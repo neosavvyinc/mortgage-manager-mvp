@@ -5,12 +5,11 @@
 ## arguments
 OPERATION=$1
 MODULE=$2
-ENV=$3
 
 ## functionality
 correct_usage()
 {
-	echo "$0 [stop|start|restart] [app.js] [env]"
+	echo "$0 [stop|start|restart] [app.js]"
 	exit 1
 }
 
@@ -18,12 +17,7 @@ start_module() {
 	PID=`ps ax | grep "node ${APP_NM}" | grep -v grep | awk '{print $1}'`
 	if `test -z ${PID}`
 	then
-		if `test -z ${ENV}`
-		then
-			node "${MODULE}"
-		else
-			node "${MODULE} ${ENV}"
-		fi
+		node "${MODULE}"
 	else
 		echo "${MODULE} is already running: pid=${PID}"
 	fi
@@ -82,12 +76,11 @@ display_info() {
 		echo "mongod running: PID=${PID}"
 	fi
 }
-
 #action
 if `test ${OPERATION} = "info"`
 then
 	display_info
-elif `test $# -lt 2`
+elif `test $# -ne 2`
 then
 	correct_usage
 elif `test ${OPERATION} = "stop"`
@@ -106,6 +99,6 @@ then
 	stop_module
 	start_module
 else
-	echo "Unknown operation '${OPERATION}'"
+
 	correct_usage
 fi
