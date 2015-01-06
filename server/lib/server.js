@@ -41,7 +41,7 @@ var runServer = function() {
 	log.info('Node server listening on port %d', port);
 };
 
-/* Routes */
+/** Routes */
 server.get('/healthcheck', route_healthcheck.healthCheck);
 
 /**

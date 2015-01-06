@@ -2,7 +2,10 @@
 
 var log4js = require('log4js'),
 	config = require('../config/settings').getConfig(),
-	path = require('path');
+	path = require('path'),
+	fs = require('fs'),
+	assert = require('assert'),
+	util = require('util');
 
 /**
  * Dereference an object chain. For example: var o={ a: { b: { c: 'chuck' } } } could be
@@ -36,3 +39,42 @@ exports.getLogger = function() {
 	return log4js.getLogger(category);
 };
 
+/**
+ * Assert that value is mandatory
+ * @param value
+ * @param name{String} - Can be null.
+ */
+exports.assertRequired = function(value, name) {
+	name = name || '[unknown]';
+	assert.ok(value !== null, util.format('Require param \'%s\' is null', name));
+};
+
+/**
+ * Jasmine does not natively support ability to stub getters and setters. We minimally
+ * do what they do which is allow functionality to be dropped in and allow things to
+ * be restored, but the exception is if we try to attach restore to getter then getter
+ * acts as a function and things get screwy.  So we add '_' suffix, hence to disconnect
+ * the stub one should call: obj.[getter-name]_.restore()
+ * @param obj
+ * @param getter
+ * @param callback
+ */
+exports.stubGetter = function(obj, getter, callback) {
+	var oldCallback = obj.__lookupGetter__(getter);
+	obj[getter + '_'] = {
+		restore: function() {
+			obj.__defineGetter__(getter, oldCallback);
+		}
+	};
+	obj.__defineGetter__(getter, callback);
+};
+
+/**
+ * Reads the json file from a given path and returns the JSON in it
+ * @param path
+ * @returns {JSON}
+ */
+exports.readJSON = function(path) {
+	var buffer = fs.readFileSync(path);
+	return JSON.parse(buffer.toString());
+};
