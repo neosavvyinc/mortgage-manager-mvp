@@ -1,16 +1,15 @@
 'use strict';
 
 var mongoose = require('mongoose/'),
-	Schema = mongoose.Schema,
-	Types = Schema.Types;
+	Schema = mongoose.Schema;
 
 var LoginSchema = new Schema({
 	username: { type: String, required: true },
 	password: { type: String, required: true },
 	type: { type: String, required: true },
-	created: Types.Date,
-	lastLogin: Types.Date
+	created: Date,
+	lastLogin: Date
 });
 
 /* Model Objects */
-exports.Login = mongoose.model('logins', LoginSchema);
+exports.Login = mongoose.model('login', LoginSchema);

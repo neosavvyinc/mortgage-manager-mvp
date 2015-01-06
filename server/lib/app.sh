@@ -14,7 +14,7 @@ correct_usage()
 }
 
 start_module() {
-	PID=`ps ax | grep "node ${APP_NM}" | grep -v grep | awk '{print $1}'`
+	PID=`ps ax | grep "node ${MODULE}" | grep -v grep | awk '{print $1}'`
 	if `test -z ${PID}`
 	then
 		node "${MODULE}"
@@ -26,7 +26,7 @@ start_module() {
 stop_module() {
 	for _INDEX in 0 1 2
 	do
-		PID=`ps ax | grep "node ${APP_NM}" | grep -v grep | awk '{print $1}'`
+		PID=`ps ax | grep "node ${MODULE}" | grep -v grep | awk '{print $1}'`
 		if `test -z ${PID}`
 		then
 			break
@@ -49,19 +49,19 @@ stop_module() {
 
 start_mongo() {
 	PID=`ps ax | grep "mongod" | grep -v grep | awk '{print $1}'`
-	if `test -z ${PID}`
+	if [[ -z ${PID} ]]
 	then
 		echo "starting mongod"
 		mongod --quiet
 		sleep 1
 	else
-		echo "mongod is already running: PID=${PID}"
+		echo "mongod is already running: ${PID}"
 	fi
 }
 
 display_info() {
 	PID=`ps ax | grep "node server.js" | grep -v grep | awk '{print $1}'`
-	if `test -z ${_PID}`
+	if `test -z ${PID}`
 	then
 		echo "server not running"
 	else
@@ -69,7 +69,7 @@ display_info() {
 	fi
 
 	PID=`ps ax | grep "mongod" | grep -v grep | awk '{print $1}'`
-	if `test -z ${_PID}`
+	if `test -z ${PID}`
 	then
 		echo "mongod not running"
 	else

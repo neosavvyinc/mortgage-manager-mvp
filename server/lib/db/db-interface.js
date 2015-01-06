@@ -3,8 +3,15 @@
 var commonUtils = require('../utils/commonUtils'),
 	model = require('./model');
 
-exports.createAuth = function(name, type, config, access) {
-	commonUtils.assertRequired(name);
+exports.createLogin = function(username, password, type, created) {
+	commonUtils.assertRequired(username);
+	commonUtils.assertRequired(password);
 	commonUtils.assertRequired(type);
-	return new model.Auth({name:name, type:type, config:config, access:access});
+	commonUtils.assertRequired(created);
+	return new model.Login({
+		name: username,
+		password: password,
+		type: type,
+		created: created
+	});
 };

@@ -1,19 +1,20 @@
 'use strict';
 
 module.exports = function gruntFile(grunt) {
+	var LOCAL_SERVICE_PORT = 3000;
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
 
 		shell: {
 			//application scripts
 			stop: {
-				command: './lib/app.sh stop server.js',
+				command: './lib/app.sh stop lib/server.js',
 				options: {
 					async: false
 				}
 			},
 			start: {
-				command: './lib/app.sh start server.js&',
+				command: './lib/app.sh start lib/server.js&',
 				options: {
 					async: false,
 					execOptions: {
@@ -24,7 +25,7 @@ module.exports = function gruntFile(grunt) {
 			startDb: {
 				command: './lib/app.sh start mongod&',
 				options: {
-					async: true,
+					async: false,
 					execOptions: {
 						detached: true
 					}
@@ -61,7 +62,7 @@ module.exports = function gruntFile(grunt) {
 		compress: {
 			build: {
 				options: {
-					archive: 'build/Uni.tgz',
+					archive: 'build/MAM.tgz',
 					mode: 'tgz'
 				},
 				files: [
@@ -101,22 +102,22 @@ module.exports = function gruntFile(grunt) {
 	grunt.registerTask('static-analysis', 'Runs static analysis of the source code',
 		['jshint']);
 
-	grunt.registerTask('coverage', 'Runs code coverage', function runCodeCoverage() {
+	grunt.registerTask('coverage', 'Runs code coverage', function() {
 		grunt.task.run('static-analysis');
 		grunt.task.run(['_coverage']);
 	});
 
-	grunt.registerTask('coverage-jenkins', 'Runs code coverage (jenkins)', function runCodeCoverage() {
+	grunt.registerTask('coverage-jenkins', 'Runs code coverage (jenkins)', function() {
 		process.env.COVERAGE_TARGET = 'jenkins';
 		grunt.task.run(['_coverage']);
 	});
 
-	grunt.registerTask('unit-test', 'Runs unit tests', function runUnitTests() {
+	grunt.registerTask('unit-test', 'Runs unit tests', function() {
 		process.env.TEST_ENV = 'unittest';
 		grunt.task.run('jasmineTests');
 	});
 
-	grunt.registerTask('integration-test', 'Runs integration tests', function runIntegrationTests() {
+	grunt.registerTask('integration-test', 'Runs integration tests', function() {
 		process.env.TEST_ENV = 'integration';
 		grunt.task.run('jasmineTests');
 	});
@@ -125,9 +126,13 @@ module.exports = function gruntFile(grunt) {
 		grunt.task.run(['jasmineTests']);
 	});
 
-	grunt.registerTask('start', 'Start server at localhost:' + LOCAL_SERVICE_PORT, function start() {
+	grunt.registerTask('stop', 'Stop the server', function() {
+		grunt.task.run('shell:stop');
+	});
+
+	grunt.registerTask('start', 'Start server at localhost:' + LOCAL_SERVICE_PORT, function() {
 		process.env.NODE_ENV = process.env.NODE_ENV || 'development';
-		grunt.task.run('shell:stop', 'shell:startDb', 'shell:start');
+		grunt.task.run('stop', 'shell:startDb', 'shell:start');
 	});
 
 	grunt.registerTask('populate', 'Populates all json files into mongo', function() {

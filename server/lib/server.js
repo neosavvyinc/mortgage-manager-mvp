@@ -6,16 +6,12 @@ var path = require('path'),
 	async = require('async'),
 	express = require('express'),
 	settings = require('./config/settings'),
-	server = express(),
-	route_healthcheck = require('./routes/route-diagnostics'),
-	log;
+	app = express(),
+	routeHealthcheck = require('./routes/route-diagnostics'),
+	server, log;
 
 exports.listen = function () {
-	server.listen.apply(server, arguments);
-};
-
-exports.close = function(callback) {
-	server.close(callback);
+	server = app.listen.apply(app, arguments);
 };
 
 /**
@@ -38,11 +34,11 @@ var runServer = function() {
 
 	//Start listening on localhost
 	exports.listen(port);
-	log.info('Node server listening on port %d', port);
+	log.info('Node app listening on port %d', port);
 };
 
 /** Routes */
-server.get('/healthcheck', route_healthcheck.healthCheck);
+app.get('/healthcheck', routeHealthcheck.healthCheck);
 
 /**
  * Block that runs when this script is executed.

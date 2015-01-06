@@ -86,27 +86,6 @@ var saveToMongo = function(files, success, failure) {
 };
 
 /**
- * Function that searches for the mongo object id in a json.
- * @param id
- * @param json
- * @returns {*}
- */
-var getMongoId = function(id, json) {
-	var result;
-	if(id === null) {
-		return undefined;
-	}
-	result = _.find(json, function(item) {
-		return (item.id === id);
-	});
-
-	if(result === null) {
-		throw new Error(util.format('failed to find referenced id=%s', id));
-	}
-	return result._id;
-};
-
-/**
  * Iterator for async.each - Iterates over a list of files
  * @param file - filename of json
  * @param next - callback for async.each
@@ -130,8 +109,8 @@ var saveFile = function(file, success, failure) {
 	var absolutePath = resourcesPath + '/' + file,
 		dbModel = file.split('.')[0];
 
-	if(dbModel === 'logins') {
-		allJson.logins = commonUtils.readJSON(absolutePath);
+	if(dbModel === 'login') {
+		allJson.login = commonUtils.readJSON(absolutePath);
 		saveLogins(allJson, success, failure);
 	} else {
 		failure('No model found with name ' + dbModel);
@@ -146,13 +125,13 @@ var saveFile = function(file, success, failure) {
  */
 var saveLogins = function(json, success, failure) {
 	var options = { upsert: true },
-		data = _.isEmpty(json) ? [] : json.logins;
+		data = _.isEmpty(json) ? [] : json.login;
 
 	async.eachSeries(data, function(item, done) {
 		var error = null;
-		models.Auth.findOneAndUpdate({name: item.username}, item, options, function(err, dbi) {
+		models.Login.findOneAndUpdate({name: item.username}, item, options, function(err, dbi) {
 			if(err) {
-				error = 'Attempt to insert/update '+ item.username + ' failed: ' + err.message;
+				error = 'Attempt to insert/update username '+ item.username + ' failed: ' + err.message;
 			} else {
 				item._id = dbi.id;
 			}

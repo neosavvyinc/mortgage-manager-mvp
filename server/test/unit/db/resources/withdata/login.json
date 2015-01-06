@@ -1,0 +1,12 @@
+[
+  {
+    "username": "banker",
+    "password": "banker",
+    "type": "lender"
+  },
+  {
+    "username": "sushi",
+    "password": "sushi",
+    "type": "borrower"
+  }
+]

@@ -2,7 +2,6 @@
 
 var log4js = require('log4js'),
 	config = require('../config/settings').getConfig(),
-	path = require('path'),
 	fs = require('fs'),
 	assert = require('assert'),
 	util = require('util');

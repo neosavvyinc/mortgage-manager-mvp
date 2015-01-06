@@ -31,8 +31,8 @@ var _runCommand = function(command, success, failure) {
  */
 var loadConfig = function() {
 	var env = process.env.NODE_ENV || 'development',
-		rootPath = __dirname.split('Uni')[0],
-		configPath = path.resolve(rootPath + '/Uni/config'),
+		rootPath = __dirname.split('server')[0],
+		configPath = path.resolve(rootPath + '/server/config'),
 		configFile = path.join(configPath + '/', env + '.json'),
 		config = fs.readFileSync(configFile, 'utf8');
 	settings.setConfig(config);
