@@ -22,6 +22,7 @@
     "grunt-shell-spawn": "0.3.0",
     "grunt-jasmine-node-coverage-validation":"0.0.4",
     "jasmine-node": "1.14.5",
+    "node-uuid": "1.4.2",
     "grunt-open": "0.2.3",
     "matchdep": "0.3.0",
     "underscore": "1.7.0",

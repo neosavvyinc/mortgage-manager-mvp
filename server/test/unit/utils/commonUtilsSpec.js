@@ -4,7 +4,7 @@ var commonUtils = require('../../../lib/utils/commonUtils');
 
 describe('commonUtils', function() {
 	describe('dereference', function() {
-		it('test fullfilled path', function() {
+		it('test fulfilled path', function() {
 			var object = {
 				a: {
 					b:'c'
@@ -22,7 +22,7 @@ describe('commonUtils', function() {
 			expect(commonUtils.dereference(object, 'a.b.1')).toBe('y');
 		});
 
-		it('test un-fullfilled path', function() {
+		it('test un-fulfilled path', function() {
 			var object={};
 			expect(commonUtils.dereference(object, 'a.b', 'dogs')).toBe('dogs');
 		});

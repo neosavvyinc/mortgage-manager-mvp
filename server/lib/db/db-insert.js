@@ -111,7 +111,7 @@ var saveFile = function(file, success, failure) {
 
 	if(dbModel === 'login') {
 		allJson.login = commonUtils.readJSON(absolutePath);
-		saveLogins(allJson, success, failure);
+		saveUsers(allJson, success, failure);
 	} else {
 		failure('No model found with name ' + dbModel);
 	}
@@ -123,13 +123,13 @@ var saveFile = function(file, success, failure) {
  * @param success
  * @param failure
  */
-var saveLogins = function(json, success, failure) {
+var saveUsers = function(json, success, failure) {
 	var options = { upsert: true },
 		data = _.isEmpty(json) ? [] : json.login;
 
 	async.eachSeries(data, function(item, done) {
 		var error = null;
-		models.Login.findOneAndUpdate({name: item.username}, item, options, function(err, dbi) {
+		models.User.findOneAndUpdate({name: item.username}, item, options, function(err, dbi) {
 			if(err) {
 				error = 'Attempt to insert/update username '+ item.username + ' failed: ' + err.message;
 			} else {

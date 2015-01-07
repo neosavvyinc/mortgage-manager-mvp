@@ -37,7 +37,7 @@ dbBase.operation = function(success, failure) {
 };
 
 /**
- * Function that runs a process - insert/retrieve/update
+ * Function that runs an operation - insert/retrieve/update
  * @abstract
  * @param success
  * @param failure

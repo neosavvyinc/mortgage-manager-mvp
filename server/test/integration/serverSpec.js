@@ -17,7 +17,7 @@ describe('Server', function() {
 			});
 		});
 
-		it('healthcheck say ok', function (done) {
+		it('healthcheck should say ok', function (done) {
 			http.get(host, function (res) {
 				var data = '';
 
