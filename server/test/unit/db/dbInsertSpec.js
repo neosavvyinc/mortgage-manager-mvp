@@ -2,7 +2,7 @@
 
 var fs = require('fs'),
 	path = require('path'),
-	db = require('../../../lib/db/db-insert'),
+	db = require('../../../lib/db/scripts/db-insert'),
 	model = require('mongoose/lib/model');
 
 describe('dbInsert', function() {

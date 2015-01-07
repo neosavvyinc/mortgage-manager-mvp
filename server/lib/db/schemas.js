@@ -1,10 +1,11 @@
 'use strict';
 
 var mongoose = require('mongoose/'),
-	Schema = mongoose.Schema;
+	Schema = mongoose.Schema,
+	Schemas = {};
 
 /* Defining the mongoose schema for each collection we will use in this application */
-var UserSchema = new Schema({
+Schemas.UserSchema = new Schema({
 	_id: { type: String, required: true, unique: true },
 	email: { type: String, required: true, unique: true },
 	password: { type: String, required: true },
@@ -23,7 +24,7 @@ var UserSchema = new Schema({
 	appId: { type: String, required: true }
 });
 
-var ApplicationSchema = new Schema({
+Schemas.ApplicationSchema = new Schema({
 	_id: { type: String, required: true, unique: true },
 	pUID: { type: String, required: true },
 	coUID: String,
@@ -31,7 +32,7 @@ var ApplicationSchema = new Schema({
 	lastModified: { type: Date, required: true }
 });
 
-var DocumentSchema = new Schema({
+Schemas.DocumentSchema = new Schema({
 	_id: { type: String, required: true, unique: true },
 	appId: { type: String, required: true },
 	name: { type: String, required: true },
@@ -43,7 +44,7 @@ var DocumentSchema = new Schema({
 	lastViewed: { type: Date, required: true }
 });
 
-var LenderInvitesSchema = new Schema({
+Schemas.LenderInvitesSchema = new Schema({
 	_id: { type: String, required: true, unique: true },
 	email: { type: String, required: true, unique: true },
 	firstName: { type: String, required: true },
@@ -52,14 +53,9 @@ var LenderInvitesSchema = new Schema({
 	isOpen: { type: Boolean, default: true }
 });
 
-var ApplicationLendersSchema = new Schema({
+Schemas.ApplicationLendersSchema = new Schema({
 	lenderId: { type: String, required: true },
 	appId: { type: String, required: true }
 });
 
-/* Model Objects */
-exports.User = mongoose.model('user', UserSchema);
-exports.Application = mongoose.model('application', ApplicationSchema);
-exports.Document = mongoose.model('document', DocumentSchema);
-exports.LenderInvites = mongoose.model('lenderInvites', LenderInvitesSchema);
-exports.ApplicationLenders = mongoose.model('applicationLenders', ApplicationLendersSchema);
+exports.Schemas = Schemas;

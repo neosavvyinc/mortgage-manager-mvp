@@ -1,6 +1,6 @@
 'use strict';
 
-var db = require('../../../lib/db/db'),
+var db = require('../../../lib/db/scripts/db'),
 	mongoose = require('mongoose/'),
 	commonUtils = require('../../../lib/utils/commonUtils');
 

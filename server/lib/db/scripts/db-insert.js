@@ -7,9 +7,9 @@ var dbInsert,
 	util = require('util'),
 	_ = require('underscore'),
 	dbBase = require('./db-base'),
-	models = require('./model'),
-	commonUtils = require('../utils/commonUtils'),
-	errorUtils = require('../utils/errorUtils'),
+	models = require('./../schemas'),
+	commonUtils = require('../../utils/commonUtils'),
+	errorUtils = require('../../utils/errorUtils'),
 	allJson = {},
 	resourcesPath;
 
@@ -31,7 +31,7 @@ dbInsert = DbInsert.prototype;
  */
 dbInsert.operation = function(success, failure) {
 	var files = [];
-	resourcesPath = path.resolve(__dirname + '/resources');
+	resourcesPath = path.resolve(__dirname.split('scripts')[0] + 'resources');
 	async.series([
 			function(done) {
 				files = getResources(resourcesPath,
