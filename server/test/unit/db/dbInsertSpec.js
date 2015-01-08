@@ -41,7 +41,7 @@ describe('dbInsert', function() {
 				});
 		});
 
-		it('should fail if saveToMongo fails for logins', function() {
+		it('should fail if saveToMongo fails for user', function() {
 			spyOn(model, 'findOneAndUpdate').andCallFake(function(json, item, options, callback) {
 				var dbi = {
 						_id: 1
@@ -50,14 +50,15 @@ describe('dbInsert', function() {
 			});
 
 			spyOn(fs, 'readdirSync').andCallFake(function() {
-				return ['login.json'];
+				return ['user.json'];
 			});
 
 			dummyDb.operation(function() {
 					expect().toHaveNotExecuted('Should not have succeeded');
 				},
 				function(error) {
-					expect(error).toBe('Attempt to insert/update username banker failed: fail');
+					console.log(error);
+					expect(error).toBe('Update: Attempt to update user failed: fail');
 				});
 		});
 
@@ -70,7 +71,7 @@ describe('dbInsert', function() {
 			});
 
 			spyOn(fs, 'readdirSync').andCallFake(function() {
-				return ['login.json'];
+				return ['user.json'];
 			});
 
 			dummyDb.operation(function() {
@@ -84,7 +85,7 @@ describe('dbInsert', function() {
 
 		it('should succeed if all jsons are empty', function() {
 			spyOn(fs, 'readdirSync').andCallFake(function() {
-				return ['login.json'];
+				return ['user.json'];
 			});
 
 			resolveSpy.andCallFake(function() {
@@ -108,7 +109,7 @@ describe('dbInsert', function() {
 			});
 
 			spyOn(fs, 'readdirSync').andCallFake(function() {
-				return ['login.json'];
+				return ['user.json'];
 			});
 
 			dummyDb.operation(function() {

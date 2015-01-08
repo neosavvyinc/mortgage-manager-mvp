@@ -18,6 +18,10 @@ function BaseModel(collection, schema) {
 
 base = BaseModel.prototype;
 
+base.getCollection = function() {
+	return this.collection;
+};
+
 /**
  * Finds documents in a collection based on conditions specified
  * @param conditions
@@ -27,7 +31,7 @@ base = BaseModel.prototype;
 base.retrieve = function(conditions, success, failure) {
 	mongooseModel.find(conditions, function(err, docs) {
 		if(err) {
-			failure('Retrieve: Attempt to find documents with conditions ' + conditions + ' in ' + this.collection + ' failed');
+			failure('Retrieve: Attempt to find documents with conditions ' + conditions + ' in ' + base.getCollection() + ' failed');
 		} else {
 			success(docs);
 		}
@@ -38,13 +42,14 @@ base.retrieve = function(conditions, success, failure) {
  * Function that updates a document in a collection.
  * @param item{Object} - object that has to be persisted into mongo
  * @param conditions{Object} - conditions to search for existing record in mongo
+ * @param options
  * @param success
  * @param failure
  */
-base.update = function(item, conditions, success, failure) {
-	mongooseModel.findOneAndUpdate(conditions, item, function(err) {
+base.update = function(item, conditions, options, success, failure) {
+	mongooseModel.findOneAndUpdate(conditions, item, options, function(err) {
 		if(err) {
-			failure('Update: Attempt to update '+ this.collection + ' failed: ' + err.message);
+			failure('Update: Attempt to update '+ base.getCollection() + ' failed: ' + err.message);
 		} else {
 			success();
 		}
@@ -58,24 +63,14 @@ base.update = function(item, conditions, success, failure) {
  * @param failure
  */
 base.insert = function(item, success, failure) {
-	var docs = {};
-	//Find existing documents with the item id
-	base.retrieve({_id: item._id}, function(documents) {
-		docs = documents;
-	}, failure);
-
-	if(!_.isEmpty(docs)) {
-		failure('Insert: Document with id ' + item._id + 'exists already in '+ this.collection);
-	} else {
-		var objectToSave = new mongooseModel(item);
-		objectToSave.save(function(err) {
-			if(err) {
-				failure('Insert: Attempt to save document with id ' + item._id + ' in ' + this.collection + ' failed');
-			} else {
-				success();
-			}
-		});
-	}
+	var objectToSave = new mongooseModel(item);
+	objectToSave.save(function(err) {
+		if(err) {
+			failure('Insert: Attempt to save document with id ' + item._id + ' in ' + base.getCollection() + ' failed');
+		} else {
+			success();
+		}
+	});
 };
 
 /**
@@ -85,22 +80,57 @@ base.insert = function(item, success, failure) {
  * @param failure
  */
 base.remove = function(item, success, failure) {
+	var objectToRemove = new mongooseModel(item);
+	objectToRemove.remove(function(err) {
+		if(err) {
+			failure('Remove: Attempt to Remove document with id ' + item._id + ' in ' + base.getCollection() + ' failed');
+		} else {
+			success();
+		}
+	});
+};
+
+/**
+ * Function that checks if item exists and then inserts
+ * @param item
+ * @param condition
+ * @param success
+ * @param failure
+ */
+base.checkAndInsert = function(item, condition, success, failure) {
+	var docs = {};
+
+	//Find existing documents with the retrieve condition
+	base.retrieve(condition, function(documents) {
+		docs = documents;
+	}, failure);
+
+	if(!_.isEmpty(docs)) {
+		failure('Insert: Document exists already in '+ base.getCollection());
+	} else {
+		base.insert(item, success, failure);
+	}
+};
+
+/**
+ * Function that checks if item exists and then removes
+ * @param item
+ * @param conditions
+ * @param success
+ * @param failure
+ */
+base.checkAndRemove = function(item, conditions, success, failure) {
 	var docs = {};
 	//Find existing documents with the item id
-	base.retrieve({_id: item._id}, function(documents) {
+	base.retrieve(conditions, function(documents) {
 		docs = documents;
 	}, failure);
 
 	if(_.isEmpty(docs)) {
-		failure('Remove: Document with id ' + item._id + ' does not exist in '+ this.collection);
+		failure('Remove: Document with id ' + item._id + ' does not exist in '+ base.getCollection());
 	} else {
-		var objectToRemove = new mongooseModel(item);
-		objectToRemove.remove(function(err) {
-			if(err) {
-				failure('Remove: Attempt to Remove document with id ' + item._id + ' in ' + this.collection + ' failed');
-			} else {
-				success();
-			}
-		});
+		base.remove(item, success, failure);
 	}
 };
+
+exports.Model = BaseModel;

@@ -7,7 +7,7 @@ var dbInsert,
 	util = require('util'),
 	_ = require('underscore'),
 	dbBase = require('./db-base'),
-	models = require('./../schemas'),
+	userModel = require('../models/model-user').Model,
 	commonUtils = require('../../utils/commonUtils'),
 	errorUtils = require('../../utils/errorUtils'),
 	allJson = {},
@@ -109,8 +109,8 @@ var saveFile = function(file, success, failure) {
 	var absolutePath = resourcesPath + '/' + file,
 		dbModel = file.split('.')[0];
 
-	if(dbModel === 'login') {
-		allJson.login = commonUtils.readJSON(absolutePath);
+	if(dbModel === 'user') {
+		allJson.user = commonUtils.readJSON(absolutePath);
 		saveUsers(allJson, success, failure);
 	} else {
 		failure('No model found with name ' + dbModel);
@@ -124,19 +124,11 @@ var saveFile = function(file, success, failure) {
  * @param failure
  */
 var saveUsers = function(json, success, failure) {
-	var options = { upsert: true },
-		data = _.isEmpty(json) ? [] : json.login;
+	var data = _.isEmpty(json) ? [] : json.user,
+		user = new userModel();
 
 	async.eachSeries(data, function(item, done) {
-		var error = null;
-		models.User.findOneAndUpdate({name: item.username}, item, options, function(err, dbi) {
-			if(err) {
-				error = 'Attempt to insert/update username '+ item.username + ' failed: ' + err.message;
-			} else {
-				item._id = dbi.id;
-			}
-			done(error);
-		});
+		user.insertOrUpdate(item, done, done);
 	}, function(error) {
 		if(error) {
 			failure(error);

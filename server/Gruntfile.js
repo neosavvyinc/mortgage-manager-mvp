@@ -33,7 +33,7 @@ module.exports = function gruntFile(grunt) {
 			},
 
 			populate: {
-				command: 'node lib/db/db-run.js create',
+				command: 'node lib/db/scripts/db-run.js create',
 				options: {
 					async: false,
 					execOptions: {
