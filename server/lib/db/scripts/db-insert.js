@@ -70,7 +70,6 @@ var getResources = function(resourcePath, success, failure) {
 /**
  * Saves each json file in the array to mongo.
  * @param files - Array of json files
- * @param saveCallback - iterator that saves one file at a time.
  * @param success
  * @param failure
  */
@@ -126,9 +125,8 @@ var saveFile = function(file, success, failure) {
 var saveUsers = function(json, success, failure) {
 	var data = _.isEmpty(json) ? [] : json.user,
 		user = new userModel();
-
 	async.eachSeries(data, function(item, done) {
-		user.insertOrUpdate(item, done, done);
+		user.insertOrUpdate(item, { email: item.email }, done, done);
 	}, function(error) {
 		if(error) {
 			failure(error);

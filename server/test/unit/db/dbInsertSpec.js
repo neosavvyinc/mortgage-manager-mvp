@@ -58,7 +58,7 @@ describe('dbInsert', function() {
 				},
 				function(error) {
 					console.log(error);
-					expect(error).toBe('Update: Attempt to update user failed: fail');
+					expect(error).toBe('Update: Attempt to update user1 failed: fail');
 				});
 		});
 

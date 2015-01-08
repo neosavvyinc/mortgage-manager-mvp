@@ -1,7 +1,7 @@
 'use strict';
 
 var errorUtils = require('../../utils/errorUtils'),
-	dbInsert = require('db-insert'),
+	dbInsert = require('./db-insert'),
 	settings = require('../../config/settings'),
 	async = require('async'),
 	path = require('path'),
@@ -62,7 +62,9 @@ errorUtils.handleErrors(
 			}
 		],
 		function(error) {
-			throw error;
+			if(error !== undefined) {
+				throw error;
+			}
 		});
 	},
 	function(error) {

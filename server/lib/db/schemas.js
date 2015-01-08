@@ -21,7 +21,7 @@ Schemas.UserSchema = new Schema({
 	coUID: { type: String, ref: 'UserSchema' },
 	created: { type: Date, required: true },
 	lastLogin: { type: Date, required: true },
-	appId: { type: String, required: true, ref: 'ApplicationSchema' }
+	appId: [{ type: String, required: true, ref: 'ApplicationSchema' }]
 });
 
 Schemas.ApplicationSchema = new Schema({
@@ -55,7 +55,7 @@ Schemas.LenderInvitesSchema = new Schema({
 
 Schemas.ApplicationLendersSchema = new Schema({
 	lenderId: { type: String, required: true, ref: 'UserSchema' },
-	appId: { type: String, required: true, ref: 'ApplicationSchema' }
+	appId: [{ type: String, required: true, ref: 'ApplicationSchema' }]
 });
 
 exports.Schemas = Schemas;

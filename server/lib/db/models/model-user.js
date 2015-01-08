@@ -2,10 +2,11 @@
 
 var util = require('util'),
 	_ = require('underscore'),
-	uuid = require('node-uuid'),
+	async = require('async'),
+	baseModel = require('./model-base'),
+	commonUtils = require('../../utils/commonUtils'),
 	Schemas = require('../schemas').Schemas,
 	userSchema = Schemas.UserSchema,
-	baseModel = require('./model-base'),
 	userModel;
 
 /**
@@ -19,10 +20,6 @@ util.inherits(UserModel, baseModel.Model);
 
 userModel = UserModel.prototype;
 
-var _generateId = function() {
-	return uuid.v1();
-};
-
 /**
  * Function that inserts/updates specified document in the user collection.
  * @param item
@@ -30,25 +27,45 @@ var _generateId = function() {
  * @param failure
  * @private
  */
-userModel.insertOrUpdate = function(item, success, failure) {
-	var uid = _generateId(),
-		appId = _generateId(),
-		created = new Date(),
+userModel.insertOrUpdate = function(item, condition, success, failure) {
+	var uid = commonUtils.generateId(),
+		currentDate = new Date(),
 		docs;
 
-	docs = userModel.retrieve({ email: item.email }, success, failure);
-
-	if(_.isEmpty(docs)) {
-		_.extend(item, {
-			_id: uid,
-			appId: appId,
-			created: created,
-			lastLogin: created
-		});
-		userModel.insert(item, success, failure);
-	} else {
-		userModel.update(item, {_id: docs[0]._id }, null, success, failure);
-	}
+	async.series([
+		function(done) {
+			docs = userModel.retrieve(condition, function(documents) {
+				docs = documents;
+				done();
+			}, done);
+		},
+		function(done) {
+			if(_.isEmpty(docs)) {
+				_.extend(item, {
+					_id: uid,
+					created: currentDate,
+					lastLogin: currentDate,
+					appId: []
+				});
+				userModel.insert(item, done, done);
+			} else {
+				//Check if there is a new appid in item and push it to the array in docs
+				var newAppId = item.appId;
+				if(newAppId !== undefined) {
+					_.extend(item, {
+						appId: docs.appId.push(newAppId)
+					});
+				}
+				userModel.update(item, {_id: docs._id }, null, done, done);
+			}
+		}
+	], function(error) {
+		if(error !== undefined) {
+			failure(error);
+		} else {
+			success();
+		}
+	});
 };
 
 exports.Model = UserModel;

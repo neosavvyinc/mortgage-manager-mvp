@@ -1,6 +1,7 @@
 'use strict';
 
 var log4js = require('log4js'),
+	uuid = require('node-uuid'),
 	config = require('../config/settings').getConfig(),
 	fs = require('fs'),
 	assert = require('assert'),
@@ -66,6 +67,15 @@ exports.stubGetter = function(obj, getter, callback) {
 		}
 	};
 	obj.__defineGetter__(getter, callback);
+};
+
+/**
+ * Generates a unique id based on timestamp.
+ * @returns {*}
+ * @private
+ */
+exports.generateId = function() {
+	return uuid.v1();
 };
 
 /**

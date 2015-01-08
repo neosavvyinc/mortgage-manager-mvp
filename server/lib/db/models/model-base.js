@@ -40,14 +40,14 @@ base.retrieve = function(conditions, success, failure) {
 
 /**
  * Function that updates a document in a collection.
- * @param item{Object} - object that has to be persisted into mongo
- * @param conditions{Object} - conditions to search for existing record in mongo
+ * @param update{Object} - Changes in document that have to be persisted
+ * @param conditions{Object} - conditions to search for existing record
  * @param options
  * @param success
  * @param failure
  */
-base.update = function(item, conditions, options, success, failure) {
-	mongooseModel.findOneAndUpdate(conditions, item, options, function(err) {
+base.update = function(update, conditions, options, success, failure) {
+	mongooseModel.findOneAndUpdate(conditions, update, options, function(err) {
 		if(err) {
 			failure('Update: Attempt to update '+ base.getCollection() + ' failed: ' + err.message);
 		} else {
@@ -63,10 +63,11 @@ base.update = function(item, conditions, options, success, failure) {
  * @param failure
  */
 base.insert = function(item, success, failure) {
+	console.log(item);
 	var objectToSave = new mongooseModel(item);
 	objectToSave.save(function(err) {
 		if(err) {
-			failure('Insert: Attempt to save document with id ' + item._id + ' in ' + base.getCollection() + ' failed');
+			failure('Insert: Attempt to save document with id ' + item._id + ' in ' + base.getCollection() + ' failed: '+err);
 		} else {
 			success();
 		}
