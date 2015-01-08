@@ -8,6 +8,7 @@ var dbInsert,
 	_ = require('underscore'),
 	dbBase = require('./db-base'),
 	userModel = require('../models/model-user').Model,
+	applicationModel = require('../models/model-application').Model,
 	commonUtils = require('../../utils/commonUtils'),
 	errorUtils = require('../../utils/errorUtils'),
 	allJson = {},
@@ -28,6 +29,8 @@ dbInsert = DbInsert.prototype;
 
 /**
  * Imports all the json files into mongodb
+ * @param success
+ * @param failure
  */
 dbInsert.operation = function(success, failure) {
 	var files = [];
@@ -106,18 +109,21 @@ var iterateFiles = function(file, next) {
  */
 var saveFile = function(file, success, failure) {
 	var absolutePath = resourcesPath + '/' + file,
-		dbModel = file.split('.')[0];
+		dbModel = file.split('.')[1];
 
 	if(dbModel === 'user') {
 		allJson.user = commonUtils.readJSON(absolutePath);
 		saveUsers(allJson, success, failure);
+	} else if(dbModel === 'application') {
+		allJson.application = commonUtils.readJSON(absolutePath);
+		saveApplications(allJson, success, failure);
 	} else {
 		failure('No model found with name ' + dbModel);
 	}
 };
 
 /**
- * Save logins to mongo
+ * Save users to mongo
  * @param json
  * @param success
  * @param failure
@@ -127,6 +133,26 @@ var saveUsers = function(json, success, failure) {
 		user = new userModel();
 	async.eachSeries(data, function(item, done) {
 		user.insertOrUpdate(item, { email: item.email }, done, done);
+	}, function(error) {
+		if(error) {
+			failure(error);
+		} else {
+			success();
+		}
+	});
+};
+
+/**
+ * Save applications to mongo
+ * @param json
+ * @param success
+ * @param failure
+ */
+var saveApplications = function(json, success, failure) {
+	var data = _.isEmpty(json) ? [] : json.application,
+		application = new applicationModel();
+	async.eachSeries(data, function(item, done) {
+		application.insertNewApp(item, done, done);
 	}, function(error) {
 		if(error) {
 			failure(error);

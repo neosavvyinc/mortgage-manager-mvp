@@ -23,6 +23,7 @@ userModel = UserModel.prototype;
 /**
  * Function that inserts/updates specified document in the user collection.
  * @param item
+ * @param condition
  * @param success
  * @param failure
  * @private
@@ -49,13 +50,6 @@ userModel.insertOrUpdate = function(item, condition, success, failure) {
 				});
 				userModel.insert(item, done, done);
 			} else {
-				//Check if there is a new appid in item and push it to the array in docs
-				var newAppId = item.appId;
-				if(newAppId !== undefined) {
-					_.extend(item, {
-						appId: docs.appId.push(newAppId)
-					});
-				}
 				userModel.update(item, {_id: docs._id }, null, done, done);
 			}
 		}

@@ -18,8 +18,36 @@ function BaseModel(collection, schema) {
 
 base = BaseModel.prototype;
 
-base.getCollection = function() {
-	return this.collection;
+/**
+ * Finds a document in the model by id
+ * @param id
+ * @param success
+ * @param failure
+ */
+base.findDocumentById = function(id, success, failure) {
+	mongooseModel.findById(id, function(err, doc) {
+		if(err) {
+			failure('Could not find document with specified id: ' + err);
+		} else {
+			success(doc);
+		}
+	});
+};
+
+/**
+ * Finds a document in the model based on conditions specified
+ * @param conditions
+ * @param success
+ * @param failure
+ */
+base.findDocument = function(conditions, success, failure) {
+	mongooseModel.find(conditions, function(err, docs) {
+		if(err) {
+			failure('FindDocId: Attempt to find document for specified conditions failed: ' + err);
+		} else {
+			success(docs);
+		}
+	});
 };
 
 /**
@@ -31,7 +59,7 @@ base.getCollection = function() {
 base.retrieve = function(conditions, success, failure) {
 	mongooseModel.find(conditions, function(err, docs) {
 		if(err) {
-			failure('Retrieve: Attempt to find documents with conditions ' + conditions + ' in ' + base.getCollection() + ' failed');
+			failure('Retrieve: Attempt to find documents with conditions ' + conditions + ' failed');
 		} else {
 			success(docs);
 		}
@@ -49,7 +77,7 @@ base.retrieve = function(conditions, success, failure) {
 base.update = function(update, conditions, options, success, failure) {
 	mongooseModel.findOneAndUpdate(conditions, update, options, function(err) {
 		if(err) {
-			failure('Update: Attempt to update '+ base.getCollection() + ' failed: ' + err.message);
+			failure('Update: Attempt to update failed: ' + err.message);
 		} else {
 			success();
 		}
@@ -63,11 +91,10 @@ base.update = function(update, conditions, options, success, failure) {
  * @param failure
  */
 base.insert = function(item, success, failure) {
-	console.log(item);
 	var objectToSave = new mongooseModel(item);
 	objectToSave.save(function(err) {
 		if(err) {
-			failure('Insert: Attempt to save document with id ' + item._id + ' in ' + base.getCollection() + ' failed: '+err);
+			failure('Insert: Attempt to save document ' + JSON.stringify(item) + ' failed: '+err);
 		} else {
 			success();
 		}
@@ -84,7 +111,7 @@ base.remove = function(item, success, failure) {
 	var objectToRemove = new mongooseModel(item);
 	objectToRemove.remove(function(err) {
 		if(err) {
-			failure('Remove: Attempt to Remove document with id ' + item._id + ' in ' + base.getCollection() + ' failed');
+			failure('Remove: Attempt to Remove document with id ' + item._id + ' failed');
 		} else {
 			success();
 		}
@@ -128,7 +155,7 @@ base.checkAndRemove = function(item, conditions, success, failure) {
 	}, failure);
 
 	if(_.isEmpty(docs)) {
-		failure('Remove: Document with id ' + item._id + ' does not exist in '+ base.getCollection());
+		failure('Remove: Document with id ' + item._id + ' does not exist');
 	} else {
 		base.remove(item, success, failure);
 	}

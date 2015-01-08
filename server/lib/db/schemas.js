@@ -28,6 +28,7 @@ Schemas.ApplicationSchema = new Schema({
 	_id: { type: String, required: true, unique: true },
 	pUID: { type: String, required: true, ref: 'UserSchema' },
 	coUID: { type: String, ref: 'UserSchema' },
+	pEmail: {type: String, required:true, unique: true },
 	created: { type:Date, required: true },
 	lastModified: { type: Date, required: true }
 });

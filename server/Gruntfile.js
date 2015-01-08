@@ -49,14 +49,7 @@ module.exports = function gruntFile(grunt) {
 			},
 			grunt: ['./*.js'],
 			server: ['./lib/**/*.js'],
-			test: {
-				options: {
-					jshintrc: './.jshintrc-test'
-				},
-				files: {
-					src: ['./test/**/*.js']
-				}
-			}
+			test: ['./test/**/*.js']
 		},
 
 		compress: {

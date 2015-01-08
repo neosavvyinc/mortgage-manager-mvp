@@ -14,7 +14,7 @@ var util = require('util'),
  * Constructor for the application model
  */
 function ApplicationModel() {
-	ApplicationModel.super_.call(this, 'user', applicationSchema);
+	ApplicationModel.super_.call(this, 'application', applicationSchema);
 }
 
 util.inherits(ApplicationModel, baseModel.Model);
@@ -22,28 +22,41 @@ util.inherits(ApplicationModel, baseModel.Model);
 applicationModel = ApplicationModel.prototype;
 
 /**
- *
+ * Inserts a new application document into mongo.
  * @param item
  * @param success
  * @param failure
  */
 applicationModel.insertNewApp = function(item, success, failure) {
 	var appId = commonUtils.generateId(),
-		currentDate = new Date();
-
+		currentDate = new Date(),
+		doc;
 	async.series([
 		function(done) {
+			//Find the user id for the primary applicant email
+			var user = new userModel();
+
+			user.findDocument({email: item.pEmail}, function(docs) {
+				doc = docs[0].toObject();
+				done();
+			}, done);
+		},
+		function(done) {
+			var application = new ApplicationModel();
 			_.extend(item, {
 				_id: appId,
 				created: currentDate,
-				lastModified: currentDate
+				lastModified: currentDate,
+				pUID: doc._id
 			});
-			applicationModel.insert(item, done, done);
+			application.insert(item, done, done);
+			done();
 		},
 		function(done) {
-			//Update the userModel with the new appId
 			var user = new userModel();
-			user.update(item, {_id: item.pUID}, null, done, done);
+			//Update the userModel with the new appId
+			doc.appId.push(appId);
+			user.update(doc, {_id: doc._id}, null, done, done);
 		}
 	], function(error) {
 		if(error !== undefined) {
@@ -54,4 +67,8 @@ applicationModel.insertNewApp = function(item, success, failure) {
 	});
 };
 
+applicationModel.insertUserReference = function(item, success, failure) {
+	var user = new userModel();
+	user.insertOrUpdate(item, null, success, failure);
+};
 exports.Model = ApplicationModel;
