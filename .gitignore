@@ -11,3 +11,4 @@ coverage/
 client/node_modules
 client/target
 client/src/main/lib
+**/*.swp

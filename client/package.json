@@ -3,6 +3,7 @@
   "version": "0.0.2",
   "description": "Mortgage Application Manager",
   "main": "js/app.js",
+  "author": "Neosavvy <contact@neosavvy.com>",
   "dependencies": {
     "keymirror": "~0.1.0",
     "object-assign": "^1.0.0",
@@ -23,18 +24,22 @@
     "grunt-contrib-uglify": "^0.7.0",
     "grunt-contrib-copy": "^0.7.0",
     "grunt-contrib-watch": "^0.6.1",
+    "grunt-htmlrefs": "~0.5.0",
     "grunt-rename": "^0.1.4",
-    "grunt-watchify": "^0.1.0",
     "grunt-browserify": "^3.2.1",
-    "grunt-react": "^0.10.0",
     "grunt-shell": "^1.1.1",
     "load-grunt-config": "^0.16.0",
     "reactify": "^0.17.1",
     "browserify": "^8.0.3",
-    "fluxify": "^0.2.1",
-    "watchify": "^2.2.1"
+    "fluxify": "~0.2.1",
+    "watchify": "~2.2.1",
+    "react-tools": "~0.12.2"
   },
-  "author": "Neosavvy <contact@neosavvy.com>",
+  "jest": {
+    "testDirectoryName": "test",
+    "scriptPreprocessor": "<rootDir>/src/test/preprocessor.js",
+    "unmockedModulePathPatterns": ["<rootDir>/node_modules/react"]
+  },
   "paths": {
     "libraries": "src/main/lib",
     "buildOutputDirectory": "target",

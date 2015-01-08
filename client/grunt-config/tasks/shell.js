@@ -10,6 +10,17 @@ module.exports = {
         },
         command: "rm -r ./target"
     },
+    cleanDeployment: {
+        options: {
+            callback: function( err, stdout, stderr, cb ) {
+                console.log("Cleaning the deployment directory.");
+                console.log(stdout);
+                console.log(stderr);
+                cb();
+            }
+        },
+        command: "rm -r ./deployment"
+    },
     testRuby: {
         options: {
             callback: function( err, stdout, stderr, cb ) {

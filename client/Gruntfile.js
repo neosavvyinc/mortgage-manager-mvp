@@ -9,11 +9,10 @@ module.exports = function (grunt) {
         'shell:npmInstall'
     ]);
     grunt.registerTask('clean', [
+        'shell:cleanDeployment',
         'shell:cleanTarget'
     ]);
-    grunt.registerTask('resolve', [
-        'bower:install'
-    ]);
+    grunt.registerTask('resolve', []);
     grunt.registerTask('compile', [
         'shell:buildVersion',
         'less:compile',
@@ -23,7 +22,11 @@ module.exports = function (grunt) {
     grunt.registerTask('runTests', [
         'jest:unit'
     ]);
-    grunt.registerTask('deploy', []);
+    grunt.registerTask('deploy', [
+        'uglify:deploy',
+        'htmlrefs:deploy',
+        'copy:deploy'
+    ]);
 
     grunt.registerTask('default', [
         'verify',
@@ -32,7 +35,8 @@ module.exports = function (grunt) {
         'compile',
         'runTests'
     ]);
-    grunt.registerTask('deploy', [
+
+    grunt.registerTask('deployment', [
         'verify',
         'clean',
         'resolve',
@@ -40,6 +44,14 @@ module.exports = function (grunt) {
         'runTests',
         'deploy'
     ]);
+
+    grunt.registerTask('fuckYoTest', [
+        'verify',
+        'clean',
+        'resolve',
+        'compile'
+    ]);
+
     grunt.registerTask('watchify', [
         'browserify:watch'
     ]);
