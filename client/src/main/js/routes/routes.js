@@ -6,8 +6,8 @@ var RouterHandler = Router.RouteHandler;
 var DefaultRoute = Router.DefaultRoute;
 
 /* Pages */
-var Main = require('../pages/main');
-var Dashboard = require('../pages/dashboard');
+var Main = require('../views/view-welcome');
+var Dashboard = require('../views/view-dashboard');
 
 /* Default Root Handler */
 var RootDefault = React.createClass({
@@ -19,21 +19,11 @@ var RootDefault = React.createClass({
     }
 });
 
-/* Test Handler */
-var TestHandler = React.createClass({
-    render: function(){
-        return (
-            <h4 className="col-md-8">Roy Batty: I have… seen things you people wouldnt believe… Attack ships on fire off the shoulder of Orion. I watched c-beams glitter in the dark near the Tannhäuser Gate. All those… moments… will be lost in time, like [small cough] tears… in… rain. Time… to die…</h4>
-        )
-    }
-});
-
 var routes = (
-    <Route name="root" path="/" handler={RootDefault}>
+    <Route name="root" path="/welcome" handler={RootDefault}>
         <DefaultRoute name="main" handler={Main} />
-        <Route path="/dashboard" handler={Dashboard}>
-            <Route name="test" path="/test" handler={TestHandler} />
-        </Route>
+        <Route name="dashboard" path="/dashboard" handler={Dashboard} />
+        <Route name="forgot-password" path="/forgotPassword" handler={Dashboard} />
     </Route>
 );
 
