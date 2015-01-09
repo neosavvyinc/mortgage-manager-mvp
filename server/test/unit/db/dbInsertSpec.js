@@ -30,7 +30,7 @@ describe('dbInsert', function() {
 
 		it('should fail if no model is found', function() {
 			spyOn(fs, 'readdirSync').andCallFake(function() {
-				return ['wrong.json'];
+				return ['1.wrong.json'];
 			});
 
 			dummyDb.operation(function() {
@@ -50,7 +50,7 @@ describe('dbInsert', function() {
 			});
 
 			spyOn(fs, 'readdirSync').andCallFake(function() {
-				return ['user.json'];
+				return ['1.user.json'];
 			});
 
 			dummyDb.operation(function() {
@@ -71,7 +71,7 @@ describe('dbInsert', function() {
 			});
 
 			spyOn(fs, 'readdirSync').andCallFake(function() {
-				return ['user.json'];
+				return ['1.user.json'];
 			});
 
 			dummyDb.operation(function() {
@@ -85,7 +85,7 @@ describe('dbInsert', function() {
 
 		it('should succeed if all jsons are empty', function() {
 			spyOn(fs, 'readdirSync').andCallFake(function() {
-				return ['user.json'];
+				return ['1.user.json', '2.application.json'];
 			});
 
 			resolveSpy.andCallFake(function() {
@@ -109,7 +109,7 @@ describe('dbInsert', function() {
 			});
 
 			spyOn(fs, 'readdirSync').andCallFake(function() {
-				return ['user.json'];
+				return ['1.user.json'];
 			});
 
 			dummyDb.operation(function() {
