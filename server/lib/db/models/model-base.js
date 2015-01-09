@@ -74,7 +74,7 @@ base.update = function(update, conditions, options, success, failure) {
  * @param failure
  */
 base.insert = function(item, success, failure) {
-	var objectToSave = new mongooseModel(item);
+	var objectToSave = base._createModelObject(item);
 	objectToSave.save(function(err) {
 		if(err) {
 			failure('Insert: Attempt to save document ' + JSON.stringify(item) + ' failed: '+err);
@@ -91,14 +91,25 @@ base.insert = function(item, success, failure) {
  * @param failure
  */
 base.remove = function(item, success, failure) {
-	var objectToRemove = new mongooseModel(item);
+	var objectToRemove = base._createModelObject(item);
 	objectToRemove.remove(function(err) {
 		if(err) {
-			failure('Remove: Attempt to Remove document with id ' + item._id + ' failed');
+			failure('Remove: Attempt to remove document ' + JSON.stringify(item) + ' failed: '+ err);
 		} else {
 			success();
 		}
 	});
+};
+
+/* Private methods */
+/**
+ * Function that returns a mongoose model object.
+ * @param item
+ * @returns {mongooseModel}
+ * @private
+ */
+base._createModelObject = function(item) {
+	return new mongooseModel(item);
 };
 
 exports.Model = BaseModel;

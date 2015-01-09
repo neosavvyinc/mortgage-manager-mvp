@@ -128,4 +128,86 @@ describe('modelBase', function() {
 				});
 		});
 	});
+
+	describe('insert', function() {
+		var modelSaveSpy,
+			ModelObject = mongoose.model('user', schemas.Schemas.UserSchema),
+			dummyModelObject,
+			item = {dummy: 'dummy'};
+
+		beforeEach(function() {
+			dummyModelObject = new ModelObject(item);
+			spyOn(baseModel.prototype, '_createModelObject').andCallFake(function() {
+				return dummyModelObject;
+			});
+			modelSaveSpy = spyOn(dummyModelObject, 'save');
+		});
+
+		it('should fail if model.save fails', function() {
+			modelSaveSpy.andCallFake(function(callback) {
+				callback(new Error('fail'));
+			});
+
+			base.insert(item, function() {
+				expect().toHaveNotExecuted('Should not have succeeded');
+			},
+			function(error) {
+				expect(error).toBe('Insert: Attempt to save document {"dummy":"dummy"} failed: Error: fail');
+			});
+		});
+
+		it('should succeed if model.save succeed', function() {
+			modelSaveSpy.andCallFake(function(callback) {
+				callback(null);
+			});
+
+			base.insert(item, function() {
+					expect().toHaveExecuted();
+				},
+				function(error) {
+					expect().toHaveNotExecuted('Should not have failed');
+				});
+		});
+	});
+
+	describe('remove', function() {
+		var modelRemoveSpy,
+			ModelObject = mongoose.model('user', schemas.Schemas.UserSchema),
+			dummyModelObject,
+			item = {dummy: 'dummy'};
+
+		beforeEach(function() {
+			dummyModelObject = new ModelObject(item);
+			spyOn(baseModel.prototype, '_createModelObject').andCallFake(function() {
+				return dummyModelObject;
+			});
+			modelRemoveSpy = spyOn(dummyModelObject, 'remove');
+		});
+
+		it('should fail if model.save fails', function() {
+			modelRemoveSpy.andCallFake(function(callback) {
+				callback(new Error('fail'));
+			});
+
+			base.remove(item, function() {
+					expect().toHaveNotExecuted('Should not have succeeded');
+				},
+				function(error) {
+					expect(error).toBe('Remove: Attempt to remove document {"dummy":"dummy"} failed: Error: fail');
+				});
+		});
+
+		it('should succeed if model.save succeed', function() {
+			modelRemoveSpy.andCallFake(function(callback) {
+				callback(null);
+			});
+
+			base.remove(item, function() {
+					expect().toHaveExecuted();
+				},
+				function(error) {
+					expect().toHaveNotExecuted('Should not have failed');
+				});
+		});
+	});
 });
