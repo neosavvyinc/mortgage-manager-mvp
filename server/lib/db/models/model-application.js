@@ -36,7 +36,7 @@ applicationModel.insertNewApp = function(item, success, failure) {
 			//Find the user id for the primary applicant email
 			var user = new userModel();
 
-			user.findDocument({email: item.pEmail}, function(docs) {
+			user.retrieve({email: item.pEmail}, function(docs) {
 				doc = docs[0].toObject();
 				done();
 			}, done);
@@ -67,8 +67,4 @@ applicationModel.insertNewApp = function(item, success, failure) {
 	});
 };
 
-applicationModel.insertUserReference = function(item, success, failure) {
-	var user = new userModel();
-	user.insertOrUpdate(item, null, success, failure);
-};
 exports.Model = ApplicationModel;
