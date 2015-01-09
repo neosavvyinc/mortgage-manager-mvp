@@ -1,8 +1,8 @@
 'use strict';
 
-var db = require('../../../lib/db/scripts/db'),
+var db = require('../../../../lib/db/scripts/db'),
 	mongoose = require('mongoose/'),
-	commonUtils = require('../../../lib/utils/commonUtils');
+	commonUtils = require('../../../../lib/utils/commonUtils');
 
 describe('Database', function() {
 	describe('connect', function() {
