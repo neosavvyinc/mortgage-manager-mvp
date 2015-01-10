@@ -1,0 +1,15 @@
+{
+  "port": 3000,
+  "dbURL": "mongodb://localhost/MAM",
+  "logging": {
+    "levels": {
+      "dev": "info"
+    },
+    "appenders": [
+      {
+        "type": "console",
+        "category": "dev"
+      }
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+#Webstorm settings
+.idea/
+
+node_modules/
+
+build/
+
+coverage/
+
+.DS_Store

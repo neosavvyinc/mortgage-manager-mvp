@@ -1,0 +1,38 @@
+{
+  "name": "mortgage-manager-mvp",
+  "version": "0.0.1",
+  "description": "Youtrack plugin for slack",
+  "repository": {
+    "type": "git",
+    "url": "http://stash.neosavvy.com/projects/MAM/repos/mortage-manager-mvp/browse"
+  },
+  "keywords": ["Mortgage", "Manager"],
+  "author": "Neosavvy",
+  "readmeFilename": "README.md",
+  "dependencies": {
+    "grunt": "0.4.5",
+    "grunt-cli": "0.1.13"
+  },
+
+  "devDependencies": {
+    "grunt-contrib-clean": "0.6.0",
+    "grunt-contrib-copy": "0.7.0",
+    "grunt-contrib-jshint": "0.10.0",
+    "grunt-contrib-compress": "0.12.0",
+    "grunt-shell-spawn": "0.3.0",
+    "grunt-jasmine-node-coverage-validation":"0.0.4",
+    "jasmine-node": "1.14.5",
+    "node-uuid": "1.4.2",
+    "grunt-open": "0.2.3",
+    "matchdep": "0.3.0",
+    "underscore": "1.7.0",
+    "async": "0.9.0",
+    "log4js": "0.6.21",
+    "mongoose": "3.8.19",
+    "express": "4.10.7"
+  },
+  "scripts": {
+    "start": "node lib/server.js",
+    "test": "./node_modules/.bin/grunt test"
+  }
+}

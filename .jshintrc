@@ -1,0 +1,45 @@
+{
+	// JSHint Configuration File for Server/Gruntfile (as on JSHint website)
+	// See http://jshint.com/docs/ for more details
+
+	"maxerr"        : 50,       // {int} Maximum error before stopping
+
+	// Enforcing
+	"camelcase"     : true,     // true: Identifiers must be in camelCase
+	"curly"         : true,     // true: Require {} for every new block or scope
+	"indent"        : 4,        // {int} Number of spaces to use for indentation
+	"newcap"        : true,     // true: Require capitalization of all constructor functions e.g. `new F()`
+	"nonew"         : true,     // true: Prohibit use of constructors for side-effects (without assignment)
+	"quotmark"      : "single", // Quotation mark consistency:
+	//   false    : do nothing (default)
+	//   true     : ensure whatever is used is consistent
+	//   "single" : require single quotes
+	//   "double" : require double quotes
+	"undef"         : true,     // true: Require all non-global variables to be declared (prevents global leaks)
+	"strict"        : true,     // true: Require all functions to run in ECMAScript 5's strict mode
+	"eqeqeq"        : true,     // Require triple equals i.e. `===`.
+
+	"unused"        : "vars",   // Require variables (but not parameters) to be used
+	"latedef"       : false,
+	"maxdepth"      : 3,
+	"expr"          : true,
+
+	// Environments
+	"node"          : true,      // Node.js
+
+	"globals"       : {
+		"jasmine"   : false,
+		"describe"  : false,
+		"xdescribe" : false,
+		"it"        : false,
+		"xit"       : false,
+		"beforeEach": false,
+		"afterEach" : false,
+		"spyOn"     : false,
+		"expect"    : false,
+		"runs"      : false,
+		"waits"     : false,
+		"waitsFor"  : false,
+		"Promise"   : true
+	}
+}
