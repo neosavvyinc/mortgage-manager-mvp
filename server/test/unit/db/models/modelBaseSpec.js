@@ -25,11 +25,11 @@ describe('modelBase', function() {
 			});
 
 			base.findDocumentById('1', function(docs) {
-				expect().toHaveNotExecuted('Should not have succeeded');
-			},
-			function(error) {
-				expect(error).toBe('Could not find document with specified id: Error: fail');
-			});
+					expect().toHaveNotExecuted('Should not have succeeded');
+				},
+				function(error) {
+					expect(error).toBe('Could not find document with specified id: Error: fail');
+				});
 		});
 
 		it('should succeed with no documents if id is not found in mongo', function() {
@@ -126,6 +126,96 @@ describe('modelBase', function() {
 				function(error) {
 					expect().toHaveNotExecuted('Should not have failed');
 				});
+		});
+	});
+
+	describe('insert', function() {
+		var modelSaveSpy,
+			ModelObject = mongoose.model('user', schemas.Schemas.UserSchema),
+			dummyModelObject,
+			item = {dummy: 'dummy'};
+
+		beforeEach(function() {
+			dummyModelObject = new ModelObject(item);
+			spyOn(baseModel.prototype, '_createModelObject').andCallFake(function() {
+				return dummyModelObject;
+			});
+			modelSaveSpy = spyOn(dummyModelObject, 'save');
+		});
+
+		it('should fail if model.save fails', function() {
+			modelSaveSpy.andCallFake(function(callback) {
+				callback(new Error('fail'));
+			});
+
+			base.insert(item, function() {
+					expect().toHaveNotExecuted('Should not have succeeded');
+				},
+				function(error) {
+					expect(error).toBe('Insert: Attempt to save document {"dummy":"dummy"} failed: Error: fail');
+				});
+		});
+
+		it('should succeed if model.save succeed', function() {
+			modelSaveSpy.andCallFake(function(callback) {
+				callback(null);
+			});
+
+			base.insert(item, function() {
+					expect().toHaveExecuted();
+				},
+				function(error) {
+					expect().toHaveNotExecuted('Should not have failed');
+				});
+		});
+	});
+
+	describe('remove', function() {
+		var modelRemoveSpy,
+			ModelObject = mongoose.model('user', schemas.Schemas.UserSchema),
+			dummyModelObject,
+			item = {dummy: 'dummy'};
+
+		beforeEach(function() {
+			dummyModelObject = new ModelObject(item);
+			spyOn(baseModel.prototype, '_createModelObject').andCallFake(function() {
+				return dummyModelObject;
+			});
+			modelRemoveSpy = spyOn(dummyModelObject, 'remove');
+		});
+
+		it('should fail if model.save fails', function() {
+			modelRemoveSpy.andCallFake(function(callback) {
+				callback(new Error('fail'));
+			});
+
+			base.remove(item, function() {
+					expect().toHaveNotExecuted('Should not have succeeded');
+				},
+				function(error) {
+					expect(error).toBe('Remove: Attempt to remove document {"dummy":"dummy"} failed: Error: fail');
+				});
+		});
+
+		it('should succeed if model.save succeed', function() {
+			modelRemoveSpy.andCallFake(function(callback) {
+				callback(null);
+			});
+
+			base.remove(item, function() {
+					expect().toHaveExecuted();
+				},
+				function(error) {
+					expect().toHaveNotExecuted('Should not have failed');
+				});
+		});
+	});
+
+	describe('_createModelObject', function() {
+		it('should return a model object for a particular item', function() {
+			var  item = {dummy: 'dummy'};
+			var modelObject = base._createModelObject(item);
+			expect(typeof modelObject).toBe('object');
 		});
 	});
 });

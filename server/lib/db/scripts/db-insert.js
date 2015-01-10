@@ -129,7 +129,7 @@ var saveFile = function(file, success, failure) {
  * @param failure
  */
 var saveUsers = function(json, success, failure) {
-	var data = _.isEmpty(json) ? [] : json.user,
+	var data = _.isEmpty(json.user) ? [] : json.user,
 		user = new userModel();
 	async.eachSeries(data, function(item, done) {
 		user.insertOrUpdate(item, { email: item.email }, done, done);
@@ -149,7 +149,7 @@ var saveUsers = function(json, success, failure) {
  * @param failure
  */
 var saveApplications = function(json, success, failure) {
-	var data = _.isEmpty(json) ? [] : json.application,
+	var data = _.isEmpty(json.application) ? [] : json.application,
 		application = new applicationModel();
 	async.eachSeries(data, function(item, done) {
 		application.insertNewApp(item, done, done);
