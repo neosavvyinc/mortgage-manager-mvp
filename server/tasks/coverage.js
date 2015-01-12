@@ -48,10 +48,6 @@ module.exports = function(grunt) {
 
 		grunt.config.set('jasmine_node', config);
 
-		if(grunt.option('openBrowser') === true) {
-			taskList.push('_open');
-		}
-
 		grunt.task.run(taskList);
 	});
 

@@ -45,7 +45,7 @@ module.exports = function gruntFile(grunt) {
 
 		jshint: {
 			options: {
-				jshintrc: './.jshintrc'
+				jshintrc: '../.jshintrc'
 			},
 			grunt: ['./*.js'],
 			server: ['./lib/**/*.js'],
@@ -112,7 +112,7 @@ module.exports = function gruntFile(grunt) {
 
 	grunt.registerTask('integration-test', 'Runs integration tests', function() {
 		process.env.TEST_ENV = 'integration';
-		grunt.task.run('jasmineTests');
+		grunt.task.run('stop', 'jasmineTests');
 	});
 
 	grunt.registerTask('test', 'Runs unit and integration tests', function() {
@@ -141,6 +141,7 @@ module.exports = function gruntFile(grunt) {
 
 	grunt.registerTask('default', [
 		'static-analysis',
+		'stop',
 		'test'
 	]);
 };

@@ -25,11 +25,11 @@ describe('modelBase', function() {
 			});
 
 			base.findDocumentById('1', function(docs) {
-				expect().toHaveNotExecuted('Should not have succeeded');
-			},
-			function(error) {
-				expect(error).toBe('Could not find document with specified id: Error: fail');
-			});
+					expect().toHaveNotExecuted('Should not have succeeded');
+				},
+				function(error) {
+					expect(error).toBe('Could not find document with specified id: Error: fail');
+				});
 		});
 
 		it('should succeed with no documents if id is not found in mongo', function() {
@@ -149,11 +149,11 @@ describe('modelBase', function() {
 			});
 
 			base.insert(item, function() {
-				expect().toHaveNotExecuted('Should not have succeeded');
-			},
-			function(error) {
-				expect(error).toBe('Insert: Attempt to save document {"dummy":"dummy"} failed: Error: fail');
-			});
+					expect().toHaveNotExecuted('Should not have succeeded');
+				},
+				function(error) {
+					expect(error).toBe('Insert: Attempt to save document {"dummy":"dummy"} failed: Error: fail');
+				});
 		});
 
 		it('should succeed if model.save succeed', function() {
@@ -208,6 +208,14 @@ describe('modelBase', function() {
 				function(error) {
 					expect().toHaveNotExecuted('Should not have failed');
 				});
+		});
+	});
+
+	describe('_createModelObject', function() {
+		it('should return a model object for a particular item', function() {
+			var  item = {dummy: 'dummy'};
+			var modelObject = base._createModelObject(item);
+			expect(typeof modelObject).toBe('object');
 		});
 	});
 });

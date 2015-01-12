@@ -1,4 +1,6 @@
 Mortgage Manager Prototype
 ==========================
 
-Look into the client and server directories for the respective readme files.
+Click [here] (server/README.md) for the server readme file
+
+Click [here] (client/README.md) for the client readme file
