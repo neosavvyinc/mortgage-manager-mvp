@@ -1,6 +1,6 @@
 'use strict';
 
-var settings = require('../../../lib/config/settings');
+var settings = require('../../../lib/config/app/settings');
 
 describe('settings', function() {
 

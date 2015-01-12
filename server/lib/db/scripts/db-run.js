@@ -2,7 +2,7 @@
 
 var errorUtils = require('../../utils/errorUtils'),
 	dbInsert = require('./db-insert'),
-	settings = require('../../config/settings'),
+	settings = require('../../config/app/settings'),
 	async = require('async'),
 	path = require('path'),
 	fs = require('fs');

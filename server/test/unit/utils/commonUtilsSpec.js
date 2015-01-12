@@ -1,7 +1,7 @@
 'use strict';
 
 var commonUtils = require('../../../lib/utils/commonUtils'),
-	settings = require('../../../lib/config/settings');
+	settings = require('../../../lib/config/app/settings');
 
 describe('commonUtils', function() {
 	describe('dereference', function() {

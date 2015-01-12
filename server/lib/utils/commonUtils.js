@@ -2,7 +2,7 @@
 
 var log4js = require('log4js'),
 	uuid = require('node-uuid'),
-	settings = require('../config/settings'),
+	settings = require('../config/app/settings'),
 	fs = require('fs');
 
 /**
