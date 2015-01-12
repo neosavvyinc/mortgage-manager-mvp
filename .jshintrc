@@ -26,7 +26,20 @@
 
 	// Environments
 	"node"          : true,      // Node.js
+
 	"globals"       : {
-		"Promise": true
+		"jasmine"   : false,
+		"describe"  : false,
+		"xdescribe" : false,
+		"it"        : false,
+		"xit"       : false,
+		"beforeEach": false,
+		"afterEach" : false,
+		"spyOn"     : false,
+		"expect"    : false,
+		"runs"      : false,
+		"waits"     : false,
+		"waitsFor"  : false,
+		"Promise"   : true
 	}
 }

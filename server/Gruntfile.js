@@ -33,7 +33,7 @@ module.exports = function gruntFile(grunt) {
 			},
 
 			populate: {
-				command: 'node lib/db/db-run.js create',
+				command: 'node lib/db/scripts/db-run.js create',
 				options: {
 					async: false,
 					execOptions: {
@@ -45,18 +45,11 @@ module.exports = function gruntFile(grunt) {
 
 		jshint: {
 			options: {
-				jshintrc: './.jshintrc'
+				jshintrc: '../.jshintrc'
 			},
 			grunt: ['./*.js'],
 			server: ['./lib/**/*.js'],
-			test: {
-				options: {
-					jshintrc: './.jshintrc-test'
-				},
-				files: {
-					src: ['./test/**/*.js']
-				}
-			}
+			test: ['./test/**/*.js']
 		},
 
 		compress: {
@@ -119,7 +112,7 @@ module.exports = function gruntFile(grunt) {
 
 	grunt.registerTask('integration-test', 'Runs integration tests', function() {
 		process.env.TEST_ENV = 'integration';
-		grunt.task.run('jasmineTests');
+		grunt.task.run('stop', 'jasmineTests');
 	});
 
 	grunt.registerTask('test', 'Runs unit and integration tests', function() {
@@ -148,6 +141,7 @@ module.exports = function gruntFile(grunt) {
 
 	grunt.registerTask('default', [
 		'static-analysis',
+		'stop',
 		'test'
 	]);
 };

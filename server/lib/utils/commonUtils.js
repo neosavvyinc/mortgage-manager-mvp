@@ -1,10 +1,9 @@
 'use strict';
 
 var log4js = require('log4js'),
-	config = require('../config/settings').getConfig(),
-	fs = require('fs'),
-	assert = require('assert'),
-	util = require('util');
+	uuid = require('node-uuid'),
+	settings = require('../config/settings'),
+	fs = require('fs');
 
 /**
  * Dereference an object chain. For example: var o={ a: { b: { c: 'chuck' } } } could be
@@ -33,19 +32,10 @@ exports.dereference=function(object, path, dfault) {
  * @returns {Logger}
  */
 exports.getLogger = function() {
-	var category = exports.dereference(config.logging.appenders[0], 'category', 'dev');
+	var config = settings.getConfig(),
+		category = exports.dereference(config.logging.appenders[0], 'category', 'dev');
 	log4js.configure(config.logging, {});
 	return log4js.getLogger(category);
-};
-
-/**
- * Assert that value is mandatory
- * @param value
- * @param name{String} - Can be null.
- */
-exports.assertRequired = function(value, name) {
-	name = name || '[unknown]';
-	assert.ok(value !== null, util.format('Require param \'%s\' is null', name));
 };
 
 /**
@@ -66,6 +56,23 @@ exports.stubGetter = function(obj, getter, callback) {
 		}
 	};
 	obj.__defineGetter__(getter, callback);
+};
+
+/**
+ * Generates a unique id based on timestamp.
+ * @returns {*}
+ * @private
+ */
+exports.generateId = function() {
+	return uuid.v1();
+};
+
+/**
+ * Returns current date
+ * @returns {Date}
+ */
+exports.getCurrentDate = function() {
+	return new Date();
 };
 
 /**

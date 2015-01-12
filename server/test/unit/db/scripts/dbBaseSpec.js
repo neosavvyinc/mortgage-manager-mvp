@@ -1,7 +1,7 @@
 'use strict';
 
-var dbBase = require('../../../lib/db/db-base');
-var db = require('../../../lib/db/db');
+var dbBase = require('../../../../lib/db/scripts/db-base');
+var db = require('../../../../lib/db/scripts/db');
 
 describe('dbBase', function() {
 	var dummyBase;

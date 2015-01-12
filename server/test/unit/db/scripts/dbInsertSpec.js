@@ -2,17 +2,24 @@
 
 var fs = require('fs'),
 	path = require('path'),
-	db = require('../../../lib/db/db-insert'),
-	model = require('mongoose/lib/model');
+	db = require('../../../../lib/db/scripts/db-insert'),
+	userModel = require('../../../../lib/db/models/model-user').Model,
+	applicationModel = require('../../../../lib/db/models/model-application').Model;
 
 describe('dbInsert', function() {
 	var dummyDb,
-		resolveSpy;
+		resolveSpy,
+		userInsertSpy,
+		applicationInsertSpy;
+
 	beforeEach(function() {
 		dummyDb = new db.Db('url');
 		resolveSpy = spyOn(path, 'resolve').andCallFake(function() {
-			return __dirname + '/resources/withdata';
+			return __dirname.split('scripts')[0] + '/resources/withdata';
 		});
+
+		userInsertSpy = spyOn(userModel.prototype, 'insertOrUpdate');
+		applicationInsertSpy = spyOn(applicationModel.prototype, 'insertNewApp');
 	});
 
 	describe('operation', function() {
@@ -30,7 +37,7 @@ describe('dbInsert', function() {
 
 		it('should fail if no model is found', function() {
 			spyOn(fs, 'readdirSync').andCallFake(function() {
-				return ['wrong.json'];
+				return ['1.wrong.json'];
 			});
 
 			dummyDb.operation(function() {
@@ -41,58 +48,51 @@ describe('dbInsert', function() {
 				});
 		});
 
-		it('should fail if saveToMongo fails for logins', function() {
-			spyOn(model, 'findOneAndUpdate').andCallFake(function(json, item, options, callback) {
-				var dbi = {
-						_id: 1
-					};
-				callback(new Error('fail'), dbi);
-			});
-
-			spyOn(fs, 'readdirSync').andCallFake(function() {
-				return ['login.json'];
+		it('should fail if saveToMongo fails for user', function() {
+			userInsertSpy.andCallFake(function(item, condition, success, failure) {
+				failure('user fail');
 			});
 
 			dummyDb.operation(function() {
 					expect().toHaveNotExecuted('Should not have succeeded');
 				},
 				function(error) {
-					expect(error).toBe('Attempt to insert/update username banker failed: fail');
+					expect(error).toBe('user fail');
 				});
 		});
 
-		it('should succeed if findOneAndUpdate returns a null id', function() {
-			spyOn(model, 'findOneAndUpdate').andCallFake(function(json, item, options, callback) {
-				var dbi = {
-					_id: null
-				};
-				callback(null, dbi);
+		it('should fail if saveToMongo fails for application', function() {
+			userInsertSpy.andCallFake(function(item, condition, success, failure) {
+				success();
 			});
 
-			spyOn(fs, 'readdirSync').andCallFake(function() {
-				return ['login.json'];
+			applicationInsertSpy.andCallFake(function(item, success, failure) {
+				failure('application fail');
 			});
 
 			dummyDb.operation(function() {
-					expect(fs.readdirSync.callCount).toBe(1);
-					expect(model.findOneAndUpdate.callCount).toBe(2);
+					expect().toHaveNotExecuted('Should not have succeeded');
 				},
 				function(error) {
-					expect().toHaveNotExecuted('Should not have failed');
+					expect(error).toBe('application fail');
 				});
 		});
 
 		it('should succeed if all jsons are empty', function() {
-			spyOn(fs, 'readdirSync').andCallFake(function() {
-				return ['login.json'];
+			userInsertSpy.andCallFake(function(item, condition, success, failure) {
+				success();
+			});
+
+			applicationInsertSpy.andCallFake(function(item, success, failure) {
+				success();
 			});
 
 			resolveSpy.andCallFake(function() {
-				return __dirname + '/resources/empty';
+				return __dirname.split('scripts')[0] + '/resources/empty';
 			});
 
 			dummyDb.operation(function() {
-					expect(fs.readdirSync.callCount).toBe(1);
+					expect().toHaveExecuted();
 				},
 				function(error) {
 					expect().toHaveNotExecuted('Should not have failed');
@@ -100,20 +100,16 @@ describe('dbInsert', function() {
 		});
 
 		it('should succeed if both getResources and saveToMongo succeed', function() {
-			spyOn(model, 'findOneAndUpdate').andCallFake(function(json, item, options, callback) {
-				var dbi = {
-					_id: 1
-				};
-				callback(null, dbi);
+			userInsertSpy.andCallFake(function(item, condition, success, failure) {
+				success();
 			});
 
-			spyOn(fs, 'readdirSync').andCallFake(function() {
-				return ['login.json'];
+			applicationInsertSpy.andCallFake(function(item, success, failure) {
+				success();
 			});
 
 			dummyDb.operation(function() {
-					expect(fs.readdirSync.callCount).toBe(1);
-					expect(model.findOneAndUpdate.callCount).toBe(2);
+					expect().toHaveExecuted();
 				},
 				function(error) {
 					expect().toHaveNotExecuted('Should not have failed');

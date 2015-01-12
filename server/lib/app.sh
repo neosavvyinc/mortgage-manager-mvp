@@ -1,5 +1,4 @@
 #!/bin/bash
-#
 # Shell script for controlling the node server and mongo
 
 ## arguments
@@ -76,6 +75,7 @@ display_info() {
 		echo "mongod running: PID=${PID}"
 	fi
 }
+
 #action
 if `test ${OPERATION} = "info"`
 then

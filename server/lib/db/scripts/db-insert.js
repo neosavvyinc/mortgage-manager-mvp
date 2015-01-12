@@ -7,9 +7,10 @@ var dbInsert,
 	util = require('util'),
 	_ = require('underscore'),
 	dbBase = require('./db-base'),
-	models = require('./model'),
-	commonUtils = require('../utils/commonUtils'),
-	errorUtils = require('../utils/errorUtils'),
+	userModel = require('../models/model-user').Model,
+	applicationModel = require('../models/model-application').Model,
+	commonUtils = require('../../utils/commonUtils'),
+	errorUtils = require('../../utils/errorUtils'),
 	allJson = {},
 	resourcesPath;
 
@@ -28,10 +29,12 @@ dbInsert = DbInsert.prototype;
 
 /**
  * Imports all the json files into mongodb
+ * @param success
+ * @param failure
  */
 dbInsert.operation = function(success, failure) {
 	var files = [];
-	resourcesPath = path.resolve(__dirname + '/resources');
+	resourcesPath = path.resolve(__dirname.split('scripts')[0] + 'resources');
 	async.series([
 			function(done) {
 				files = getResources(resourcesPath,
@@ -70,7 +73,6 @@ var getResources = function(resourcePath, success, failure) {
 /**
  * Saves each json file in the array to mongo.
  * @param files - Array of json files
- * @param saveCallback - iterator that saves one file at a time.
  * @param success
  * @param failure
  */
@@ -107,36 +109,50 @@ var iterateFiles = function(file, next) {
  */
 var saveFile = function(file, success, failure) {
 	var absolutePath = resourcesPath + '/' + file,
-		dbModel = file.split('.')[0];
+		dbModel = file.split('.')[1];
 
-	if(dbModel === 'login') {
-		allJson.login = commonUtils.readJSON(absolutePath);
-		saveLogins(allJson, success, failure);
+	if(dbModel === 'user') {
+		allJson.user = commonUtils.readJSON(absolutePath);
+		saveUsers(allJson, success, failure);
+	} else if(dbModel === 'application') {
+		allJson.application = commonUtils.readJSON(absolutePath);
+		saveApplications(allJson, success, failure);
 	} else {
 		failure('No model found with name ' + dbModel);
 	}
 };
 
 /**
- * Save logins to mongo
+ * Save users to mongo
  * @param json
  * @param success
  * @param failure
  */
-var saveLogins = function(json, success, failure) {
-	var options = { upsert: true },
-		data = _.isEmpty(json) ? [] : json.login;
-
+var saveUsers = function(json, success, failure) {
+	var data = _.isEmpty(json.user) ? [] : json.user,
+		user = new userModel();
 	async.eachSeries(data, function(item, done) {
-		var error = null;
-		models.Login.findOneAndUpdate({name: item.username}, item, options, function(err, dbi) {
-			if(err) {
-				error = 'Attempt to insert/update username '+ item.username + ' failed: ' + err.message;
-			} else {
-				item._id = dbi.id;
-			}
-			done(error);
-		});
+		user.insertOrUpdate(item, { email: item.email }, done, done);
+	}, function(error) {
+		if(error) {
+			failure(error);
+		} else {
+			success();
+		}
+	});
+};
+
+/**
+ * Save applications to mongo
+ * @param json
+ * @param success
+ * @param failure
+ */
+var saveApplications = function(json, success, failure) {
+	var data = _.isEmpty(json.application) ? [] : json.application,
+		application = new applicationModel();
+	async.eachSeries(data, function(item, done) {
+		application.insertNewApp(item, done, done);
 	}, function(error) {
 		if(error) {
 			failure(error);
