@@ -1,13 +1,20 @@
 var React = require('react');
-var Link = require('react-router').Link;
+var Router = require('react-router');
+var Link = Router.Link;
 var Reflux = require('reflux');
 
 var Login = require('../components/component-login');
 var UserStore = require('../stores/store-user');
+var LenderStore = require('../stores/store-lender');
+var BorrowerStore = require('../stores/store-borrower');
 
 var Main = React.createClass({
 
-    mixins: [Reflux.listenTo(UserStore, 'onLoginError')],
+    mixins: [
+        Router.Navigation,
+        Reflux.listenTo(UserStore, 'onLogin'),
+        Reflux.listenTo(LenderStore, 'onNewLender'),
+        Reflux.listenTo(BorrowerStore, 'onNewBorrower')],
 
     statics: {
         willTransitionTo: function (transition){
@@ -21,10 +28,6 @@ var Main = React.createClass({
         return {
             loginError: false
         }
-    },
-
-    componentDidMount: function() {
-        this.listenTo(UserStore, this.doSomething);
     },
 
     render: function(){
@@ -67,22 +70,33 @@ var Main = React.createClass({
         );
     },
 
-    onLoginError: function(){
-        console.log("trying this again.");
-
+    onLogin: function(){
         if(!UserStore.isAuthenticated()) {
+            console.log("error");
             this.setState({loginError: true});
+        } else {
+            console.log("success");
+            this.transitionTo('dashboard');
         }
+    },
+
+    onNewLender: function(){
+        this.transitionTo('test');
+    },
+
+    onNewBorrower: function(){
+        this.transitionTo('test');
     },
 
     onSignUpBorrower: function(){
         var email = this.refs.borrowerEmail.getDOMNode().value;
-        UserAction.addLender(email);
+        //UserAction.addLender(email);
 
     },
+
     onSignUpLender: function(){
         var email = this.refs.lenderEmail.getDOMNode().value;
-        UserAction.addBorrower(email);
+        //UserAction.addBorrower(email);
     }
 
 });

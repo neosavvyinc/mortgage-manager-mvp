@@ -3,9 +3,7 @@ var Reflux = require('reflux');
 
 var UserActions = Reflux.createActions([
     'login',
-    'logout',
-    'addLender',
-    'addBorrower'
+    'logout'
 ]);
 
 module.exports = UserActions;
