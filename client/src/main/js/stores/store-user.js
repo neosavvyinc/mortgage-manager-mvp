@@ -26,15 +26,14 @@ var UserStore = Reflux.createStore({
     */
 
     onLogin: function(email, password){
-        var self = this;
         User.login(email, password).then(function(){
             _currentUser.email = email;
             _currentUser.password = password;
-            self.trigger();
-        }, function(){
+            this.trigger();
+        }.bind(this), function(){
             _currentUser = {};
-            self.trigger();
-        });
+            this.trigger();
+        }.bind(this));
     },
 
     onLogout: function(){
