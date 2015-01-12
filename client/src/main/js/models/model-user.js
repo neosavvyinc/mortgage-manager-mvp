@@ -8,21 +8,27 @@ function User () { }
 
 User.login = function (email, password){
     return Q.promise(function(resolve, reject){
-        setTimeout(function(){
-            if(email == "pablo@gmail.com")
-                resolve({email:"pablo@gmail.com", other: true});
-            else
-                reject({msg: "error logging in"});
-        }, 1000);
-        /*$.post(Endpoints.LOGIN, {
+        $.post(Endpoints.LOGIN, {
             email: email,
             password: password
-        },function(success){
-            resolve(success);
-        }, function(error){
+        }).success(function(response){
+            resolve(response);
+        }).error(function(error){
             reject(error);
-        });*/
+        });
     });
 };
+
+User.register = function (newUser){
+    return Q.promise(function(resolve, reject){
+        $.post(Endpoints.REGISTER, newUser)
+            .success(function(response){
+                resolve(response);
+            })
+            .error(function(error){
+                reject(error);
+            });
+    });
+}
 
 module.exports = User;
