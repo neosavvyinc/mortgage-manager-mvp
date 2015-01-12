@@ -42,18 +42,6 @@ var UserStore = Reflux.createStore({
         this.trigger();
     },
 
-    //onAddLender: function(email){
-    //    _newUser.email = email;
-    //    _newUser.type = "Lender";
-    //    this.trigger();
-    //},
-    //
-    //onAddBorrower: function(email){
-    //    _newUser.email = email;
-    //    _newUser.type = "Borrower";
-    //    this.trigger();
-    //},
-
     isAuthenticated: function(){
         return (_currentUser.email && _currentUser.password);
     },
