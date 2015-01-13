@@ -10,6 +10,7 @@ var Welcome = require('../views/view-welcome');
 var Dashboard = require('../views/view-dashboard');
 var NewPassword = require('../views/registration/view-new-password');
 var ApplicantInfo = require('../views/registration/view-applicant-info');
+var ApplicantQuestions = require('../views/registration/view-questions');
 
 /* Default Root Handler */
 var RootDefault = React.createClass({
@@ -26,6 +27,7 @@ var routes = (
         <DefaultRoute name="welcome" handler={Welcome} />
         <Route name="register" handler={RootDefault}>
             <Route name="newPassword" path="/register/newPassword" handler={NewPassword}/>
+            <Route name="applicantQuestions" path="/register/applicantQuestions" handler={ApplicantQuestions} />
             <Route name="applicantInfo" path="/register/applicantInfo" handler={ApplicantInfo} />
         </Route>
         <Route name="dashboard" handler={Dashboard} />

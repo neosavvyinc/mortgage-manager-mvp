@@ -31,4 +31,16 @@ User.register = function (newUser){
     });
 };
 
+User.update = function (userInfo){
+    return Q.promise(function(resolve, reject){
+        $.post(Endpoints.USER.ONE.URL.replace(':id', userInfo.id), userInfo)
+            .success(function(response){
+                resolve(response);
+            })
+            .error(function(error){
+                reject(error);
+            });
+    });
+};
+
 module.exports = User;

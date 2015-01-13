@@ -65,7 +65,7 @@ var NewPassword = React.createClass({
                 errorText: "There was an error creating your user. Please try again."
             });
         } else {
-            this.transitionTo('applicantInfo');
+            this.transitionTo('applicantQuestions');
         }
     }
 });

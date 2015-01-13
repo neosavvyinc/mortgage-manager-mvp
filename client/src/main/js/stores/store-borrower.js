@@ -20,11 +20,22 @@ var BorrowerStore = Reflux.createStore({
 
     onNewPassword: function(password){
         _borrower.password = password;
-        User.register(_borrower).then(function(){
+        User.register(_borrower).then(function(user){
+            _borrower.id = user.id;
             _isAjaxError = false;
             this.trigger();
         }.bind(this), function(){
             _isAjaxError = true;
+            this.trigger();
+        }.bind(this));
+    },
+
+    onSubmitQuestions: function (hasCoapplicant, isSelfEmployed){
+        // TODO: Implement User Update with endpoint / payload schema
+        User.update({
+            hasCoapplicant: hasCoapplicant,
+            isSelfEmployed: isSelfEmployed
+        }).then(function(){
             this.trigger();
         }.bind(this));
     },

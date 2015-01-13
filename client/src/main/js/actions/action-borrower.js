@@ -3,7 +3,8 @@ var Reflux = require('reflux');
 
 var BorrowerActions = Reflux.createActions([
     'newBorrower',
-    'newPassword'
+    'newPassword',
+    "submitQuestions"
 ]);
 
 module.exports = BorrowerActions;
