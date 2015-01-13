@@ -29,7 +29,7 @@ exports.initPassport = function(passport) {
  */
 exports.validateLogin = function(passport) {
 	return function(req, res, next) {
-		passport.authenticate('login', function(err, user, info) {
+		passport.authenticate('local', function(err, user, info) {
 			if (err) {
 				res.send(err);
 			}
@@ -49,7 +49,7 @@ exports.validateLogin = function(passport) {
  * @private
  */
 var _loginSetup = function(passport) {
-	passport.use('login', new LocalStrategy({
+	passport.use('local', new LocalStrategy({
 			passReqToCallback : true
 		},
 		function(req, username, password, done) {
