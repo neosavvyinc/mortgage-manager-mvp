@@ -22,7 +22,7 @@ module.exports = function(app, passport) {
 
 	// Forward 404 to Error handler
 	app.use(function(req, res, next) {
-		var error = new Error('Page not found');
+		var error = new Error('Route not handled');
 		error.status = 404;
 		next(error);
 	});

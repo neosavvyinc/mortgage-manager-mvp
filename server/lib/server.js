@@ -13,12 +13,10 @@ var path = require('path'),
 	server, log;
 
 // Configure routes
-routes(app);
+routes(app, passport);
 
 // Configure middleware
 middleware(app, passport);
-
-//app.set('view engine', null);
 
 /**
  * Listens on a port

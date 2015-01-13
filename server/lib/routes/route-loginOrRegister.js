@@ -5,7 +5,8 @@ var bCrypt = require('bcrypt-nodejs'),
 	loginService = require('../services/service-loginOrRegister');
 
 /**
- *
+ * Initializes passport for the application. Creates function to serialize and deserialize
+ * users.
  * @param passport
  */
 exports.initPassport = function(passport) {
@@ -23,11 +24,26 @@ exports.initPassport = function(passport) {
 	_registerSetup(passport);
 };
 
-/** Private Functions */
+/**
+ * Validates username and password through passport
+ * @param passport
+ */
+exports.validateLogin = function(passport) {
+	return passport.authenticate('login', {});
+};
 
 /**
- * Checks if username and password are valid.
+ * Registers a new user through passport
  * @param passport
+ */
+exports.registerUser = function(passport) {
+	return passport.authenticate('register', {});
+};
+
+/**
+ * Private function that configures passport to check if username and password are valid.
+ * @param passport
+ * @private
  */
 var _loginSetup = function(passport) {
 	passport.use('login', new LocalStrategy({
@@ -37,19 +53,18 @@ var _loginSetup = function(passport) {
 			// check in mongo if a user with username exists or not
 			loginService.findUser({ 'email' :  username },
 				function(err, user) {
+					console.log('Finding user');
 					// In case of any error, return using the done method
 					if (err) {
 						return done(err);
 					}
 					// Username does not exist, log error & redirect back
-					if (!user){
-						console.log('User Not Found with username ' + username);
-						return done(null, false, req.flash('message', 'User Not found.'));
+					if (!user) {
+						return done(null, false, { message: 'User Not found.' });
 					}
 					// User exists but wrong password, log the error
-					if (!_isValidPassword(user, password)){
-						console.log('Invalid Password');
-						return done(null, false, req.flash('message', 'Invalid Password'));
+					if (!_isValidPassword(user, password)) {
+						return done(null, false, { message: 'Incorrect password.' });
 					}
 					// User and password both match, return user from
 					// done method which will be treated like success
@@ -60,13 +75,13 @@ var _loginSetup = function(passport) {
 };
 
 /**
- *
+ * Private function that configures passport to register a new user.
  * @param passport
  * @private
  */
 var _registerSetup = function(passport){
-	passport.use('signup', new LocalStrategy({
-				passReqToCallback : true //allows us to pass back the entire request to the callback
+	passport.use('register', new LocalStrategy({
+			passReqToCallback : true //allows us to pass back the entire request to the callback
 		},
 		function(req, username, password, done) {
 			var findOrCreateUser = function() {
