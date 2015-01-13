@@ -8,5 +8,10 @@ module.exports = function(app, passport) {
 	app.route('/healthcheck')
 		.get(routeHealthcheck.healthCheck);
 
+	//Validate User Login
 	app.post('/login', routeLogin.validateLogin(passport));
+
+	//Register User
+	app.post('/register', routeLogin.registerUser(passport));
+
 };

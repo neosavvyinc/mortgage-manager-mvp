@@ -10,7 +10,7 @@ var userModel = require('../db/models/model-user').Model;
 exports.findUser = function(conditions, callback) {
 	var user = new userModel();
 	user.retrieve(conditions, function(doc) {
-		callback(null, doc.toObject());
+		callback(null, doc);
 	},
 	function(error) {
 		callback(error, null);

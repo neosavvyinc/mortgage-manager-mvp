@@ -3,6 +3,7 @@
 var util = require('util'),
 	_ = require('underscore'),
 	async = require('async'),
+	bCrypt = require('bcrypt-nodejs'),
 	baseModel = require('./model-base'),
 	commonUtils = require('../../utils/commonUtils'),
 	Schemas = require('../schemas').Schemas,
@@ -42,12 +43,15 @@ userModel.insertOrUpdate = function(item, condition, success, failure) {
 		},
 		function(done) {
 			if(_.isEmpty(docs)) {
+				var password = _createHash(item.password);
 				_.extend(item, {
 					_id: uid,
 					created: currentDate,
 					lastLogin: currentDate,
 					appId: []
 				});
+
+				item.password = password;
 				userModel.insert(item, done, done);
 			} else {
 				userModel.update(item, {_id: docs._id }, null, done, done);
@@ -60,6 +64,16 @@ userModel.insertOrUpdate = function(item, condition, success, failure) {
 			success();
 		}
 	});
+};
+
+/**
+ * Generates hash using bCrypt
+ * @param password
+ * @returns {*}
+ * @private
+ */
+var _createHash = function(password){
+	return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
 };
 
 exports.Model = UserModel;
