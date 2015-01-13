@@ -38,6 +38,7 @@ var UserStore = Reflux.createStore({
 
     onLogout: function(){
         _currentUser = {};
+        console.log('Logging out');
         this.trigger();
     },
 
@@ -46,7 +47,6 @@ var UserStore = Reflux.createStore({
     },
 
     getCurrentUser: function(){
-        console.log("getting current user...");
         return _currentUser;
     }
 

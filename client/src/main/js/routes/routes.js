@@ -6,8 +6,10 @@ var RouterHandler = Router.RouteHandler;
 var DefaultRoute = Router.DefaultRoute;
 
 /* Pages */
-var Main = require('../views/view-welcome');
+var Welcome = require('../views/view-welcome');
 var Dashboard = require('../views/view-dashboard');
+var NewPassword = require('../views/registration/view-new-password');
+var ApplicantInfo = require('../views/registration/view-applicant-info');
 
 /* Default Root Handler */
 var RootDefault = React.createClass({
@@ -21,9 +23,13 @@ var RootDefault = React.createClass({
 
 var routes = (
     <Route name="root" path="/welcome" handler={RootDefault}>
-        <DefaultRoute name="main" handler={Main} />
-        <Route name="dashboard" path="/dashboard" handler={Dashboard} />
-        <Route name="forgot-password" path="/forgotPassword" handler={Dashboard} />
+        <DefaultRoute name="welcome" handler={Welcome} />
+        <Route name="register" handler={RootDefault}>
+            <Route name="newPassword" path="/register/newPassword" handler={NewPassword}/>
+            <Route name="applicantInfo" path="/register/applicantInfo" handler={ApplicantInfo} />
+        </Route>
+        <Route name="dashboard" handler={Dashboard} />
+        <Route name="forgot-password" handler={Dashboard} />
     </Route>
 );
 

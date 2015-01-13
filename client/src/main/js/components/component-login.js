@@ -1,19 +1,22 @@
 var React = require('react');
 var Link = require('react-router').Link;
+
 var UserActions = require('../actions/action-user');
+
+var ErrorMessage = require('../components/component-error-msg');
 
 var Login = React.createClass({
 
     render: function(){
 
-        var errorClass = this.props.error ? "error dismissible message gap-bottom" : "hidden";
+        var errorText = "There was an error with your credentials. Please try again.";
 
         return (
-            <form >
+            <form>
                 <h4>Already a User?</h4>
                 <input className="gap-bottom" ref="userEmail" type="email" placeholder="Email Address" />
                 <input className="gap-bottom" ref="userPassword" type="password" placeholder="Password" />
-                <div className={errorClass}>There was an error with your credentials. Please try again.</div>
+                <ErrorMessage errorDisplay={this.props.error} errorMessage={errorText}/>
                 <button className="block turquoise" onClick={this.onLogin}>
                     Login
                 </button>

@@ -29,6 +29,6 @@ User.register = function (newUser){
                 reject(error);
             });
     });
-}
+};
 
 module.exports = User;
