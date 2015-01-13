@@ -21,7 +21,6 @@ exports.initPassport = function(passport) {
 
 	// Setting up Passport Strategies for Login and SignUp/Registration
 	_loginSetup(passport);
-	_registerSetup(passport);
 };
 
 /**
@@ -42,14 +41,6 @@ exports.validateLogin = function(passport) {
 			res.end();
 		})(req, res, next);
 	};
-};
-
-/**
- * Registers a new user through passport
- * @param passport
- */
-exports.registerUser = function(passport) {
-	return passport.authenticate('register', { failureFlash: true });
 };
 
 /**
@@ -88,21 +79,6 @@ var _loginSetup = function(passport) {
 };
 
 /**
- * Private function that configures passport to register a new user.
- * @param passport
- * @private
- */
-var _registerSetup = function(passport){
-	passport.use('register', new LocalStrategy({
-			passReqToCallback : true //allows us to pass back the entire request to the callback
-		},
-		function(req, username, password, done) {
-
-		})
-	);
-};
-
-/**
  * Checks if a password is valid
  * @param user
  * @param password
@@ -111,14 +87,4 @@ var _registerSetup = function(passport){
  */
 var _isValidPassword = function(user, password) {
 	return bCrypt.compareSync(password, user.password);
-};
-
-/**
- * Generates hash using bCrypt
- * @param password
- * @returns {*}
- * @private
- */
-var _createHash = function(password) {
-	return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
 };

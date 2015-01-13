@@ -10,8 +10,4 @@ module.exports = function(app, passport) {
 
 	//Validate User Login
 	app.post('/login', routeLogin.validateLogin(passport));
-
-	//Register User
-	app.post('/register', routeLogin.registerUser(passport));
-
 };
