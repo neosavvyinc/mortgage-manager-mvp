@@ -2,7 +2,7 @@
 
 var bCrypt = require('bcrypt-nodejs'),
 	LocalStrategy = require('passport-local').Strategy,
-	loginService = require('../services/service-loginOrRegister');
+	loginService = require('../services/service-auth');
 
 /**
  * Initializes passport for the application. Creates function to serialize and deserialize
@@ -36,7 +36,7 @@ exports.validateLogin = function(passport) {
 			if(!user) {
 				res.send(info);
 			} else {
-				res.send({ code: 200, message: 'Success' });
+				res.send({message: 'Success' });
 			}
 			res.end();
 		})(req, res, next);
@@ -64,11 +64,11 @@ var _loginSetup = function(passport) {
 					}
 					// Username does not exist, log error & redirect back
 					if (!user) {
-						return done(null, false, { code: 400, message: 'User Not found.' });
+						return done(null, false, { code: 401, message: 'User Not found.' });
 					}
 					// User exists but wrong password, log the error
 					if (!_isValidPassword(user, password)) {
-						return done(null, false, { code: 400, message: 'Incorrect password.' });
+						return done(null, false, { code: 401, message: 'Incorrect password.' });
 					}
 					// User and password both match, return user from
 					// done method which will be treated like success

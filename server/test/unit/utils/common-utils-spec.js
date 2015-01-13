@@ -1,6 +1,6 @@
 'use strict';
 
-var commonUtils = require('../../../lib/utils/commonUtils'),
+var commonUtils = require('../../../lib/utils/common-utils'),
 	settings = require('../../../lib/config/app/settings');
 
 describe('commonUtils', function() {

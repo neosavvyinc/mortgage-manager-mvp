@@ -1,6 +1,6 @@
 'use strict';
 
-var errorUtils = require('../../utils/errorUtils'),
+var errorUtils = require('../../utils/error-utils'),
 	dbInsert = require('./db-insert'),
 	settings = require('../../config/app/settings'),
 	async = require('async'),

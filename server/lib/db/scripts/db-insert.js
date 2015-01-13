@@ -9,8 +9,8 @@ var dbInsert,
 	dbBase = require('./db-base'),
 	userModel = require('../models/model-user').Model,
 	applicationModel = require('../models/model-application').Model,
-	commonUtils = require('../../utils/commonUtils'),
-	errorUtils = require('../../utils/errorUtils'),
+	commonUtils = require('../../utils/common-utils'),
+	errorUtils = require('../../utils/error-utils'),
 	allJson = {},
 	resourcesPath;
 

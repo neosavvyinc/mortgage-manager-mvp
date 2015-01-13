@@ -1,6 +1,7 @@
 'use strict';
 var expressSession = require('express-session'),
-	bodyParser = require('body-parser');
+	bodyParser = require('body-parser'),
+	settings = require('../app/settings');
 
 
 module.exports = function(app, passport) {
@@ -12,7 +13,7 @@ module.exports = function(app, passport) {
 
 	// For passport
 	app.use(expressSession({
-		secret: 'mySecretKey',
+		secret: settings.secretKey,
 		saveUninitialized: true,
 		resave: true
 	}));

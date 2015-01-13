@@ -13,3 +13,5 @@ exports.setConfig = function(json) {
 exports.getConfig = function() {
 	return config;
 };
+
+exports.secretKey = 'MamSecretKey';

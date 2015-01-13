@@ -35,7 +35,7 @@ module.exports = function(grunt) {
 				matchall: false,
 				extensions: 'js',
 				isVerbose: false,
-				specNameMatcher: 'spec',
+				specNameMatcher: '-spec',
 				specFolders: ['test/unit']
 			}
 		}, taskList = ['clean:coverage', 'jasmine_node'];

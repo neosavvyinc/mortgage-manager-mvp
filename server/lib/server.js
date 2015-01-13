@@ -9,7 +9,7 @@ var path = require('path'),
 	db = require('./db/scripts/db'),
 	middleware = require('./config/express/express-middleware'),
 	routes = require('./config/express/express-routes'),
-	loginRoute = require('./routes/route-loginOrRegister'),
+	loginRoute = require('./routes/route-auth'),
 	passport = require('passport/'),
 	server, log;
 
@@ -61,7 +61,7 @@ async.series([
 		db.connect(settings.getConfig().dbURL, done, done);
 	},
 	function(done) {
-		log = require('./utils/commonUtils').getLogger();
+		log = require('./utils/common-utils').getLogger();
 		done();
 	},
 	function(done) {

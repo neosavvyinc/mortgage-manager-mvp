@@ -5,7 +5,7 @@ var util = require('util'),
 	async = require('async'),
 	bCrypt = require('bcrypt-nodejs'),
 	baseModel = require('./model-base'),
-	commonUtils = require('../../utils/commonUtils'),
+	commonUtils = require('../../utils/common-utils'),
 	Schemas = require('../schemas').Schemas,
 	userSchema = Schemas.UserSchema,
 	userModel;
