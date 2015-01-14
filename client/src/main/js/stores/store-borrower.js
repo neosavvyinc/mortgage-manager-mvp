@@ -5,8 +5,7 @@ var User = require('../models/model-user');
 var BorrowerActions = require('../actions/action-borrower');
 
 var _borrower = {};
-
-var _isAjaxError = false; // Note: Another way to do it would be to this.trigger({ajax-result});
+var _borrowerType = "Applicant";
 
 var BorrowerStore = Reflux.createStore({
 
@@ -14,38 +13,41 @@ var BorrowerStore = Reflux.createStore({
 
     onNewBorrower: function(email){
         _borrower.email = email;
-        _borrower.type = "applicant";
         this.trigger();
     },
 
     onNewPassword: function(password){
         _borrower.password = password;
-        User.register(_borrower).then(function(user){
-            _borrower.id = user.id;
-            _isAjaxError = false;
-            this.trigger();
-        }.bind(this), function(){
-            _isAjaxError = true;
-            this.trigger();
-        }.bind(this));
+        this.trigger();
     },
 
     onSubmitQuestions: function (hasCoapplicant, isSelfEmployed){
-        // TODO: Implement User Update with endpoint / payload schema
-        User.update({
-            hasCoapplicant: hasCoapplicant,
-            isSelfEmployed: isSelfEmployed
-        }).then(function(){
-            this.trigger();
-        }.bind(this));
+        _borrower.hasCoapplicant =  hasCoapplicant;
+        _borrower.isSelfEmployed = isSelfEmployed;
+        this.trigger();
+    },
+
+    onChangeBorrowerType: function(newType){
+        _borrowerType = newType;
+        this.trigger();
+    },
+
+    onSubmitBasicInfo: function(basicInfo){
+        _borrower.basicInfo = basicInfo;
+    },
+
+    onResetBorrower: function(){
+        _borrower = {};
+        _borrowerType = "Applicant";
+        this.trigger();
     },
 
     getBorrower: function(){
         return _borrower;
     },
 
-    isAjaxError: function(){
-        return _isAjaxError;
+    getBorrowerType: function(){
+        return _borrowerType
     }
 
 });

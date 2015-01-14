@@ -3,7 +3,10 @@ module.exports = function(){
         USER: {
             URL: '/user',
             ONE: {
-                URL: '/user/:id'
+                URL: '/user/:id',
+                COAPPLICANT: {
+                    URL: '/user/:id/coapplicant'
+                }
             }
         },
         LOGIN: {

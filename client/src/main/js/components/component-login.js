@@ -7,16 +7,20 @@ var ErrorMessage = require('../components/component-error-msg');
 
 var Login = React.createClass({
 
+    getInitialState: function(){
+        return {
+            loginError: false,
+            loginErrorText: "There was an error with your credentials. Please try again."
+        }
+    },
+
     render: function(){
-
-        var errorText = "There was an error with your credentials. Please try again.";
-
         return (
             <form>
                 <h4>Already a User?</h4>
                 <input className="gap-bottom" ref="userEmail" type="email" placeholder="Email Address" />
                 <input className="gap-bottom" ref="userPassword" type="password" placeholder="Password" />
-                <ErrorMessage errorDisplay={this.props.error} errorMessage={errorText}/>
+                <ErrorMessage errorDisplay={this.state.loginError} errorMessage={this.state.loginErrorText}/>
                 <button className="block turquoise" onClick={this.onLogin}>
                     Login
                 </button>
@@ -31,7 +35,16 @@ var Login = React.createClass({
         var email = this.refs.userEmail.getDOMNode().value,
             password = this.refs.userPassword.getDOMNode().value;
 
-        UserActions.login(email, password);
+        User.login(email, password).then(
+            function(user){
+                UserActions.login(user);
+            }, function(error){
+                this.setState({
+                    loginError:true,
+                    loginError: error.message
+                });
+            }
+        );
     }
 });
 

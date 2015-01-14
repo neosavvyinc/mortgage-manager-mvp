@@ -2,17 +2,19 @@ var React = require('react');
 var Router = require('react-router');
 var Reflux = require('reflux');
 
+var User = require('../../models/model-user');
+var ErrorMessage = require('../../components/component-error-msg');
 var BorrowerStore = require('../../stores/store-borrower');
 var BorrowerActions = require('../../actions/action-borrower');
-
-var ErrorMessage = require('../../components/component-error-msg');
+var UserStore = require('../../stores/store-user');
+var UserActions = require('../../actions/action-user');
 
 var NewPassword = React.createClass({
 
     mixins: [
         Router.State,
         Router.Navigation,
-        Reflux.listenTo(BorrowerStore, 'onValidPassword')
+        Reflux.listenTo(UserStore, 'onNewAccount')
     ],
 
     statics: {
@@ -54,19 +56,20 @@ var NewPassword = React.createClass({
                 errorText: "Both passwords need to match"
             });
         } else {
-            BorrowerActions.newPassword(newPassword);
+            User.register(BorrowerStore.getBorrower().email, newPassword).then(function(user){
+                BorrowerActions.newPassword(newPassword);
+                UserActions.login(user);
+            }, function(error){
+                this.setState({
+                    passwordError: true,
+                    errorText: error.message
+                });
+            });
         }
     },
 
-    onValidPassword: function(){
-        if(BorrowerStore.isAjaxError()){
-            this.setState({
-                passwordError: true,
-                errorText: "There was an error creating your user. Please try again."
-            });
-        } else {
-            this.transitionTo('applicantQuestions');
-        }
+    onNewAccount: function(){
+        this.transitionTo('applicantQuestions');
     }
 });
 

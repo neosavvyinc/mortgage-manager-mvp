@@ -28,7 +28,6 @@ var Welcome = React.createClass({
 
     getInitialState: function(){
         return {
-            loginError: false,
             borrowerEmpty: false,
             lenderEmpty: false
         }
@@ -72,7 +71,7 @@ var Welcome = React.createClass({
                     </div>
                     <div className="one third padded">
                         <div className="user-section">
-                            <Login error={this.state.loginError}/>
+                            <Login />
                         </div>
                     </div>
                 </div>
@@ -97,11 +96,7 @@ var Welcome = React.createClass({
     },
 
     onLogin: function(){
-        if(!UserStore.isAuthenticated()) {
-            console.log("error");
-            this.setState({loginError: true});
-        } else {
-            console.log("success");
+        if(UserStore.isAuthenticated()) {
             this.transitionTo('dashboard');
         }
     },

@@ -5,7 +5,7 @@ var ErrorMessage = React.createClass({
     getDefaultProps: function(){
         return {
             errorDisplay: false,
-            errorMessage: "su"
+            errorMessage: ""
         }
     },
 
