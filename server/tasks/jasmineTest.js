@@ -1,7 +1,5 @@
 'use strict';
 
-var path = require('path');
-
 module.exports = function(grunt) {
 	grunt.registerTask('jasmineTests', 'Runs jasmine node tests according to the environment', function() {
 		var config = {

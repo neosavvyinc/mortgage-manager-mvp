@@ -1,6 +1,6 @@
 'use strict';
 
-var errorUtils = require('../../../lib/utils/errorUtils');
+var errorUtils = require('../../../lib/utils/error-utils');
 
 describe('errorUtils', function() {
 	it('should call the failure callback', function() {

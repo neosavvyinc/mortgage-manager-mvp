@@ -3,7 +3,7 @@
 var userModel = require('../../../../lib/db/models/model-user').Model,
 	applicationModel = require('../../../../lib/db/models/model-application').Model,
 	baseModel = require('../../../../lib/db/models/model-base').Model,
-	commonUtils = require('../../../../lib/utils/commonUtils');
+	commonUtils = require('../../../../lib/utils/common-utils');
 
 describe('modelUser',  function() {
 	var user,

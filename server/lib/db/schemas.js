@@ -21,7 +21,8 @@ Schemas.UserSchema = new Schema({
 	coUID: { type: String, ref: 'UserSchema' },
 	created: { type: Date, required: true },
 	lastLogin: { type: Date, required: true },
-	appId: [{ type: String, required: true, ref: 'ApplicationSchema' }]
+	appId: [{ type: String, required: true, ref: 'ApplicationSchema' }],
+	access: Schema.Types.Mixed
 });
 
 Schemas.ApplicationSchema = new Schema({
