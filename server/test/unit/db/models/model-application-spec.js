@@ -1,6 +1,6 @@
 'use strict';
 
-var userModel = require('../../../../lib/db/models/model-user').Model,
+var userModel = require('../../../../lib/db/models/model-user-details').Model,
 	applicationModel = require('../../../../lib/db/models/model-application').Model,
 	baseModel = require('../../../../lib/db/models/model-base').Model,
 	commonUtils = require('../../../../lib/utils/common-utils');

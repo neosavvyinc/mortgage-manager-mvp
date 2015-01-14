@@ -1,6 +1,6 @@
 'use strict';
 
-var userModel = require('../db/models/model-user').Model;
+var userModel = require('../db/models/model-user-details').Model;
 
 /**
  * Function that gets the user document based on conditions specified.

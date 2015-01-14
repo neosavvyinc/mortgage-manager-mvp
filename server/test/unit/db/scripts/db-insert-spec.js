@@ -3,7 +3,7 @@
 var fs = require('fs'),
 	path = require('path'),
 	db = require('../../../../lib/db/scripts/db-insert'),
-	userModel = require('../../../../lib/db/models/model-user').Model,
+	userModel = require('../../../../lib/db/models/model-user-details').Model,
 	applicationModel = require('../../../../lib/db/models/model-application').Model;
 
 describe('dbInsert', function() {

@@ -21,6 +21,7 @@ exports.initPassport = function(passport) {
 
 	// Setting up Passport Strategies for Login and SignUp/Registration
 	_loginSetup(passport);
+	_registerSetup(passport);
 };
 
 /**
@@ -76,6 +77,57 @@ var _loginSetup = function(passport) {
 				}
 			);
 		}));
+};
+
+/**
+ * Private function that configures passport to register a new user.
+ * @param passport
+ * @private
+ */
+var _registerSetup = function(passport){
+	passport.use('register', new LocalStrategy({
+				passReqToCallback : true //allows us to pass back the entire request to the callback
+			},
+			function(req, username, password, done) {
+				var findOrCreateUser = function() {
+					// find a user in Mongo with provided username
+					loginService.findUser({ 'username' :  username }, function(err, user) {
+						// In case of any error, return using the done method
+						if (err){
+							console.log('Error in Registration: ' + err);
+							return done(err);
+						}
+						// already exists
+						if (user) {
+							console.log('User already exists with username: ' + username);
+							return done(null, false, req.flash('message','User Already Exists'));
+						} else {
+							// if there is no user with that email
+							// create the user
+							var userObject = req.param('userDetails');
+							userObject.password = _createHash(userObject.password);
+
+							loginService.createUser(userObject, function(err) {
+								if(err) {
+									throw err;
+								} else {
+									return done(null, userObject);
+								}
+							});
+							/* // set the user's local credentials
+							 newUser.username = username;
+							 newUser.password = _createHash(password);
+							 newUser.email = req.param('email');
+							 newUser.firstName = req.param('firstName');
+							 newUser.lastName = req.param('lastName');*/
+						}
+					});
+				};
+				// Delay the execution of findOrCreateUser and execute the method
+				// in the next tick of the event loop
+				process.nextTick(findOrCreateUser);
+			})
+	);
 };
 
 /**

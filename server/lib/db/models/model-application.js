@@ -7,6 +7,7 @@ var util = require('util'),
 	commonUtils = require('../../utils/common-utils'),
 	Schemas = require('../schemas').Schemas,
 	applicationSchema = Schemas.ApplicationSchema,
+	userDetailsModel = require('./model-user-details').Model,
 	userModel = require('./model-user').Model,
 	applicationModel;
 
@@ -30,20 +31,23 @@ applicationModel = ApplicationModel.prototype;
 applicationModel.insertNewApp = function(item, success, failure) {
 	var appId = commonUtils.generateId(),
 		currentDate = commonUtils.getCurrentDate(),
-		doc;
+		userDoc,
+		userDetailsDoc;
 	async.series([
 		function(done) {
 			//Find the user id for the primary applicant email
 			var user = new userModel();
-			user.retrieve({email: item.pEmail}, function(docs) {
-				if(docs.length === 1) {
-					doc = docs[0];
-					done();
-				} else if(docs.length < 1) {
-					done('Error: No documents found');
-				} else {
-					done('Error: More than 1 document found');
-				}
+			user.findOneDocument({ email: item.pEmail }, function(document) {
+				user = document;
+				done();
+			}, done);
+		},
+		function(done) {
+			//Get the user details if user exists
+			var	userDetails = new userDetailsModel();
+			userDetails.findOneDocument({ _id: userDoc._id }, function(document) {
+				userDetailsDoc = document;
+				done();
 			}, done);
 		},
 		function(done) {
@@ -52,18 +56,18 @@ applicationModel.insertNewApp = function(item, success, failure) {
 				_id: appId,
 				created: currentDate,
 				lastModified: currentDate,
-				pUID: doc._id
+				pUID: userDoc._id
 			});
 			application.insert(item, done, done);
 		},
 		function(done) {
-			var user = new userModel();
-			//Update the userModel with the new appId
-			doc.appId.push(appId);
-			if(doc.toObject !== undefined ) {
-				doc = doc.toObject();
+			var userDetails = new userDetailsModel();
+			//Update the userDetailsModel with the new appId
+			userDetailsDoc.appId.push(appId);
+			if(userDetailsDoc.toObject !== undefined ) {
+				userDetailsDoc = userDetailsDoc.toObject();
 			}
-			user.update(doc, {_id: doc._id}, null, done, done);
+			userDetails.update(userDetailsDoc, {_id: userDetailsDoc._id}, null, done, done);
 		}
 	], function(error) {
 		if(error !== undefined) {

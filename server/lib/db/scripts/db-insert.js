@@ -7,7 +7,7 @@ var dbInsert,
 	util = require('util'),
 	_ = require('underscore'),
 	dbBase = require('./db-base'),
-	userModel = require('../models/model-user').Model,
+	userModel = require('../models/model-user-details').Model,
 	applicationModel = require('../models/model-application').Model,
 	commonUtils = require('../../utils/common-utils'),
 	errorUtils = require('../../utils/error-utils'),
@@ -114,6 +114,9 @@ var saveFile = function(file, success, failure) {
 	if(dbModel === 'user') {
 		allJson.user = commonUtils.readJSON(absolutePath);
 		saveUsers(allJson, success, failure);
+	} else if(dbModel === 'userdetails') {
+		allJson.userdetails = commonUtils.readJSON(absolutePath);
+		saveUserDetails(allJson, success, failure);
 	} else if(dbModel === 'application') {
 		allJson.application = commonUtils.readJSON(absolutePath);
 		saveApplications(allJson, success, failure);
@@ -131,8 +134,32 @@ var saveFile = function(file, success, failure) {
 var saveUsers = function(json, success, failure) {
 	var data = _.isEmpty(json.user) ? [] : json.user,
 		user = new userModel();
+
 	async.eachSeries(data, function(item, done) {
-		user.insertOrUpdate(item, { email: item.email }, done, done);
+		user.insertOrUpdate(item, { email: item.email }, function(updated) {
+			item = updated;
+		}, done);
+	}, function(error) {
+		if(error) {
+			failure(error);
+		} else {
+			success();
+		}
+	});
+};
+
+/**
+ * Save user details to mongo
+ * @param json
+ * @param success
+ * @param failure
+ */
+var saveUserDetails = function(json, success, failure) {
+	var data = _.isEmpty(json.userdetails) ? [] : json.userdetails,
+		user = new userModel();
+
+	async.eachSeries(data, function(item, done) {
+		user.insertOrUpdate(item, { _id: item._id }, done, done);
 	}, function(error) {
 		if(error) {
 			failure(error);
@@ -160,6 +187,10 @@ var saveApplications = function(json, success, failure) {
 			success();
 		}
 	});
+};
+
+var _getDocumentId = function(model, condition) {
+
 };
 
 exports.Db = DbInsert;

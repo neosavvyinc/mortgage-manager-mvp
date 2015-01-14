@@ -1,6 +1,6 @@
 'use strict';
 
-var userModel = require('../../../../lib/db/models/model-user').Model,
+var userModel = require('../../../../lib/db/models/model-user-details').Model,
 	baseModel = require('../../../../lib/db/models/model-base').Model;
 
 describe('modelUser',  function() {

@@ -31,9 +31,7 @@ userModel = UserModel.prototype;
  */
 userModel.insertOrUpdate = function(item, condition, success, failure) {
 	var uid = commonUtils.generateId(),
-		currentDate = new Date(),
 		docs;
-
 	async.series([
 		function(done) {
 			docs = userModel.retrieve(condition, function(documents) {
@@ -45,12 +43,8 @@ userModel.insertOrUpdate = function(item, condition, success, failure) {
 			if(_.isEmpty(docs)) {
 				var password = _createHash(item.password);
 				_.extend(item, {
-					_id: uid,
-					created: currentDate,
-					lastLogin: currentDate,
-					appId: []
+					_id: uid
 				});
-
 				item.password = password;
 				userModel.insert(item, done, done);
 			} else {
@@ -61,7 +55,7 @@ userModel.insertOrUpdate = function(item, condition, success, failure) {
 		if(error !== undefined) {
 			failure(error);
 		} else {
-			success();
+			success(item);
 		}
 	});
 };

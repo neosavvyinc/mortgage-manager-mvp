@@ -1,7 +1,7 @@
 'use strict';
 
 var serviceLogin = require('../../../lib/services/service-auth'),
-	userModel = require('../../../lib/db/models/model-user').Model;
+	userModel = require('../../../lib/db/models/model-user-details').Model;
 
 describe('serviceLogin', function() {
 

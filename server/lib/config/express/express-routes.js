@@ -9,5 +9,14 @@ module.exports = function(app, passport) {
 		.get(routeHealthcheck.healthCheck);
 
 	//Validate User Login
-	app.post('/login', routeLogin.validateLogin(passport));
+	app.route('/login')
+		.post(routeLogin.validateLogin(passport));
+
+	//Validate User Login
+	app.route('/register')
+		.post(routeLogin.validateLogin(passport));
+
+	//
+	app.route('/user/:uid')
+		.post(routeLogin.validateLogin(passport));
 };
