@@ -8,6 +8,7 @@ var dbInsert,
 	_ = require('underscore'),
 	dbBase = require('./db-base'),
 	userModel = require('../models/model-user').Model,
+	userDetailsModel = require('../models/model-user-details').Model,
 	applicationModel = require('../models/model-application').Model,
 	commonUtils = require('../../utils/common-utils'),
 	errorUtils = require('../../utils/error-utils'),
@@ -54,6 +55,19 @@ dbInsert.operation = function(success, failure) {
 				success();
 			}
 		});
+};
+
+/**
+ * Get mongoose id for a document based on specified model and conditions
+ * @param model
+ * @param conditions
+ * @param success
+ * @param failure
+ */
+dbInsert.getMongoId = function(model, conditions, success, failure) {
+	model.findOneDocument(conditions, function(document) {
+		success(document._id);
+	}, failure);
 };
 
 /**
@@ -114,6 +128,9 @@ var saveFile = function(file, success, failure) {
 	if(dbModel === 'user') {
 		allJson.user = commonUtils.readJSON(absolutePath);
 		saveUsers(allJson, success, failure);
+	} else if(dbModel === 'userdetails') {
+		allJson.userdetails = commonUtils.readJSON(absolutePath);
+		saveUserDetails(allJson, success, failure);
 	} else if(dbModel === 'application') {
 		allJson.application = commonUtils.readJSON(absolutePath);
 		saveApplications(allJson, success, failure);
@@ -131,8 +148,48 @@ var saveFile = function(file, success, failure) {
 var saveUsers = function(json, success, failure) {
 	var data = _.isEmpty(json.user) ? [] : json.user,
 		user = new userModel();
+
 	async.eachSeries(data, function(item, done) {
-		user.insertOrUpdate(item, { email: item.email }, done, done);
+		user.insertOrUpdate(item, { email: item.email }, function(updated) {
+			item = updated;
+			done();
+		}, done);
+	}, function(error) {
+		if(error) {
+			failure(error);
+		} else {
+			success();
+		}
+	});
+};
+
+/**
+ * Save user details to mongo
+ * @param json
+ * @param success
+ * @param failure
+ */
+var saveUserDetails = function(json, success, failure) {
+	var data = _.isEmpty(json.userdetails) ? [] : json.userdetails,
+		userDetails = new userDetailsModel();
+	async.eachSeries(data, function(item, done) {
+		async.series([
+			function(done1) {
+				dbInsert.getMongoId(new userModel(), { email: item.email }, function(_id) {
+					item._id = _id;
+					done1();
+				}, done1);
+			},
+			function(done1) {
+				userDetails.insertOrUpdate(item, done1, done1);
+			}
+		], function(error) {
+			if(error) {
+				done(error);
+			} else {
+				done();
+			}
+		});
 	}, function(error) {
 		if(error) {
 			failure(error);

@@ -8,10 +8,11 @@ describe('Server', function() {
 	//Start the server
 
 	beforeEach(function() {
-		require('../../lib/server');
 		spyOn(mongoose, 'connect').andCallFake(function(url, success, failure) {
 			failure(null);
 		});
+
+		require('../../lib/server');
 	});
 
 	describe('/healthcheck', function () {

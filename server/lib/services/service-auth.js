@@ -24,8 +24,8 @@ exports.findUser = function(conditions, callback) {
  */
 exports.createUser = function(userObject, callback) {
 	var user = new userModel();
-	user.insert(userObject, function() {
-		callback();
+	user.insertOrUpdate(userObject, {email: userObject.email}, function(user) {
+		callback(null, user);
 	},
 	function(error) {
 		callback(error);

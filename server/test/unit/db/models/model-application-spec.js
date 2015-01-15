@@ -1,6 +1,6 @@
 'use strict';
 
-var userModel = require('../../../../lib/db/models/model-user').Model,
+var userModel = require('../../../../lib/db/models/model-user-details').Model,
 	applicationModel = require('../../../../lib/db/models/model-application').Model,
 	baseModel = require('../../../../lib/db/models/model-base').Model,
 	commonUtils = require('../../../../lib/utils/common-utils');
@@ -150,7 +150,7 @@ describe('modelUser',  function() {
 			});
 
 			application.insertNewApp({dummy: 'dummy'}, function() {
-				expect(baseModel.prototype.retrieve.callCount).toBe(1);
+				expect(baseModel.prototype.retrieve.callCount).toBe(2);
 				expect(baseModel.prototype.insert.callCount).toBe(1);
 				expect(baseModel.prototype.update.callCount).toBe(1);
 			}, function(error) {
@@ -189,7 +189,7 @@ describe('modelUser',  function() {
 			});
 
 			application.insertNewApp({dummy: 'dummy'}, function() {
-				expect(baseModel.prototype.retrieve.callCount).toBe(1);
+				expect(baseModel.prototype.retrieve.callCount).toBe(2);
 				expect(baseModel.prototype.insert.callCount).toBe(1);
 				expect(baseModel.prototype.update.callCount).toBe(1);
 			}, function(error) {

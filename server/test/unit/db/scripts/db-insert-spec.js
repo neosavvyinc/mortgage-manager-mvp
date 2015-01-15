@@ -3,14 +3,18 @@
 var fs = require('fs'),
 	path = require('path'),
 	db = require('../../../../lib/db/scripts/db-insert'),
+	baseModel = require('../../../../lib/db/models/model-base').Model,
 	userModel = require('../../../../lib/db/models/model-user').Model,
+	userDetailsModel = require('../../../../lib/db/models/model-user-details').Model,
 	applicationModel = require('../../../../lib/db/models/model-application').Model;
 
 describe('dbInsert', function() {
 	var dummyDb,
 		resolveSpy,
 		userInsertSpy,
+		userDetailsInsertSpy,
 		applicationInsertSpy;
+
 
 	beforeEach(function() {
 		dummyDb = new db.Db('url');
@@ -19,10 +23,17 @@ describe('dbInsert', function() {
 		});
 
 		userInsertSpy = spyOn(userModel.prototype, 'insertOrUpdate');
+		userDetailsInsertSpy = spyOn(userDetailsModel.prototype, 'insertOrUpdate');
 		applicationInsertSpy = spyOn(applicationModel.prototype, 'insertNewApp');
 	});
 
 	describe('operation', function() {
+		var dbGetMongoIdSpy;
+
+		beforeEach(function() {
+			dbGetMongoIdSpy = spyOn(db.Db.prototype, 'getMongoId');
+		});
+
 		it('should fail if getResources fails', function() {
 			spyOn(fs, 'readdirSync').andCallFake(function() {
 				throw new Error('fail');
@@ -61,8 +72,54 @@ describe('dbInsert', function() {
 				});
 		});
 
+		it('should fail if getMongoId fails', function() {
+			userInsertSpy.andCallFake(function(item, condition, success, failure) {
+				success();
+			});
+
+			dbGetMongoIdSpy.andCallFake(function(Model, conditions, success, failure) {
+				failure('get mongoId fail');
+			});
+
+			dummyDb.operation(function() {
+					expect().toHaveNotExecuted('Should not have succeeded');
+				},
+				function(error) {
+					expect(error).toBe('get mongoId fail');
+				});
+		});
+
+		it('should fail if saveToMongo fails for userdetails', function() {
+			userInsertSpy.andCallFake(function(item, condition, success, failure) {
+				success();
+			});
+
+			dbGetMongoIdSpy.andCallFake(function(Model, conditions, success, failure) {
+				success();
+			});
+
+			userDetailsInsertSpy.andCallFake(function(item, success, failure) {
+				failure('user details fail');
+			});
+
+			dummyDb.operation(function() {
+					expect().toHaveNotExecuted('Should not have succeeded');
+				},
+				function(error) {
+					expect(error).toBe('user details fail');
+				});
+		});
+
 		it('should fail if saveToMongo fails for application', function() {
 			userInsertSpy.andCallFake(function(item, condition, success, failure) {
+				success();
+			});
+
+			dbGetMongoIdSpy.andCallFake(function(Model, conditions, success, failure) {
+				success();
+			});
+
+			userDetailsInsertSpy.andCallFake(function(item, success, failure) {
 				success();
 			});
 
@@ -80,6 +137,14 @@ describe('dbInsert', function() {
 
 		it('should succeed if all jsons are empty', function() {
 			userInsertSpy.andCallFake(function(item, condition, success, failure) {
+				success();
+			});
+
+			dbGetMongoIdSpy.andCallFake(function(Model, conditions, success, failure) {
+				success();
+			});
+
+			userDetailsInsertSpy.andCallFake(function(item, success, failure) {
 				success();
 			});
 
@@ -104,6 +169,14 @@ describe('dbInsert', function() {
 				success();
 			});
 
+			dbGetMongoIdSpy.andCallFake(function(Model, conditions, success, failure) {
+				success();
+			});
+
+			userDetailsInsertSpy.andCallFake(function(item, success, failure) {
+				success();
+			});
+
 			applicationInsertSpy.andCallFake(function(item, success, failure) {
 				success();
 			});
@@ -114,6 +187,38 @@ describe('dbInsert', function() {
 				function(error) {
 					expect().toHaveNotExecuted('Should not have failed');
 				});
+		});
+	});
+
+	describe('getMongoId', function() {
+		var baseFindDocSpy;
+
+		beforeEach(function() {
+			baseFindDocSpy = spyOn(baseModel.prototype, 'findOneDocument');
+		});
+
+		it('should fail if findOneDocument fails', function() {
+			baseFindDocSpy.andCallFake(function(condtions, success, failure) {
+				failure('fail');
+			});
+
+			dummyDb.getMongoId(new userModel(), {}, function() {
+				expect().toHaveNotExecuted('should not have succeeded');
+			}, function(error) {
+				expect(error).toBe('fail');
+			});
+		});
+
+		it('should succeed if findOneDocument succeeds', function() {
+			baseFindDocSpy.andCallFake(function(condtions, success, failure) {
+				success({_id: '123'});
+			});
+
+			dummyDb.getMongoId(new userModel(), {}, function(id) {
+				expect(id).toBe('123');
+			}, function(error) {
+				expect().toHaveNotExecuted('should not have failed');
+			});
 		});
 	});
 });

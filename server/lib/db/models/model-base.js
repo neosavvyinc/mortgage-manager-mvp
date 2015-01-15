@@ -34,6 +34,24 @@ base.findDocumentById = function(id, success, failure) {
 };
 
 /**
+ * Finds one document based on conditions
+ * @param conditions
+ * @param success
+ * @param failure
+ */
+base.findOneDocument = function(conditions, success, failure) {
+	base.retrieve(conditions, function(docs) {
+		if(docs.length === 1) {
+			success(docs[0]);
+		} else if(docs.length < 1) {
+			failure('Error: No documents found');
+		} else {
+			failure('Error: More than 1 document found');
+		}
+	}, failure);
+};
+
+/**
  * Finds documents in a collection based on conditions specified
  * @param conditions
  * @param success
