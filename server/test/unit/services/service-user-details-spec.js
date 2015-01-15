@@ -2,8 +2,7 @@
 
 var serviceUserDetails = require('../../../lib/services/service-user-details'),
 	userDetailsModel = require('../../../lib/db/models/model-user-details').Model,
-	userModel = require('../../../lib/db/models/model-user').Model,
-	baseModel = require('../../../lib/db/models/model-base').Model;
+	userModel = require('../../../lib/db/models/model-user').Model;
 
 describe('serviceUserDetails', function() {
 	var userInsertSpy,
