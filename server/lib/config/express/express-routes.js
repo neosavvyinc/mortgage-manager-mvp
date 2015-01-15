@@ -1,7 +1,7 @@
 'use strict';
 
 var routeHealthcheck = require('../../routes/route-diagnostics'),
-	authRoute = require('../../routes/route-auth'),
+	authRoute = require('../../routes/route-user'),
 	userRoute = require('../../routes/route-user-details');
 
 module.exports = function(app, passport) {
