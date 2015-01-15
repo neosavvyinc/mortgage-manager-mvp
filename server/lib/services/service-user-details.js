@@ -20,21 +20,24 @@ exports.updateUser = function(userObject, success, failure) {
 /**
  * Function that creates a coapplicant for a particular user
  * @param userId
- * @param coApplicant
+ * @param coapplicant
  * @param success
  * @param failure
  */
-/*
-exports.createCoApplicant = function(userId, coApplicant, success, failure) {
-	var user = new userModel();
+exports.createCoApplicant = function(userId, coapplicant, success, failure) {
+	var user = new userModel(),
+		createdCoApp;
 
 	async.series([
 		function(done) {
 			//Create a coapplicant
-			user.insertOrUpdate(coApplicant, {email: coApplicant.email}, )
+			user.insertOrUpdate(coapplicant, {email: coapplicant.email}, function(coapplicant) {
+				done();
+			}, done);
 		},
 		function(done) {
 			//Update the user to point to the coapplicant id
+
 		}
 	], function(error) {
 		if(error) {
@@ -43,4 +46,4 @@ exports.createCoApplicant = function(userId, coApplicant, success, failure) {
 			success();
 		}
 	});
-};*/
+};
