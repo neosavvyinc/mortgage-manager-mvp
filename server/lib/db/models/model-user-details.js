@@ -46,7 +46,7 @@ userDetailsModel.insertOrUpdate = function(item, success, failure) {
 				});
 				userDetailsModel.insert(item, done, done);
 			} else {
-				userDetailsModel.update(item, {_id: docs._id }, null, done, done);
+				userDetailsModel.update(item, {_id: docs[0]._id }, null, done, done);
 			}
 		}
 	], function(error) {

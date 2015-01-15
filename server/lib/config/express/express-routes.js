@@ -1,7 +1,8 @@
 'use strict';
 
 var routeHealthcheck = require('../../routes/route-diagnostics'),
-	authRoute = require('../../routes/route-auth');
+	authRoute = require('../../routes/route-auth'),
+	userRoute = require('../../routes/route-user-details');
 
 module.exports = function(app, passport) {
 	//Healthcheck
@@ -16,11 +17,15 @@ module.exports = function(app, passport) {
 	app.route('/register')
 		.post(authRoute.registerUser(passport));
 
+	//Update a user based on a userId
 	app.route('/user/:uid')
-		.all(_isAuthenticated);
+		.all(_isAuthenticated)
+		.post(userRoute.updateUser);
 
+	//Add a coapplicant for a particular userId
 	app.route('/user/:uid/coapplicant')
-		.all(_isAuthenticated);
+		.all(_isAuthenticated)
+		.post(userRoute.addCoApplicant);
 };
 
 /**

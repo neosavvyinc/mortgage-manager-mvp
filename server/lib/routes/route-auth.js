@@ -2,8 +2,7 @@
 
 var bCrypt = require('bcrypt-nodejs'),
 	LocalStrategy = require('passport-local').Strategy,
-	loginService = require('../services/service-auth');
-
+	loginService = require('../services/service-user');
 /**
  * Initializes passport for the application. Creates function to serialize and deserialize
  * users.
