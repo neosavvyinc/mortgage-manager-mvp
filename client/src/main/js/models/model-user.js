@@ -46,13 +46,13 @@ User.update = function (userInfo){
 
 User.addCoapplicant = function (applicantID, coapplicantInfo){
     return Q.promise(function(resolve, reject){
-            $.post(Endpoints.USER.ONE.COAPPLICANT.URL.replace(':id', applicantID), coapplicantInfo)
-                .success(function(response){
-                    resolve(response);
-                })
-                .error(function(error){
-                    reject(error);
-                });
+        $.post(Endpoints.USER.ONE.COAPPLICANT.URL.replace(':id', applicantID), coapplicantInfo)
+            .success(function(response){
+                resolve(response);
+            })
+            .error(function(error){
+                reject(error);
+            });
     });
 };
 
