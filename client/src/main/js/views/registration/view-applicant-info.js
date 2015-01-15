@@ -15,8 +15,8 @@ var validateApplicantInfo = function(applicantType, applicantInfo){
         applicantInfo.address && applicantInfo.address != "" &&
         applicantInfo.city && applicantInfo.city != "" &&
         applicantInfo.state && applicantInfo.state != "" &&
-        applicantInfo.zipCode && applicantInfo.zipCode != "" &&
-        applicantInfo.mobile && applicantInfo.mobile != "";
+        applicantInfo.zip && applicantInfo.zip != "" &&
+        applicantInfo.phone && applicantInfo.phone != "";
     if(applicantType == "Co-Applicant"){
         isValidInfo = isValidInfo && applicantInfo.email && applicantInfo.email != "";
     }
@@ -30,12 +30,12 @@ var resetApplicantInfo = function(){
     this.refs.address.getDOMNode().value = "";
     this.refs.city.getDOMNode().value = "";
     this.refs.state.getDOMNode().value = "";
-    this.refs.zipCode.getDOMNode().value = "";
-    this.refs.mobile.getDOMNode().value = "";
+    this.refs.zip.getDOMNode().value = "";
+    this.refs.phone.getDOMNode().value = "";
     this.refs.email.getDOMNode().value = "";
 };
 
-var ApplicantBasic = React.createClass({
+var ApplicantInfo = React.createClass({
 
     mixins: [
         Router.State,
@@ -68,22 +68,26 @@ var ApplicantBasic = React.createClass({
                     <input className="one third" type="text" ref="middleName" placeholder="Middle Name" required />
                     <input className="one third" type="text" ref="lastName" placeholder="Last Name" required />
                 </div>
-                <h2>{this.state.applicantType}'s Address</h2>
+                <div className="row">
+                </div>
+                <div className="row">
+                    <h2 className="one third">{this.state.applicantType}'s Address</h2>
+                    <div className={showCoapplicantFieldClass}>
+                        <p className="one third">Shares address with main applicant:</p>
+                        <input type="checkbox" ref="sameAddress" onChange={this.populateAddress}/>
+                    </div>
+                </div>
                 <div className="row">
                     <input type="text" ref="address" placeholder="address" required />
                 </div>
                 <div className="row">
-                    <h2 className="one third">{this.state.applicantType}'s Contact Information</h2>
-                    <input className={showCoapplicantFieldClass} type="checkbox" ref="sameAddress" onChange={this.populateAddress}/>
-                </div>
-                <div className="row">
                     <input className="one third" type="text" ref="city" placeholder="City" required />
                     <input className="one third" type="text" ref="state" placeholder="State" required />
-                    <input className="one third" type="text" ref="zipCode" placeholder="Zip Code" required />
+                    <input className="one third" type="text" ref="zip" placeholder="Zip Code" required />
                 </div>
                 <h2>{this.state.applicantType}'s Contact Information</h2>
                 <div className="row">
-                    <input className="one third" type="text" ref="mobile" placeholder="Mobile Phone" required />
+                    <input className="one third" type="text" ref="phone" placeholder="Mobile Phone" required />
                     <input className={showCoapplicantFieldClass} type="email" ref="email" placeholder="Email" required />
                 </div>
                 <ErrorMessage errorDisplay={this.state.applicantInfoError} errorMessage={this.state.errorText}/>
@@ -103,16 +107,16 @@ var ApplicantBasic = React.createClass({
             address: this.refs.address.getDOMNode().value,
             city: this.refs.city.getDOMNode().value,
             state: this.refs.state.getDOMNode().value,
-            zipCode: this.refs.zipCode.getDOMNode().value,
-            mobile: this.refs.mobile.getDOMNode().value,
+            zip: this.refs.zip.getDOMNode().value,
+            phone: this.refs.phone.getDOMNode().value,
             email: this.refs.email.getDOMNode().value || ""
         };
 
         if(validateApplicantInfo(this.state.applicantType, applicantInfo)) {
             if(this.state.applicantType == "Applicant") {
                 delete applicantInfo.email;
-                applicantInfo.type = "borrower";
-                User.update(applicantInfo).then(function () {
+                applicantInfo.isSelfEmployed = BorrowerStore.getBorrower().isSelfEmployed;
+                User.update(UserStore.getCurrentUser()._id, applicantInfo).then(function () {
                     if(BorrowerStore.getBorrower().hasCoapplicant){
                         BorrowerActions.submitBasicInfo(applicantInfo);
                         this.setState({
@@ -123,13 +127,16 @@ var ApplicantBasic = React.createClass({
                         this.transitionTo('dashboard');
                     }
                 }.bind(this), function (error) {
+                    console.log(error.message);
                     this.setState({
                         applicantInfoError: true,
                         errorText: error.message
                     });
                 }.bind(this));
             } else {
-                User.addCoapplicant(UserStore.getCurrentUser().userId, applicantInfo).then(function(){
+                applicantInfo.type = "borrower";
+                debugger;
+                User.addCoapplicant(UserStore.getCurrentUser()._id, applicantInfo).then(function(){
                     BorrowerActions.resetBorrower();
                     this.transitionTo('dashboard');
                 }.bind(this), function(error){
@@ -152,16 +159,18 @@ var ApplicantBasic = React.createClass({
             shareAddress: !this.state.shareAddress
         }, function(){
             if(this.state.shareAddress){
+                this.refs.address.getDOMNode().value = BorrowerStore.getBorrower().basicInfo.address;
                 this.refs.city.getDOMNode().value = BorrowerStore.getBorrower().basicInfo.city;
                 this.refs.state.getDOMNode().value = BorrowerStore.getBorrower().basicInfo.state;
-                this.refs.zipCode.getDOMNode().value = BorrowerStore.getBorrower().basicInfo.zipCode;
+                this.refs.zip.getDOMNode().value = BorrowerStore.getBorrower().basicInfo.zip;
             } else {
+                this.refs.address.getDOMNode().value = "";
                 this.refs.city.getDOMNode().value = "";
                 this.refs.state.getDOMNode().value = "";
-                this.refs.zipCode.getDOMNode().value = "";
+                this.refs.zip.getDOMNode().value = "";
             }
         });
     }
 });
 
-module.exports = ApplicantBasic;
+module.exports = ApplicantInfo;

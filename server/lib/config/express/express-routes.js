@@ -4,26 +4,26 @@ var routeHealthcheck = require('../../routes/route-diagnostics'),
 	authRoute = require('../../routes/route-user'),
 	userRoute = require('../../routes/route-user-details');
 
-module.exports = function(app, passport) {
+module.exports = function(router, passport) {
 	//Healthcheck
-	app.route('/healthcheck')
+	router.route('/healthcheck')
 		.get(routeHealthcheck.healthCheck);
 
 	//Validate User Login
-	app.route('/login')
+	router.route('/login')
 		.post(authRoute.validateLogin(passport));
 
 	//Create a new user
-	app.route('/register')
+	router.route('/register')
 		.post(authRoute.registerUser(passport));
 
 	//Update a user based on a userId
-	app.route('/user/:uid')
+	router.route('/user/:uid')
 		.all(_isAuthenticated)
 		.post(userRoute.updateUser);
 
 	//Add a coapplicant for a particular userId
-	app.route('/user/:uid/coapplicant')
+	router.route('/user/:uid/coapplicant')
 		.all(_isAuthenticated)
 		.post(userRoute.addCoApplicant);
 };

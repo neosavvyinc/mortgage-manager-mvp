@@ -4,6 +4,7 @@ var Reflux = require('reflux');
 
 var BorrowerStore = require('../../stores/store-borrower');
 var BorrowerActions = require('../../actions/action-borrower');
+var UserStore = require('../../stores/store-user');
 
 var User = require('../../models/model-user');
 
@@ -68,16 +69,7 @@ var ApplicantQuestions = React.createClass({
     },
 
     onSubmitQuestions: function(){
-        User.update({
-            isSelfEmployed: this.state.isSelfEmployed
-        }).then(function(){
-            BorrowerActions.submitQuestions(this.state.hasCoapplicant, this.state.isSelfEmployed);
-        }.bind(this), function(error){
-            this.setState({
-                questionsError: true,
-                errorText: error.message
-            });
-        }.bind(this));
+        BorrowerActions.submitQuestions(this.state.hasCoapplicant, this.state.isSelfEmployed);
     },
 
     onContinue: function(){

@@ -49,21 +49,24 @@ var NewPassword = React.createClass({
     onCheckPassword: function(){
         var newPassword = this.refs.newPassword.getDOMNode().value,
             confirmPassword = this.refs.confirmPassword.getDOMNode().value;
-
         if(newPassword != confirmPassword){
             this.setState({
                 passwordError: true,
                 errorText: "Both passwords need to match"
             });
         } else {
-            User.register(BorrowerStore.getBorrower().email, newPassword).then(function(user){
+            User.register({
+                email: BorrowerStore.getBorrower().email,
+                password: newPassword,
+                type: "borrower"
+            }).then(function(user){
                 BorrowerActions.newPassword(newPassword);
                 UserActions.login(user);
             }, function(error){
                 this.setState({
                     passwordError: true,
                     errorText: error.message
-                });
+                }, console.log(this.state));
             });
         }
     },

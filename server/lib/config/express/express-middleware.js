@@ -4,7 +4,7 @@ var expressSession = require('express-session'),
 	settings = require('../app/settings');
 
 
-module.exports = function(app, passport) {
+module.exports = function(app, router, passport) {
 	// for parsing application/json
 	app.use(bodyParser.json());
 
@@ -20,5 +20,8 @@ module.exports = function(app, passport) {
 
 	app.use(passport.initialize());
 	app.use(passport.session());
+
+	app.use('/api', router);
+
 };
 

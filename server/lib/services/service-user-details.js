@@ -30,7 +30,8 @@ exports.createCoApplicant = function(userId, coapplicant, success, failure) {
 		function(done) {
 			//Create coapplicant credentials in user schema
 			var user = new userModel();
-			user.insertOrUpdate({email: coapplicant.email, password: coapplicant.password, type: coapplicant.type}, {email: coapplicant.email}, function(coapp) {
+			// TODO: generate default password and send it to coapplicant email
+			user.insertOrUpdate({email: coapplicant.email, password: 'default', type: coapplicant.type}, {email: coapplicant.email}, function(coapp) {
 				createdCoApp = coapp;
 				done();
 			}, done);
