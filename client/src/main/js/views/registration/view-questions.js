@@ -20,7 +20,7 @@ var ApplicantQuestions = React.createClass({
 
     statics: {
         willTransitionTo: function (transition){
-            if(!BorrowerStore.getBorrower().email && !BorrowerStore.getBorrower().password){
+            if(!UserStore.isAuthenticated()){
                 transition.redirect('welcome');
             }
         }

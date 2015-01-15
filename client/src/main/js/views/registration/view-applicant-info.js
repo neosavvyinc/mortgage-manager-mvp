@@ -41,6 +41,14 @@ var ApplicantInfo = React.createClass({
         Router.State,
         Router.Navigation
     ],
+    
+    statics: {
+        willTransitionTo: function (transition){
+            if(!UserStore.isAuthenticated()){
+                transition.redirect('welcome');
+            }
+        }
+    },
 
     defaultProps: {
         applicantType: "Applicant"
