@@ -9,7 +9,7 @@ var path = require('path'),
 	db = require('./db/scripts/db'),
 	middleware = require('./config/express/express-middleware'),
 	routes = require('./config/express/express-routes'),
-	loginRoute = require('./routes/route-auth'),
+	loginRoute = require('./routes/route-user'),
 	passport = require('passport/'),
 	server, log;
 

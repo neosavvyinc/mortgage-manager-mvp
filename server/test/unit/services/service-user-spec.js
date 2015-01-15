@@ -1,9 +1,9 @@
 'use strict';
 
-var serviceLogin = require('../../../lib/services/service-auth'),
+var serviceUser = require('../../../lib/services/service-user'),
 	userModel = require('../../../lib/db/models/model-user').Model;
 
-describe('serviceLogin', function() {
+describe('serviceUser', function() {
 
 	describe('findUser', function() {
 		var retrieveSpy;
@@ -18,7 +18,7 @@ describe('serviceLogin', function() {
 				failure('fail');
 			});
 
-			serviceLogin.findUser({foo: 'bar'}, function(error, docs) {
+			serviceUser.findUser({foo: 'bar'}, function(error, docs) {
 				if(error) {
 					expect(error).toBe('fail');
 				} else {
@@ -33,7 +33,7 @@ describe('serviceLogin', function() {
 				success([{foo: 'success'}]);
 			});
 
-			serviceLogin.findUser({foo: 'bar'}, function(error, docs) {
+			serviceUser.findUser({foo: 'bar'}, function(error, docs) {
 				if(error) {
 					expect().toHaveNotExecuted('Should not have failed.');
 				} else {
@@ -57,7 +57,7 @@ describe('serviceLogin', function() {
 				failure('fail');
 			});
 
-			serviceLogin.createUser({foo: 'bar', email: 'email'}, function(error) {
+			serviceUser.createUser({foo: 'bar', email: 'email'}, function(error) {
 				if(error) {
 					expect(error).toBe('fail');
 				} else {
@@ -73,7 +73,7 @@ describe('serviceLogin', function() {
 				success();
 			});
 
-			serviceLogin.createUser({foo: 'bar', email: 'email'}, function(error) {
+			serviceUser.createUser({foo: 'bar', email: 'email'}, function(error) {
 				if(error) {
 					expect().toHaveNotExecuted('Should not have failed.');
 				} else {
