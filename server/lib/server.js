@@ -4,17 +4,30 @@ var path = require('path'),
 	fs = require('fs'),
 	async = require('async'),
 	express = require('express'),
-	settings = require('./config/settings'),
+	settings = require('./config/app/settings'),
 	app = express(),
-	routeHealthcheck = require('./routes/route-diagnostics'),
+	db = require('./db/scripts/db'),
+	middleware = require('./config/express/express-middleware'),
+	routes = require('./config/express/express-routes'),
+	loginRoute = require('./routes/route-auth'),
+	passport = require('passport/'),
 	server, log;
 
+// Configure middleware
+middleware(app, passport);
+
+// Configure routes
+routes(app, passport);
+
+/**
+ * Listens on a port
+ */
 exports.listen = function () {
 	server = app.listen.apply(app, arguments);
 };
 
 /**
- * Function that loads the config
+ * Function to load the config
  */
 var loadConfig = function() {
 	var env = process.env.NODE_ENV || 'development',
@@ -36,9 +49,6 @@ var runServer = function() {
 	log.info('Node app listening on port %d', port);
 };
 
-/** Routes */
-app.get('/healthcheck', routeHealthcheck.healthCheck);
-
 /**
  * Block that runs when this script is executed.
  */
@@ -48,7 +58,14 @@ async.series([
 		done();
 	},
 	function(done) {
-		log = require('./utils/commonUtils').getLogger();
+		db.connect(settings.getConfig().dbURL, done, done);
+	},
+	function(done) {
+		log = require('./utils/common-utils').getLogger();
+		done();
+	},
+	function(done) {
+		loginRoute.initPassport(passport);
 		done();
 	},
 	function(done) {

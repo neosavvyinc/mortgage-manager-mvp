@@ -3,8 +3,9 @@
 var util = require('util'),
 	_ = require('underscore'),
 	async = require('async'),
+	bCrypt = require('bcrypt-nodejs'),
 	baseModel = require('./model-base'),
-	commonUtils = require('../../utils/commonUtils'),
+	commonUtils = require('../../utils/common-utils'),
 	Schemas = require('../schemas').Schemas,
 	userSchema = Schemas.UserSchema,
 	userModel;
@@ -30,9 +31,7 @@ userModel = UserModel.prototype;
  */
 userModel.insertOrUpdate = function(item, condition, success, failure) {
 	var uid = commonUtils.generateId(),
-		currentDate = new Date(),
 		docs;
-
 	async.series([
 		function(done) {
 			docs = userModel.retrieve(condition, function(documents) {
@@ -42,12 +41,11 @@ userModel.insertOrUpdate = function(item, condition, success, failure) {
 		},
 		function(done) {
 			if(_.isEmpty(docs)) {
+				var password = _createHash(item.password);
 				_.extend(item, {
-					_id: uid,
-					created: currentDate,
-					lastLogin: currentDate,
-					appId: []
+					_id: uid
 				});
+				item.password = password;
 				userModel.insert(item, done, done);
 			} else {
 				userModel.update(item, {_id: docs._id }, null, done, done);
@@ -57,9 +55,19 @@ userModel.insertOrUpdate = function(item, condition, success, failure) {
 		if(error !== undefined) {
 			failure(error);
 		} else {
-			success();
+			success(item);
 		}
 	});
+};
+
+/**
+ * Generates hash using bCrypt
+ * @param password
+ * @returns {*}
+ * @private
+ */
+var _createHash = function(password){
+	return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
 };
 
 exports.Model = UserModel;

@@ -29,8 +29,15 @@
     "async": "0.9.0",
     "log4js": "0.6.21",
     "mongoose": "3.8.19",
-    "express": "4.10.7"
+    "express": "4.10.7",
+    "express-session": "1.10.1",
+    "passport": "0.2.1 ",
+    "passport-local": "1.0.0",
+    "connect-flash": "0.1.1",
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "1.10.1"
   },
+
   "scripts": {
     "start": "node lib/server.js",
     "test": "./node_modules/.bin/grunt test"

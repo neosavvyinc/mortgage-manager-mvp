@@ -9,6 +9,11 @@ Schemas.UserSchema = new Schema({
 	_id: { type: String, required: true, unique: true },
 	email: { type: String, required: true, unique: true },
 	password: { type: String, required: true },
+	type: { type: String, required: true }
+});
+
+Schemas.UserInfoSchema = new Schema({
+	_id: { type: String, required: true, unique: true },
 	firstName: { type: String, required: true },
 	middleName: String,
 	lastName: { type: String, required: true },
@@ -17,11 +22,12 @@ Schemas.UserSchema = new Schema({
 	state: { type: String, required: true },
 	zip: { type: Number, required: true },
 	phone: { type: Number, required: true, unique: true },
-	type: { type: String, required: true },
 	coUID: { type: String, ref: 'UserSchema' },
 	created: { type: Date, required: true },
 	lastLogin: { type: Date, required: true },
-	appId: [{ type: String, required: true, ref: 'ApplicationSchema' }]
+	appId: [{ type: String, required: true, ref: 'ApplicationSchema' }],
+	isSelfEmployed: { type: Boolean, default: false },
+	access: Schema.Types.Mixed
 });
 
 Schemas.ApplicationSchema = new Schema({
@@ -30,7 +36,8 @@ Schemas.ApplicationSchema = new Schema({
 	coUID: { type: String, ref: 'UserSchema' },
 	pEmail: {type: String, required:true, unique: true },
 	created: { type:Date, required: true },
-	lastModified: { type: Date, required: true }
+	lastModified: { type: Date, required: true },
+	documents: [String]
 });
 
 Schemas.DocumentSchema = new Schema({
@@ -57,6 +64,12 @@ Schemas.LenderInvitesSchema = new Schema({
 Schemas.ApplicationLendersSchema = new Schema({
 	lenderId: { type: String, required: true, ref: 'UserSchema' },
 	appId: [{ type: String, required: true, ref: 'ApplicationSchema' }]
+});
+
+Schemas.NotificationSchema = new Schema({
+	notificationId: { type: String, required: true },
+	docId: { type: String, required: true },
+	type: { type: String, required: true }
 });
 
 exports.Schemas = Schemas;
