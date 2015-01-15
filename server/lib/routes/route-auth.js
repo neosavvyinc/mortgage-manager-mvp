@@ -31,7 +31,7 @@ exports.validateLogin = function(passport) {
 	return function(req, res, next) {
 		passport.authenticate('local', function(err, user, info) {
 			if (err) {
-				res.status(401).
+				res.status(409).
 					send(err);
 			}
 			if(!user) {
@@ -95,7 +95,7 @@ var _loginSetup = function(passport) {
 					}
 					// User exists but wrong password, log the error
 					if (!_isValidPassword(user, password)) {
-						return done(null, false, { code: 401, message: 'Invalid Credentials' });
+						return done(null, false, { code: 401, message: 'Invalid Credentials.' });
 					}
 					// User and password both match, return user from
 					// done method which will be treated like success
@@ -144,6 +144,7 @@ var _registerSetup = function(passport){
 							}
 					});
 				};
+
 				// Delay the execution of findOrCreateUser and execute the method
 				// in the next tick of the event loop
 				process.nextTick(findOrCreateUser);
