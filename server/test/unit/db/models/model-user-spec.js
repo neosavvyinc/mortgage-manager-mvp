@@ -38,7 +38,7 @@ describe('modelUser',  function() {
 
 		it('should fail userModel.insert fails', function() {
 			retrieveSpy.andCallFake(function(conditions, success, failure) {
-				var docs = {};
+				var docs = [];
 				success(docs);
 			});
 
@@ -55,9 +55,10 @@ describe('modelUser',  function() {
 
 		it('should fail if userModel.update fails', function() {
 			retrieveSpy.andCallFake(function(conditions, success, failure) {
-				var docs = {
+				var docs = [{
+					_id: '123',
 					one: 'one'
-				};
+				}];
 				success(docs);
 			});
 
@@ -74,7 +75,7 @@ describe('modelUser',  function() {
 
 		it('should call insert and succeed if no documents are found', function() {
 			retrieveSpy.andCallFake(function(conditions, success, failure) {
-				var docs = {};
+				var docs = [];
 				success(docs);
 			});
 
@@ -86,7 +87,6 @@ describe('modelUser',  function() {
 				expect(user.retrieve.callCount).toBe(1);
 				expect(user.insert.callCount).toBe(1);
 				expect(user.update.callCount).toBe(0);
-				expect().toHaveExecuted();
 			}, function(error) {
 				expect().toHaveNotExecuted('should not have failed');
 			});
@@ -94,9 +94,10 @@ describe('modelUser',  function() {
 
 		it('should call update and succeed if one document is found', function() {
 			retrieveSpy.andCallFake(function(conditions, success, failure) {
-				var docs = {
+				var docs = [{
+					_id: '123',
 					one: 'one'
-				};
+				}];
 				success(docs);
 			});
 
@@ -108,7 +109,6 @@ describe('modelUser',  function() {
 				expect(user.retrieve.callCount).toBe(1);
 				expect(user.insert.callCount).toBe(0);
 				expect(user.update.callCount).toBe(1);
-				expect().toHaveExecuted();
 			}, function(error) {
 				expect().toHaveNotExecuted('should not have failed');
 			});
