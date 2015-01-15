@@ -3,9 +3,7 @@
 var util = require('util'),
 	_ = require('underscore'),
 	async = require('async'),
-	bCrypt = require('bcrypt-nodejs'),
 	baseModel = require('./model-base'),
-	commonUtils = require('../../utils/common-utils'),
 	Schemas = require('../schemas').Schemas,
 	userDetailsSchema = Schemas.UserInfoSchema,
 	userDetailsModel;
@@ -34,7 +32,7 @@ userDetailsModel.insertOrUpdate = function(item, success, failure) {
 
 	async.series([
 		function(done) {
-			docs = userDetailsModel.retrieve({ _id: item._id }, function(documents) {
+			docs = new UserDetailsModel().retrieve({ _id: item._id }, function(documents) {
 				docs = documents;
 				done();
 			}, done);
@@ -55,7 +53,7 @@ userDetailsModel.insertOrUpdate = function(item, success, failure) {
 		if(error !== undefined) {
 			failure(error);
 		} else {
-			success(item);
+			success();
 		}
 	});
 };

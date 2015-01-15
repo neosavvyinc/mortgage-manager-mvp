@@ -61,6 +61,66 @@ describe('modelBase', function() {
 		});
 	});
 
+	describe('findOneDocument', function() {
+		var baseRetrieveSpy;
+
+		beforeEach(function() {
+			baseRetrieveSpy = spyOn(baseModel.prototype, 'retrieve');
+		});
+
+		it('should fail if baseModel.retrieve', function() {
+			baseRetrieveSpy.andCallFake(function(conditions, callback, failure) {
+				failure('fail');
+			});
+
+			base.findOneDocument({}, function(document) {
+					expect().toHaveNotExecuted('Should not have succeeded');
+				},
+				function(error) {
+					expect(error).toBe('fail');
+				});
+		});
+
+		it('should fail if no documents are found in mongo', function() {
+			baseRetrieveSpy.andCallFake(function(conditions, callback) {
+				callback([]);
+			});
+
+			base.findOneDocument({}, function(document) {
+					expect().toHaveNotExecuted('Should not have succeeded');
+				},
+				function(error) {
+					expect(error).toBe('Error: No documents found');
+				});
+		});
+
+		it('should fail if more than one document is found in mongo', function() {
+			baseRetrieveSpy.andCallFake(function(conditions, callback) {
+				callback([{_id: 1, first: 'first'}, {_id: 2, second: 'second'}]);
+			});
+
+			base.findOneDocument({}, function(docs) {
+					expect().toHaveNotExecuted('Should not have succeeded');
+				},
+				function(error) {
+					expect(error).toBe('Error: More than 1 document found');
+				});
+		});
+
+		it('should succeed if only one document is found in mongo', function() {
+			baseRetrieveSpy.andCallFake(function(conditions, callback) {
+				callback([{_id: 1, first: 'first'}]);
+			});
+
+			base.findOneDocument({}, function(document) {
+					expect(document).toEqual({_id: 1, first: 'first'});
+				},
+				function(error) {
+					expect().toHaveNotExecuted('Should not have failed');
+				});
+		});
+	});
+
 	describe('retrieve', function() {
 		var modelFindSpy;
 

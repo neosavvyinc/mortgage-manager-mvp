@@ -1,7 +1,7 @@
 'use strict';
 
 var routeHealthcheck = require('../../routes/route-diagnostics'),
-	routeLogin = require('../../routes/route-auth');
+	authRoute = require('../../routes/route-auth');
 
 module.exports = function(app, passport) {
 	//Healthcheck
@@ -10,13 +10,30 @@ module.exports = function(app, passport) {
 
 	//Validate User Login
 	app.route('/login')
-		.post(routeLogin.validateLogin(passport));
+		.post(authRoute.validateLogin(passport));
 
-	//Validate User Login
+	//Create a new user
 	app.route('/register')
-		.post(routeLogin.validateLogin(passport));
+		.post(authRoute.registerUser(passport));
 
-	//
 	app.route('/user/:uid')
-		.post(routeLogin.validateLogin(passport));
+		.all(_isAuthenticated);
+
+	app.route('/user/:uid/coapplicant')
+		.all(_isAuthenticated);
+};
+
+/**
+ * Check if user is authenticated
+ * @param req
+ * @param res
+ * @param next
+ * @private
+ */
+var _isAuthenticated = function(req, res, next){
+	if(req.sessionID){
+		next();
+	} else {
+		res.status(401).end();
+	}
 };

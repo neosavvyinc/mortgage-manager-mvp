@@ -22,17 +22,3 @@ module.exports = function(app, passport) {
 	app.use(passport.session());
 };
 
-/**
- * Check if user is authenticated
- * @param req
- * @param res
- * @param next
- * @private
- */
-var _isAuthenticated = function(req, res, next){
-	if(req.sessionID){
-		next();
-	} else {
-		res.status(401).end();
-	}
-};

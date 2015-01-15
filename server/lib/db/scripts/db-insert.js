@@ -7,7 +7,8 @@ var dbInsert,
 	util = require('util'),
 	_ = require('underscore'),
 	dbBase = require('./db-base'),
-	userModel = require('../models/model-user-details').Model,
+	userModel = require('../models/model-user').Model,
+	userDetailsModel = require('../models/model-user-details').Model,
 	applicationModel = require('../models/model-application').Model,
 	commonUtils = require('../../utils/common-utils'),
 	errorUtils = require('../../utils/error-utils'),
@@ -54,6 +55,19 @@ dbInsert.operation = function(success, failure) {
 				success();
 			}
 		});
+};
+
+/**
+ * Get mongoose id for a document based on specified model and conditions
+ * @param model
+ * @param conditions
+ * @param success
+ * @param failure
+ */
+dbInsert.getMongoId = function(model, conditions, success, failure) {
+	model.findOneDocument(conditions, function(document) {
+		success(document._id);
+	}, failure);
 };
 
 /**
@@ -138,6 +152,7 @@ var saveUsers = function(json, success, failure) {
 	async.eachSeries(data, function(item, done) {
 		user.insertOrUpdate(item, { email: item.email }, function(updated) {
 			item = updated;
+			done();
 		}, done);
 	}, function(error) {
 		if(error) {
@@ -156,10 +171,25 @@ var saveUsers = function(json, success, failure) {
  */
 var saveUserDetails = function(json, success, failure) {
 	var data = _.isEmpty(json.userdetails) ? [] : json.userdetails,
-		user = new userModel();
-
+		userDetails = new userDetailsModel();
 	async.eachSeries(data, function(item, done) {
-		user.insertOrUpdate(item, { _id: item._id }, done, done);
+		async.series([
+			function(done1) {
+				dbInsert.getMongoId(new userModel(), { email: item.email }, function(_id) {
+					item._id = _id;
+					done1();
+				}, done1);
+			},
+			function(done1) {
+				userDetails.insertOrUpdate(item, done1, done1);
+			}
+		], function(error) {
+			if(error) {
+				done(error);
+			} else {
+				done();
+			}
+		});
 	}, function(error) {
 		if(error) {
 			failure(error);
@@ -187,10 +217,6 @@ var saveApplications = function(json, success, failure) {
 			success();
 		}
 	});
-};
-
-var _getDocumentId = function(model, condition) {
-
 };
 
 exports.Db = DbInsert;

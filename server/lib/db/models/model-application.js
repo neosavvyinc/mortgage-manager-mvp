@@ -38,7 +38,7 @@ applicationModel.insertNewApp = function(item, success, failure) {
 			//Find the user id for the primary applicant email
 			var user = new userModel();
 			user.findOneDocument({ email: item.pEmail }, function(document) {
-				user = document;
+				userDoc = document;
 				done();
 			}, done);
 		},

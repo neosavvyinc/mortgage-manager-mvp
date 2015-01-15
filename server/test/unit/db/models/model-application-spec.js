@@ -150,7 +150,7 @@ describe('modelUser',  function() {
 			});
 
 			application.insertNewApp({dummy: 'dummy'}, function() {
-				expect(baseModel.prototype.retrieve.callCount).toBe(1);
+				expect(baseModel.prototype.retrieve.callCount).toBe(2);
 				expect(baseModel.prototype.insert.callCount).toBe(1);
 				expect(baseModel.prototype.update.callCount).toBe(1);
 			}, function(error) {
@@ -189,7 +189,7 @@ describe('modelUser',  function() {
 			});
 
 			application.insertNewApp({dummy: 'dummy'}, function() {
-				expect(baseModel.prototype.retrieve.callCount).toBe(1);
+				expect(baseModel.prototype.retrieve.callCount).toBe(2);
 				expect(baseModel.prototype.insert.callCount).toBe(1);
 				expect(baseModel.prototype.update.callCount).toBe(1);
 			}, function(error) {

@@ -32,12 +32,37 @@ exports.validateLogin = function(passport) {
 	return function(req, res, next) {
 		passport.authenticate('local', function(err, user, info) {
 			if (err) {
-				res.send(err);
+				res.status(401).
+					send(err);
 			}
 			if(!user) {
-				res.send(info);
+				res.status(info.code)
+					.send(info.message);
 			} else {
 				res.send({message: 'Success' });
+			}
+			res.end();
+		})(req, res, next);
+	};
+};
+
+/**
+ *
+ * @param passport
+ * @returns {Function}
+ */
+exports.registerUser = function(passport) {
+	return function(req, res, next) {
+		passport.authenticate('register', function(err, user, info) {
+			if (err) {
+				res.status(401).
+					send(err);
+			}
+			if(!user) {
+				res.status(info.code)
+					.send(info.message);
+			} else {
+				res.send({message: 'Success'});
 			}
 			res.end();
 		})(req, res, next);
@@ -51,6 +76,8 @@ exports.validateLogin = function(passport) {
  */
 var _loginSetup = function(passport) {
 	passport.use('local', new LocalStrategy({
+			usernameField: 'email',
+			passwordField: 'password',
 			passReqToCallback : true
 		},
 		function(req, username, password, done) {
@@ -65,7 +92,7 @@ var _loginSetup = function(passport) {
 					}
 					// Username does not exist, log error & redirect back
 					if (!user) {
-						return done(null, false, { code: 401, message: 'User Not found.' });
+						return done(null, false, { code: 401, message: 'Username Not found.' });
 					}
 					// User exists but wrong password, log the error
 					if (!_isValidPassword(user, password)) {
@@ -86,43 +113,39 @@ var _loginSetup = function(passport) {
  */
 var _registerSetup = function(passport){
 	passport.use('register', new LocalStrategy({
+				usernameField: 'email',
+				passwordField: 'password',
 				passReqToCallback : true //allows us to pass back the entire request to the callback
 			},
 			function(req, username, password, done) {
 				var findOrCreateUser = function() {
 					// find a user in Mongo with provided username
-					loginService.findUser({ 'username' :  username }, function(err, user) {
-						// In case of any error, return using the done method
-						if (err){
-							console.log('Error in Registration: ' + err);
-							return done(err);
-						}
-						// already exists
-						if (user) {
-							console.log('User already exists with username: ' + username);
-							return done(null, false, req.flash('message','User Already Exists'));
-						} else {
-							// if there is no user with that email
-							// create the user
-							var userObject = req.param('userDetails');
-							userObject.password = _createHash(userObject.password);
-
-							loginService.createUser(userObject, function(err) {
-								if(err) {
-									throw err;
-								} else {
-									return done(null, userObject);
-								}
-							});
-							/* // set the user's local credentials
-							 newUser.username = username;
-							 newUser.password = _createHash(password);
-							 newUser.email = req.param('email');
-							 newUser.firstName = req.param('firstName');
-							 newUser.lastName = req.param('lastName');*/
-						}
+					loginService.findUser({email :  username },
+						 function(err, users) {
+							var user = users[0];
+							// In case of any error, return using the done method
+							if (err) {
+								return done(err);
+							}
+							// already exists
+							if (user) {
+								return done(null, false, {code: 401, message:'User Already Exists'});
+							} else {
+								// if there is no user with that email
+								// create the user
+								var userObject = req.body;
+								loginService.createUser(userObject, function(err, userDoc) {
+									if(err) {
+										//log.fatal
+										return done(null, false, {code: 500, message: 'Internal server error'});
+									} else {
+										return done(null, userDoc);
+									}
+								});
+							}
 					});
 				};
+
 				// Delay the execution of findOrCreateUser and execute the method
 				// in the next tick of the event loop
 				process.nextTick(findOrCreateUser);

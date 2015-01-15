@@ -1,7 +1,6 @@
 'use strict';
 
-var bCrypt = require('bcrypt-nodejs'),
-	userModel = require('../../../../lib/db/models/model-user').Model,
+var userModel = require('../../../../lib/db/models/model-user-details').Model,
 	baseModel = require('../../../../lib/db/models/model-base').Model;
 
 describe('modelUser',  function() {
@@ -14,14 +13,12 @@ describe('modelUser',  function() {
 	describe('insertOrUpdate', function() {
 		var retrieveSpy,
 			insertSpy,
-			updateSpy,
-			hashSpy;
+			updateSpy;
 
 		beforeEach(function() {
 			retrieveSpy = spyOn(baseModel.prototype, 'retrieve');
 			insertSpy = spyOn(baseModel.prototype, 'insert');
 			updateSpy = spyOn(baseModel.prototype, 'update');
-			hashSpy = spyOn(bCrypt, 'hashSync').andReturn('foo');
 		});
 
 		it('should fail if userModel.retrieve fails', function() {
@@ -29,7 +26,7 @@ describe('modelUser',  function() {
 				failure('retrieve fail');
 			});
 
-			user.insertOrUpdate({dummy: 'dummy'}, null, function() {
+			user.insertOrUpdate({dummy: 'dummy'}, function() {
 				expect().toHaveNotExecuted('should not have succeeded');
 			}, function(error) {
 				expect(error).toBe('retrieve fail');
@@ -46,7 +43,7 @@ describe('modelUser',  function() {
 				failure('insert fail');
 			});
 
-			user.insertOrUpdate({dummy: 'dummy'}, null, function() {
+			user.insertOrUpdate({dummy: 'dummy'}, function() {
 				expect().toHaveNotExecuted('should not have succeeded');
 			}, function(error) {
 				expect(error).toBe('insert fail');
@@ -65,7 +62,7 @@ describe('modelUser',  function() {
 				failure('update fail');
 			});
 
-			user.insertOrUpdate({dummy: 'dummy'}, null, function() {
+			user.insertOrUpdate({dummy: 'dummy'}, function() {
 				expect().toHaveNotExecuted('should not have succeeded');
 			}, function(error) {
 				expect(error).toBe('update fail');
@@ -82,7 +79,7 @@ describe('modelUser',  function() {
 				success();
 			});
 
-			user.insertOrUpdate({dummy: 'dummy'}, null, function() {
+			user.insertOrUpdate({dummy: 'dummy'}, function() {
 				expect(user.retrieve.callCount).toBe(1);
 				expect(user.insert.callCount).toBe(1);
 				expect(user.update.callCount).toBe(0);
@@ -104,7 +101,7 @@ describe('modelUser',  function() {
 				success();
 			});
 
-			user.insertOrUpdate({dummy: 'dummy'}, null, function() {
+			user.insertOrUpdate({dummy: 'dummy'}, function() {
 				expect(user.retrieve.callCount).toBe(1);
 				expect(user.insert.callCount).toBe(0);
 				expect(user.update.callCount).toBe(1);

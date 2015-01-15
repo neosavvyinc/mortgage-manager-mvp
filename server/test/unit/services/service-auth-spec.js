@@ -1,7 +1,7 @@
 'use strict';
 
 var serviceLogin = require('../../../lib/services/service-auth'),
-	userModel = require('../../../lib/db/models/model-user-details').Model;
+	userModel = require('../../../lib/db/models/model-user').Model;
 
 describe('serviceLogin', function() {
 
@@ -47,16 +47,17 @@ describe('serviceLogin', function() {
 		var insertSpy;
 
 		beforeEach(function() {
-			insertSpy = spyOn(userModel.prototype, 'insert');
+			insertSpy = spyOn(userModel.prototype, 'insertOrUpdate');
 		});
 
 		it('should fail if userModel.retrieve fails', function() {
-			insertSpy.andCallFake(function(item, success, failure) {
-				expect(item).toEqual({foo: 'bar'});
+			insertSpy.andCallFake(function(item, conditions, success, failure) {
+				expect(item).toEqual({foo: 'bar', email: 'email'});
+				expect(conditions).toEqual({email: 'email'});
 				failure('fail');
 			});
 
-			serviceLogin.createUser({foo: 'bar'}, function(error) {
+			serviceLogin.createUser({foo: 'bar', email: 'email'}, function(error) {
 				if(error) {
 					expect(error).toBe('fail');
 				} else {
@@ -66,16 +67,17 @@ describe('serviceLogin', function() {
 		});
 
 		it('should succeed if userModel.retrieve succeeds', function() {
-			insertSpy.andCallFake(function(item, success, failure) {
-				expect(item).toEqual({foo: 'bar'});
+			insertSpy.andCallFake(function(item, conditions, success, failure) {
+				expect(item).toEqual({foo: 'bar', email: 'email'});
+				expect(conditions).toEqual({email: 'email'});
 				success();
 			});
 
-			serviceLogin.createUser({foo: 'bar'}, function(error) {
+			serviceLogin.createUser({foo: 'bar', email: 'email'}, function(error) {
 				if(error) {
 					expect().toHaveNotExecuted('Should not have failed.');
 				} else {
-					expect(userModel.prototype.insert.callCount).toBe(1);
+					expect(userModel.prototype.insertOrUpdate.callCount).toBe(1);
 				}
 			});
 		});
