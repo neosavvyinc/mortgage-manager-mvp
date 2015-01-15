@@ -1,7 +1,6 @@
 'use strict';
 
 var async = require('async'),
-	commonUtils = require('../utils/common-utils'),
 	userDetailsModel = require('../db/models/model-user-details').Model,
 	userModel = require('../db/models/model-user').Model;
 
@@ -25,19 +24,38 @@ exports.updateUser = function(userObject, success, failure) {
  * @param failure
  */
 exports.createCoApplicant = function(userId, coapplicant, success, failure) {
-	var user = new userModel(),
-		createdCoApp;
+	var createdCoApp;
 
 	async.series([
 		function(done) {
-			//Create a coapplicant
-			user.insertOrUpdate(coapplicant, {email: coapplicant.email}, function(coapplicant) {
+			//Create coapplicant credentials in user schema
+			var user = new userModel();
+			user.insertOrUpdate({email: coapplicant.email, password: coapplicant, type: coapplicant}, {email: coapplicant.email}, function(coapp) {
+				createdCoApp = coapp;
 				done();
 			}, done);
 		},
 		function(done) {
-			//Update the user to point to the coapplicant id
+			//Create coapplicant details in user details schema
+			var userDetails = new userDetailsModel();
 
+			//Delete details from coapplicant that we don't want to persist in the user details schema
+			delete coapplicant.email;
+			delete coapplicant.password;
+			delete coapplicant.type;
+
+			coapplicant._id = createdCoApp._id;
+
+			userDetails.insertOrUpdate(coapplicant, function() {
+				done();
+			}, done);
+		},
+		function(done) {
+			var userDetails = new userDetailsModel();
+			//Update the user to point to the coapplicant id
+			userDetails.insertOrUpdate({_id: userId, coUID: createdCoApp._id}, function() {
+				done();
+			}, done);
 		}
 	], function(error) {
 		if(error) {

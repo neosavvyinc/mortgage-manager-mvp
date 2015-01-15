@@ -48,7 +48,8 @@ userModel.insertOrUpdate = function(item, condition, success, failure) {
 				item.password = password;
 				userModel.insert(item, done, done);
 			} else {
-				userModel.update(item, {_id: docs._id }, null, done, done);
+				item._id = docs[0]._id;
+				userModel.update(item, {_id: docs[0]._id }, null, done, done);
 			}
 		}
 	], function(error) {
