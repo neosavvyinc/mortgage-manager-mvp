@@ -47,7 +47,7 @@ exports.validateLogin = function(passport) {
 };
 
 /**
- *
+ * Register a new user
  * @param passport
  * @returns {Function}
  */
@@ -129,7 +129,7 @@ var _registerSetup = function(passport){
 							}
 							// already exists
 							if (user) {
-								return done(null, false, {code: 401, message:'User Already Exists'});
+								return done(null, false, {code: 401, message: 'User Already Exists'});
 							} else {
 								// if there is no user with that email
 								// create the user
