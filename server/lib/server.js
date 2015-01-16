@@ -59,15 +59,15 @@ async.series([
 		done();
 	},
 	function(done) {
-		db.connect(settings.getConfig().dbURL, done, done);
-	},
-	function(done) {
 		log = require('./utils/common-utils').getLogger();
 		done();
 	},
 	function(done) {
 		loginRoute.initPassport(passport);
 		done();
+	},
+	function(done) {
+		db.connect(settings.getConfig().dbURL, done, done);
 	},
 	function(done) {
 		runServer();
