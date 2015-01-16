@@ -80,9 +80,9 @@ var Navigation = React.createClass({
     },
 
     render: function(){
-        var tabSpacingClass = calculateTabSpacing(this.props.navigationItems.length) + "";
+        var tabSpacingClass = calculateTabSpacing(this.props.navigationItems.length) + " blue";
 
-        var activeTabClass = tabSpacingClass + " error";
+        var activeTabClass = tabSpacingClass + " turquoise";
 
         return (
             <div className="container row">
@@ -92,13 +92,17 @@ var Navigation = React.createClass({
                             if(_.indexOf(this.props.navigationItems, tab) == this.state.activeTabNumber){
                                 return (
                                     <button className={activeTabClass}>
-                                        <Link key={tab.tabName} to={tab.tabLink}>{tab.tabName}</Link>
+                                        <Link key={tab.tabName} to={tab.tabLink}>
+                                            <span className="plaintext">{tab.tabName}</span>
+                                        </Link>
                                     </button>
                                 );
                             } else {
                                 return (
                                     <button className={tabSpacingClass} onClick={this.changeActive.bind(this, tab)}>
-                                        <Link key={tab.tabName} to={tab.tabLink}>{tab.tabName}</Link>
+                                        <Link key={tab.tabName} to={tab.tabLink}>
+                                            <span className="plaintext">{tab.tabName}</span>
+                                        </Link>
                                     </button>
                                 );
                             }
