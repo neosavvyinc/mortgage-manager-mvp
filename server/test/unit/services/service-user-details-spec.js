@@ -31,11 +31,11 @@ describe('serviceUserDetails', function() {
 	describe('createCoApplicant', function() {
 		it('should fail if userModel.insertOrUpdate fails', function() {
 			userInsertSpy.andCallFake(function(obj, conditions, success, failure) {
-				expect(obj).toEqual({email: 'bar', password: '123', type:'borrower'});
+				expect(obj).toEqual({email: 'bar', password: 'default', type:'borrower'});
 				failure('coapplicant user insert failed');
 			});
 
-			serviceUserDetails.createCoApplicant('123', {email: 'bar', password: '123', type:'borrower'}, function() {
+			serviceUserDetails.createCoApplicant('123', {email: 'bar', password: 'default', type:'borrower'}, function() {
 				expect().toHaveNotExecuted('Should not have succeeded');
 			},
 			function(error) {
@@ -45,7 +45,7 @@ describe('serviceUserDetails', function() {
 
 		it('should fail if userDetailsModel.insertOrUpdate fails while creating coapplicant', function() {
 			userInsertSpy.andCallFake(function(obj, conditions, success, failure) {
-				expect(obj).toEqual({email: 'bar', password: '123', type:'borrower'});
+				expect(obj).toEqual({email: 'bar', password: 'default', type:'borrower'});
 				success({_id: '222'});
 			});
 
@@ -54,7 +54,7 @@ describe('serviceUserDetails', function() {
 				failure('coapplicant details insert failed');
 			});
 
-			serviceUserDetails.createCoApplicant('123', {email: 'bar', password: '123', type:'borrower'}, function() {
+			serviceUserDetails.createCoApplicant('123', {email: 'bar', password: 'default', type:'borrower'}, function() {
 				expect().toHaveNotExecuted('Should not have succeeded');
 			},
 			function(error) {
@@ -64,7 +64,7 @@ describe('serviceUserDetails', function() {
 
 		it('should fail if userDetailsModel.insertOrUpdate fails while updating user with coapplicant id', function() {
 			userInsertSpy.andCallFake(function(obj, conditions, success, failure) {
-				expect(obj).toEqual({email: 'bar', password: '123', type:'borrower'});
+				expect(obj).toEqual({email: 'bar', password: 'default', type:'borrower'});
 				success({_id: '222'});
 			});
 
@@ -78,7 +78,7 @@ describe('serviceUserDetails', function() {
 				}
 			});
 
-			serviceUserDetails.createCoApplicant('123', {email: 'bar', password: '123', type:'borrower'}, function() {
+			serviceUserDetails.createCoApplicant('123', {email: 'bar', password: 'default', type:'borrower'}, function() {
 				expect().toHaveNotExecuted('Should not have succeeded');
 			},
 			function(error) {
@@ -88,7 +88,7 @@ describe('serviceUserDetails', function() {
 
 		it('should succeed if all insertOrUpdate functions succeed', function() {
 			userInsertSpy.andCallFake(function(obj, conditions, success, failure) {
-				expect(obj).toEqual({email: 'bar', password: '123', type:'borrower'});
+				expect(obj).toEqual({email: 'bar', password: 'default', type:'borrower'});
 				success({_id: '222'});
 			});
 
@@ -102,7 +102,7 @@ describe('serviceUserDetails', function() {
 				}
 			});
 
-			serviceUserDetails.createCoApplicant('123', {email: 'bar', password: '123', type:'borrower'}, function() {
+			serviceUserDetails.createCoApplicant('123', {email: 'bar', password: 'default', type:'borrower'}, function() {
 				expect().toHaveExecuted();
 			},
 			function(error) {
