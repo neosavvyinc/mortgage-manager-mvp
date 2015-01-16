@@ -42,14 +42,10 @@ var calculateTabSpacing = function(tabNavLength){
 
 var Navigation = React.createClass({
 
-    propTypes: {
-        navigationItems: React.PropTypes.array.isRequired
-    },
+    mixins: [Router.State],
 
-    getInitialState: function(){
-        return {
-            activeTabNumber: 0 // Starts at array's position 0
-        }
+    propTypes: {
+        navigationItems: React.PropTypes.array
     },
 
     getDefaultProps: function(){
@@ -61,19 +57,11 @@ var Navigation = React.createClass({
                 },
                 {
                     tabName: "tab2",
-                    tabLink: "dashboardMain"
+                    tabLink: "dashboardApplicants"
                 },
                 {
                     tabName: "tab3",
-                    tabLink: "dashboardMain"
-                },
-                {
-                    tabName: "tab4",
-                    tabLink: "dashboardMain"
-                },
-                {
-                    tabName: "tab5",
-                    tabLink: "dashboardMain"
+                    tabLink: "dashboardDocuments"
                 }
             ]
         }
@@ -87,34 +75,28 @@ var Navigation = React.createClass({
         return (
             <div className="container">
                 <div className="row">
-                        {this.props.navigationItems.map(function(tab) {
-                            if(_.indexOf(this.props.navigationItems, tab) == this.state.activeTabNumber){
-                                return (
-                                    <button className={activeTabClass}>
-                                        <Link key={tab.tabName} to={tab.tabLink}>
+                    {this.props.navigationItems.map(function(tab) {
+                        if(this.isActive(tab.tabLink)){
+                            return (
+                                    <Link key={tab.tabName} to={tab.tabLink}>
+                                        <button className={activeTabClass}>
                                             <span className="plaintext">{tab.tabName}</span>
-                                        </Link>
-                                    </button>
-                                );
-                            } else {
-                                return (
-                                    <button className={tabSpacingClass} onClick={this.changeActive.bind(this, tab)}>
-                                        <Link key={tab.tabName} to={tab.tabLink}>
+                                        </button>
+                                    </Link>
+                            );
+                        } else {
+                            return (
+                                    <Link key={tab.tabName} to={tab.tabLink}>
+                                        <button className={tabSpacingClass}>
                                             <span className="plaintext">{tab.tabName}</span>
-                                        </Link>
-                                    </button>
-                                );
-                            }
-                        }.bind(this))}
+                                        </button>
+                                    </Link>
+                            );
+                        }
+                    }.bind(this))}
                 </div>
             </div>
         );
-    },
-
-    changeActive: function(tab){
-        this.setState({
-            activeTabNumber: _.indexOf(this.props.navigationItems, tab)
-        });
     }
 
 });
