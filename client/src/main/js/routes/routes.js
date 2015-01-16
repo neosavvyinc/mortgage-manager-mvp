@@ -41,7 +41,9 @@ var routes = (
             <Route name="applicantQuestions" path="applicant-questions" handler={ApplicantQuestions} />
             <Route name="applicantInfo" path="applicant-info" handler={ApplicantInfo} />
         </Route>
-        <Route name="dashboard" handler={Dashboard} />
+        <Route name="dashboard" handler={Dashboard}>
+            <DefaultRoute name="dashboardMain" path="main" handler={TestRoute} />
+        </Route>
         <Route name="forgotPassword" path="forgot-password" handler={TestRoute} />
     </Route>
 );
