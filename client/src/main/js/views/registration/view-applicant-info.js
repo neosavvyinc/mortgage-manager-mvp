@@ -41,17 +41,13 @@ var ApplicantInfo = React.createClass({
         Router.State,
         Router.Navigation
     ],
-    
+
     statics: {
         willTransitionTo: function (transition){
             if(!UserStore.isAuthenticated()){
                 transition.redirect('welcome');
             }
         }
-    },
-
-    defaultProps: {
-        applicantType: "Applicant"
     },
 
     getInitialState: function(){
@@ -66,41 +62,42 @@ var ApplicantInfo = React.createClass({
 
     render: function(){
 
-        var showCoapplicantFieldClass = this.state.applicantType == "Co-Applicant" ? "one third" : "hidden";
+        var showCoapplicantFieldClass = this.state.applicantType == "Co-Applicant" ? "two thirds" : "hidden";
+        var showEmailClass = this.state.applicantType == "Co-Applicant" ? "one third" : "hidden";
 
         return (
-            <div>
-                <h2>{this.state.applicantType}'s Name</h2>
-                <div className="row">
-                    <input className="one third" type="text" ref="firstName" placeholder="First Name" required />
-                    <input className="one third" type="text" ref="middleName" placeholder="Middle Name" required />
-                    <input className="one third" type="text" ref="lastName" placeholder="Last Name" required />
-                </div>
-                <div className="row">
-                </div>
-                <div className="row">
-                    <h2 className="one third">{this.state.applicantType}'s Address</h2>
-                    <div className={showCoapplicantFieldClass}>
-                        <p className="one third">Shares address with main applicant:</p>
-                        <input type="checkbox" ref="sameAddress" onChange={this.populateAddress}/>
+            <div className="container">
+                <div className="gap-top">
+                    <h2>{this.state.applicantType}'s Name</h2>
+                    <div className="row gap-bottom">
+                        <input className="one fourth half-gap-right" type="text" ref="firstName" placeholder="First Name" required />
+                        <input className="one fourth half-gap-right" type="text" ref="middleName" placeholder="Middle Name" required />
+                        <input className="one fourth" type="text" ref="lastName" placeholder="Last Name" required />
                     </div>
-                </div>
-                <div className="row">
-                    <input type="text" ref="address" placeholder="address" required />
-                </div>
-                <div className="row">
-                    <input className="one third" type="text" ref="city" placeholder="City" required />
-                    <input className="one third" type="text" ref="state" placeholder="State" required />
-                    <input className="one third" type="text" ref="zip" placeholder="Zip Code" required />
-                </div>
-                <h2>{this.state.applicantType}'s Contact Information</h2>
-                <div className="row">
-                    <input className="one third" type="text" ref="phone" placeholder="Mobile Phone" required />
-                    <input className={showCoapplicantFieldClass} type="email" ref="email" placeholder="Email" required />
-                </div>
-                <ErrorMessage errorDisplay={this.state.applicantInfoError} errorMessage={this.state.errorText}/>
-                <div className="row">
-                    <button className="one third blue button" onClick={this.onSubmitInfo}>Continue</button>
+                    <div className="row">
+                        <h2 className="one third">{this.state.applicantType}'s Address</h2>
+                        <div className={showCoapplicantFieldClass}>
+                            <p className="one third">Shares address with main applicant:</p>
+                            <input type="checkbox" ref="sameAddress" onChange={this.populateAddress}/>
+                        </div>
+                    </div>
+                    <div className="row gap-bottom">
+                        <input className="three fourths" type="text" ref="address" placeholder="address" required />
+                    </div>
+                    <div className="row gap-bottom">
+                        <input className="one fourth half-gap-right" type="text" ref="city" placeholder="City" required />
+                        <input className="one fourth half-gap-right" type="text" ref="state" placeholder="State" required />
+                        <input className="one fourth" type="text" ref="zip" placeholder="Zip Code" required />
+                    </div>
+                    <h2>{this.state.applicantType}'s Contact Information</h2>
+                    <div className="row gap-bottom">
+                        <input className="one third half-gap-right" type="text" ref="phone" placeholder="Mobile Phone" required />
+                        <input className={showEmailClass} type="email" ref="email" placeholder="Email" required />
+                    </div>
+                    <ErrorMessage errorDisplay={this.state.applicantInfoError} errorMessage={this.state.errorText}/>
+                    <div className="row">
+                        <button className="one third turquoise button" onClick={this.onSubmitInfo}>Continue</button>
+                    </div>
                 </div>
             </div>
         )
@@ -143,7 +140,6 @@ var ApplicantInfo = React.createClass({
                 }.bind(this));
             } else {
                 applicantInfo.type = "borrower";
-                debugger;
                 User.addCoapplicant(UserStore.getCurrentUser()._id, applicantInfo).then(function(){
                     BorrowerActions.resetBorrower();
                     this.transitionTo('dashboard');

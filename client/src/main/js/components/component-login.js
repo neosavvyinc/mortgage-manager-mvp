@@ -25,7 +25,7 @@ var Login = React.createClass({
                 <button className="block turquoise" onClick={this.onLogin}>
                     Login
                 </button>
-                <Link to="forgot-password">Forgot Password?</Link>
+                <Link to="forgotPassword">Forgot Password?</Link>
             </form>
         )
     },
