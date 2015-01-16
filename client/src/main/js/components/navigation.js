@@ -4,11 +4,11 @@ var Link = Router.Link;
 var _ = require('lodash');
 
 /*
-    NavigationItems array schema:
-     {
-         tabName: "tab1",
-         tabLink: "dashboardMain"
-     }
+ NavigationItems array schema:
+ {
+ tabName: "tab1",
+ tabLink: "dashboardMain"
+ }
  */
 
 var calculateTabSpacing = function(tabNavLength){
@@ -85,9 +85,8 @@ var Navigation = React.createClass({
         var activeTabClass = tabSpacingClass + " turquoise";
 
         return (
-            <div className="container row">
-                <div className="two thirds">
-                    <div className="row">
+            <div className="container">
+                <div className="row">
                         {this.props.navigationItems.map(function(tab) {
                             if(_.indexOf(this.props.navigationItems, tab) == this.state.activeTabNumber){
                                 return (
@@ -107,17 +106,15 @@ var Navigation = React.createClass({
                                 );
                             }
                         }.bind(this))}
-                    </div>
                 </div>
             </div>
         );
     },
 
     changeActive: function(tab){
-        console.log( _.indexOf(this.props.navigationItems, tab));
-       this.setState({
-           activeTabNumber: _.indexOf(this.props.navigationItems, tab)
-       });
+        this.setState({
+            activeTabNumber: _.indexOf(this.props.navigationItems, tab)
+        });
     }
 
 });
