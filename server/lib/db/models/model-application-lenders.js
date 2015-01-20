@@ -3,6 +3,7 @@
 var util = require('util'),
 	Schemas = require('../schemas').Schemas,
 	appLendersSchema = Schemas.ApplicationLendersSchema,
+	mongoose = require('mongoose/'),
 	baseModel = require('./model-base'),
 	appLendersModel;
 
@@ -10,11 +11,13 @@ var util = require('util'),
  * Constructor for the applicationLenders model
  */
 function ApplictionLendersModel() {
-	ApplictionLendersModel.super_.call(this, 'user', appLendersSchema);
+	ApplictionLendersModel.super_.call(this);
 }
 
 util.inherits(ApplictionLendersModel, baseModel.Model);
 
 appLendersModel = ApplictionLendersModel.prototype;
+
+appLendersModel.init('user', appLendersSchema);
 
 exports.Model = ApplictionLendersModel;

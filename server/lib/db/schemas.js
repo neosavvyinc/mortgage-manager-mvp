@@ -13,7 +13,7 @@ Schemas.UserSchema = new Schema({
 });
 
 Schemas.UserInfoSchema = new Schema({
-	_id: { type: String, required: true, unique: true },
+	_id: { type: String, required: true, unique: true , ref: 'UserSchema'},
 	firstName: { type: String, required: true },
 	middleName: String,
 	lastName: { type: String, required: true },
@@ -27,6 +27,9 @@ Schemas.UserInfoSchema = new Schema({
 	lastLogin: { type: Date, required: true },
 	appId: [{ type: String, required: true, ref: 'ApplicationSchema' }],
 	isSelfEmployed: { type: Boolean, default: false },
+	renting: { type: Boolean, default: false },
+	marriedRecently: { type: Boolean, default: false },
+	financialAssets: { type: Boolean, default: false },
 	access: Schema.Types.Mixed
 });
 
@@ -34,10 +37,13 @@ Schemas.ApplicationSchema = new Schema({
 	_id: { type: String, required: true, unique: true },
 	pUID: { type: String, required: true, ref: 'UserSchema' },
 	coUID: { type: String, ref: 'UserSchema' },
-	pEmail: {type: String, required:true, unique: true },
 	created: { type:Date, required: true },
 	lastModified: { type: Date, required: true },
-	documents: [String]
+	documents: [{
+		documentName: { type: String, required: true },
+		description: { type: String, required: true },
+		amount: { type: Number, required: true }
+	}]
 });
 
 Schemas.DocumentSchema = new Schema({

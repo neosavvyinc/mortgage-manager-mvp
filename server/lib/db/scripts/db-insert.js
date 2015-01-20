@@ -206,17 +206,17 @@ var saveUserDetails = function(json, success, failure) {
  * @param failure
  */
 var saveApplications = function(json, success, failure) {
-	var data = _.isEmpty(json.application) ? [] : json.application,
-		application = new applicationModel();
-	async.eachSeries(data, function(item, done) {
-		application.insertNewApp(item, done, done);
-	}, function(error) {
-		if(error) {
-			failure(error);
-		} else {
-			success();
-		}
-	});
+	//var data = _.isEmpty(json.application) ? [] : json.application,
+	//	application = new applicationModel();
+	//async.eachSeries(data, function(item, done) {
+	//	application.insertNewApp(item, done, done);
+	//}, function(error) {
+	//	if(error) {
+	//		failure(error);
+	//	} else {
+	//		success();
+	//	}
+	//});
 };
 
 exports.Db = DbInsert;

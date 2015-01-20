@@ -3,6 +3,7 @@
 var util = require('util'),
 	_ = require('underscore'),
 	async = require('async'),
+	mongoose = require('mongoose/'),
 	baseModel = require('./model-base'),
 	Schemas = require('../schemas').Schemas,
 	userDetailsSchema = Schemas.UserInfoSchema,
@@ -12,7 +13,8 @@ var util = require('util'),
  * Constructor for the user model
  */
 function UserDetailsModel() {
-	UserDetailsModel.super_.call(this, 'userdetails', userDetailsSchema);
+	UserDetailsModel.super_.call(this);
+	UserDetailsModel.prototype.init('userdetails', userDetailsSchema);
 }
 
 util.inherits(UserDetailsModel, baseModel.Model);

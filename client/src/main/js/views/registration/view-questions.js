@@ -30,6 +30,9 @@ var ApplicantQuestions = React.createClass({
         return {
             hasCoapplicant: false,
             isSelfEmployed: false,
+            recentlyMarried: false,
+            renting: false,
+            hasFinancialAssets: false,
             questionsError: false,
             errorText: ""
         }
@@ -41,6 +44,12 @@ var ApplicantQuestions = React.createClass({
         var coapplicantNo = this.state.hasCoapplicant ? "two fifths half-gap-right" : "two fifths turquoise button half-gap-right";
         var selfEmployedYes = this.state.isSelfEmployed ? "two fifths turquoise button half-gap-right" : "two fifths half-gap-right";
         var selfEMployedNo = this.state.isSelfEmployed ? "two fifths half-gap-right" : "two fifths turquoise button half-gap-right";
+        var recentlyMarriedYes = this.state.recentlyMarried ? "two fifths turquoise button half-gap-right" : "two fifths half-gap-right";
+        var recentlyMarriedNo = this.state.recentlyMarried ? "two fifths half-gap-right" : "two fifths turquoise button half-gap-right";
+        var rentingYes = this.state.renting ? "two fifths turquoise button half-gap-right" : "two fifths half-gap-right";
+        var rentingNo = this.state.renting ? "two fifths half-gap-right" : "two fifths turquoise button half-gap-right";
+        var financialAssetsYes = this.state.hasFinancialAssets ? "two fifths turquoise button half-gap-right" : "two fifths half-gap-right";
+        var financialAssetsNo = this.state.hasFinancialAssets ? "two fifths half-gap-right" : "two fifths turquoise button half-gap-right";
 
         return (
             <div className="container">
@@ -60,6 +69,27 @@ var ApplicantQuestions = React.createClass({
                             <button className={selfEMployedNo} onClick={this.onSelfEmployedChange.bind(this, false)}>No</button>
                         </div>
                     </div>
+                    <div className="row">
+                        <h3 className="row">Have you recently gotten married?</h3>
+                        <div className="row one fourth gap-bottom">
+                            <button className={recentlyMarriedYes} onClick={this.onMarried.bind(this, true)}>Yes</button>
+                            <button className={recentlyMarriedNo} onClick={this.onMarried.bind(this, false)}>No</button>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <h3 className="row">Have you been renting an apartment until now?</h3>
+                        <div className="row one fourth gap-bottom">
+                            <button className={rentingYes} onClick={this.onRenting.bind(this, true)}>Yes</button>
+                            <button className={rentingNo} onClick={this.onRenting.bind(this, false)}>No</button>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <h3 className="row">Do you Have a SEP-IRA / 401k?</h3>
+                        <div className="row one fourth gap-bottom">
+                            <button className={financialAssetsYes} onClick={this.onFinancialAssets.bind(this, true)}>Yes</button>
+                            <button className={financialAssetsNo} onClick={this.onFinancialAssets.bind(this, false)}>No</button>
+                        </div>
+                    </div>
                     <div className="one fourth row">
                         <ErrorMessage errorDisplay={this.state.questionsError} errorMessage={this.state.errorText}/>
                         <button className="row block turquoise" onClick={this.onSubmitQuestions}>Continue</button>
@@ -75,9 +105,24 @@ var ApplicantQuestions = React.createClass({
     onSelfEmployedChange: function(status){
         this.setState({isSelfEmployed: status});
     },
+    onMarried: function(status){
+        this.setState({recentlyMarried: status});
+    },
+    onRenting: function(status){
+        this.setState({renting: status});
+    },
+    onFinancialAssets: function(status){
+        this.setState({hasFinancialAssets: status});
+    },
 
     onSubmitQuestions: function(){
-        BorrowerActions.submitQuestions(this.state.hasCoapplicant, this.state.isSelfEmployed);
+        BorrowerActions.submitQuestions(
+            this.state.hasCoapplicant,
+            this.state.isSelfEmployed,
+            this.state.recentlyMarried,
+            this.state.renting,
+            this.state.hasFinancialAssets
+        );
     },
 
     onContinue: function(){

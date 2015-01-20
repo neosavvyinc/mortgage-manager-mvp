@@ -5,6 +5,7 @@ var util = require('util'),
 	async = require('async'),
 	baseModel = require('./model-base'),
 	commonUtils = require('../../utils/common-utils'),
+	mongoose = require('mongoose/'),
 	Schemas = require('../schemas').Schemas,
 	applicationSchema = Schemas.ApplicationSchema,
 	userDetailsModel = require('./model-user-details').Model,
@@ -15,7 +16,8 @@ var util = require('util'),
  * Constructor for the application model
  */
 function ApplicationModel() {
-	ApplicationModel.super_.call(this, 'application', applicationSchema);
+	ApplicationModel.super_.call(this);
+	ApplicationModel.prototype.init('application', applicationSchema);
 }
 
 util.inherits(ApplicationModel, baseModel.Model);
@@ -28,46 +30,39 @@ applicationModel = ApplicationModel.prototype;
  * @param success
  * @param failure
  */
-applicationModel.insertNewApp = function(item, success, failure) {
+applicationModel.insertNewApp = function(applicantDetails,
+										 coapplicantDetails,
+										 documents,
+										 success,
+										 failure) {
 	var appId = commonUtils.generateId(),
 		currentDate = commonUtils.getCurrentDate(),
-		userDoc,
-		userDetailsDoc;
+		item = {};
 	async.series([
-		function(done) {
-			//Find the user id for the primary applicant email
-			var user = new userModel();
-			user.findOneDocument({ email: item.pEmail }, function(document) {
-				userDoc = document;
-				done();
-			}, done);
-		},
-		function(done) {
-			//Get the user details if user exists
-			var	userDetails = new userDetailsModel();
-			userDetails.findOneDocument({ _id: userDoc._id }, function(document) {
-				userDetailsDoc = document;
-				done();
-			}, done);
-		},
 		function(done) {
 			var application = new ApplicationModel();
 			_.extend(item, {
 				_id: appId,
 				created: currentDate,
 				lastModified: currentDate,
-				pUID: userDoc._id
+				pUID: applicantDetails._id,
+				documents: documents
 			});
+			if(coapplicantDetails){
+				_.extend(item, {
+					cUID: coapplicantDetails._id
+				});
+			}
 			application.insert(item, done, done);
 		},
 		function(done) {
 			var userDetails = new userDetailsModel();
 			//Update the userDetailsModel with the new appId
-			userDetailsDoc.appId.push(appId);
-			if(userDetailsDoc.toObject !== undefined ) {
-				userDetailsDoc = userDetailsDoc.toObject();
+			applicantDetails.appId.push(appId);
+			if(applicantDetails.toObject !== undefined ) {
+				applicantDetails = applicantDetails.toObject();
 			}
-			userDetails.update(userDetailsDoc, {_id: userDetailsDoc._id}, null, done, done);
+			userDetails.update(applicantDetails, {_id: applicantDetails._id}, null, done, done);
 		}
 	], function(error) {
 		if(error !== undefined) {
@@ -78,4 +73,5 @@ applicationModel.insertNewApp = function(item, success, failure) {
 	});
 };
 
+//console.log("application", new ApplicationModel());
 exports.Model = ApplicationModel;
