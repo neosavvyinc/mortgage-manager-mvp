@@ -77,7 +77,6 @@ var NewPassword = React.createClass({
                 } else {
                     LenderActions.newPassword(newPassword);
                 }
-                console.log('Registered');
                 UserActions.login(user);
             }, function(error){
                 this.setState({
@@ -88,8 +87,15 @@ var NewPassword = React.createClass({
         }
     },
 
-    onNewAccount: function(){
-        this.transitionTo('applicantQuestions');
+    onNewAccount: function() {
+        var borrowerEmail = BorrowerStore.getBorrower().email,
+            lenderEmail = LenderStore.getLender().email;
+
+        if(borrowerEmail) {
+            this.transitionTo('applicantQuestions');
+        } else if(lenderEmail) {
+            this.transitionTo('lenderInfo');
+        }
     }
 });
 

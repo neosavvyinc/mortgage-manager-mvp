@@ -167,7 +167,6 @@ var ApplicantInfo = React.createClass({
                 }.bind(this));
             } else {
                 applicantInfo.type = "borrower";
-                User.addCoapplicant(UserStore.getCurrentUser()._id, applicantInfo).then(function(){
                 User.addCoapplicant(this.state.currentUser._id, applicantInfo).then(function(){
                     BorrowerActions.resetBorrower();
                     this.transitionTo('dashboard');

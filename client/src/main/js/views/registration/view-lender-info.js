@@ -6,13 +6,12 @@ var React = require('react'),
 	ErrorMessage = require('../../components/component-error-msg'),
 	User = require('../../models/model-user'),
 	UserStore = require('../../stores/store-user'),
-	LenderStore = require('../../stores/store-borrower'),
-	LenderActions = require('../../actions/action-lender');
+	LenderActions = require('../../actions/action-lender'),
+    Constants = require('../../constants/constants');
 
 var validateLenderInfo = function(lenderInfo) {
 	var isValidInfo =
 		lenderInfo.firstName && lenderInfo.firstName != "" &&
-		lenderInfo.middleName && lenderInfo.middleName != "" &&
 		lenderInfo.lastName && lenderInfo.lastName != "" &&
 		lenderInfo.address && lenderInfo.address != "" &&
 		lenderInfo.city && lenderInfo.city != "" &&
@@ -46,31 +45,44 @@ var LenderInfo = React.createClass({
 	},
 
 	render: function() {
-		return (
+		var applicantAddress = (
 			<div>
-				<h2>{this.state.applicantType}'s Name</h2>
-				<div className="row">
-					<input className="one third" type="text" ref="firstName" placeholder="First Name" required />
-					<input className="one third" type="text" ref="middleName" placeholder="Middle Name" required />
-					<input className="one third" type="text" ref="lastName" placeholder="Last Name" required />
+				<div className="row gap-bottom">
+					<input className="three fourths" type="text" ref="address" placeholder="address"  required />
 				</div>
-				<div className="row">
+				<div className="row gap-bottom">
+					<input className="one fourth half-gap-right" type="text" ref="city" placeholder="City" required />
+					<select ref="state" className="one fourth half-gap-right">
+                        {Constants.usStates.map(function(state) {
+	                        return <option key={state.data} value={state.data}>{state.label}</option>;
+                        })}
+					</select>
+					<input className="one fourth" type="text" ref="zip" placeholder="Zip Code" required />
 				</div>
-				<div className="row">
-					<input type="text" ref="address" placeholder="address" required />
-				</div>
-				<div className="row">
-					<input className="one third" type="text" ref="city" placeholder="City" required />
-					<input className="one third" type="text" ref="state" placeholder="State" required />
-					<input className="one third" type="text" ref="zip" placeholder="Zip Code" required />
-				</div>
-				<h2>{this.state.applicantType}'s Contact Information</h2>
-				<div className="row">
-					<input className="one third" type="text" ref="phone" placeholder="Mobile Phone" required />
-				</div>
-				<ErrorMessage errorDisplay={this.state.applicantInfoError} errorMessage={this.state.errorText}/>
-				<div className="row">
-					<button className="one third blue button" onClick={this.onSubmitInfo}>Continue</button>
+			</div>
+		);
+
+		return (
+			<div className="container">
+				<div className="gap-top">
+					<h2>{this.state.applicantType}'s Name</h2>
+					<div className="row gap-bottom">
+						<input className="one fourth half-gap-right" type="text" ref="firstName" placeholder="First Name" required />
+						<input className="one fourth half-gap-right" type="text" ref="middleName" placeholder="Middle Name" required />
+						<input className="one fourth" type="text" ref="lastName" placeholder="Last Name" required />
+					</div>
+					<div className="row">
+						<h2 className="one third">{this.state.applicantType}'s Address</h2>
+					</div>
+                {applicantAddress}
+					<h2>{this.state.applicantType}'s Contact Information</h2>
+					<div className="row gap-bottom">
+						<input className="one third half-gap-right" type="text" ref="phone" placeholder="Mobile Phone" required />
+					</div>
+					<ErrorMessage errorDisplay={this.state.applicantInfoError} errorMessage={this.state.errorText}/>
+					<div className="row">
+						<button className="one third turquoise button" onClick={this.onSubmitInfo}>Continue</button>
+					</div>
 				</div>
 			</div>
 		)
@@ -88,7 +100,7 @@ var LenderInfo = React.createClass({
 			phone: this.refs.phone.getDOMNode().value
 		};
 
-		if(validateLenderInfo(this.state.applicantType, applicantInfo)) {
+		if(validateLenderInfo(applicantInfo)) {
 			applicantInfo.type = "lender";
 			User.update(UserStore.getCurrentUser()._id, applicantInfo).then(function () {
 				LenderActions.submitBasicInfo(applicantInfo);
