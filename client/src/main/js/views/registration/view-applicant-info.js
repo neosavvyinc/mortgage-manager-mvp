@@ -152,7 +152,10 @@ var ApplicantInfo = React.createClass({
         if(validateApplicantInfo(this.state.applicantType, applicantInfo)) {
             if(this.state.applicantType == "Applicant") {
                 delete applicantInfo.email;
-                applicantInfo.isSelfEmployed = BorrowerStore.getBorrower().isSelfEmployed;
+                applicantInfo.isSelfEmployed = this.state.currentBorrower.isSelfEmployed;
+                applicantInfo.recentlyMarried = this.state.currentBorrower.recentlyMarried;
+                applicantInfo.renting = this.state.currentBorrower.renting;
+                applicantInfo.hasFinancialAssets = this.state.currentBorrower.hasFinancialAssets;
                 User.update(this.state.currentUser._id, applicantInfo).then(function () {
                     if(this.state.currentBorrower.hasCoapplicant){
                         BorrowerActions.submitBasicInfo(applicantInfo);
