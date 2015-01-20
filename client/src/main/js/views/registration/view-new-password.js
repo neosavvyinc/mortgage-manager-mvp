@@ -5,12 +5,13 @@ var Reflux = require('reflux');
 var User = require('../../models/model-user');
 var ErrorMessage = require('../../components/component-error-msg');
 var BorrowerStore = require('../../stores/store-borrower');
+var LenderStore = require('../../stores/store-lender');
 var BorrowerActions = require('../../actions/action-borrower');
+var LenderActions = require('../../actions/action-lender');
 var UserStore = require('../../stores/store-user');
 var UserActions = require('../../actions/action-user');
 
 var NewPassword = React.createClass({
-
     mixins: [
         Router.State,
         Router.Navigation,
@@ -19,7 +20,7 @@ var NewPassword = React.createClass({
 
     statics: {
         willTransitionTo: function (transition){
-            if(!BorrowerStore.getBorrower().email){
+            if(!BorrowerStore.getBorrower().email && !LenderStore.getLender().email) {
                 transition.redirect('welcome');
             }
         }
@@ -55,12 +56,26 @@ var NewPassword = React.createClass({
                 errorText: "Both passwords need to match"
             });
         } else {
-            User.register({
-                email: BorrowerStore.getBorrower().email,
-                password: newPassword,
-                type: "borrower"
-            }).then(function(user){
-                BorrowerActions.newPassword(newPassword);
+            var newUser = {},
+                borrowerEmail = BorrowerStore.getBorrower().email,
+                lenderEmail = LenderStore.getLender().email;
+
+            if(borrowerEmail) {
+                newUser.email = borrowerEmail;
+                newUser.type = "borrower";
+            } else if(lenderEmail) {
+                newUser.email = lenderEmail;
+                newUser.type = "lender";
+            }
+            newUser.password = newPassword;
+
+            User.register(newUser).then(function(user){
+                if(newUser.type === "borrower") {
+                    BorrowerActions.newPassword(newPassword);
+                } else {
+                    LenderActions.newPassword(newPassword);
+                }
+                console.log('Registered');
                 UserActions.login(user);
             }, function(error){
                 this.setState({

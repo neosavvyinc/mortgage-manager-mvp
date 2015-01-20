@@ -22,6 +22,10 @@ var LenderStore = Reflux.createStore({
 
     onSubmitBasicInfo: function(basicInfo){
         _newLender.basicInfo = basicInfo;
+    },
+
+    getLender: function(){
+        return _newLender;
     }
 });
 

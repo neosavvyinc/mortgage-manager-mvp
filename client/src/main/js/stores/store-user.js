@@ -9,7 +9,6 @@ var _isAuthenticated = false;
 var UserStore = Reflux.createStore({
 
     listenables: UserActions,
-
     /*
     // Or:
     init: function(){
@@ -23,7 +22,7 @@ var UserStore = Reflux.createStore({
     },
     */
 
-    onLogin: function(user){
+    onLogin: function(user) {
         _currentUser = user;
         _isAuthenticated = true;
         this.trigger();
