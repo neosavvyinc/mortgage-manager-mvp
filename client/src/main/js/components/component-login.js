@@ -1,23 +1,31 @@
 var React = require('react');
 var Link = require('react-router').Link;
+
+var User = require('../models/model-user');
 var UserActions = require('../actions/action-user');
+
+var ErrorMessage = require('../components/component-error-msg');
 
 var Login = React.createClass({
 
+    getInitialState: function(){
+        return {
+            loginError: false,
+            loginErrorText: "There was an error with your credentials. Please try again."
+        }
+    },
+
     render: function(){
-
-        var errorClass = this.props.error ? "error dismissible message gap-bottom" : "hidden";
-
         return (
-            <form >
+            <form>
                 <h4>Already a User?</h4>
                 <input className="gap-bottom" ref="userEmail" type="email" placeholder="Email Address" />
                 <input className="gap-bottom" ref="userPassword" type="password" placeholder="Password" />
-                <div className={errorClass}>There was an error with your credentials. Please try again.</div>
+                <ErrorMessage errorDisplay={this.state.loginError} errorMessage={this.state.loginErrorText}/>
                 <button className="block turquoise" onClick={this.onLogin}>
                     Login
                 </button>
-                <Link to="forgot-password">Forgot Password?</Link>
+                <Link to="forgotPassword">Forgot Password?</Link>
             </form>
         )
     },
@@ -28,7 +36,16 @@ var Login = React.createClass({
         var email = this.refs.userEmail.getDOMNode().value,
             password = this.refs.userPassword.getDOMNode().value;
 
-        UserActions.login(email, password);
+        User.login(email, password).then(
+            function(user){
+                UserActions.login(user);
+            }, function(error){
+                this.setState({
+                    loginError:true,
+                    loginError: error.message
+                });
+            }
+        );
     }
 });
 

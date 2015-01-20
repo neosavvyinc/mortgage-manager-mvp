@@ -8,7 +8,7 @@ function User () { }
 
 User.login = function (email, password){
     return Q.promise(function(resolve, reject){
-        $.post(Endpoints.LOGIN, {
+        $.post(Endpoints.LOGIN.URL, {
             email: email,
             password: password
         }).success(function(response){
@@ -21,7 +21,7 @@ User.login = function (email, password){
 
 User.register = function (newUser){
     return Q.promise(function(resolve, reject){
-        $.post(Endpoints.REGISTER, newUser)
+        $.post(Endpoints.REGISTER.URL, newUser)
             .success(function(response){
                 resolve(response);
             })
@@ -29,6 +29,30 @@ User.register = function (newUser){
                 reject(error);
             });
     });
-}
+};
+
+User.update = function (userId, userInfo){
+    return Q.promise(function(resolve, reject){
+        $.post(Endpoints.USER.ONE.URL.replace(':id', userId), userInfo)
+            .success(function(response){
+                resolve(response);
+            })
+            .error(function(error){
+                reject(error);
+            });
+    });
+};
+
+User.addCoapplicant = function (applicantID, coapplicantInfo){
+    return Q.promise(function(resolve, reject){
+        $.post(Endpoints.USER.ONE.COAPPLICANT.URL.replace(':id', applicantID), coapplicantInfo)
+            .success(function(response){
+                resolve(response);
+            })
+            .error(function(error){
+                reject(error);
+            });
+    });
+};
 
 module.exports = User;

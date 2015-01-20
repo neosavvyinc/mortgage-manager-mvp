@@ -1,10 +1,10 @@
 var React = require('react');
 var Reflux = require('reflux');
-var User = require('../models/model-user');
+
 var UserActions = require('../actions/action-user');
 
 var _currentUser = {};
-//var _newUser = {};
+var _isAuthenticated = false;
 
 var UserStore = Reflux.createStore({
 
@@ -19,34 +19,27 @@ var UserStore = Reflux.createStore({
         // Same as:
         this.listenTo(UserActions.login, this.onLogin);
         this.listenTo(UserActions.logout, this.onLogout);
-        this.listenTo(UserActions.addLender, this.onAddLender);
-        this.listenTo(UserActions.addBorrower, this.onAddBorrower);
 
     },
     */
 
-    onLogin: function(email, password){
-        User.login(email, password).then(function(){
-            _currentUser.email = email;
-            _currentUser.password = password;
-            this.trigger();
-        }.bind(this), function(){
-            _currentUser = {};
-            this.trigger();
-        }.bind(this));
+    onLogin: function(user){
+        _currentUser = user;
+        _isAuthenticated = true;
+        this.trigger();
     },
 
     onLogout: function(){
         _currentUser = {};
+        _isAuthenticated = false;
         this.trigger();
     },
 
     isAuthenticated: function(){
-        return (_currentUser.email && _currentUser.password);
+        return _isAuthenticated;
     },
 
     getCurrentUser: function(){
-        console.log("getting current user...");
         return _currentUser;
     }
 

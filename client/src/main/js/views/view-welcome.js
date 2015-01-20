@@ -7,8 +7,10 @@ var Login = require('../components/component-login');
 var UserStore = require('../stores/store-user');
 var LenderStore = require('../stores/store-lender');
 var BorrowerStore = require('../stores/store-borrower');
+var BorrowerActions = require('../actions/action-borrower');
+var LenderActions = require('../actions/action-lender');
 
-var Main = React.createClass({
+var Welcome = React.createClass({
 
     mixins: [
         Router.Navigation,
@@ -26,11 +28,16 @@ var Main = React.createClass({
 
     getInitialState: function(){
         return {
-            loginError: false
+            borrowerEmpty: false,
+            lenderEmpty: false
         }
     },
 
     render: function(){
+
+        var borrowerEmptyClass = this.state.borrowerEmpty ? "error message gap-bottom" : "hidden";
+        var falseEmptyClass = this.state.lenderEmpty ? "error message gap-bottom" : "hidden";
+
         return (
             <div className="container triple-pad-right triple-pad-left">
                 <div className="row align-center">
@@ -42,6 +49,7 @@ var Main = React.createClass({
                         <h4>Are you a Borrower?</h4>
                         <form>
                             <input className="double-gap-bottom" ref="borrowerEmail" type="email" placeholder="Email Address" />
+                            <div className={borrowerEmptyClass}>You need to provide a valid email</div>
                             <button className="block turquoise" onClick={this.onSignUpBorrower}>
                                 Signup as Borrower
                             </button>
@@ -54,6 +62,7 @@ var Main = React.createClass({
                         <h4>Are you a Lender?</h4>
                         <form>
                             <input className="double-gap-bottom" ref="lenderEmail" type="email" placeholder="Email Address" />
+                            <div className={falseEmptyClass}>You need to provide a valid email</div>
                             <button className="block turquoise" onClick={this.onSignUpLender}>
                                 Signup as Lender
                             </button>
@@ -62,7 +71,7 @@ var Main = React.createClass({
                     </div>
                     <div className="one third padded">
                         <div className="user-section">
-                            <Login error={this.state.loginError}/>
+                            <Login />
                         </div>
                     </div>
                 </div>
@@ -70,36 +79,38 @@ var Main = React.createClass({
         );
     },
 
-    onLogin: function(){
-        if(!UserStore.isAuthenticated()) {
-            console.log("error");
-            this.setState({loginError: true});
+    onSignUpBorrower: function(){
+        if(this.refs.borrowerEmail.getDOMNode().value){
+            BorrowerActions.newBorrower(this.refs.borrowerEmail.getDOMNode().value);
         } else {
-            console.log("success");
+            this.setState({borrowerEmpty: true});
+        }
+    },
+
+    onSignUpLender: function(){
+        if(this.refs.lenderEmail.getDOMNode().value){
+            LenderActions.newLender(this.refs.lenderEmail.getDOMNode().value);
+        } else {
+            this.setState({lenderEmpty: true});
+        }
+    },
+
+    onLogin: function(){
+        if(UserStore.isAuthenticated()) {
             this.transitionTo('dashboard');
         }
     },
 
     onNewLender: function(){
-        this.transitionTo('test');
+        this.transitionTo('newPassword');
     },
 
     onNewBorrower: function(){
-        this.transitionTo('test');
-    },
-
-    onSignUpBorrower: function(){
-        var email = this.refs.borrowerEmail.getDOMNode().value;
-        //UserAction.addLender(email);
-
-    },
-
-    onSignUpLender: function(){
-        var email = this.refs.lenderEmail.getDOMNode().value;
-        //UserAction.addBorrower(email);
+        this.transitionTo('newPassword');
     }
+
 
 });
 
 
-module.exports = Main;
+module.exports = Welcome;

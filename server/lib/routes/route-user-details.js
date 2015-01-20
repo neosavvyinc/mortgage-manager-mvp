@@ -9,6 +9,7 @@ var _ = require('underscore'),
  * @param res
  */
 exports.updateUser = function(req, res) {
+
 	var userObject = req.body,
 		uid = req.params.uid;
 
@@ -21,7 +22,7 @@ exports.updateUser = function(req, res) {
 		res.end();
 	}, function(error) {
 		if(error) {
-			res.send({code: 500, message: 'Internal Server Error'});
+			res.status(500).send({message: 'Internal Server Error'});
 		}
 		res.end();
 	});
@@ -41,7 +42,7 @@ exports.addCoApplicant = function(req, res) {
 		res.end();
 	}, function(error) {
 		if(error) {
-			res.send({code: 500, message: 'Internal Server Error'});
+			res.status(500).send({message: 'Internal Server Error'});
 		}
 		res.end();
 	});

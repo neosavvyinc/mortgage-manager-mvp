@@ -6,6 +6,7 @@ var path = require('path'),
 	express = require('express'),
 	settings = require('./config/app/settings'),
 	app = express(),
+	router = express.Router(),
 	db = require('./db/scripts/db'),
 	middleware = require('./config/express/express-middleware'),
 	routes = require('./config/express/express-routes'),
@@ -14,10 +15,10 @@ var path = require('path'),
 	server, log;
 
 // Configure middleware
-middleware(app, passport);
+middleware(app, router, passport);
 
 // Configure routes
-routes(app, passport);
+routes(router, passport);
 
 /**
  * Listens on a port
@@ -58,15 +59,15 @@ async.series([
 		done();
 	},
 	function(done) {
-		db.connect(settings.getConfig().dbURL, done, done);
-	},
-	function(done) {
 		log = require('./utils/common-utils').getLogger();
 		done();
 	},
 	function(done) {
 		loginRoute.initPassport(passport);
 		done();
+	},
+	function(done) {
+		db.connect(settings.getConfig().dbURL, done, done);
 	},
 	function(done) {
 		runServer();

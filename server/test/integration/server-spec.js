@@ -16,7 +16,7 @@ describe('Server', function() {
 	});
 
 	describe('/healthcheck', function () {
-		var host = 'http://localhost:' + port + '/healthcheck';
+		var host = 'http://localhost:' + port + '/api/healthcheck';
 
 		it('should return 200', function (done) {
 			http.get(host, function (res) {

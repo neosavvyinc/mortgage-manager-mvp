@@ -25,7 +25,7 @@ module.exports = function gruntFile(grunt) {
 			startDb: {
 				command: './lib/app.sh start mongod&',
 				options: {
-					async: false,
+					async: true,
 					execOptions: {
 						detached: true
 					}

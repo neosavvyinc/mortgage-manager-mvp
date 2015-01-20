@@ -1,14 +1,17 @@
-module.exports = function(){
-    return {
-        USER: {
-            URL: '/user',
-            ONE: '/user/:id'
-        },
-        LOGIN: {
-            URL: '/login'
-        },
-        REGISTER: {
-            URL: '/register'
+module.exports = {
+    USER: {
+        URL: '/api/user',
+        ONE: {
+            URL: '/api/user/:id',
+            COAPPLICANT: {
+                URL: '/api/user/:id/coapplicant'
+            }
         }
-    };
+    },
+    LOGIN: {
+        URL: '/api/login'
+    },
+    REGISTER: {
+        URL: '/api/register'
+    }
 };
