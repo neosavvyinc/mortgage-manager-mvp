@@ -37,26 +37,34 @@ var ApplicantQuestions = React.createClass({
 
     render: function(){
 
-        var coapplicantYes = this.state.hasCoapplicant ? "one fifth blue button" : "one fifth";
-        var coapplicantNo = this.state.hasCoapplicant ? "one fifth" : "one fifth blue button";
-        var selfEmployedYes = this.state.isSelfEmployed ? "one fifth blue button" : "one fifth";
-        var selfEMployedNo = this.state.isSelfEmployed ? "one fifth" : "one fifth blue button";
+        var coapplicantYes = this.state.hasCoapplicant ? "two fifths turquoise button half-gap-right" : "two fifths half-gap-right";
+        var coapplicantNo = this.state.hasCoapplicant ? "two fifths half-gap-right" : "two fifths turquoise button half-gap-right";
+        var selfEmployedYes = this.state.isSelfEmployed ? "two fifths turquoise button half-gap-right" : "two fifths half-gap-right";
+        var selfEMployedNo = this.state.isSelfEmployed ? "two fifths half-gap-right" : "two fifths turquoise button half-gap-right";
 
         return (
-            <div>
-                <h1>We have to ask you a few questions to get this right</h1>
-                <h3 className="row">Do you have a co-applicant like a spouse or partner?</h3>
-                <div className="row gap-bottom">
-                    <button className={coapplicantYes} onClick={this.onCoapplicantChange.bind(this, true)}>Yes</button>
-                    <button className={coapplicantNo} onClick={this.onCoapplicantChange.bind(this, false)}>No</button>
+            <div className="container">
+                <div className="gap-top">
+                    <h1>We have to ask you a few questions to get this right</h1>
+                    <div className="row">
+                        <h3 className="row">Do you have a co-applicant like a spouse or partner?</h3>
+                        <div className="one fourth row gap-bottom">
+                            <button className={coapplicantYes} onClick={this.onCoapplicantChange.bind(this, true)}>Yes</button>
+                            <button className={coapplicantNo} onClick={this.onCoapplicantChange.bind(this, false)}>No</button>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <h3 className="row">Are you Self Employed?</h3>
+                        <div className="row one fourth gap-bottom">
+                            <button className={selfEmployedYes} onClick={this.onSelfEmployedChange.bind(this, true)}>Yes</button>
+                            <button className={selfEMployedNo} onClick={this.onSelfEmployedChange.bind(this, false)}>No</button>
+                        </div>
+                    </div>
+                    <div className="one fourth row">
+                        <ErrorMessage errorDisplay={this.state.questionsError} errorMessage={this.state.errorText}/>
+                        <button className="row block turquoise" onClick={this.onSubmitQuestions}>Continue</button>
+                    </div>
                 </div>
-                <h3 className="row">Are you Self Employed?</h3>
-                <div className="row gap-bottom">
-                    <button className={selfEmployedYes} onClick={this.onSelfEmployedChange.bind(this, true)}>Yes</button>
-                    <button className={selfEMployedNo} onClick={this.onSelfEmployedChange.bind(this, false)}>No</button>
-                </div>
-                <ErrorMessage errorDisplay={this.state.questionsError} errorMessage={this.state.errorText}/>
-                <button className="row blue button" onClick={this.onSubmitQuestions}>Continue</button>
             </div>
         );
     },

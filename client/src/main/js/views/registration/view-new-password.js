@@ -35,13 +35,15 @@ var NewPassword = React.createClass({
 
     render: function(){
         return (
-            <div>
-                <h1>We need you to give us a password so you can log in later</h1>
-                <div className="one fourth">
-                    <input className="gap-bottom" type="password" ref="newPassword" placeholder="New Password" />
-                    <input className="gap-bottom" type="password" ref="confirmPassword" placeholder="Confirm Password" />
-                    <ErrorMessage errorDisplay={this.state.passwordError} errorMessage={this.state.errorText}/>
-                    <button className="info" onClick={this.onCheckPassword}>Continue</button>
+            <div className="container">
+                <div className="gap-top">
+                    <h1>We need you to give us a password so you can log in later</h1>
+                    <div className="one fourth">
+                        <input className="gap-bottom" type="password" ref="newPassword" placeholder="New Password" />
+                        <input className="gap-bottom" type="password" ref="confirmPassword" placeholder="Confirm Password" />
+                        <ErrorMessage errorDisplay={this.state.passwordError} errorMessage={this.state.errorText}/>
+                        <button className="block turquoise" onClick={this.onCheckPassword}>Continue</button>
+                    </div>
                 </div>
             </div>
         );

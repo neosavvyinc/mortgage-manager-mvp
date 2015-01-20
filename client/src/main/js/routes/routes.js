@@ -23,8 +23,19 @@ var RootDefault = React.createClass({
     }
 });
 
+var TestRoute = React.createClass({
+    mixins: [Router.State],
+    render: function(){
+        return (
+            <div className="container">
+                <h1>Something really important...</h1>
+            </div>
+        )
+    }
+});
+
 var routes = (
-    <Route name="root" path="/welcome" handler={RootDefault}>
+    <Route handler={RootDefault}>
         <DefaultRoute name="welcome" handler={Welcome} />
         <Route name="register" handler={RootDefault}>
             <Route name="newPassword" path="/register/newPassword" handler={NewPassword}/>
@@ -33,7 +44,7 @@ var routes = (
             <Route name="applicantInfo" path="/register/applicantInfo" handler={ApplicantInfo} />
         </Route>
         <Route name="dashboard" handler={Dashboard} />
-        <Route name="forgot-password" handler={Dashboard} />
+        <Route name="forgotPassword" path="forgot-password" handler={TestRoute} />
     </Route>
 );
 
