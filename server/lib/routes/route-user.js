@@ -38,7 +38,8 @@ exports.validateLogin = function(passport) {
 				res.status(info.code)
 					.send({message: info.message});
 			} else {
-				res.send({message: 'Success' });
+				delete user.password;
+				res.send(user);
 			}
 			res.end();
 		})(req, res, next);

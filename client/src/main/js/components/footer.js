@@ -7,7 +7,7 @@ var Footer = React.createClass({
     render: function(){
         return (
             <div className="row">
-                <div className="container">
+                <div className="container triple-pad-bottom triple-pad-top">
                     <div className="row one centered mobile half">
                         <Link to="dashboard" className="one fifth align-center">About</Link>
                         <Link to="dashboard" className="one fifth align-center">Help</Link>

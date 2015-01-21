@@ -6,7 +6,7 @@ exports.getAllApplications = function(req, res){
     var uid = req.params.uid;
 
     applicationService.getUserApplications(uid, function(applications) {
-        res.send({applications: applications});
+        res.send(applications);
         res.end();
     }, function(error) {
         if(error) {

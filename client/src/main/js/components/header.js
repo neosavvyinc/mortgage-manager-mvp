@@ -13,14 +13,6 @@ var Header = React.createClass({
         Reflux.listenTo(UserStore, 'onLogoutTransition')
     ],
 
-    statics: {
-        willTransitionTo: function (transition){
-            if(!UserStore.isAuthenticated()){
-                transition.redirect('welcome');
-            }
-        }
-    },
-
     getInitialState: function(){
         return {
             hasError: false,

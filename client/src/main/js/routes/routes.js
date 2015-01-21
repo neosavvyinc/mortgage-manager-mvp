@@ -11,6 +11,8 @@ var Dashboard = require('../views/view-dashboard');
 var NewPassword = require('../views/registration/view-new-password');
 var ApplicantInfo = require('../views/registration/view-applicant-info');
 var ApplicantQuestions = require('../views/registration/view-questions');
+var Applications = require('../views/dashboard/view-application-list');
+var Documents = require('../views/dashboard/view-document-list');
 
 /* Default Root Handler */
 var RootDefault = React.createClass({
@@ -27,27 +29,7 @@ var TestRoute1 = React.createClass({
     render: function(){
         return (
             <div className="container">
-                <h1>Something really important...</h1>
-            </div>
-        )
-    }
-});
-var TestRoute2 = React.createClass({
-    mixins: [Router.State],
-    render: function(){
-        return (
-            <div className="container">
-                <h1>Something not that important...</h1>
-            </div>
-        )
-    }
-});
-var TestRoute3 = React.createClass({
-    mixins: [Router.State],
-    render: function(){
-        return (
-            <div className="container">
-                <h1>Something extremely important!!</h1>
+                <h1>To Be Implemented...</h1>
             </div>
         )
     }
@@ -57,18 +39,20 @@ var routes = (
     <Route handler={RootDefault}>
         <DefaultRoute name="welcome" handler={Welcome} />
         <Route name="register" handler={RootDefault}>
-            <Route name="newPassword" path="new-password" handler={NewPassword}/>
+            <Route name="newPassword" path="new-password" handler={NewPassword} />
             <Route name="applicantQuestions" path="applicant-questions" handler={ApplicantQuestions} />
             <Route name="applicantInfo" path="applicant-info" handler={ApplicantInfo} />
         </Route>
         <Route name="dashboard" handler={Dashboard}>
-            <DefaultRoute name="dashboardMain" handler={TestRoute1} />
-            <Route name="dashboardApplicants" path="applicants" handler={TestRoute2} />
-            <Route name="dashboardDocuments" path="documents" handler={TestRoute3} />
+            <Route name="dashboardApplications" path="applications" handler={Applications} />
+            <Route name="dashboardDocuments" path="applications/:appId" handler={TestRoute1} />
+            <Route name="routeTester" path="testRoute" handler={TestRoute1} />
         </Route>
         <Route name="forgotPassword" path="forgot-password" handler={TestRoute1} />
     </Route>
 );
+// TODO: Change for applications/:appID
+
 
 var router = Router.create({
     routes: routes

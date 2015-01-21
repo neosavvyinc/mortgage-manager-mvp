@@ -36,8 +36,9 @@ Schemas.ApplicationSchema = new Schema({
 	_id: { type: String, required: true, unique: true },
 	pUID: { type: String, required: true, ref: 'UserSchema' },
 	coUID: { type: String, ref: 'UserSchema' },
-	created: { type:Date, required: true },
+	created: { type: Date, required: true },
 	lastModified: { type: Date, required: true },
+	status: { type: Number, required: true},
 	documents: [String]
 });
 
@@ -49,7 +50,7 @@ Schemas.DocumentSchema = new Schema({
 	description: String,
 	amount: {type: Number, required: true },
 	requesterId: { type: String, ref: 'UserSchema' },
-	requestDate: Date,
+	requestDate: { type: Date, required: true },
 	uploadDate: Date
 });
 

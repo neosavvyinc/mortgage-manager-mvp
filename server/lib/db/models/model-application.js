@@ -45,7 +45,8 @@ applicationModel.insertNewApp = function(applicantDetails,
 				created: currentDate,
 				lastModified: currentDate,
 				pUID: applicantDetails._id,
-				documents: []
+				documents: [],
+				status: 0
 			});
 			if(coapplicantDetails){
 				_.extend(item, {

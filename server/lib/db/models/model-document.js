@@ -33,9 +33,11 @@ documentModel.insertNewDocument = function(documents,
 				_.range(documents.length).map(function(index){
 					return function(done){
 						var docUUID = commonUtils.generateId(),
+							currentDate = commonUtils.getCurrentDate(),
 							document = new DocumentModel();
 						_.extend(documents[index],{
-							_id: docUUID
+							_id: docUUID,
+							requestDate: currentDate
 						});
 						document.insert(documents[index], done, done);
 					}

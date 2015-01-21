@@ -41,9 +41,7 @@ exports.createApplication = function(uid, callback) {
                 userDetails.retrieve({_id: applicantDetails.coUID}, function (coAppDetails) {
                     coapplicantDetails = coAppDetails[0];
                     done();
-                }, function (error) {
-                    callback(error);
-                });
+                }, done);
             } else {
                 done();
             }
@@ -52,7 +50,7 @@ exports.createApplication = function(uid, callback) {
             application.insertNewApp(applicantDetails, coapplicantDetails, function(appUUID){
                 applicationId = appUUID;
                 done();
-            });
+            }, done);
         },
         function(done) {
             docs = documentService.generateDocumentList(applicationId, applicantDetails, coapplicantDetails);
@@ -74,5 +72,5 @@ exports.insertDocuments = function(documents, callback){
     if(!documents[0] || documents[0].appId){
         callback(new Error("The document array was empty"));
     }
-    application.update(_.pluck(documents, '_id'), {_id: documents[0].appId}, callback, callback);
+    application.update({documents: _.pluck(documents, '_id')}, {_id: documents[0].appId}, callback, callback);
 };

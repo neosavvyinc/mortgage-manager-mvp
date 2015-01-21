@@ -38,6 +38,40 @@ var ApplicantQuestions = React.createClass({
         }
     },
 
+    onCoapplicantChange: function(status){
+        this.setState({hasCoapplicant: status});
+    },
+
+    onSelfEmployedChange: function(status){
+        this.setState({isSelfEmployed: status});
+    },
+
+    onMarried: function(status){
+        this.setState({recentlyMarried: status});
+    },
+
+    onRenting: function(status){
+        this.setState({renting: status});
+    },
+
+    onFinancialAssets: function(status){
+        this.setState({hasFinancialAssets: status});
+    },
+
+    onSubmitQuestions: function(){
+        BorrowerActions.submitQuestions(
+            this.state.hasCoapplicant,
+            this.state.isSelfEmployed,
+            this.state.recentlyMarried,
+            this.state.renting,
+            this.state.hasFinancialAssets
+        );
+    },
+
+    onContinue: function(){
+        this.transitionTo('applicantInfo');
+    },
+
     render: function(){
 
         var coapplicantYes = this.state.hasCoapplicant ? "two fifths turquoise button half-gap-right" : "two fifths half-gap-right";
@@ -97,36 +131,6 @@ var ApplicantQuestions = React.createClass({
                 </div>
             </div>
         );
-    },
-
-    onCoapplicantChange: function(status){
-        this.setState({hasCoapplicant: status});
-    },
-    onSelfEmployedChange: function(status){
-        this.setState({isSelfEmployed: status});
-    },
-    onMarried: function(status){
-        this.setState({recentlyMarried: status});
-    },
-    onRenting: function(status){
-        this.setState({renting: status});
-    },
-    onFinancialAssets: function(status){
-        this.setState({hasFinancialAssets: status});
-    },
-
-    onSubmitQuestions: function(){
-        BorrowerActions.submitQuestions(
-            this.state.hasCoapplicant,
-            this.state.isSelfEmployed,
-            this.state.recentlyMarried,
-            this.state.renting,
-            this.state.hasFinancialAssets
-        );
-    },
-
-    onContinue: function(){
-        this.transitionTo('applicantInfo');
     }
 });
 
