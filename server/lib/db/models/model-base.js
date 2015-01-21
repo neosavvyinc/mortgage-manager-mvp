@@ -4,32 +4,17 @@ var base,
 	mongoose = require('mongoose/'),
 	mongooseModel;
 
-/**
- * Constructor for base model class
- * @param collection
- * @param schema
- */
-//function BaseModel(collection, schema) {
-//	console.log("here");
-//	//this.collection = collection;
-//	//this.schema = schema;
-//	//mongooseModel = mongoose.model(collection, schema);
-//	//this.mongooseModel = mongooseModel;
-//	mongooseModel = mongooseMode;
-//}
-
 function BaseModel(){ }
 
 base = BaseModel.prototype;
 
+/**
+ * Initializes the base mongoose model
+ * @param collection
+ * @param schema
+ */
 base.init = function (collection, schema){
-	//base.init = function (mongooseModel){
-	//this.collection = collection;
-	//this.schema = schema;
-	//console.log(collection, schema);
 	this.mongooseModel = mongoose.model(collection, schema);
-	//this.mongooseModel = mongooseModel;
-	//console.log(mongooseModel);
 };
 /**
  * Finds a document in the model by id
@@ -108,7 +93,6 @@ base.update = function(update, conditions, options, success, failure) {
 base.insert = function(item, success, failure) {
 	var objectToSave = base._createModelObject(this, item);
 	objectToSave.save(function(err) {
-		console.log(err);
 		if(err) {
 			failure('Insert: Attempt to save document ' + JSON.stringify(item) + ' failed: '+err);
 		} else {

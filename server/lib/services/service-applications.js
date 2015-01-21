@@ -1,8 +1,10 @@
 'use strict';
 
 var async = require('async');
+var _ = require('underscore');
 var applicationModel = require('../db/models/model-application').Model;
 var userDetailsModel = require('../db/models/model-user-details').Model;
+var documentModel = require('../db/models/model-document').Model;
 var documentService = require('./service-documents');
 
 exports.getUserApplications = function(uid, callback){
@@ -18,10 +20,12 @@ exports.createApplication = function(uid, callback) {
 
     var userDetails = new userDetailsModel();
     var application = new applicationModel();
+    var documents = new documentModel();
 
     var applicantDetails,
         coapplicantDetails = null,
-        documents;
+        docs,
+        applicationId;
 
     async.series([
         function(done){
@@ -44,9 +48,15 @@ exports.createApplication = function(uid, callback) {
                 done();
             }
         },
-        function(done){
-            documents = documentService.generateDocumentList(applicantDetails, coapplicantDetails);
-            application.insertNewApp(applicantDetails, coapplicantDetails, documents, done, done);
+        function(done) {
+            application.insertNewApp(applicantDetails, coapplicantDetails, function(appUUID){
+                applicationId = appUUID;
+                done();
+            });
+        },
+        function(done) {
+            docs = documentService.generateDocumentList(applicationId, applicantDetails, coapplicantDetails);
+            documents.insertNewDocument(docs, done, done);
         }
     ], function(error){
             if(error !== undefined){
@@ -56,4 +66,13 @@ exports.createApplication = function(uid, callback) {
             }
         }
     );
+};
+
+exports.insertDocuments = function(documents, callback){
+    var application = new applicationModel();
+
+    if(!documents[0] || documents[0].appId){
+        callback(new Error("The document array was empty"));
+    }
+    application.update(_.pluck(documents, '_id'), {_id: documents[0].appId}, callback, callback);
 };

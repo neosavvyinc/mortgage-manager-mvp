@@ -32,7 +32,6 @@ applicationModel = ApplicationModel.prototype;
  */
 applicationModel.insertNewApp = function(applicantDetails,
 										 coapplicantDetails,
-										 documents,
 										 success,
 										 failure) {
 	var appId = commonUtils.generateId(),
@@ -46,7 +45,7 @@ applicationModel.insertNewApp = function(applicantDetails,
 				created: currentDate,
 				lastModified: currentDate,
 				pUID: applicantDetails._id,
-				documents: documents
+				documents: []
 			});
 			if(coapplicantDetails){
 				_.extend(item, {
@@ -68,10 +67,9 @@ applicationModel.insertNewApp = function(applicantDetails,
 		if(error !== undefined) {
 			failure(error);
 		} else {
-			success();
+			success(appId);
 		}
 	});
 };
 
-//console.log("application", new ApplicationModel());
 exports.Model = ApplicationModel;

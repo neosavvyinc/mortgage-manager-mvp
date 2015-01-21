@@ -4,7 +4,11 @@ var util = require('util'),
 	mongoose = require('mongoose/'),
 	Schemas = require('../schemas').Schemas,
 	documentSchema = Schemas.DocumentSchema,
+	async = require('async'),
+	commonUtils = require('../../utils/common-utils'),
 	baseModel = require('./model-base'),
+	applicationService = require('../../services/service-applications'),
+	_ = require('underscore'),
 	documentModel;
 
 /**
@@ -19,5 +23,41 @@ util.inherits(DocumentModel, baseModel.Model);
 documentModel = DocumentModel.prototype;
 
 documentModel.init('document', documentSchema);
+
+documentModel.insertNewDocument = function(documents,
+										   success,
+										   failure) {
+	async.series([
+		function(done){
+			async.parallel(
+				_.range(documents.length).map(function(index){
+					return function(done){
+						var docUUID = commonUtils.generateId(),
+							document = new DocumentModel();
+						_.extend(documents[index],{
+							_id: docUUID
+						});
+						document.insert(documents[index], done, done);
+					}
+				}),
+				function(error){
+					if(error !== undefined){
+						done(error);
+					} else {
+						done();
+					}
+			})
+		},
+		function(done){
+			applicationService.insertDocuments(documents, done, done);
+		}
+	], function(error){
+		if(error !== undefined) {
+			failure(error);
+		} else {
+			success();
+		}
+	});
+};
 
 exports.Model = DocumentModel;

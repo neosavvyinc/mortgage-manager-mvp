@@ -29,8 +29,7 @@ Schemas.UserInfoSchema = new Schema({
 	isSelfEmployed: { type: Boolean, default: false },
 	renting: { type: Boolean, default: false },
 	marriedRecently: { type: Boolean, default: false },
-	financialAssets: { type: Boolean, default: false },
-	access: Schema.Types.Mixed
+	financialAssets: { type: Boolean, default: false }
 });
 
 Schemas.ApplicationSchema = new Schema({
@@ -39,11 +38,7 @@ Schemas.ApplicationSchema = new Schema({
 	coUID: { type: String, ref: 'UserSchema' },
 	created: { type:Date, required: true },
 	lastModified: { type: Date, required: true },
-	documents: [{
-		documentName: { type: String, required: true },
-		description: { type: String, required: true },
-		amount: { type: Number, required: true }
-	}]
+	documents: [String]
 });
 
 Schemas.DocumentSchema = new Schema({
@@ -52,10 +47,10 @@ Schemas.DocumentSchema = new Schema({
 	name: { type: String, required: true },
 	type: { type: String, required: true },
 	description: String,
+	amount: {type: Number, required: true },
 	requesterId: { type: String, ref: 'UserSchema' },
 	requestDate: Date,
-	uploadDate: Date,
-	lastViewed: { type: Date, required: true }
+	uploadDate: Date
 });
 
 Schemas.LenderInvitesSchema = new Schema({
