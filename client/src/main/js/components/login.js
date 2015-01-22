@@ -4,7 +4,7 @@ var Link = require('react-router').Link;
 var User = require('../models/model-user');
 var UserActions = require('../actions/action-user');
 
-var ErrorMessage = require('../components/component-error-msg');
+var ErrorMessage = require('../components/error-message');
 
 var Login = React.createClass({
 
