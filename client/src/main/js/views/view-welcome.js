@@ -108,8 +108,6 @@ var Welcome = React.createClass({
     onNewBorrower: function(){
         this.transitionTo('newPassword');
     }
-
-
 });
 
 

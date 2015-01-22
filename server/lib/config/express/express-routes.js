@@ -2,7 +2,8 @@
 
 var routeHealthcheck = require('../../routes/route-diagnostics'),
 	authRoute = require('../../routes/route-user'),
-	userRoute = require('../../routes/route-user-details');
+	userRoute = require('../../routes/route-user-details'),
+	documentRoute = require('../../routes/route-document');;
 
 module.exports = function(router, passport) {
 	//Healthcheck
@@ -26,6 +27,11 @@ module.exports = function(router, passport) {
 	router.route('/user/:uid/coapplicant')
 		.all(_isAuthenticated)
 		.post(userRoute.addCoApplicant);
+
+	//Upload a document
+	router.route('/application/:appId/document')
+		.all(_isAuthenticated)
+		.post(documentRoute.insertDocument);
 };
 
 /**

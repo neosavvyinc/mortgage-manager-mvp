@@ -1,4 +1,3 @@
-var React = require('react');
 var Reflux = require('reflux');
 
 var UserActions = require('../actions/action-user');
@@ -42,7 +41,6 @@ var UserStore = Reflux.createStore({
     getCurrentUser: function(){
         return _currentUser;
     }
-
 });
 
 module.exports = UserStore;

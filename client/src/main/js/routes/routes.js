@@ -44,7 +44,9 @@ var routes = (
             <Route name="applicantInfo" path="applicant-info" handler={ApplicantInfo} />
         </Route>
         <Route name="dashboard" handler={Dashboard}>
-            <Route name="modal" handler={Modal}>
+            <DefaultRoute name="main" handler={TestRoute} />
+            <Route name="upload" handler={Modal}>
+                <DefaultRoute handler={Upload} />
             </Route>
         </Route>
         <Route name="forgotPassword" path="forgot-password" handler={TestRoute} />

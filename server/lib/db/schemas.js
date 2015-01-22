@@ -26,8 +26,7 @@ Schemas.UserInfoSchema = new Schema({
 	created: { type: Date, required: true },
 	lastLogin: { type: Date, required: true },
 	appId: [{ type: String, required: true, ref: 'ApplicationSchema' }],
-	isSelfEmployed: { type: Boolean, default: false },
-	access: Schema.Types.Mixed
+	isSelfEmployed: { type: Boolean, default: false }
 });
 
 Schemas.ApplicationSchema = new Schema({
@@ -46,6 +45,8 @@ Schemas.DocumentSchema = new Schema({
 	name: { type: String, required: true },
 	type: { type: String, required: true },
 	description: String,
+	amount: Number,
+	url: { type: String, unique: true },
 	requesterId: { type: String, ref: 'UserSchema' },
 	requestDate: Date,
 	uploadDate: Date,

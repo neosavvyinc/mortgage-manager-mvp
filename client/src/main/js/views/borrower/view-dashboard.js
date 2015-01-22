@@ -35,7 +35,7 @@ var Dashboard = React.createClass({
             <div>
                 <h1>I'm a dashboard</h1>
                 <button className="error gap-bottom" onClick={this.onLogout}>Logout</button>
-                <Link to="modal">Upload</Link>
+                <Link to="upload">Upload</Link>
                 <RouterHandler/>
                 <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</div>
                 <p>{this.state.currentUser.email}</p>
