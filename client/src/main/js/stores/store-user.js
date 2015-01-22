@@ -24,22 +24,23 @@ var UserStore = Reflux.createStore({
 
     onLogin: function(user){
         _currentUser = user;
-        localStorage.setItem("authenticated", true);
+        localStorage.setItem("userId", user._id);
         this.trigger();
     },
 
     onLogout: function(){
         _currentUser = {};
-        localStorage.removeItem("authenticated");
+        localStorage.removeItem("userId");
+        console.log("local storage", localStorage.removeItem("userId"));
         this.trigger();
     },
 
     isAuthenticated: function(){
-        return localStorage.getItem("authenticated");
+        return (localStorage.getItem("userId") != undefined);
     },
 
     getCurrentUser: function(){
-        return _currentUser;
+        return localStorage.getItem("userId");
     }
 
 });

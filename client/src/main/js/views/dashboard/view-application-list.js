@@ -25,7 +25,7 @@ var Applications = React.createClass({
     },
 
     componentDidMount: function(){
-        User.getApplications(UserStore.getCurrentUser()._id).then(function(applications){
+        User.getApplications(UserStore.getCurrentUser()).then(function(applications){
             if(this.isMounted()) {
                 this.setState({
                     applications: applications
