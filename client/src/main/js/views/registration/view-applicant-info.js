@@ -3,7 +3,7 @@ var Router = require('react-router');
 var Reflux = require('reflux');
 
 var Constants = require('../../constants/constants');
-var ErrorMessage = require('../../components/component-error-msg');
+var ErrorMessage = require('../../components/error-message');
 var User = require('../../models/model-user');
 var BorrowerStore = require('../../stores/store-borrower');
 var BorrowerActions = require('../../actions/action-borrower');
@@ -42,13 +42,17 @@ var ApplicantInfo = React.createClass({
         Router.State,
         Router.Navigation
     ],
-
+    
     statics: {
         willTransitionTo: function (transition){
             if(!UserStore.isAuthenticated()){
                 transition.redirect('welcome');
             }
         }
+    },
+
+    defaultProps: {
+        applicantType: "Applicant"
     },
 
     getInitialState: function(){

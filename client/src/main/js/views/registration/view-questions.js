@@ -8,7 +8,7 @@ var UserStore = require('../../stores/store-user');
 
 var User = require('../../models/model-user');
 
-var ErrorMessage = require('../../components/component-error-msg');
+var ErrorMessage = require('../../components/error-message');
 
 var ApplicantQuestions = React.createClass({
 
