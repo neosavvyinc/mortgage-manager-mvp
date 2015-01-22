@@ -7,8 +7,8 @@ var DefaultRoute = Router.DefaultRoute;
 
 /* Pages */
 var Welcome = require('../views/view-welcome');
-var Dashboard = require('..views/dashboard/view-dashboard');
-var Modal = require('../components/component-modal');
+var Dashboard = require('../views/dashboard/view-dashboard');
+var Modal = require('../components/modal');
 var NewPassword = require('../views/registration/view-new-password');
 var ApplicantInfo = require('../views/registration/view-applicant-info');
 var ApplicantQuestions = require('../views/registration/view-questions');

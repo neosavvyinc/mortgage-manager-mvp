@@ -5,9 +5,10 @@ var React = require('react'),
 	Reflux = require('reflux'),
 	DocumentActions = require('../../actions/action-document'),
 	DocumentStore = require('../../stores/store-borrower'),
+	ApplicationStore = require('../../stores/store-application'),
 	Document = require('../../models/model-document'),
-	ErrorMessage = require('../../components/component-error-msg'),
-	SuccessMessage = require('../../components/component-success-msg');
+	ErrorMessage = require('../../components/error-message'),
+	SuccessMessage = require('../../components/success-msg');
 
 //Validate Document Info
 var validateDocumentInfo = function(document) {
@@ -68,7 +69,7 @@ var UploadDocument = React.createClass({
 
 		if(validateDocumentInfo(documentInfo)) {
 			documentInfo.file = this.state.fileHandler;
-			Document.upload('5113e820-a250-11e4-a321-5bb9c785c398', documentInfo).then(function(){
+			Document.upload(ApplicationStore.getCurrentApplication()._id, documentInfo).then(function(){
 				DocumentActions.uploadDocument(documentInfo);
 			}.bind(this), function(error){
 				this.setState({

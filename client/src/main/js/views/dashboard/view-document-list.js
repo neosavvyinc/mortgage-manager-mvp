@@ -29,8 +29,8 @@ var Documents = React.createClass({
         }.bind(this));
     },
 
-    onDocumentUpload: function(document){
-        console.log("uploading :: ", document);
+    onDocumentUpload: function() {
+        this.transitionTo('upload');
     },
 
     render: function(){
