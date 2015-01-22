@@ -6,7 +6,6 @@ var util = require('util'),
 	async = require('async'),
 	commonUtils = require('../../utils/common-utils'),
 	baseModel = require('./model-base'),
-	applicationService = require('../../services/service-applications'),
 	_ = require('underscore'),
 	documentModel;
 
@@ -48,9 +47,6 @@ documentModel.insertNewDocument = function(documents,
 						done();
 					}
 			});
-		},
-		function(done){
-			applicationService.insertDocuments(documents, done, done);
 		}
 	], function(error){
 		if(error !== undefined) {

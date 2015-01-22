@@ -5,6 +5,7 @@ var _ = require('underscore');
 var applicationModel = require('../db/models/model-application').Model;
 var userDetailsModel = require('../db/models/model-user-details').Model;
 var documentModel = require('../db/models/model-document').Model;
+var applicationService = require('../services/service-applications');
 var documentService = require('./service-documents');
 
 exports.getUserApplications = function(uid, callback){
@@ -54,7 +55,14 @@ exports.createApplication = function(uid, callback) {
         },
         function(done) {
             docs = documentService.generateDocumentList(applicationId, applicantDetails, coapplicantDetails);
+            console.log("generating documents");
             documents.insertNewDocument(docs, done, done);
+            console.log("documents Inserted");
+        },
+        function(done){
+            console.log("insertind UUIDS into app");
+            applicationService.insertDocuments(docs, done, done);
+            console.log("Done");
         }
     ], function(error){
             if(error !== undefined){
