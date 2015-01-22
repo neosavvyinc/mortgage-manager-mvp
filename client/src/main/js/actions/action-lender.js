@@ -1,8 +1,13 @@
-var React = require('react');
-var Reflux = require('reflux');
+'use strict';
 
-var LenderActions = Reflux.createActions([
-    'newLender'
+var React = require('react'),
+    Reflux = require('reflux'),
+    LenderActions;
+
+LenderActions = Reflux.createActions([
+    'newLender',
+    'newPassword',
+    'submitBasicInfo'
 ]);
 
 module.exports = LenderActions;

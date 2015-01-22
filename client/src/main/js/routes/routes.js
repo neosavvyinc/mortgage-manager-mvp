@@ -10,6 +10,7 @@ var Welcome = require('../views/view-welcome');
 var Dashboard = require('../views/view-dashboard');
 var NewPassword = require('../views/registration/view-new-password');
 var ApplicantInfo = require('../views/registration/view-applicant-info');
+var LenderInfo = require('../views/registration/view-lender-info');
 var ApplicantQuestions = require('../views/registration/view-questions');
 var Applications = require('../views/dashboard/view-application-list');
 var Documents = require('../views/dashboard/view-document-list');
@@ -39,8 +40,9 @@ var routes = (
     <Route handler={RootDefault}>
         <DefaultRoute name="welcome" handler={Welcome} />
         <Route name="register" handler={RootDefault}>
-            <Route name="newPassword" path="new-password" handler={NewPassword} />
+            <Route name="newPassword" path="new-password" handler={NewPassword}/>
             <Route name="applicantQuestions" path="applicant-questions" handler={ApplicantQuestions} />
+            <Route name="lenderInfo" path="lender-info" handler={LenderInfo} />
             <Route name="applicantInfo" path="applicant-info" handler={ApplicantInfo} />
         </Route>
         <Route name="dashboard" handler={Dashboard}>
