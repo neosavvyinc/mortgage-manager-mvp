@@ -4,7 +4,7 @@ var routeHealthcheck = require('../../routes/route-diagnostics'),
 	authRoute = require('../../routes/route-user'),
 	userRoute = require('../../routes/route-user-details'),
 	documentRoute = require('../../routes/route-document'),
-	applicationRoute = require('../../routes/route-applications');
+	applicationRoute = require('../../routes/route-application');
 
 module.exports = function(router, passport) {
 	//Healthcheck
@@ -43,12 +43,9 @@ module.exports = function(router, passport) {
 	//Manage application specific documents
 	router.route('/applications/:appId/documents')
 		.all(_isAuthenticated)
-		.get(applicationRoute.getApplicationDocuments);
-
-	//Upload a document
-	router.route('/application/:appId/document')
-		.all(_isAuthenticated)
+		.get(applicationRoute.getApplicationDocuments)
 		.post(documentRoute.insertDocument);
+
 };
 
 /**

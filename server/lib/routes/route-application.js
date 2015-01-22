@@ -1,6 +1,6 @@
 'use strict';
 
-var applicationService = require('../services/service-applications');
+var applicationService = require('../services/service-application');
 
 exports.getAllApplications = function(req, res){
     var uid = req.params.uid;

@@ -15,15 +15,17 @@ Document.upload = function (applicationId, document) {
 
 	return Q.promise(function(resolve, reject) {
 		$.ajax({
-				url: Endpoints.DOCUMENT.UPLOAD.URL.replace(':appId', applicationId),
+				url: Endpoints.APPLICATIONS.ONE.DOCUMENTS.URL.replace(':id', applicationId),
 				type: 'POST',
 				data: formData,
 				contentType: false,
 				mimeType: false,
 				processData: false
 			}).success(function(response) {
+			console.log(response);
 				resolve(response);
 			}).error(function(error) {
+			console.log(error);
 				reject(error.responseJSON);
 			});
 	});

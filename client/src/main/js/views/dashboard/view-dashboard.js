@@ -5,7 +5,6 @@ var Reflux = require('reflux');
 
 var User = require('../../models/model-user');
 var UserStore = require('../../stores/store-user');
-var UserActions = require('../../actions/action-user');
 var Link = require('react-router').Link;
 
 var Header = require('../../components/header');
@@ -23,12 +22,6 @@ var Dashboard = React.createClass({
             if(!UserStore.isAuthenticated()){
                 transition.redirect('welcome');
             }
-        }
-    },
-
-    getInitialState: function(){
-        return {
-            currentUser: UserStore.getCurrentUser()
         }
     },
 

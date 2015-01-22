@@ -5,8 +5,8 @@ var _ = require('underscore');
 var applicationModel = require('../db/models/model-application').Model;
 var userDetailsModel = require('../db/models/model-user-details').Model;
 var documentModel = require('../db/models/model-document').Model;
-var applicationService = require('../services/service-applications');
-var documentService = require('./service-documents');
+var applicationService = require('./service-application');
+var documentService = require('./service-document');
 
 exports.getUserApplications = function(uid, callback){
     var application = new applicationModel();
