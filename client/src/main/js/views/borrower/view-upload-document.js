@@ -68,7 +68,7 @@ var UploadDocument = React.createClass({
 
 		if(validateDocumentInfo(documentInfo)) {
 			documentInfo.file = this.state.fileHandler;
-			Document.upload('9e59aaa0-9cf3-11e4-8bb9-13ea8b3f1e80', documentInfo).then(function(){
+			Document.upload('5113e820-a250-11e4-a321-5bb9c785c398', documentInfo).then(function(){
 				DocumentActions.uploadDocument(documentInfo);
 			}.bind(this), function(error){
 				this.setState({

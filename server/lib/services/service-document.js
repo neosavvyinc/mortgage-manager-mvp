@@ -31,7 +31,7 @@ exports.saveDocument = function(doc, success, failure) {
 		function(done) {
 			//Add the document to doc array in application collection
 			var application = new applicationModel();
-			application.updateApplication(doc.appId, {newDocId: docId}, done, done);
+			application.updateApplication(doc.appId, {documents: [docId]}, done, done);
 		}
 	], function(error) {
 		if(error !== undefined) {
@@ -40,5 +40,4 @@ exports.saveDocument = function(doc, success, failure) {
 			success();
 		}
 	});
-	document.insertNewdocument(doc, success, failure);
 };

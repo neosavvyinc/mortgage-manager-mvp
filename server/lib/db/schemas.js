@@ -50,7 +50,7 @@ Schemas.DocumentSchema = new Schema({
 	requesterId: { type: String, ref: 'UserSchema' },
 	requestDate: Date,
 	uploadDate: Date,
-	lastViewed: { type: Date, required: true }
+	lastViewed: Date
 });
 
 Schemas.LenderInvitesSchema = new Schema({

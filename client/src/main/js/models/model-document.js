@@ -11,7 +11,7 @@ Document.upload = function (applicationId, document) {
 	var formData = new FormData();
 	formData.append('file', document.file);
 	delete document.file;
-	formData.append('details', document);
+	formData.append('details', JSON.stringify(document));
 
 	return Q.promise(function(resolve, reject) {
 		$.ajax({

@@ -87,25 +87,20 @@ applicationModel.insertNewApp = function(item, success, failure) {
  */
 applicationModel.updateApplication = function(appId, update, success, failure) {
 	var app = {};
-
 	async.series([
 		function(done) {
 			//Get Application object
 			var application = new ApplicationModel();
 			application.findOneDocument({_id: appId}, function(document) {
-				app = document;
+				app = document.toObject();
 				done();
 			}, done)
 		},
 		function(done) {
 			//Update the object and save in mongo
 			var application = new ApplicationModel();
-			if(update.newDocId) {
-				app.documents.push(update.newDocId);
-				delete update.newDocId;
-			} else {
-				_.extend(app, update);
-			}
+			update.documents = _.union(app.documents, update.documents);
+			_.extend(app, update);
 			application.update(app, {_id: app._id}, null, done, done);
 		}
 	], function(error) {

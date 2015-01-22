@@ -1,6 +1,7 @@
 'use strict';
 
 var _ = require('underscore'),
+	commonUtils = require('../utils/common-utils'),
 	documentService = require('../services/service-document');
 
 /**
@@ -9,10 +10,13 @@ var _ = require('underscore'),
  * @param res
  */
 exports.insertDocument = function(req, res) {
-	var documentObject = req.body,
+	var documentObject = JSON.parse(req.body.details),
 		file = req.files.file,
 		appId = req.params.appId,
-		extension = file.extension;
+		extension = file.extension,
+		uploadPath = file.path,
+		splitPath = uploadPath.split('/'),
+		destPath = splitPath[0] + '/' + appId +'/' + splitPath[1];
 
 
 	//Do some validation for document extension
@@ -20,8 +24,11 @@ exports.insertDocument = function(req, res) {
 		res.status(415).send({message: 'Unsupported Media type'});
 	}
 
+	//Move the uploaded files before calling the service
+	commonUtils.moveFiles(uploadPath, destPath);
+
 	_.extend(documentObject, {
-		url: path,
+		url: destPath,
 		appId: appId
 	});
 

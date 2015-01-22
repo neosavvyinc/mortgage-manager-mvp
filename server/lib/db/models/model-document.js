@@ -10,7 +10,7 @@ var util = require('util'),
  * Constructor for the document model
  */
 function DocumentModel() {
-	DocumentModel.super_.call(this, 'user', documentSchema);
+	DocumentModel.super_.call(this, 'document', documentSchema);
 }
 
 util.inherits(DocumentModel, baseModel.Model);
