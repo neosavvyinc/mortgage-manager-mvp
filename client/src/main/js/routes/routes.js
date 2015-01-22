@@ -42,10 +42,10 @@ var routes = (
     <Route handler={RootDefault}>
         <DefaultRoute name="welcome" handler={Welcome} />
         <Route name="register" handler={RootDefault}>
-            <Route name="newPassword" path="new-password" handler={NewPassword} />
+            <Route name="newPassword" path="new-password" handler={NewPassword}/>
             <Route name="applicantQuestions" path="applicant-questions" handler={ApplicantQuestions} />
+            <Route name="lenderInfo" path="lender-info" handler={LenderInfo} />
             <Route name="applicantInfo" path="applicant-info" handler={ApplicantInfo} />
-            <Route name="lenderInfo" path="/register/lenderInfo" handler={LenderInfo} />
         </Route>
         <Route name="dashboard" handler={Dashboard}>
             <Route name="dashboardApplications" path="applications" handler={Applications} />

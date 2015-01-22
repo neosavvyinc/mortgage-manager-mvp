@@ -3,7 +3,7 @@
 var React = require('react'),
 	Router = require('react-router'),
 	Reflux = require('reflux'),
-	ErrorMessage = require('../../components/component-error-msg'),
+	ErrorMessage = require('../../components/error-message'),
 	User = require('../../models/model-user'),
 	UserStore = require('../../stores/store-user'),
 	LenderActions = require('../../actions/action-lender'),

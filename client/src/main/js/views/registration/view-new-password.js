@@ -71,7 +71,7 @@ var NewPassword = React.createClass({
         }
     },
 
-    onNewAccount: function() {
+    onNewAccount: function(){
         var borrowerEmail = BorrowerStore.getBorrower().email,
             lenderEmail = LenderStore.getLender().email;
 
