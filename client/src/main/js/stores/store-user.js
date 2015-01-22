@@ -3,8 +3,6 @@ var Reflux = require('reflux');
 
 var UserActions = require('../actions/action-user');
 
-var _currentUser = {};
-
 var UserStore = Reflux.createStore({
 
     listenables: UserActions,
@@ -23,23 +21,21 @@ var UserStore = Reflux.createStore({
     */
 
     onLogin: function(user){
-        _currentUser = user;
-        localStorage.setItem("authenticated", true);
+        localStorage.setItem("userId", user._id);
         this.trigger();
     },
 
     onLogout: function(){
-        _currentUser = {};
-        localStorage.removeItem("authenticated");
+        localStorage.removeItem("userId");
         this.trigger();
     },
 
     isAuthenticated: function(){
-        return localStorage.getItem("authenticated");
+        return (localStorage.getItem("userId") != undefined);
     },
 
-    getCurrentUser: function(){
-        return _currentUser;
+    getCurrentUserId: function(){
+        return localStorage.getItem("userId");
     }
 
 });

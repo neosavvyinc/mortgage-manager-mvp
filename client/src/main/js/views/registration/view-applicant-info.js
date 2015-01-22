@@ -45,8 +45,7 @@ var ApplicantInfo = React.createClass({
     
     statics: {
         willTransitionTo: function (transition){
-            console.log("authentication", UserStore.isAuthenticated(), UserStore.getCurrentUser());
-            if(!UserStore.isAuthenticated()){
+            if(!UserStore.isAuthenticated() || !BorrowerStore.getBorrower()){
                 transition.redirect('welcome');
             }
         }
@@ -63,7 +62,7 @@ var ApplicantInfo = React.createClass({
             errorText: "",
             applicantType: "Applicant",
             shareAddress: false,
-            currentUser: UserStore.getCurrentUser(),
+            currentUserId: UserStore.getCurrentUserId(),
             currentBorrower: BorrowerStore.getBorrower()
         }
     },
@@ -90,7 +89,7 @@ var ApplicantInfo = React.createClass({
                 applicantInfo.renting = this.state.currentBorrower.renting;
                 applicantInfo.hasFinancialAssets = this.state.currentBorrower.hasFinancialAssets;
 
-                User.update(this.state.currentUser._id, applicantInfo).then(function () {
+                User.update(this.state.currentUserId, applicantInfo).then(function () {
                     if(this.state.currentBorrower.hasCoapplicant){
                         BorrowerActions.submitBasicInfo(applicantInfo);
                         this.setState({
@@ -98,7 +97,7 @@ var ApplicantInfo = React.createClass({
                         });
                         resetApplicantInfo(this);
                     } else {
-                        User.generateApplication(this.state.currentUser._id).then(function(){
+                        User.generateApplication(this.state.currentUserId).then(function(){
                             this.transitionTo('dashboardApplications');
                         }.bind(this), function(error){
                             this.setState({
@@ -117,9 +116,9 @@ var ApplicantInfo = React.createClass({
             } else {
                 applicantInfo.type = "borrower";
 
-                User.addCoapplicant(this.state.currentUser._id, applicantInfo).then(function(){
+                User.addCoapplicant(this.state.currentUserId, applicantInfo).then(function(){
                     BorrowerActions.resetBorrower();
-                    User.generateApplication(this.state.currentUser._id).then(function(){
+                    User.generateApplication(this.state.currentUserId).then(function(){
                         this.transitionTo('dashboardApplications');
                     }.bind(this), function(error){
                         this.setState({
