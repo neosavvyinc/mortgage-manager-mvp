@@ -29,8 +29,12 @@ var Documents = React.createClass({
         }.bind(this));
     },
 
-    onDocumentUpload: function() {
+    onNewDocumentUpload: function() {
         this.transitionTo('upload', {appId: this.getParams().appId});
+    },
+
+    onDocumentUpload: function(document) {
+        //this.transitionTo('upload', {appId: this.getParams().appId});
     },
 
     render: function(){
@@ -59,7 +63,10 @@ var Documents = React.createClass({
         return (
             <div className="container">
                 <div className="gap-top">
-                    <h1>Documents</h1>
+                    <div className="row">
+                        <h1 className="one seventh">Documents</h1>
+                        <button className="btn blue one ninth skip-six gap-right gap-top" onClick={this.onNewDocumentUpload}>New Document</button>
+                    </div>
                     <table className="responsive">
                         <thead>
                             <tr>

@@ -3,8 +3,9 @@
 var React = require('react'),
 	Router = require('react-router'),
 	Reflux = require('reflux'),
+	Location = Router.HistoryLocation,
 	DocumentActions = require('../../actions/action-document'),
-	DocumentStore = require('../../stores/store-borrower'),
+	DocumentStore = require('../../stores/store-document'),
 	ApplicationStore = require('../../stores/store-application'),
 	Document = require('../../models/model-document'),
 	ErrorMessage = require('../../components/error-message'),
@@ -38,7 +39,7 @@ var UploadDocument = React.createClass({
 	},
 
 	close: function() {
-		this.transitionTo('dashboardDocuments');
+		this.transitionTo('dashboardDocuments', {appId: this.getParams().appId});
 	},
 
 	updateDocName: function() {
@@ -88,11 +89,12 @@ var UploadDocument = React.createClass({
 	onDisplayMessage: function() {
 		this.setState({
 			success: true,
-			uploadMessage: 'File successfully uploaded'
+			uploadMessage: 'File successfully uploaded!'
 		});
 	},
 
 	render: function() {
+
 		return (
 			<form className="uploadComponent" encType="multipart/form-data">
 				<legend><h1>Upload Document</h1></legend>
@@ -131,7 +133,7 @@ var UploadDocument = React.createClass({
 				</div>
 				<div className="row">
 					<div className="two fourths skip-one">
-						<SuccessMessage errorDisplay={this.state.success} errorMessage={this.state.uploadMessage}/>
+						<SuccessMessage successDisplay={this.state.success} message={this.state.uploadMessage}/>
 						<ErrorMessage errorDisplay={this.state.error} errorMessage={this.state.uploadMessage}/>
 					</div>
 				</div>
