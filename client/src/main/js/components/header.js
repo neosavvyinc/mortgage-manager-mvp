@@ -22,7 +22,7 @@ var Header = React.createClass({
 
     render: function(){
         return (
-            <div className="row">
+            <div className="row gap-top">
                 <div className="container">
                     <div className="one half">
                         <h3>NeosavvyLabs</h3>
