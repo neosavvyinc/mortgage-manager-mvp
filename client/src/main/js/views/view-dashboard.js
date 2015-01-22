@@ -25,12 +25,6 @@ var Dashboard = React.createClass({
         }
     },
 
-    getInitialState: function(){
-        return {
-            currentUser: UserStore.getCurrentUser()
-        }
-    },
-
     render: function(){
         return (
             <div>
