@@ -9,7 +9,8 @@ describe('modelBase', function() {
 	var base;
 
 	beforeEach(function() {
-		base = new baseModel('user', schemas.Schemas.UserSchema);
+		base = new baseModel();
+		base.init('user', schemas.Schemas.UserSchema);
 	});
 
 	describe('findDocumentById', function() {
@@ -274,8 +275,8 @@ describe('modelBase', function() {
 	describe('_createModelObject', function() {
 		it('should return a model object for a particular item', function() {
 			var  item = {dummy: 'dummy'};
-			var modelObject = base._createModelObject(item);
-			expect(typeof modelObject).toBe('object');
+			var modelObject = base._createModelObject.bind({}, item);
+			expect(typeof modelObject).toBe('function');
 		});
 	});
 });

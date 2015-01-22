@@ -113,13 +113,15 @@ describe('modelUser',  function() {
 			});
 		});
 
-		iit('should succeed if retrieve insert and update succeeds and document is a mongo object', function() {
+		it('should succeed if retrieve insert and update succeeds and document is a mongo object', function() {
 			var checkItem = {
-				dummy: 'dummy',
 				_id: 'fakeId',
 				created: 'date',
 				lastModified: 'date',
-				pUID: 'uId'
+				pUID: 'uId',
+				documents: [],
+				status: 0,
+				cUID: 'couId'
 			};
 
 			spyOn(commonUtils, 'generateId').andReturn('fakeId');
@@ -129,8 +131,6 @@ describe('modelUser',  function() {
 				var docs = [{
 					appId: [],
 					_id: 'uId',
-					documents: [],
-					status: 0,
 					toObject: function() {
 						return {
 							appId: ['fakeId'],
@@ -151,8 +151,7 @@ describe('modelUser',  function() {
 				success();
 			});
 
-			application.insertNewApp({_id: 'uId'}, {dummyTwo: 'dummy2'}, function() {
-				expect(baseModel.prototype.retrieve.callCount).toBe(2);
+			application.insertNewApp({_id: 'uId', appId: []}, {_id: 'couId'}, function() {
 				expect(baseModel.prototype.insert.callCount).toBe(1);
 				expect(baseModel.prototype.update.callCount).toBe(1);
 			}, function(error) {
@@ -162,11 +161,13 @@ describe('modelUser',  function() {
 
 		it('should succeed if retrieve insert and update succeeds', function() {
 			var checkItem = {
-				dummy: 'dummy',
 				_id: 'fakeId',
 				created: 'date',
 				lastModified: 'date',
-				pUID: 'uId'
+				pUID: 'uId',
+				documents: [],
+				status: 0,
+				cUID: 'couId'
 			};
 
 			spyOn(commonUtils, 'generateId').andReturn('fakeId');
@@ -190,8 +191,7 @@ describe('modelUser',  function() {
 				success();
 			});
 
-			application.insertNewApp({dummy: 'dummy'}, {dummyTwo: 'dummy2'}, function() {
-				expect(baseModel.prototype.retrieve.callCount).toBe(2);
+			application.insertNewApp({_id: 'uId', appId: []}, {_id: 'couId'}, function() {
 				expect(baseModel.prototype.insert.callCount).toBe(1);
 				expect(baseModel.prototype.update.callCount).toBe(1);
 			}, function(error) {
