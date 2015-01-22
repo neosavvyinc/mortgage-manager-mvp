@@ -8,6 +8,16 @@ var User = require('../../models/model-user');
 var Application = require('../../models/model-application');
 var ErrorMessage = require('../../components/error-message');
 
+var arraysEqual = function(arr1, arr2) {
+    if(arr1.length !== arr2.length)
+        return false;
+    for(var i = arr1.length; i--;) {
+        if(arr1[i] !== arr2[i])
+            return false;
+    }
+    return true;
+};
+
 var Documents = React.createClass({
 
     mixins: [
@@ -22,11 +32,13 @@ var Documents = React.createClass({
     },
 
     componentDidMount: function(){
-        Application.getDocuments(this.getParams().appId).then(function(documents){
-            this.setState({
-                documents: documents
-            });
-        }.bind(this));
+        this.getDocuments();
+    },
+
+    componentDidUpdate: function(prevProps, prevState) {
+        if(arraysEqual(prevState.documents, this.state.documents)) {
+            this.getDocuments();
+        }
     },
 
     onNewDocumentUpload: function() {
@@ -35,6 +47,14 @@ var Documents = React.createClass({
 
     onDocumentUpload: function(document) {
         //this.transitionTo('upload', {appId: this.getParams().appId});
+    },
+
+    getDocuments: function() {
+        Application.getDocuments(this.getParams().appId).then(function(documents){
+            this.setState({
+                documents: documents
+            });
+        }.bind(this));
     },
 
     render: function(){
