@@ -5,12 +5,13 @@ var Reflux = require('reflux');
 var User = require('../../models/model-user');
 var ErrorMessage = require('../../components/error-message');
 var BorrowerStore = require('../../stores/store-borrower');
+var LenderStore = require('../../stores/store-lender');
 var BorrowerActions = require('../../actions/action-borrower');
+var LenderActions = require('../../actions/action-lender');
 var UserStore = require('../../stores/store-user');
 var UserActions = require('../../actions/action-user');
 
 var NewPassword = React.createClass({
-
     mixins: [
         Router.State,
         Router.Navigation,
@@ -19,7 +20,7 @@ var NewPassword = React.createClass({
 
     statics: {
         willTransitionTo: function (transition){
-            if(!BorrowerStore.getBorrower().email){
+            if(!BorrowerStore.getBorrower().email && !LenderStore.getLender().email) {
                 transition.redirect('welcome');
             }
         }
@@ -41,27 +42,47 @@ var NewPassword = React.createClass({
                 errorText: "Both passwords need to match"
             });
         } else {
-            User.register({
-                email: BorrowerStore.getBorrower().email,
-                password: newPassword,
-                type: "dashboard"
-            }).then(function(user){
-                BorrowerActions.newPassword(newPassword);
+            var newUser = {},
+                borrowerEmail = BorrowerStore.getBorrower().email,
+                lenderEmail = LenderStore.getLender().email;
+
+            if(borrowerEmail) {
+                newUser.email = borrowerEmail;
+                newUser.type = "borrower";
+            } else if(lenderEmail) {
+                newUser.email = lenderEmail;
+                newUser.type = "lender";
+            }
+            newUser.password = newPassword;
+
+            User.register(newUser).then(function(user){
+                if(newUser.type === "borrower") {
+                    BorrowerActions.newPassword(newPassword);
+                } else {
+                    LenderActions.newPassword(newPassword);
+                }
                 UserActions.login(user);
             }, function(error){
                 this.setState({
                     passwordError: true,
-                    errorText: error.responseJSON.message
-                });
-            }.bind(this));
+                    errorText: error.message
+                }, console.log(this.state));
+            });
         }
     },
 
-    onNewAccount: function(){
-        this.transitionTo('applicantQuestions');
+    onNewAccount: function() {
+        var borrowerEmail = BorrowerStore.getBorrower().email,
+            lenderEmail = LenderStore.getLender().email;
+
+        if(borrowerEmail) {
+            this.transitionTo('applicantQuestions');
+        } else if(lenderEmail) {
+            this.transitionTo('lenderInfo');
+        }
     },
 
-    render: function(){
+    render: function() {
         return (
             <div className="container">
                 <div className="gap-top">
@@ -76,7 +97,6 @@ var NewPassword = React.createClass({
             </div>
         );
     }
-
 });
 
 module.exports = NewPassword;

@@ -1,12 +1,31 @@
-var Reflux = require('reflux');
-var User = require('../models/model-user');
-var LenderActions = require('../actions/action-lender');
+'use strict';
 
-var _newLender = {};
+var Reflux = require('reflux'),
+    User = require('../models/model-user'),
+    LenderActions = require('../actions/action-lender'),
+    _newLender = {};
 
 var LenderStore = Reflux.createStore({
-    listenables: LenderActions
 
+    listenables: LenderActions,
+
+    onNewLender: function(email){
+        _newLender.email = email;
+        this.trigger();
+    },
+
+    onNewPassword: function(password){
+        _newLender.password = password;
+        this.trigger();
+    },
+
+    onSubmitBasicInfo: function(basicInfo){
+        _newLender.basicInfo = basicInfo;
+    },
+
+    getLender: function(){
+        return _newLender;
+    }
 });
 
 module.exports = LenderStore;

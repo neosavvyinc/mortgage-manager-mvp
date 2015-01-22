@@ -11,6 +11,7 @@ var Dashboard = require('../views/dashboard/view-dashboard');
 var Modal = require('../components/modal');
 var NewPassword = require('../views/registration/view-new-password');
 var ApplicantInfo = require('../views/registration/view-applicant-info');
+var LenderInfo = require('../views/registration/view-lender-info');
 var ApplicantQuestions = require('../views/registration/view-questions');
 var Applications = require('../views/dashboard/view-application-list');
 var Documents = require('../views/dashboard/view-document-list');
@@ -44,6 +45,7 @@ var routes = (
             <Route name="newPassword" path="new-password" handler={NewPassword} />
             <Route name="applicantQuestions" path="applicant-questions" handler={ApplicantQuestions} />
             <Route name="applicantInfo" path="applicant-info" handler={ApplicantInfo} />
+            <Route name="lenderInfo" path="/register/lenderInfo" handler={LenderInfo} />
         </Route>
         <Route name="dashboard" handler={Dashboard}>
             <Route name="dashboardApplications" path="applications" handler={Applications} />

@@ -5,7 +5,6 @@ var UserActions = require('../actions/action-user');
 var UserStore = Reflux.createStore({
 
     listenables: UserActions,
-
     /*
     // Or:
     init: function(){

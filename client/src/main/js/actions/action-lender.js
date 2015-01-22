@@ -1,7 +1,12 @@
-var Reflux = require('reflux');
+'use strict';
 
-var LenderActions = Reflux.createActions([
-    'newLender'
+var Reflux = require('reflux'),
+    LenderActions;
+
+LenderActions = Reflux.createActions([
+    'newLender',
+    'newPassword',
+    'submitBasicInfo'
 ]);
 
 module.exports = LenderActions;
