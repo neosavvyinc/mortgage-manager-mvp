@@ -26,7 +26,7 @@ User.register = function (newUser){
                 resolve(response);
             })
             .error(function(error) {
-                reject(JSON.parse(error.responseText));
+                reject(error);
             });
     });
 };
