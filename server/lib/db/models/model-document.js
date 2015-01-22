@@ -14,13 +14,12 @@ var util = require('util'),
  */
 function DocumentModel() {
 	DocumentModel.super_.call(this);
+	DocumentModel.prototype.init('document', documentSchema);
 }
 
 util.inherits(DocumentModel, baseModel.Model);
 
 documentModel = DocumentModel.prototype;
-
-documentModel.init('document', documentSchema);
 
 documentModel.insertNewDocument = function(documents,
 										   success,

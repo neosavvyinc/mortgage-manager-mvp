@@ -22,7 +22,6 @@ util.inherits(UserModel, baseModel.Model);
 
 userModel = UserModel.prototype;
 
-
 /**
  * Function that inserts/updates specified document in the user collection.
  * @param item
