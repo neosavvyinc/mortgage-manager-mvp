@@ -42,9 +42,9 @@ var Login = React.createClass({
             }, function(error){
                 this.setState({
                     loginError:true,
-                    loginError: error.message
+                    loginErrorText: error.responseJSON.message
                 });
-            }
+            }.bind(this)
         );
     }
 });

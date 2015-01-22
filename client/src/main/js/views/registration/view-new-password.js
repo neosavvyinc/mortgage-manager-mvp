@@ -51,9 +51,9 @@ var NewPassword = React.createClass({
             }, function(error){
                 this.setState({
                     passwordError: true,
-                    errorText: error.message
-                }, console.log(this.state));
-            });
+                    errorText: error.responseJSON.message
+                });
+            }.bind(this));
         }
     },
 

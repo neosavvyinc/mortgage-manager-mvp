@@ -102,14 +102,14 @@ var ApplicantInfo = React.createClass({
                         }.bind(this), function(error){
                             this.setState({
                                 applicantInfoError: true,
-                                errorText: error.message
+                                errorText: error.responseJSON.message
                             });
                         }.bind(this));
                     }
                 }.bind(this), function (error) {
                     this.setState({
                         applicantInfoError: true,
-                        errorText: error.message
+                        errorText: error.responseJSON.message
                     });
                 }.bind(this));
 
@@ -123,13 +123,13 @@ var ApplicantInfo = React.createClass({
                     }.bind(this), function(error){
                         this.setState({
                             applicantInfoError: true,
-                            errorText: error.message
+                            errorText: error.responseJSON.message
                         });
                     }.bind(this));
                 }.bind(this), function(error){
                     this.setState({
                         applicantInfoError: true,
-                        errorText: error.message
+                        errorText: error.responseJSON.message
                     });
                 }.bind(this));
 
