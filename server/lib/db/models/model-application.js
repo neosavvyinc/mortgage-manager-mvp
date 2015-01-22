@@ -71,4 +71,38 @@ applicationModel.insertNewApp = function(applicantDetails,
 	});
 };
 
+/**
+ * Update an application with the update object specified
+ * @param appId
+ * @param update
+ * @param success
+ * @param failure
+ */
+applicationModel.updateApplication = function(appId, update, success, failure) {
+	var app = {};
+	async.series([
+		function(done) {
+			//Get Application object
+			var application = new ApplicationModel();
+			application.findOneDocument({_id: appId}, function(document) {
+				app = document.toObject();
+				done();
+			}, done)
+		},
+		function(done) {
+			//Update the object and save in mongo
+			var application = new ApplicationModel();
+			update.documents = _.union(app.documents, update.documents);
+			_.extend(app, update);
+			application.update(app, {_id: app._id}, null, done, done);
+		}
+	], function(error) {
+		if(error !== undefined) {
+			failure(error);
+		} else {
+			success();
+		}
+	});
+};
+
 exports.Model = ApplicationModel;

@@ -3,7 +3,8 @@
 var log4js = require('log4js'),
 	uuid = require('node-uuid'),
 	settings = require('../config/app/settings'),
-	fs = require('fs');
+	fs = require('fs'),
+	mv = require('mv');
 
 /**
  * Dereference an object chain. For example: var o={ a: { b: { c: 'chuck' } } } could be
@@ -83,4 +84,17 @@ exports.getCurrentDate = function() {
 exports.readJSON = function(path) {
 	var buffer = fs.readFileSync(path);
 	return JSON.parse(buffer.toString());
+};
+
+/**
+ * Transfers files from source to destination
+ * @param source
+ * @param dest
+ */
+exports.moveFiles = function(source, dest) {
+	mv(source, dest, {mkdirp: true}, function(err) {
+		if(err) {
+			console.log('Error moving files '+ err);
+		}
+	});
 };

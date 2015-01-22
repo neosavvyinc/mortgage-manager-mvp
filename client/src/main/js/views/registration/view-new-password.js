@@ -44,7 +44,7 @@ var NewPassword = React.createClass({
             User.register({
                 email: BorrowerStore.getBorrower().email,
                 password: newPassword,
-                type: "borrower"
+                type: "dashboard"
             }).then(function(user){
                 BorrowerActions.newPassword(newPassword);
                 UserActions.login(user);

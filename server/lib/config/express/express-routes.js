@@ -3,6 +3,7 @@
 var routeHealthcheck = require('../../routes/route-diagnostics'),
 	authRoute = require('../../routes/route-user'),
 	userRoute = require('../../routes/route-user-details'),
+	documentRoute = require('../../routes/route-document'),
 	applicationRoute = require('../../routes/route-applications');
 
 module.exports = function(router, passport) {
@@ -27,7 +28,7 @@ module.exports = function(router, passport) {
 	router.route('/user/:uid/coapplicant')
 		.all(_isAuthenticated)
 		.post(userRoute.addCoApplicant);
-
+	
 	//Get all applications for a particular userId
 	router.route('/user/:uid/applications')
 		.all(_isAuthenticated)
@@ -43,6 +44,11 @@ module.exports = function(router, passport) {
 	router.route('/applications/:appId/documents')
 		.all(_isAuthenticated)
 		.get(applicationRoute.getApplicationDocuments);
+
+	//Upload a document
+	router.route('/application/:appId/document')
+		.all(_isAuthenticated)
+		.post(documentRoute.insertDocument);
 };
 
 /**

@@ -1,4 +1,3 @@
-var React = require('react');
 var Reflux = require('reflux');
 
 var User = require('../models/model-user');

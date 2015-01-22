@@ -95,7 +95,7 @@ var Applications = React.createClass({
         );
     },
 
-    onApplicationSelect: function(application){
+    onApplicationSelect: function(application) {
         ApplicationActions.selectApplication(application);
     },
 

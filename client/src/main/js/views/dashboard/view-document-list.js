@@ -1,9 +1,9 @@
 var React = require('react');
 var Router = require('react-router');
 var Reflux = require('reflux');
+var RouterHandler = Router.RouteHandler;
 var _ = require('lodash');
 var moment = require('moment');
-
 var User = require('../../models/model-user');
 var Application = require('../../models/model-application');
 var ErrorMessage = require('../../components/error-message');
@@ -29,8 +29,12 @@ var Documents = React.createClass({
         }.bind(this));
     },
 
-    onDocumentUpload: function(document){
-        console.log("uploading :: ", document);
+    onNewDocumentUpload: function() {
+        this.transitionTo('upload', {appId: this.getParams().appId});
+    },
+
+    onDocumentUpload: function(document) {
+        //this.transitionTo('upload', {appId: this.getParams().appId});
     },
 
     render: function(){
@@ -59,7 +63,10 @@ var Documents = React.createClass({
         return (
             <div className="container">
                 <div className="gap-top">
-                    <h1>Documents</h1>
+                    <div className="row">
+                        <h1 className="one seventh">Documents</h1>
+                        <button className="btn blue one ninth skip-six gap-right gap-top" onClick={this.onNewDocumentUpload}>New Document</button>
+                    </div>
                     <table className="responsive">
                         <thead>
                             <tr>
@@ -78,6 +85,7 @@ var Documents = React.createClass({
                         </tbody>
                     </table>
                 </div>
+                <RouterHandler/>
             </div>
         );
     }

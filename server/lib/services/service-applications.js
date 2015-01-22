@@ -55,14 +55,10 @@ exports.createApplication = function(uid, callback) {
         },
         function(done) {
             docs = documentService.generateDocumentList(applicationId, applicantDetails, coapplicantDetails);
-            console.log("generating documents");
             documents.insertNewDocument(docs, done, done);
-            console.log("documents Inserted");
         },
         function(done){
-            console.log("insertind UUIDS into app");
             applicationService.insertDocuments(docs, done, done);
-            console.log("Done");
         }
     ], function(error){
             if(error !== undefined){
@@ -83,7 +79,8 @@ exports.insertDocuments = function(documents, callback){
     application.update({documents: _.pluck(documents, '_id')}, {_id: documents[0].appId}, callback, callback);
 };
 
-exports.getDocuments = function(appId, callback){
+exports.getDocuments = function(appId, success, failure){
     var documents = new documentModel();
-    documents.retrieve({appId: appId}, callback, callback);
+
+    documents.retrieve({appId: appId}, success, failure);
 };

@@ -56,4 +56,14 @@ documentModel.insertNewDocument = function(documents,
 	});
 };
 
+/**
+ * Function that saves a file on the server and saves the path in Mongo
+ * @param document
+ * @param success
+ * @param failure
+ */
+documentModel.insertOnedocument = function(document, success, failure) {
+	documentModel.insert(document, success, failure);
+};
+
 exports.Model = DocumentModel;

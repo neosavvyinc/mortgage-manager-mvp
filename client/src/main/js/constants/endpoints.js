@@ -11,6 +11,12 @@ module.exports = {
             }
         }
     },
+    DOCUMENT: {
+        URL: '/api/application',
+        UPLOAD: {
+            URL: '/api/application/:appId/document'
+        }
+    },
     LOGIN: {
         URL: '/api/login'
     },
