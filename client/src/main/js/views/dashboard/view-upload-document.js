@@ -88,6 +88,7 @@ var UploadDocument = React.createClass({
 
 	onDisplayMessage: function() {
 		this.setState({
+			error: false,
 			success: true,
 			uploadMessage: 'File successfully uploaded!'
 		});
