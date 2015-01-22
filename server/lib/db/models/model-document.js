@@ -1,13 +1,13 @@
 'use strict';
 
-var _ = require('underscore'),
-	util = require('util'),
-	async = require('async'),
+var util = require('util'),
 	Schemas = require('../schemas').Schemas,
+	documentSchema = Schemas.DocumentSchema,
+	async = require('async'),
 	commonUtils = require('../../utils/common-utils'),
 	baseModel = require('./model-base'),
 	applicationService = require('../../services/service-applications'),
-	documentSchema = Schemas.DocumentSchema,
+	_ = require('underscore'),
 	documentModel;
 
 /**

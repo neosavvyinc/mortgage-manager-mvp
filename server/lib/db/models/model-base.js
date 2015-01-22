@@ -15,6 +15,7 @@ base = BaseModel.prototype;
 base.init = function (collection, schema){
 	this.mongooseModel = mongoose.model(collection, schema);
 };
+
 /**
  * Finds a document in the model by id
  * @param id
@@ -120,6 +121,7 @@ base.remove = function(item, success, failure) {
 /* Private methods */
 /**
  * Function that returns a mongoose model object.
+ * @param self
  * @param item
  * @returns {mongooseModel}
  * @private

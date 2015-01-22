@@ -24,9 +24,10 @@ exports.saveDocument = function(doc, success, failure) {
 			_.extend(doc, {
 				_id: docId,
 				requestDate: currentDate,
-				uploadDate: currentDate
+				uploadDate: currentDate,
+				amount: 1
 			});
-			document.insertNewdocument(doc, done, done);
+			document.insertOnedocument(doc, done, done);
 		},
 		function(done) {
 			//Add the document to doc array in application collection
