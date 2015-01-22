@@ -11,12 +11,11 @@ var util = require('util'),
  */
 function LenderInvitesModel() {
 	LenderInvitesModel.super_.call(this);
+	LenderInvitesModel.prototype.init('lenderInvites', lenderSchema);
 }
 
 util.inherits(LenderInvitesModel, baseModel.Model);
 
 invitesModel = LenderInvitesModel.prototype;
-
-invitesModel.init('lenderInvites', lenderSchema);
 
 exports.Model = LenderInvitesModel;

@@ -20,6 +20,7 @@ var Welcome = React.createClass({
 
     statics: {
         willTransitionTo: function (transition){
+            console.log("authentication", UserStore.isAuthenticated(), UserStore.getCurrentUser());
             if(UserStore.isAuthenticated()){
                 transition.redirect('dashboardApplications');
             }

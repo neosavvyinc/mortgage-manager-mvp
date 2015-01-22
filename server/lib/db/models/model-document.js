@@ -6,7 +6,6 @@ var util = require('util'),
 	async = require('async'),
 	commonUtils = require('../../utils/common-utils'),
 	baseModel = require('./model-base'),
-	applicationService = require('../../services/service-applications'),
 	_ = require('underscore'),
 	documentModel;
 
@@ -15,13 +14,12 @@ var util = require('util'),
  */
 function DocumentModel() {
 	DocumentModel.super_.call(this);
+	DocumentModel.prototype.init('document', documentSchema);
 }
 
 util.inherits(DocumentModel, baseModel.Model);
 
 documentModel = DocumentModel.prototype;
-
-documentModel.init('document', documentSchema);
 
 documentModel.insertNewDocument = function(documents,
 										   success,
@@ -48,9 +46,6 @@ documentModel.insertNewDocument = function(documents,
 						done();
 					}
 			});
-		},
-		function(done){
-			applicationService.insertDocuments(documents, done, done);
 		}
 	], function(error){
 		if(error !== undefined) {

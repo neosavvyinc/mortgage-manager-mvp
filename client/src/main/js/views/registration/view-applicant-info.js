@@ -45,6 +45,7 @@ var ApplicantInfo = React.createClass({
     
     statics: {
         willTransitionTo: function (transition){
+            console.log("authentication", UserStore.isAuthenticated(), UserStore.getCurrentUser());
             if(!UserStore.isAuthenticated()){
                 transition.redirect('welcome');
             }
