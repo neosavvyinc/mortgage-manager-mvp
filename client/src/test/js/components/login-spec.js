@@ -1,10 +1,10 @@
-jest.dontMock('../../../main/js/components/component-login');
+jest.dontMock('../../../main/js/components/login');
 
 var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
 //var Router = require('react-router');
 
-var Login = require('../../../main/js/components/component-login');
+var Login = require('../../../main/js/components/login');
 
 describe('Login', function () {
     var loginForm,

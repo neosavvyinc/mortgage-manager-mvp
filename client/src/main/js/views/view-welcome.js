@@ -3,7 +3,7 @@ var Router = require('react-router');
 var Link = Router.Link;
 var Reflux = require('reflux');
 
-var Login = require('../components/component-login');
+var Login = require('../components/login');
 var UserStore = require('../stores/store-user');
 var LenderStore = require('../stores/store-lender');
 var BorrowerStore = require('../stores/store-borrower');
