@@ -170,7 +170,7 @@ var ApplicantInfo = React.createClass({
                     });
                 }.bind(this));
             } else {
-                applicantInfo.type = "borrower";
+                applicantInfo.type = "dashboard";
                 User.addCoapplicant(this.state.currentUser._id, applicantInfo).then(function(){
                     BorrowerActions.resetBorrower();
                     this.transitionTo('dashboard');
