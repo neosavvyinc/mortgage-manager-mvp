@@ -25,7 +25,7 @@ User.register = function (newUser){
             .success(function(response){
                 resolve(response);
             })
-            .error(function(error){
+            .error(function(error) {
                 reject(error);
             });
     });
