@@ -20,7 +20,7 @@ var NewPassword = React.createClass({
 
     statics: {
         willTransitionTo: function (transition){
-            if(!BorrowerStore.getBorrower().email || !LenderStore.getLender().email) {
+            if(!BorrowerStore.getBorrower().email && !LenderStore.getLender().email) {
                 transition.redirect('welcome');
             }
         }
