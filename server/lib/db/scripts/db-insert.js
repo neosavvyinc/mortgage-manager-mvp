@@ -9,6 +9,7 @@ var dbInsert,
 	dbBase = require('./db-base'),
 	userModel = require('../models/model-user').Model,
 	userDetailsModel = require('../models/model-user-details').Model,
+	applicationModel = require('../models/model-application').Model,
 	commonUtils = require('../../utils/common-utils'),
 	errorUtils = require('../../utils/error-utils'),
 	allJson = {},
@@ -170,11 +171,12 @@ var saveUsers = function(json, success, failure) {
  */
 var saveUserDetails = function(json, success, failure) {
 	var data = _.isEmpty(json.userdetails) ? [] : json.userdetails,
-		userDetails = new userDetailsModel();
+		userDetails = new userDetailsModel(),
+		user = new userModel();
 	async.eachSeries(data, function(item, done) {
 		async.series([
 			function(done1) {
-				dbInsert.getMongoId(new userModel(), { email: item.email }, function(_id) {
+				user.retrieve({ email: item.email }, function(_id) {
 					item._id = _id;
 					done1();
 				}, done1);
@@ -205,17 +207,19 @@ var saveUserDetails = function(json, success, failure) {
  * @param failure
  */
 var saveApplications = function(json, success, failure) {
-	//var data = _.isEmpty(json.application) ? [] : json.application,
-	//	application = new applicationModel();
-	//async.eachSeries(data, function(item, done) {
-	//	application.insertNewApp(item, done, done);
-	//}, function(error) {
-	//	if(error) {
-	//		failure(error);
-	//	} else {
-	//		success();
-	//	}
-	//});
+	var data = _.isEmpty(json.application) ? [] : json.application,
+		application = new applicationModel();
+	async.eachSeries(data, function(item, done) {
+		application.insertNewApp(item, item, function(appId){
+			done();
+		}, done);
+	}, function(error) {
+		if(error) {
+			failure(error);
+		} else {
+			success();
+		}
+	});
 };
 
 exports.Db = DbInsert;
