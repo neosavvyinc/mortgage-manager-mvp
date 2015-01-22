@@ -45,14 +45,12 @@ var routes = (
         </Route>
         <Route name="dashboard" handler={Dashboard}>
             <Route name="dashboardApplications" path="applications" handler={Applications} />
-            <Route name="dashboardDocuments" path="applications/:appId" handler={TestRoute1} />
+            <Route name="dashboardDocuments" path="applications/:appId" handler={Documents} />
             <Route name="routeTester" path="testRoute" handler={TestRoute1} />
         </Route>
         <Route name="forgotPassword" path="forgot-password" handler={TestRoute1} />
     </Route>
 );
-// TODO: Change for applications/:appID
-
 
 var router = Router.create({
     routes: routes

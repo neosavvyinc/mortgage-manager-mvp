@@ -1,8 +1,7 @@
 'use strict';
 
 var base,
-	mongoose = require('mongoose/'),
-	mongooseModel;
+	mongoose = require('mongoose/');
 
 function BaseModel(){ }
 

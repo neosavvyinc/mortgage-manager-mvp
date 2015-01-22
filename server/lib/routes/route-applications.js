@@ -28,3 +28,15 @@ exports.createApplication = function(req, res){
         }
     });
 };
+
+exports.getApplicationDocuments = function(req, res){
+    var appId = req.params.appId;
+    applicationService.getDocuments(appId,  function(documents){
+        res.send(documents);
+        res.end();
+    }, function(error){
+        if(error){
+            res.status(500).send({message: 'Internal Server Error'});
+        }
+    });
+};

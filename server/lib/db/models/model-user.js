@@ -4,7 +4,6 @@ var util = require('util'),
 	_ = require('underscore'),
 	async = require('async'),
 	bCrypt = require('bcrypt-nodejs'),
-	mongoose = require('mongoose/'),
 	baseModel = require('./model-base'),
 	commonUtils = require('../../utils/common-utils'),
 	Schemas = require('../schemas').Schemas,
@@ -17,7 +16,6 @@ var util = require('util'),
 function UserModel() {
 	UserModel.super_.call(this);
 	UserModel.prototype.init('user', userSchema);
-
 }
 
 util.inherits(UserModel, baseModel.Model);

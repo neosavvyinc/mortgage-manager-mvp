@@ -70,7 +70,12 @@ exports.insertDocuments = function(documents, callback){
     var application = new applicationModel();
 
     if(!documents[0] || documents[0].appId){
-        callback(new Error("The document array was empty"));
+        callback(new Error('The document array was empty'));
     }
     application.update({documents: _.pluck(documents, '_id')}, {_id: documents[0].appId}, callback, callback);
+};
+
+exports.getDocuments = function(appId, callback){
+    var documents = new documentModel();
+    documents.retrieve({appId: appId}, callback, callback);
 };

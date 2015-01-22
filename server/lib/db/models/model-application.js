@@ -5,11 +5,9 @@ var util = require('util'),
 	async = require('async'),
 	baseModel = require('./model-base'),
 	commonUtils = require('../../utils/common-utils'),
-	mongoose = require('mongoose/'),
 	Schemas = require('../schemas').Schemas,
 	applicationSchema = Schemas.ApplicationSchema,
 	userDetailsModel = require('./model-user-details').Model,
-	userModel = require('./model-user').Model,
 	applicationModel;
 
 /**

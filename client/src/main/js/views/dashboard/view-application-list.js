@@ -10,12 +10,12 @@ var UserStore = require('../../stores/store-user');
 var ApplicationStore = require('../../stores/store-application');
 var ApplicationActions = require('../../actions/action-application');
 
-var NewPassword = React.createClass({
+var Applications = React.createClass({
 
     mixins: [
         Router.State,
         Router.Navigation,
-        Reflux.listenTo(ApplicationStore, 'onApplicationView')
+        Reflux.listenTo(ApplicationStore, 'onApplicationTransition')
     ],
 
     getInitialState: function(){
@@ -63,7 +63,7 @@ var NewPassword = React.createClass({
                     <th>{status}</th>
                     <th>
                         <div className="row">
-                            <button className="btn turquoise one half" onClick={this.onApplicationSelect(app)}>View</button>
+                            <button className="btn turquoise one half" onClick={this.onApplicationSelect.bind(null, app)}>View</button>
                             <button className="btn red one half">Delete</button>
                         </div>
                     </th>
@@ -99,9 +99,9 @@ var NewPassword = React.createClass({
         ApplicationActions.selectApplication(application);
     },
 
-    onApplicationTransition: function(appID){
-        this.transitionTo('applications/' + appID);
+    onApplicationTransition: function(){
+        this.transitionTo('dashboardDocuments', {appId: ApplicationStore.getCurrentApplication()._id});
     }
 });
 
-module.exports = NewPassword;
+module.exports = Applications;

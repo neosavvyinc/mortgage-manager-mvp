@@ -1,7 +1,6 @@
 'use strict';
 
 var util = require('util'),
-	mongoose = require('mongoose/'),
 	Schemas = require('../schemas').Schemas,
 	documentSchema = Schemas.DocumentSchema,
 	async = require('async'),
@@ -40,7 +39,7 @@ documentModel.insertNewDocument = function(documents,
 							requestDate: currentDate
 						});
 						document.insert(documents[index], done, done);
-					}
+					};
 				}),
 				function(error){
 					if(error !== undefined){
@@ -48,7 +47,7 @@ documentModel.insertNewDocument = function(documents,
 					} else {
 						done();
 					}
-			})
+			});
 		},
 		function(done){
 			applicationService.insertDocuments(documents, done, done);

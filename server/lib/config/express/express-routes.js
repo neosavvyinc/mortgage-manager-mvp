@@ -38,6 +38,11 @@ module.exports = function(router, passport) {
 		.all(_isAuthenticated)
 		.post(applicationRoute.createApplication)
 		.get(applicationRoute.getAllApplications);
+
+	//Manage application specific documents
+	router.route('/applications/:appId/documents')
+		.all(_isAuthenticated)
+		.get(applicationRoute.getApplicationDocuments);
 };
 
 /**

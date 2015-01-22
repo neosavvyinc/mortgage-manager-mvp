@@ -81,7 +81,7 @@ describe('modelUser',  function() {
 				failure('insert fail');
 			});
 
-			application.insertNewApp({dummy: 'dummy'}, function() {
+			application.insertNewApp({dummy: 'dummy'}, {dummyTwo: 'dummy2'}, function() {
 				expect().toHaveNotExecuted('should not have succeeded');
 			}, function(error) {
 				expect(error).toBe('insert fail');
@@ -106,14 +106,14 @@ describe('modelUser',  function() {
 				failure('update fail');
 			});
 
-			application.insertNewApp({dummy: 'dummy'}, function() {
+			application.insertNewApp({appId: []}, {dummy: 'dummy2'}, function() {
 				expect().toHaveNotExecuted('should not have succeeded');
 			}, function(error) {
 				expect(error).toBe('update fail');
 			});
 		});
 
-		it('should succeed if retrieve insert and update succeeds and document is a mongo object', function() {
+		iit('should succeed if retrieve insert and update succeeds and document is a mongo object', function() {
 			var checkItem = {
 				dummy: 'dummy',
 				_id: 'fakeId',
@@ -129,6 +129,8 @@ describe('modelUser',  function() {
 				var docs = [{
 					appId: [],
 					_id: 'uId',
+					documents: [],
+					status: 0,
 					toObject: function() {
 						return {
 							appId: ['fakeId'],
@@ -149,7 +151,7 @@ describe('modelUser',  function() {
 				success();
 			});
 
-			application.insertNewApp({dummy: 'dummy'}, function() {
+			application.insertNewApp({_id: 'uId'}, {dummyTwo: 'dummy2'}, function() {
 				expect(baseModel.prototype.retrieve.callCount).toBe(2);
 				expect(baseModel.prototype.insert.callCount).toBe(1);
 				expect(baseModel.prototype.update.callCount).toBe(1);
@@ -188,7 +190,7 @@ describe('modelUser',  function() {
 				success();
 			});
 
-			application.insertNewApp({dummy: 'dummy'}, function() {
+			application.insertNewApp({dummy: 'dummy'}, {dummyTwo: 'dummy2'}, function() {
 				expect(baseModel.prototype.retrieve.callCount).toBe(2);
 				expect(baseModel.prototype.insert.callCount).toBe(1);
 				expect(baseModel.prototype.update.callCount).toBe(1);

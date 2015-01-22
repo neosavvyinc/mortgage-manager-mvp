@@ -1,7 +1,6 @@
 'use strict';
 
 var util = require('util'),
-	mongoose = require('mongoose/'),
 	Schemas = require('../schemas').Schemas,
 	lenderSchema = Schemas.LenderInvitesSchema,
 	baseModel = require('./model-base'),

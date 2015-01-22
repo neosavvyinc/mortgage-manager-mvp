@@ -7,9 +7,8 @@ var moment = require('moment');
 var User = require('../../models/model-user');
 var Application = require('../../models/model-application');
 var ErrorMessage = require('../../components/error-message');
-var ApplicationStore = require('../../stores/store-application');
 
-var NewPassword = React.createClass({
+var Documents = React.createClass({
 
     mixins: [
         Router.State,
@@ -23,11 +22,15 @@ var NewPassword = React.createClass({
     },
 
     componentDidMount: function(){
-        //Application.getDocuments(ApplicationStore.getCurrentApplication()._id).then(function(documents){
-        //    this.setState({
-        //        documents: documents
-        //    });
-        //}.bind(this));
+        Application.getDocuments(this.getParams().appId).then(function(documents){
+            this.setState({
+                documents: documents
+            });
+        }.bind(this));
+    },
+
+    onDocumentUpload: function(document){
+        console.log("uploading :: ", document);
     },
 
     render: function(){
@@ -36,37 +39,36 @@ var NewPassword = React.createClass({
 
         _.map(this.state.documents, function(document){
 
-            //// e.g. Wednesday, January 21, 2015 3:21 PM
-            //app.created = moment(app.created).format('llll');
-            //app.lastModified = moment(app.lastModified).format('llll');
+            // e.g. Wednesday, January 21, 2015 3:21 PM
+            document.requestDate = moment(document.requestDate).format('llll');
 
             documentsTable.push((
                 <tr>
                     <th>{document._id}</th>
-                    //<th>{doc.created}</th>
-                    //<th>{doc.lastModified}</th>
-                    //<th>
-                    //    <div className="row">
-                    //        <button className="btn turquoise one half" onClick={this.onApplicationSelect(app)}>View</button>
-                    //        <button className="btn red one half">Delete</button>
-                    //    </div>
-                    //</th>
+                    <th>{document.name}</th>
+                    <th>{document.type}</th>
+                    <th>{document.description}</th>
+                    <th>{document.requestDate}</th>
+                    <th>
+                        <button className="btn blue" onClick={this.onDocumentUpload.bind(this, document)}>Upload</button>
+                    </th>
                 </tr>
             ));
-        });
+        }, this);
 
         return (
             <div className="container">
                 <div className="gap-top">
-                    <h1>Applications</h1>
+                    <h1>Documents</h1>
                     <table className="responsive">
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                //<th>Last Created</th>
-                                //<th>Last Modified</th>
-                                //<th>Status</th>
-                                //<th>Action</th>
+                                <th>Document Name</th>
+                                <th>Document Type</th>
+                                <th>Description</th>
+                                <th>Requested Date</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -82,4 +84,4 @@ var NewPassword = React.createClass({
 
 });
 
-module.exports = NewPassword;
+module.exports = Documents;

@@ -3,7 +3,6 @@
 var util = require('util'),
 	Schemas = require('../schemas').Schemas,
 	appLendersSchema = Schemas.ApplicationLendersSchema,
-	mongoose = require('mongoose/'),
 	baseModel = require('./model-base'),
 	appLendersModel;
 

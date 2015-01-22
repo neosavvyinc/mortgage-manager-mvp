@@ -20,7 +20,10 @@ module.exports = {
     APPLICATIONS: {
         URL: '/api/applications',
         ONE: {
-            URL: '/api/applications/:id'
+            URL: '/api/applications/:id',
+            DOCUMENTS: {
+                URL: '/api/applications/:id/documents'
+            }
         }
     }
 };

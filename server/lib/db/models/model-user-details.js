@@ -3,7 +3,6 @@
 var util = require('util'),
 	_ = require('underscore'),
 	async = require('async'),
-	mongoose = require('mongoose/'),
 	baseModel = require('./model-base'),
 	Schemas = require('../schemas').Schemas,
 	userDetailsSchema = Schemas.UserInfoSchema,

@@ -7,7 +7,7 @@ function Application() { }
 
 Application.getDocuments = function(appID){
     return Q.promise(function(resolve, reject){
-        $.get(Endpoints.APPLICATIONS.ONE.URL.replace(':id', appID))
+        $.get(Endpoints.APPLICATIONS.ONE.DOCUMENTS.URL.replace(':id', appID))
             .success(function(response){
                 resolve(response);
             })
