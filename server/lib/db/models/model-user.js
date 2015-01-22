@@ -14,12 +14,14 @@ var util = require('util'),
  * Constructor for the user model
  */
 function UserModel() {
-	UserModel.super_.call(this, 'user', userSchema);
+	UserModel.super_.call(this);
+	UserModel.prototype.init('user', userSchema);
 }
 
 util.inherits(UserModel, baseModel.Model);
 
 userModel = UserModel.prototype;
+
 
 /**
  * Function that inserts/updates specified document in the user collection.

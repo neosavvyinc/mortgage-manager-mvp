@@ -52,16 +52,12 @@ var Navigation = React.createClass({
         return {
             navigationItems: [
                 {
-                    tabName: "tab1",
-                    tabLink: "dashboardMain"
+                    tabName: "Applications",
+                    tabLink: "dashboardApplications"
                 },
                 {
-                    tabName: "tab2",
-                    tabLink: "dashboardApplicants"
-                },
-                {
-                    tabName: "tab3",
-                    tabLink: "dashboardDocuments"
+                    tabName: "Lenders",
+                    tabLink: "routeTester"
                 }
             ]
         }
@@ -78,19 +74,19 @@ var Navigation = React.createClass({
                     {this.props.navigationItems.map(function(tab) {
                         if(this.isActive(tab.tabLink)){
                             return (
-                                    <Link key={tab.tabName} to={tab.tabLink}>
-                                        <button className={activeTabClass}>
-                                            <span className="plaintext">{tab.tabName}</span>
-                                        </button>
-                                    </Link>
+                                <Link key={tab.tabName} to={tab.tabLink}>
+                                    <button className={activeTabClass}>
+                                        <span className="plaintext">{tab.tabName}</span>
+                                    </button>
+                                </Link>
                             );
                         } else {
                             return (
-                                    <Link key={tab.tabName} to={tab.tabLink}>
-                                        <button className={tabSpacingClass}>
-                                            <span className="plaintext">{tab.tabName}</span>
-                                        </button>
-                                    </Link>
+                                <Link key={tab.tabName} to={tab.tabLink}>
+                                    <button className={tabSpacingClass}>
+                                        <span className="plaintext">{tab.tabName}</span>
+                                    </button>
+                                </Link>
                             );
                         }
                     }.bind(this))}

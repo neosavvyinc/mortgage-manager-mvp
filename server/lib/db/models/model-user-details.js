@@ -12,7 +12,8 @@ var util = require('util'),
  * Constructor for the user model
  */
 function UserDetailsModel() {
-	UserDetailsModel.super_.call(this, 'userdetails', userDetailsSchema);
+	UserDetailsModel.super_.call(this);
+	UserDetailsModel.prototype.init('userdetails', userDetailsSchema);
 }
 
 util.inherits(UserDetailsModel, baseModel.Model);

@@ -21,7 +21,7 @@ var Welcome = React.createClass({
     statics: {
         willTransitionTo: function (transition){
             if(UserStore.isAuthenticated()){
-                transition.redirect('dashboard');
+                transition.redirect('dashboardApplications');
             }
         }
     },
@@ -31,52 +31,6 @@ var Welcome = React.createClass({
             borrowerEmpty: false,
             lenderEmpty: false
         }
-    },
-
-    render: function(){
-
-        var borrowerEmptyClass = this.state.borrowerEmpty ? "error message gap-bottom" : "hidden";
-        var falseEmptyClass = this.state.lenderEmpty ? "error message gap-bottom" : "hidden";
-
-        return (
-            <div className="container triple-pad-right triple-pad-left">
-                <div className="row align-center">
-                    <img className="triple-gap-top triple-gap-bottom" src="./assets/images/banner.png" alt="banner" />
-                </div>
-                <div className="row">
-                    <div className="one third padded">
-                        <div className="user-section">
-                        <h4>Are you a Borrower?</h4>
-                        <form>
-                            <input className="double-gap-bottom" ref="borrowerEmail" type="email" placeholder="Email Address" />
-                            <div className={borrowerEmptyClass}>You need to provide a valid email</div>
-                            <button className="block turquoise" onClick={this.onSignUpBorrower}>
-                                Signup as Borrower
-                            </button>
-                        </form>
-                        </div>
-                    </div>
-
-                    <div className="one third padded">
-                        <div className="user-section">
-                        <h4>Are you a Lender?</h4>
-                        <form>
-                            <input className="double-gap-bottom" ref="lenderEmail" type="email" placeholder="Email Address" />
-                            <div className={falseEmptyClass}>You need to provide a valid email</div>
-                            <button className="block turquoise" onClick={this.onSignUpLender}>
-                                Signup as Lender
-                            </button>
-                        </form>
-                        </div>
-                    </div>
-                    <div className="one third padded">
-                        <div className="user-section">
-                            <Login />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
     },
 
     onSignUpBorrower: function(){
@@ -97,7 +51,7 @@ var Welcome = React.createClass({
 
     onLogin: function(){
         if(UserStore.isAuthenticated()) {
-            this.transitionTo('dashboard');
+            this.transitionTo('dashboardApplications');
         }
     },
 
@@ -107,7 +61,54 @@ var Welcome = React.createClass({
 
     onNewBorrower: function(){
         this.transitionTo('newPassword');
+    },
+
+    render: function(){
+
+        var borrowerEmptyClass = this.state.borrowerEmpty ? "error message gap-bottom" : "hidden";
+        var falseEmptyClass = this.state.lenderEmpty ? "error message gap-bottom" : "hidden";
+
+        return (
+            <div className="container triple-pad-right triple-pad-left">
+                <div className="row align-center">
+                    <img className="triple-gap-top triple-gap-bottom" src="./assets/images/banner.png" alt="banner" />
+                </div>
+                <div className="row">
+                    <div className="one third padded">
+                        <div className="user-section">
+                            <h4>Are you a Borrower?</h4>
+                            <form>
+                                <input className="double-gap-bottom" ref="borrowerEmail" type="email" placeholder="Email Address" />
+                                <div className={borrowerEmptyClass}>You need to provide a valid email</div>
+                                <button className="block turquoise" onClick={this.onSignUpBorrower}>
+                                    Signup as Borrower
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div className="one third padded">
+                        <div className="user-section">
+                            <h4>Are you a Lender?</h4>
+                            <form>
+                                <input className="double-gap-bottom" ref="lenderEmail" type="email" placeholder="Email Address" />
+                                <div className={falseEmptyClass}>You need to provide a valid email</div>
+                                <button className="block turquoise" onClick={this.onSignUpLender}>
+                                    Signup as Lender
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    <div className="one third padded">
+                        <div className="user-section">
+                            <Login />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
     }
+
 });
 
 

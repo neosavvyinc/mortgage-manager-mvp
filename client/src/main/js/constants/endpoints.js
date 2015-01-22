@@ -5,6 +5,9 @@ module.exports = {
             URL: '/api/user/:id',
             COAPPLICANT: {
                 URL: '/api/user/:id/coapplicant'
+            },
+            APPLICATIONS: {
+                URL: '/api/user/:id/applications'
             }
         }
     },
@@ -19,5 +22,14 @@ module.exports = {
     },
     REGISTER: {
         URL: '/api/register'
+    },
+    APPLICATIONS: {
+        URL: '/api/applications',
+        ONE: {
+            URL: '/api/applications/:id',
+            DOCUMENTS: {
+                URL: '/api/applications/:id/documents'
+            }
+        }
     }
 };

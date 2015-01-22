@@ -81,7 +81,7 @@ describe('modelUser',  function() {
 				failure('insert fail');
 			});
 
-			application.insertNewApp({dummy: 'dummy'}, function() {
+			application.insertNewApp({dummy: 'dummy'}, {dummyTwo: 'dummy2'}, function() {
 				expect().toHaveNotExecuted('should not have succeeded');
 			}, function(error) {
 				expect(error).toBe('insert fail');
@@ -106,7 +106,7 @@ describe('modelUser',  function() {
 				failure('update fail');
 			});
 
-			application.insertNewApp({dummy: 'dummy'}, function() {
+			application.insertNewApp({appId: []}, {dummy: 'dummy2'}, function() {
 				expect().toHaveNotExecuted('should not have succeeded');
 			}, function(error) {
 				expect(error).toBe('update fail');
@@ -115,11 +115,13 @@ describe('modelUser',  function() {
 
 		it('should succeed if retrieve insert and update succeeds and document is a mongo object', function() {
 			var checkItem = {
-				dummy: 'dummy',
 				_id: 'fakeId',
 				created: 'date',
 				lastModified: 'date',
-				pUID: 'uId'
+				pUID: 'uId',
+				documents: [],
+				status: 0,
+				cUID: 'couId'
 			};
 
 			spyOn(commonUtils, 'generateId').andReturn('fakeId');
@@ -149,8 +151,7 @@ describe('modelUser',  function() {
 				success();
 			});
 
-			application.insertNewApp({dummy: 'dummy'}, function() {
-				expect(baseModel.prototype.retrieve.callCount).toBe(2);
+			application.insertNewApp({_id: 'uId', appId: []}, {_id: 'couId'}, function() {
 				expect(baseModel.prototype.insert.callCount).toBe(1);
 				expect(baseModel.prototype.update.callCount).toBe(1);
 			}, function(error) {
@@ -160,11 +161,13 @@ describe('modelUser',  function() {
 
 		it('should succeed if retrieve insert and update succeeds', function() {
 			var checkItem = {
-				dummy: 'dummy',
 				_id: 'fakeId',
 				created: 'date',
 				lastModified: 'date',
-				pUID: 'uId'
+				pUID: 'uId',
+				documents: [],
+				status: 0,
+				cUID: 'couId'
 			};
 
 			spyOn(commonUtils, 'generateId').andReturn('fakeId');
@@ -188,8 +191,7 @@ describe('modelUser',  function() {
 				success();
 			});
 
-			application.insertNewApp({dummy: 'dummy'}, function() {
-				expect(baseModel.prototype.retrieve.callCount).toBe(2);
+			application.insertNewApp({_id: 'uId', appId: []}, {_id: 'couId'}, function() {
 				expect(baseModel.prototype.insert.callCount).toBe(1);
 				expect(baseModel.prototype.update.callCount).toBe(1);
 			}, function(error) {

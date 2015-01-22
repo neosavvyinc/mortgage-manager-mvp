@@ -10,11 +10,13 @@ var util = require('util'),
  * Constructor for the applicationLenders model
  */
 function ApplictionLendersModel() {
-	ApplictionLendersModel.super_.call(this, 'user', appLendersSchema);
+	ApplictionLendersModel.super_.call(this);
 }
 
 util.inherits(ApplictionLendersModel, baseModel.Model);
 
 appLendersModel = ApplictionLendersModel.prototype;
+
+appLendersModel.init('user', appLendersSchema);
 
 exports.Model = ApplictionLendersModel;

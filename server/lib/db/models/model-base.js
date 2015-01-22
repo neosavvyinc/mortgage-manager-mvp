@@ -1,22 +1,20 @@
 'use strict';
 
-var mongoose = require('mongoose/'),
-	mongooseModel,
-	base;
+var base,
+	mongoose = require('mongoose/');
 
-/**
- * Constructor for base model class
- * @param collection
- * @param schema
- */
-function BaseModel(collection, schema) {
-	this.collection = collection;
-	this.schema = schema;
-	mongooseModel = mongoose.model(collection, schema);
-}
+function BaseModel(){ }
 
 base = BaseModel.prototype;
 
+/**
+ * Initializes the base mongoose model
+ * @param collection
+ * @param schema
+ */
+base.init = function (collection, schema){
+	this.mongooseModel = mongoose.model(collection, schema);
+};
 /**
  * Finds a document in the model by id
  * @param id
@@ -24,7 +22,7 @@ base = BaseModel.prototype;
  * @param failure
  */
 base.findDocumentById = function(id, success, failure) {
-	mongooseModel.findById(id, function(err, doc) {
+	this.mongooseModel.findById(id, function(err, doc) {
 		if(err) {
 			failure('Could not find document with specified id: ' + err);
 		} else {
@@ -58,7 +56,7 @@ base.findOneDocument = function(conditions, success, failure) {
  * @param failure
  */
 base.retrieve = function(conditions, success, failure) {
-	mongooseModel.find(conditions, function(err, docs) {
+	this.mongooseModel.find(conditions, function(err, docs) {
 		if(err) {
 			failure('Retrieve: Attempt to find documents for specified conditions failed: ' + err);
 		} else {
@@ -76,7 +74,7 @@ base.retrieve = function(conditions, success, failure) {
  * @param failure
  */
 base.update = function(update, conditions, options, success, failure) {
-	mongooseModel.findOneAndUpdate(conditions, update, options, function(err) {
+	this.mongooseModel.findOneAndUpdate(conditions, update, options, function(err) {
 		if(err) {
 			failure('Update: Attempt to update failed: ' + err.message);
 		} else {
@@ -92,7 +90,7 @@ base.update = function(update, conditions, options, success, failure) {
  * @param failure
  */
 base.insert = function(item, success, failure) {
-	var objectToSave = base._createModelObject(item);
+	var objectToSave = base._createModelObject(this, item);
 	objectToSave.save(function(err) {
 		if(err) {
 			failure('Insert: Attempt to save document ' + JSON.stringify(item) + ' failed: '+err);
@@ -109,7 +107,7 @@ base.insert = function(item, success, failure) {
  * @param failure
  */
 base.remove = function(item, success, failure) {
-	var objectToRemove = base._createModelObject(item);
+	var objectToRemove = base._createModelObject(this, item);
 	objectToRemove.remove(function(err) {
 		if(err) {
 			failure('Remove: Attempt to remove document ' + JSON.stringify(item) + ' failed: '+ err);
@@ -126,8 +124,9 @@ base.remove = function(item, success, failure) {
  * @returns {mongooseModel}
  * @private
  */
-base._createModelObject = function(item) {
-	return new mongooseModel(item);
+base._createModelObject = function(self, item) {
+	return new self.mongooseModel(item);
 };
+
 
 exports.Model = BaseModel;

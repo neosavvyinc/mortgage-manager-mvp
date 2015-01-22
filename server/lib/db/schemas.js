@@ -13,7 +13,7 @@ Schemas.UserSchema = new Schema({
 });
 
 Schemas.UserInfoSchema = new Schema({
-	_id: { type: String, required: true, unique: true },
+	_id: { type: String, required: true, unique: true , ref: 'UserSchema'},
 	firstName: { type: String, required: true },
 	middleName: String,
 	lastName: { type: String, required: true },
@@ -26,16 +26,19 @@ Schemas.UserInfoSchema = new Schema({
 	created: { type: Date, required: true },
 	lastLogin: { type: Date, required: true },
 	appId: [{ type: String, required: true, ref: 'ApplicationSchema' }],
-	isSelfEmployed: { type: Boolean, default: false }
+	isSelfEmployed: { type: Boolean, default: false },
+	renting: { type: Boolean, default: false },
+	marriedRecently: { type: Boolean, default: false },
+	financialAssets: { type: Boolean, default: false }
 });
 
 Schemas.ApplicationSchema = new Schema({
 	_id: { type: String, required: true, unique: true },
 	pUID: { type: String, required: true, ref: 'UserSchema' },
 	coUID: { type: String, ref: 'UserSchema' },
-	pEmail: {type: String, required:true, unique: true },
-	created: { type:Date, required: true },
+	created: { type: Date, required: true },
 	lastModified: { type: Date, required: true },
+	status: { type: Number, required: true},
 	documents: [String]
 });
 
@@ -45,7 +48,7 @@ Schemas.DocumentSchema = new Schema({
 	name: { type: String, required: true },
 	type: { type: String, required: true },
 	description: String,
-	amount: Number,
+	amount: {type: Number, required: true },
 	url: { type: String, unique: true },
 	requesterId: { type: String, ref: 'UserSchema' },
 	requestDate: Date,
@@ -68,7 +71,7 @@ Schemas.ApplicationLendersSchema = new Schema({
 });
 
 Schemas.NotificationSchema = new Schema({
-	notificationId: { type: String, required: true },
+	_id: { type: String, required: true },
 	docId: { type: String, required: true },
 	type: { type: String, required: true }
 });

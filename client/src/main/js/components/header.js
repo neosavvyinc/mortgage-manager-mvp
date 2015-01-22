@@ -13,14 +13,6 @@ var Header = React.createClass({
         Reflux.listenTo(UserStore, 'onLogoutTransition')
     ],
 
-    statics: {
-        willTransitionTo: function (transition){
-            if(!UserStore.isAuthenticated()){
-                transition.redirect('welcome');
-            }
-        }
-    },
-
     getInitialState: function(){
         return {
             hasError: false,
@@ -30,7 +22,7 @@ var Header = React.createClass({
 
     render: function(){
         return (
-            <div className="row">
+            <div className="row gap-top">
                 <div className="container">
                     <div className="one half">
                         <h3>NeosavvyLabs</h3>

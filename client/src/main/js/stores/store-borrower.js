@@ -20,9 +20,12 @@ var BorrowerStore = Reflux.createStore({
         this.trigger();
     },
 
-    onSubmitQuestions: function (hasCoapplicant, isSelfEmployed){
+    onSubmitQuestions: function (hasCoapplicant, isSelfEmployed, recentlyMarried, renting, hasFinancialAssets){
         _borrower.hasCoapplicant =  hasCoapplicant;
         _borrower.isSelfEmployed = isSelfEmployed;
+        _borrower.recentlyMarried = recentlyMarried;
+        _borrower.renting = renting;
+        _borrower.hasFinancialAssets = hasFinancialAssets;
         this.trigger();
     },
 
