@@ -47,11 +47,12 @@ var routes = (
         </Route>
         <Route name="dashboard" handler={Dashboard}>
             <Route name="dashboardApplications" path="applications" handler={Applications} />
-            <Route name="dashboardDocuments" path="applications/:appId" handler={Documents} />
-            <Route name="routeTester" path="testRoute" handler={TestRoute1} />
-            <Route name="upload" handler={Modal}>
-                <DefaultRoute handler={Upload} />
+            <Route name="dashboardDocuments" path="applications/:appId" handler={Documents}>
+                <Route name="upload" handler={Modal}>
+                    <DefaultRoute handler={Upload} />
+                </Route>
             </Route>
+            <Route name="routeTester" path="testRoute" handler={TestRoute1} />
         </Route>
         <Route name="forgotPassword" path="forgot-password" handler={TestRoute1} />
     </Route>

@@ -38,7 +38,7 @@ var UploadDocument = React.createClass({
 	},
 
 	close: function() {
-		this.transitionTo('dashboard');
+		this.transitionTo('dashboardDocuments');
 	},
 
 	updateDocName: function() {
@@ -69,7 +69,7 @@ var UploadDocument = React.createClass({
 
 		if(validateDocumentInfo(documentInfo)) {
 			documentInfo.file = this.state.fileHandler;
-			Document.upload(ApplicationStore.getCurrentApplication()._id, documentInfo).then(function(){
+			Document.upload(this.getParams().appId, documentInfo).then(function(){
 				DocumentActions.uploadDocument(documentInfo);
 			}.bind(this), function(error){
 				this.setState({
@@ -94,7 +94,7 @@ var UploadDocument = React.createClass({
 
 	render: function() {
 		return (
-			<form className="uploadComponent" enctype="multipart/form-data">
+			<form className="uploadComponent" encType="multipart/form-data">
 				<legend><h1>Upload Document</h1></legend>
 				<div className="row">
 					<div className="two fourths padded">

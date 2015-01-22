@@ -8,6 +8,7 @@ var Q = require('q'),
 function Document() { }
 
 Document.upload = function (applicationId, document) {
+	console.log(applicationId);
 	var formData = new FormData();
 	formData.append('file', document.file);
 	delete document.file;

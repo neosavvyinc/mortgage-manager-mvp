@@ -1,9 +1,9 @@
 var React = require('react');
 var Router = require('react-router');
 var Reflux = require('reflux');
+var RouterHandler = Router.RouteHandler;
 var _ = require('lodash');
 var moment = require('moment');
-
 var User = require('../../models/model-user');
 var Application = require('../../models/model-application');
 var ErrorMessage = require('../../components/error-message');
@@ -30,7 +30,7 @@ var Documents = React.createClass({
     },
 
     onDocumentUpload: function() {
-        this.transitionTo('upload');
+        this.transitionTo('upload', {appId: this.getParams().appId});
     },
 
     render: function(){
@@ -78,6 +78,7 @@ var Documents = React.createClass({
                         </tbody>
                     </table>
                 </div>
+                <RouterHandler/>
             </div>
         );
     }
