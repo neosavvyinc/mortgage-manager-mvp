@@ -55,4 +55,28 @@ User.addCoapplicant = function (applicantID, coapplicantInfo){
     });
 };
 
+User.getApplications = function(userID){
+    return Q.promise(function(resolve, reject){
+        $.get(Endpoints.USER.ONE.APPLICATIONS.URL.replace(':id', userID))
+            .success(function(response){
+                resolve(response);
+            })
+            .error(function(error){
+                reject(error);
+            });
+    })
+};
+
+User.generateApplication = function(userID){
+    return Q.promise(function(resolve, reject){
+        $.post(Endpoints.USER.ONE.APPLICATIONS.URL.replace(':id', userID))
+            .success(function(response){
+                resolve(response);
+            })
+            .error(function(error){
+                reject(error);
+            });
+    })
+};
+
 module.exports = User;

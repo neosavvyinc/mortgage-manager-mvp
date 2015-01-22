@@ -171,11 +171,12 @@ var saveUsers = function(json, success, failure) {
  */
 var saveUserDetails = function(json, success, failure) {
 	var data = _.isEmpty(json.userdetails) ? [] : json.userdetails,
-		userDetails = new userDetailsModel();
+		userDetails = new userDetailsModel(),
+		user = new userModel();
 	async.eachSeries(data, function(item, done) {
 		async.series([
 			function(done1) {
-				dbInsert.getMongoId(new userModel(), { email: item.email }, function(_id) {
+				user.retrieve({ email: item.email }, function(_id) {
 					item._id = _id;
 					done1();
 				}, done1);
@@ -209,7 +210,9 @@ var saveApplications = function(json, success, failure) {
 	var data = _.isEmpty(json.application) ? [] : json.application,
 		application = new applicationModel();
 	async.eachSeries(data, function(item, done) {
-		application.insertNewApp(item, done, done);
+		application.insertNewApp(item, item, function(appId){
+			done();
+		}, done);
 	}, function(error) {
 		if(error) {
 			failure(error);

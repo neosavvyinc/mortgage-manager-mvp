@@ -24,16 +24,16 @@ var validateApplicantInfo = function(applicantType, applicantInfo){
     return isValidInfo;
 };
 
-var resetApplicantInfo = function(){
-    this.refs.firstName.getDOMNode().value = "";
-    this.refs.middleName.getDOMNode().value = "";
-    this.refs.lastName.getDOMNode().value = "";
-    this.refs.address.getDOMNode().value = "";
-    this.refs.city.getDOMNode().value = "";
-    this.refs.state.getDOMNode().value = "";
-    this.refs.zip.getDOMNode().value = "";
-    this.refs.phone.getDOMNode().value = "";
-    this.refs.email.getDOMNode().value = "";
+var resetApplicantInfo = function(self){
+    self.refs.firstName.getDOMNode().value = "";
+    self.refs.middleName.getDOMNode().value = "";
+    self.refs.lastName.getDOMNode().value = "";
+    self.refs.address.getDOMNode().value = "";
+    self.refs.city.getDOMNode().value = "";
+    self.refs.state.getDOMNode().value = "";
+    self.refs.zip.getDOMNode().value = "";
+    self.refs.phone.getDOMNode().value = "";
+    self.refs.email.getDOMNode().value = "";
 };
 
 var ApplicantInfo = React.createClass({
@@ -45,7 +45,7 @@ var ApplicantInfo = React.createClass({
     
     statics: {
         willTransitionTo: function (transition){
-            if(!UserStore.isAuthenticated()){
+            if(!UserStore.isAuthenticated() || !BorrowerStore.getBorrower()){
                 transition.redirect('welcome');
             }
         }
@@ -62,9 +62,90 @@ var ApplicantInfo = React.createClass({
             errorText: "",
             applicantType: "Applicant",
             shareAddress: false,
-            currentUser: UserStore.getCurrentUser(),
+            currentUserId: UserStore.getCurrentUserId(),
             currentBorrower: BorrowerStore.getBorrower()
         }
+    },
+
+    onSubmitInfo: function(e){
+
+        var applicantInfo = {
+            firstName: this.refs.firstName.getDOMNode().value,
+            middleName: this.refs.middleName.getDOMNode().value || "",
+            lastName: this.refs.lastName.getDOMNode().value,
+            address: this.refs.address.getDOMNode().value,
+            city: this.refs.city.getDOMNode().value,
+            state: this.refs.state.getDOMNode().value,
+            zip: this.refs.zip.getDOMNode().value,
+            phone: this.refs.phone.getDOMNode().value,
+            email: this.refs.email.getDOMNode().value || ""
+        };
+
+        if(validateApplicantInfo(this.state.applicantType, applicantInfo)) {
+            if(this.state.applicantType == "Applicant") {
+                delete applicantInfo.email;
+                applicantInfo.isSelfEmployed = this.state.currentBorrower.isSelfEmployed;
+                applicantInfo.recentlyMarried = this.state.currentBorrower.recentlyMarried;
+                applicantInfo.renting = this.state.currentBorrower.renting;
+                applicantInfo.hasFinancialAssets = this.state.currentBorrower.hasFinancialAssets;
+
+                User.update(this.state.currentUserId, applicantInfo).then(function () {
+                    if(this.state.currentBorrower.hasCoapplicant){
+                        BorrowerActions.submitBasicInfo(applicantInfo);
+                        this.setState({
+                            applicantType: "Co-Applicant"
+                        });
+                        resetApplicantInfo(this);
+                    } else {
+                        User.generateApplication(this.state.currentUserId).then(function(){
+                            this.transitionTo('dashboardApplications');
+                        }.bind(this), function(error){
+                            this.setState({
+                                applicantInfoError: true,
+                                errorText: error.responseJSON.message
+                            });
+                        }.bind(this));
+                    }
+                }.bind(this), function (error) {
+                    this.setState({
+                        applicantInfoError: true,
+                        errorText: error.responseJSON.message
+                    });
+                }.bind(this));
+
+            } else {
+                applicantInfo.type = "borrower";
+
+                User.addCoapplicant(this.state.currentUserId, applicantInfo).then(function(){
+                    BorrowerActions.resetBorrower();
+                    User.generateApplication(this.state.currentUserId).then(function(){
+                        this.transitionTo('dashboardApplications');
+                    }.bind(this), function(error){
+                        this.setState({
+                            applicantInfoError: true,
+                            errorText: error.responseJSON.message
+                        });
+                    }.bind(this));
+                }.bind(this), function(error){
+                    this.setState({
+                        applicantInfoError: true,
+                        errorText: error.responseJSON.message
+                    });
+                }.bind(this));
+
+            }
+        } else {
+            this.setState({
+                applicantInfoError: true,
+                errorText: "All the fields are required."
+            });
+        }
+    },
+
+    populateAddress: function(){
+        this.setState({
+            shareAddress: !this.state.shareAddress
+        });
     },
 
     render: function(){
@@ -133,67 +214,8 @@ var ApplicantInfo = React.createClass({
                 </div>
             </div>
         )
-    },
-
-    onSubmitInfo: function(e){
-
-        var applicantInfo = {
-            firstName: this.refs.firstName.getDOMNode().value,
-            middleName: this.refs.middleName.getDOMNode().value || "",
-            lastName: this.refs.lastName.getDOMNode().value,
-            address: this.refs.address.getDOMNode().value,
-            city: this.refs.city.getDOMNode().value,
-            state: this.refs.state.getDOMNode().value,
-            zip: this.refs.zip.getDOMNode().value,
-            phone: this.refs.phone.getDOMNode().value,
-            email: this.refs.email.getDOMNode().value || ""
-        };
-
-        if(validateApplicantInfo(this.state.applicantType, applicantInfo)) {
-            if(this.state.applicantType == "Applicant") {
-                delete applicantInfo.email;
-                applicantInfo.isSelfEmployed = BorrowerStore.getBorrower().isSelfEmployed;
-                User.update(this.state.currentUser._id, applicantInfo).then(function () {
-                    if(this.state.currentBorrower.hasCoapplicant){
-                        BorrowerActions.submitBasicInfo(applicantInfo);
-                        this.setState({
-                            applicantType: "Co-Applicant"
-                        });
-                        resetApplicantInfo.bind(this)();
-                    } else {
-                        this.transitionTo('dashboard');
-                    }
-                }.bind(this), function (error) {
-                    this.setState({
-                        applicantInfoError: true,
-                        errorText: error.message
-                    });
-                }.bind(this));
-            } else {
-                applicantInfo.type = "borrower";
-                User.addCoapplicant(this.state.currentUser._id, applicantInfo).then(function(){
-                    BorrowerActions.resetBorrower();
-                    this.transitionTo('dashboard');
-                }.bind(this), function(error){
-                    this.setState({
-                        applicantInfoError: true,
-                        errorText: error.message
-                    });
-                }.bind(this));
-            }
-        } else {
-            this.setState({
-                applicantInfoError: true,
-                errorText: "All the fields are required."
-            });
-        }
-    },
-
-    populateAddress: function(){
-        this.setState({
-            shareAddress: !this.state.shareAddress
-        });
     }
+
 });
 
 module.exports = ApplicantInfo;

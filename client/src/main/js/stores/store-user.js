@@ -9,6 +9,7 @@ var _isAuthenticated = false;
 var UserStore = Reflux.createStore({
 
     listenables: UserActions,
+
     /*
     // Or:
     init: function(){
@@ -22,24 +23,22 @@ var UserStore = Reflux.createStore({
     },
     */
 
-    onLogin: function(user) {
-        _currentUser = user;
-        _isAuthenticated = true;
+    onLogin: function(user){
+        localStorage.setItem("userId", user._id);
         this.trigger();
     },
 
     onLogout: function(){
-        _currentUser = {};
-        _isAuthenticated = false;
+        localStorage.removeItem("userId");
         this.trigger();
     },
 
     isAuthenticated: function(){
-        return _isAuthenticated;
+        return (localStorage.getItem("userId") != undefined);
     },
 
-    getCurrentUser: function(){
-        return _currentUser;
+    getCurrentUserId: function(){
+        return localStorage.getItem("userId");
     }
 
 });

@@ -20,7 +20,7 @@ var NewPassword = React.createClass({
 
     statics: {
         willTransitionTo: function (transition){
-            if(!BorrowerStore.getBorrower().email || !LenderStore.getLender().email) {
+            if(!BorrowerStore.getBorrower().email && !LenderStore.getLender().email) {
                 transition.redirect('welcome');
             }
         }
@@ -31,22 +31,6 @@ var NewPassword = React.createClass({
             passwordError: false,
             errorText: ""
         }
-    },
-
-    render: function(){
-        return (
-            <div className="container">
-                <div className="gap-top">
-                    <h1>We need you to give us a password so you can log in later</h1>
-                    <div className="one fourth">
-                        <input className="gap-bottom" type="password" ref="newPassword" placeholder="New Password" />
-                        <input className="gap-bottom" type="password" ref="confirmPassword" placeholder="Confirm Password" />
-                        <ErrorMessage errorDisplay={this.state.passwordError} errorMessage={this.state.errorText}/>
-                        <button className="block turquoise" onClick={this.onCheckPassword}>Continue</button>
-                    </div>
-                </div>
-            </div>
-        );
     },
 
     onCheckPassword: function(){
@@ -81,13 +65,13 @@ var NewPassword = React.createClass({
             }, function(error){
                 this.setState({
                     passwordError: true,
-                    errorText: error.message
-                }, console.log(this.state));
-            });
+                    errorText: error.responseJSON.message
+                });
+            }.bind(this));
         }
     },
 
-    onNewAccount: function() {
+    onNewAccount: function(){
         var borrowerEmail = BorrowerStore.getBorrower().email,
             lenderEmail = LenderStore.getLender().email;
 
@@ -96,7 +80,24 @@ var NewPassword = React.createClass({
         } else if(lenderEmail) {
             this.transitionTo('lenderInfo');
         }
+    },
+
+    render: function(){
+        return (
+            <div className="container">
+                <div className="gap-top">
+                    <h1>We need you to give us a password so you can log in later</h1>
+                    <div className="one fourth">
+                        <input className="gap-bottom" type="password" ref="newPassword" placeholder="New Password" />
+                        <input className="gap-bottom" type="password" ref="confirmPassword" placeholder="Confirm Password" />
+                        <ErrorMessage errorDisplay={this.state.passwordError} errorMessage={this.state.errorText}/>
+                        <button className="block turquoise" onClick={this.onCheckPassword}>Continue</button>
+                    </div>
+                </div>
+            </div>
+        );
     }
+
 });
 
 module.exports = NewPassword;

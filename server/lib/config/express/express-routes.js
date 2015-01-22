@@ -2,7 +2,8 @@
 
 var routeHealthcheck = require('../../routes/route-diagnostics'),
 	authRoute = require('../../routes/route-user'),
-	userRoute = require('../../routes/route-user-details');
+	userRoute = require('../../routes/route-user-details'),
+	applicationRoute = require('../../routes/route-applications');
 
 module.exports = function(router, passport) {
 	//Healthcheck
@@ -26,6 +27,22 @@ module.exports = function(router, passport) {
 	router.route('/user/:uid/coapplicant')
 		.all(_isAuthenticated)
 		.post(userRoute.addCoApplicant);
+
+	//Get all applications for a particular userId
+	router.route('/user/:uid/applications')
+		.all(_isAuthenticated)
+		.get(applicationRoute.getAllApplications);
+
+	//Create application for a particular userId
+	router.route('/user/:uid/applications')
+		.all(_isAuthenticated)
+		.post(applicationRoute.createApplication)
+		.get(applicationRoute.getAllApplications);
+
+	//Manage application specific documents
+	router.route('/applications/:appId/documents')
+		.all(_isAuthenticated)
+		.get(applicationRoute.getApplicationDocuments);
 };
 
 /**

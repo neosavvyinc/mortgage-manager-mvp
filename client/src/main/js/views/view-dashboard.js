@@ -17,9 +17,11 @@ var Dashboard = React.createClass({
         Router.State
     ],
 
-    getInitialState: function(){
-        return {
-            currentUser: UserStore.getCurrentUser()
+    statics: {
+        willTransitionTo: function (transition){
+            if(!UserStore.isAuthenticated()){
+                transition.redirect('welcome');
+            }
         }
     },
 
@@ -33,7 +35,6 @@ var Dashboard = React.createClass({
             </div>
         )
     }
-
 
 });
 
