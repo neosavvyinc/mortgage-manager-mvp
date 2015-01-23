@@ -46,7 +46,7 @@ var Documents = React.createClass({
     },
 
     onDocumentUpload: function(document) {
-        this.transitionTo('uploadExistingDocument', {appId: this.getParams().appId, document: document});
+        this.transitionTo('uploadExistingDocument', {appId: this.getParams().appId, document: JSON.stringify(document)});
     },
 
     getDocuments: function() {

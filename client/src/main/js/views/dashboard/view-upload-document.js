@@ -28,8 +28,10 @@ var UploadDocument = React.createClass({
 
 	getInitialState: function() {
 		var docName = '',
-			type = 'Tax Document';
-		if(this.getParams().document) {
+			type = 'Tax Document',
+			document = this.getParams().document;
+		if(document) {
+			document = JSON.parse(document);
 			docName = document.name;
 			type = document.type;
 		}
@@ -107,7 +109,7 @@ var UploadDocument = React.createClass({
 				<legend><h1>Upload Document</h1></legend>
 				<div className="row">
 					<div className="two fourths padded">
-						<input ref="docName" type="text" placeholder="Document Name" onChange={this.updateDocName}/>
+						<input ref="docName" type="text" placeholder="Document Name" value={this.state.docName} onChange={this.updateDocName}/>
 					</div>
 					<div className="two fourths padded">
 						<span className="select-wrap">
