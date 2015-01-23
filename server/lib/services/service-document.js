@@ -20,7 +20,7 @@ exports.saveDocument = function(doc, success, failure) {
 			//Store the document in mongo
 			var document = new documentModel();
 			if(doc._id === undefined) {
-				doc._id = commonUtils.generateId()
+				doc._id = commonUtils.generateId();
 			}
 			_.extend(doc, {
 				requestDate: currentDate,
