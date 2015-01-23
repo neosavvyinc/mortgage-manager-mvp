@@ -85,7 +85,7 @@ describe('modelDocument',  function() {
 
 
         it('should succeed if insert succeeds', function () {
-            document.insertOnedocument(documents, function () {
+            document.insertOrUpdate(documents, function () {
                 expect(baseModel.prototype.insert.callCount).toBe(1);
             }, function (error) {
                 expect().toHaveNotExecuted('should not have failed');
