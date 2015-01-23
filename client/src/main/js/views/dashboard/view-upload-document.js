@@ -27,9 +27,15 @@ var UploadDocument = React.createClass({
 	],
 
 	getInitialState: function() {
+		var docName = '',
+			type = 'Tax Document';
+		if(this.getParams().document) {
+			docName = document.name;
+			type = document.type;
+		}
 		return {
-			docName: '',
-			type: 'Income Document',
+			docName: docName,
+			type: type,
 			fileName: '',
 			fileHandler: '',
 			uploadMessage: '',

@@ -50,7 +50,10 @@ var routes = (
         <Route name="dashboard" handler={Dashboard}>
             <Route name="dashboardApplications" path="applications" handler={Applications} />
             <Route name="dashboardDocuments" path="applications/:appId" handler={Documents}>
-                <Route name="upload" handler={Modal}>
+                <Route name="uploadNewDocument" handler={Modal}>
+                    <DefaultRoute handler={Upload} />
+                </Route>
+                <Route name="uploadExistingDocument" path="document/:document" handler={Modal}>
                     <DefaultRoute handler={Upload} />
                 </Route>
             </Route>

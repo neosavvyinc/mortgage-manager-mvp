@@ -42,11 +42,11 @@ var Documents = React.createClass({
     },
 
     onNewDocumentUpload: function() {
-        this.transitionTo('upload', {appId: this.getParams().appId});
+        this.transitionTo('uploadNewDocument', {appId: this.getParams().appId});
     },
 
     onDocumentUpload: function(document) {
-        //this.transitionTo('upload', {appId: this.getParams().appId});
+        this.transitionTo('uploadExistingDocument', {appId: this.getParams().appId, document: document});
     },
 
     getDocuments: function() {
