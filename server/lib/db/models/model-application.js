@@ -85,9 +85,11 @@ applicationModel.updateApplication = function(appId, update, success, failure) {
 			//Get Application object
 			var application = new ApplicationModel();
 			application.findOneDocument({_id: appId}, function(document) {
-				app = document.toObject();
+				if(document.toObject !== undefined ) {
+					app = document.toObject();
+				}
 				done();
-			}, done)
+			}, done);
 		},
 		function(done) {
 			//Update the object and save in mongo

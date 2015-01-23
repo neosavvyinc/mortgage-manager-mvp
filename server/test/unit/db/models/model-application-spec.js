@@ -5,7 +5,7 @@ var userModel = require('../../../../lib/db/models/model-user-details').Model,
 	baseModel = require('../../../../lib/db/models/model-base').Model,
 	commonUtils = require('../../../../lib/utils/common-utils');
 
-describe('modelUser',  function() {
+describe('modelApplication',  function() {
 	var user,
 		application;
 
@@ -193,6 +193,99 @@ describe('modelUser',  function() {
 
 			application.insertNewApp({_id: 'uId', appId: []}, {_id: 'couId'}, function() {
 				expect(baseModel.prototype.insert.callCount).toBe(1);
+				expect(baseModel.prototype.update.callCount).toBe(1);
+			}, function(error) {
+				expect().toHaveNotExecuted('should not have failed');
+			});
+		});
+	});
+
+	describe('updateApplication', function() {
+		var findOneDocumentSpy,
+			updateSpy;
+
+		beforeEach(function() {
+			findOneDocumentSpy = spyOn(baseModel.prototype, 'findOneDocument');
+			updateSpy = spyOn(baseModel.prototype, 'update');
+		});
+
+		it('should fail if applicationModel.findOneDocument fails', function() {
+			findOneDocumentSpy.andCallFake(function(conditions, success, failure) {
+				failure('findOneDocument fail');
+			});
+
+			application.updateApplication('1234', {one: 'one'}, function() {
+				expect().toHaveNotExecuted('should not have succeeded');
+			}, function(error) {
+				expect(error).toBe('findOneDocument fail');
+			});
+		});
+
+		it('should fail if applicationModel.findOneDocument returns 0 documents', function() {
+			findOneDocumentSpy.andCallFake(function(conditions, success, failure) {
+				success({_id:'1234'});
+			});
+
+			application.updateApplication('1234', {one: 'one'}, function() {
+				expect().toHaveNotExecuted('should not have succeeded');
+			}, function(error) {
+				expect(error).toBe('Error: No documents found');
+			});
+		});
+
+		it('should fail if applicationModel.findOneDocument returns more than 1 document', function() {
+			findOneDocumentSpy.andCallFake(function(conditions, success, failure) {
+				var docs = [
+					{
+						one: 'one'
+					},
+					{
+						two: 'two'
+					}];
+				success(docs);
+			});
+
+			application.updateApplication('1234', {one: 'one'}, function() {
+				expect().toHaveNotExecuted('should not have succeeded');
+			}, function(error) {
+				expect(error).toBe('Error: More than 1 document found');
+			});
+		});
+
+
+
+		it('should fail if applicationModel.update fails', function() {
+			findOneDocumentSpy.andCallFake(function(item, success, failure) {
+				success({_id:'1234'});
+			});
+
+			updateSpy.andCallFake(function(item, conditions, options, success, failure) {
+				failure('update fail');
+			});
+
+			application.updateApplication({appId: []}, {dummy: 'dummy2'}, function() {
+				expect().toHaveNotExecuted('should not have succeeded');
+			}, function(error) {
+				expect(error).toBe('update fail');
+			});
+		});
+
+		it('should succeed if update succeeds', function() {
+
+			findOneDocumentSpy.andCallFake(function(conditions, success, failure) {
+				var doc = {
+					appId: [],
+					_id: 'uId'
+				};
+				success(doc);
+			});
+
+			updateSpy.andCallFake(function(item, conditions, options, success, failure) {
+				expect(item).toEqual({ documents : [  ], _id : 'couId' });
+				success();
+			});
+
+			application.updateApplication({_id: 'uId', appId: []}, {_id: 'couId'}, function() {
 				expect(baseModel.prototype.update.callCount).toBe(1);
 			}, function(error) {
 				expect().toHaveNotExecuted('should not have failed');
