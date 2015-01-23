@@ -9,7 +9,6 @@ var _ = require('underscore'),
  * @param res
  */
 exports.updateUser = function(req, res) {
-
 	var userObject = req.body,
 		uid = req.params.uid;
 

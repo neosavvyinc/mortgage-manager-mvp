@@ -65,9 +65,9 @@ var NewPassword = React.createClass({
             }, function(error){
                 this.setState({
                     passwordError: true,
-                    errorText: error.responseJSON.message
-                });
-            }.bind(this));
+                    errorText: error.message
+                }, console.log(this.state));
+            });
         }
     },
 
@@ -82,7 +82,7 @@ var NewPassword = React.createClass({
         }
     },
 
-    render: function(){
+    render: function() {
         return (
             <div className="container">
                 <div className="gap-top">
@@ -97,7 +97,6 @@ var NewPassword = React.createClass({
             </div>
         );
     }
-
 });
 
 module.exports = NewPassword;

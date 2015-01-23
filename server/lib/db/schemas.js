@@ -49,9 +49,11 @@ Schemas.DocumentSchema = new Schema({
 	type: { type: String, required: true },
 	description: String,
 	amount: {type: Number, required: true },
+	url: { type: String, unique: true },
 	requesterId: { type: String, ref: 'UserSchema' },
-	requestDate: { type: Date, required: true },
-	uploadDate: Date
+	requestDate: Date,
+	uploadDate: Date,
+	lastViewed: Date
 });
 
 Schemas.LenderInvitesSchema = new Schema({
@@ -69,7 +71,7 @@ Schemas.ApplicationLendersSchema = new Schema({
 });
 
 Schemas.NotificationSchema = new Schema({
-	notificationId: { type: String, required: true },
+	_id: { type: String, required: true },
 	docId: { type: String, required: true },
 	type: { type: String, required: true }
 });

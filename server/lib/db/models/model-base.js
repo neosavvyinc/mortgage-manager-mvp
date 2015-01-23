@@ -15,6 +15,7 @@ base = BaseModel.prototype;
 base.init = function (collection, schema){
 	this.mongooseModel = mongoose.model(collection, schema);
 };
+
 /**
  * Finds a document in the model by id
  * @param id
@@ -38,7 +39,7 @@ base.findDocumentById = function(id, success, failure) {
  * @param failure
  */
 base.findOneDocument = function(conditions, success, failure) {
-	base.retrieve(conditions, function(docs) {
+	base.retrieve.bind(this)(conditions, function(docs) {
 		if(docs.length === 1) {
 			success(docs[0]);
 		} else if(docs.length < 1) {
@@ -120,6 +121,7 @@ base.remove = function(item, success, failure) {
 /* Private methods */
 /**
  * Function that returns a mongoose model object.
+ * @param self
  * @param item
  * @returns {mongooseModel}
  * @private

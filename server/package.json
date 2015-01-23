@@ -35,7 +35,9 @@
     "passport-local": "1.0.0",
     "connect-flash": "0.1.1",
     "bcrypt-nodejs": "0.0.3",
-    "body-parser": "1.10.1"
+    "body-parser": "1.10.1",
+    "multer": "0.1.7",
+    "mv": "2.0.3"
   },
 
   "scripts": {

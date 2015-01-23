@@ -1,7 +1,6 @@
 'use strict';
 
-var React = require('react'),
-    Reflux = require('reflux'),
+var Reflux = require('reflux'),
     User = require('../models/model-user'),
     LenderActions = require('../actions/action-lender'),
     _newLender = {};

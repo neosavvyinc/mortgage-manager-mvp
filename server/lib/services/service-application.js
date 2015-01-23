@@ -5,8 +5,8 @@ var _ = require('underscore');
 var applicationModel = require('../db/models/model-application').Model;
 var userDetailsModel = require('../db/models/model-user-details').Model;
 var documentModel = require('../db/models/model-document').Model;
-var applicationService = require('../services/service-applications');
-var documentService = require('./service-documents');
+var applicationService = require('./service-application');
+var documentService = require('./service-document');
 
 exports.getUserApplications = function(uid, callback){
     var application = new applicationModel();
@@ -55,14 +55,10 @@ exports.createApplication = function(uid, callback) {
         },
         function(done) {
             docs = documentService.generateDocumentList(applicationId, applicantDetails, coapplicantDetails);
-            console.log("generating documents");
             documents.insertNewDocument(docs, done, done);
-            console.log("documents Inserted");
         },
         function(done){
-            console.log("insertind UUIDS into app");
             applicationService.insertDocuments(docs, done, done);
-            console.log("Done");
         }
     ], function(error){
             if(error !== undefined){
@@ -83,7 +79,13 @@ exports.insertDocuments = function(documents, callback){
     application.update({documents: _.pluck(documents, '_id')}, {_id: documents[0].appId}, callback, callback);
 };
 
-exports.getDocuments = function(appId, callback){
-    var documents = new documentModel();
-    documents.retrieve({appId: appId}, callback, callback);
+exports.getDocuments = function(appId, docId, success, failure){
+    var documents = new documentModel(),
+        conditions = {appId: appId};
+
+    if(docId) {
+        conditions._id = docId;
+    }
+
+    documents.retrieve(conditions, success, failure);
 };

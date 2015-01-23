@@ -1,12 +1,22 @@
 var React = require('react');
 var Router = require('react-router');
 var Reflux = require('reflux');
+var RouterHandler = Router.RouteHandler;
 var _ = require('lodash');
 var moment = require('moment');
-
 var User = require('../../models/model-user');
 var Application = require('../../models/model-application');
 var ErrorMessage = require('../../components/error-message');
+
+var arraysEqual = function(arr1, arr2) {
+    if(arr1.length !== arr2.length)
+        return false;
+    for(var i = arr1.length; i--;) {
+        if(arr1[i] !== arr2[i])
+            return false;
+    }
+    return true;
+};
 
 var Documents = React.createClass({
 
@@ -22,6 +32,24 @@ var Documents = React.createClass({
     },
 
     componentDidMount: function(){
+        this.getDocuments();
+    },
+
+    componentDidUpdate: function(prevProps, prevState) {
+        if(arraysEqual(prevState.documents, this.state.documents)) {
+            this.getDocuments();
+        }
+    },
+
+    onNewDocumentUpload: function() {
+        this.transitionTo('uploadNewDocument', {appId: this.getParams().appId});
+    },
+
+    onDocumentUpload: function(document) {
+        this.transitionTo('uploadExistingDocument', {appId: this.getParams().appId, documentId: document._id});
+    },
+
+    getDocuments: function() {
         Application.getDocuments(this.getParams().appId).then(function(documents){
             this.setState({
                 documents: documents
@@ -29,15 +57,22 @@ var Documents = React.createClass({
         }.bind(this));
     },
 
-    onDocumentUpload: function(document){
-        console.log("uploading :: ", document);
-    },
-
-    render: function(){
-
+    render: function() {
         var documentsTable = [];
+        _.map(this.state.documents, function(document) {
 
-        _.map(this.state.documents, function(document){
+            var viewButton = {
+                disabled: true,
+                style: 'disabled hidden'
+            }, uploadButton = {
+                style: 'btn blue six sevenths gap-right'
+            };
+
+            if(!document.uploadDate) {
+                viewButton.disabled = false;
+                viewButton.style =  'btn red three sevenths gap-right';
+                uploadButton.style = 'btn blue three sevenths';
+            }
 
             // e.g. Wednesday, January 21, 2015 3:21 PM
             document.requestDate = moment(document.requestDate).format('llll');
@@ -50,7 +85,8 @@ var Documents = React.createClass({
                     <th>{document.description}</th>
                     <th>{document.requestDate}</th>
                     <th>
-                        <button className="btn blue" onClick={this.onDocumentUpload.bind(this, document)}>Upload</button>
+                        <button className={viewButton.style} disabled={viewButton.disabled}>View</button>
+                        <button className={uploadButton.style} onClick={this.onDocumentUpload.bind(this, document)}>Upload</button>
                     </th>
                 </tr>
             ));
@@ -59,7 +95,10 @@ var Documents = React.createClass({
         return (
             <div className="container">
                 <div className="gap-top">
-                    <h1>Documents</h1>
+                    <div className="row">
+                        <h1 className="one seventh">Documents</h1>
+                        <button className="btn blue one ninth skip-six gap-right gap-top" onClick={this.onNewDocumentUpload}>New Document</button>
+                    </div>
                     <table className="responsive">
                         <thead>
                             <tr>
@@ -78,10 +117,10 @@ var Documents = React.createClass({
                         </tbody>
                     </table>
                 </div>
+                <RouterHandler/>
             </div>
         );
     }
-
 });
 
 module.exports = Documents;
