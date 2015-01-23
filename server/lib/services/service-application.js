@@ -79,8 +79,13 @@ exports.insertDocuments = function(documents, callback){
     application.update({documents: _.pluck(documents, '_id')}, {_id: documents[0].appId}, callback, callback);
 };
 
-exports.getDocuments = function(appId, success, failure){
-    var documents = new documentModel();
+exports.getDocuments = function(appId, docId, success, failure){
+    var documents = new documentModel(),
+        conditions = {appId: appId};
 
-    documents.retrieve({appId: appId}, success, failure);
+    if(docId) {
+        conditions._id = docId;
+    }
+
+    documents.retrieve(conditions, success, failure);
 };

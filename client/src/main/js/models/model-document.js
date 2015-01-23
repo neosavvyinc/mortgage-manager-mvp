@@ -8,21 +8,27 @@ var Q = require('q'),
 function Document() { }
 
 Document.upload = function (applicationId, document) {
-	var formData = new FormData();
+	var formData = new FormData(),
+		url;
 	formData.append('file', document.file);
 	delete document.file;
 	formData.append('details', JSON.stringify(document));
 
+	if(document._id !== undefined) {
+		url = Endpoints.APPLICATIONS.ONE.DOCUMENTS.URL.replace(':id', applicationId);
+	} else {
+		url = Endpoints.APPLICATIONS.ONE.DOCUMENTS.ONE.URL.replace(':id', applicationId).replace(':docId', document._id);
+	}
+
 	return Q.promise(function(resolve, reject) {
 		$.ajax({
-				url: Endpoints.APPLICATIONS.ONE.DOCUMENTS.URL.replace(':id', applicationId),
+				url: url,
 				type: 'POST',
 				data: formData,
 				contentType: false,
 				mimeType: false,
 				processData: false
 			}).success(function(response) {
-			console.log(response);
 				resolve(response);
 			}).error(function(error) {
 			console.log(error);

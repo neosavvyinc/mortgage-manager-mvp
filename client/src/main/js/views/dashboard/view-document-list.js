@@ -46,7 +46,7 @@ var Documents = React.createClass({
     },
 
     onDocumentUpload: function(document) {
-        this.transitionTo('uploadExistingDocument', {appId: this.getParams().appId, document: JSON.stringify(document)});
+        this.transitionTo('uploadExistingDocument', {appId: this.getParams().appId, documentId: document._id});
     },
 
     getDocuments: function() {
@@ -57,11 +57,22 @@ var Documents = React.createClass({
         }.bind(this));
     },
 
-    render: function(){
-
+    render: function() {
         var documentsTable = [];
+        _.map(this.state.documents, function(document) {
 
-        _.map(this.state.documents, function(document){
+            var viewButton = {
+                disabled: true,
+                style: 'disabled hidden'
+            }, uploadButton = {
+                style: 'btn blue six sevenths gap-right'
+            };
+
+            if(!document.uploadDate) {
+                viewButton.disabled = false;
+                viewButton.style =  'btn red three sevenths gap-right';
+                uploadButton.style = 'btn blue three sevenths';
+            }
 
             // e.g. Wednesday, January 21, 2015 3:21 PM
             document.requestDate = moment(document.requestDate).format('llll');
@@ -74,7 +85,8 @@ var Documents = React.createClass({
                     <th>{document.description}</th>
                     <th>{document.requestDate}</th>
                     <th>
-                        <button className="btn blue" onClick={this.onDocumentUpload.bind(this, document)}>Upload</button>
+                        <button className={viewButton.style} disabled={viewButton.disabled}>View</button>
+                        <button className={uploadButton.style} onClick={this.onDocumentUpload.bind(this, document)}>Upload</button>
                     </th>
                 </tr>
             ));
@@ -109,7 +121,6 @@ var Documents = React.createClass({
             </div>
         );
     }
-
 });
 
 module.exports = Documents;

@@ -53,7 +53,7 @@ var routes = (
                 <Route name="uploadNewDocument" handler={Modal}>
                     <DefaultRoute handler={Upload} />
                 </Route>
-                <Route name="uploadExistingDocument" path="document/:document" handler={Modal}>
+                <Route name="uploadExistingDocument" path="document/:documentId" handler={Modal}>
                     <DefaultRoute handler={Upload} />
                 </Route>
             </Route>

@@ -62,8 +62,8 @@ documentModel.insertNewDocument = function(documents,
  * @param success
  * @param failure
  */
-documentModel.insertOnedocument = function(document, success, failure) {
-	documentModel.insert(document, success, failure);
+documentModel.insertOrUpdate = function(document, success, failure) {
+	documentModel.update(document, {_id: document._id}, {upsert: true}, success, failure);
 };
 
 exports.Model = DocumentModel;

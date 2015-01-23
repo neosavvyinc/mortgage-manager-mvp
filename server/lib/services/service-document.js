@@ -8,31 +8,31 @@ var _ = require('underscore'),
 
 /**
  * Service that handles storing a document in mongo for a particular application
- * @param appId
  * @param doc
  * @param success
  * @param failure
  */
 exports.saveDocument = function(doc, success, failure) {
-	var docId = commonUtils.generateId(),
-		currentDate = new Date();
+	var currentDate = new Date();
 
 	async.series([
 		function(done) {
 			//Store the document in mongo
 			var document = new documentModel();
+			if(doc._id === undefined) {
+				doc._id = commonUtils.generateId()
+			}
 			_.extend(doc, {
-				_id: docId,
 				requestDate: currentDate,
 				uploadDate: currentDate,
 				amount: 1
 			});
-			document.insertOnedocument(doc, done, done);
+			document.insertOrUpdate(doc, done, done);
 		},
 		function(done) {
 			//Add the document to doc array in application collection
 			var application = new applicationModel();
-			application.updateApplication(doc.appId, {documents: [docId]}, done, done);
+			application.updateApplication(doc.appId, {documents: [doc._id]}, done, done);
 		}
 	], function(error) {
 		if(error !== undefined) {
@@ -45,6 +45,7 @@ exports.saveDocument = function(doc, success, failure) {
 
 /**
  * Generates a new list of documents depending on the applicants
+ * @param applicationId
  * @param applicantDetails
  * @param coapplicantDetails
  */

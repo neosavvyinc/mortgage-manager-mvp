@@ -22,7 +22,10 @@ module.exports = {
         ONE: {
             URL: '/api/applications/:id',
             DOCUMENTS: {
-                URL: '/api/applications/:id/documents'
+                URL: '/api/applications/:id/documents',
+                ONE: {
+                    URL: '/api/applications/:id/documents/:docId'
+                }
             }
         }
     }

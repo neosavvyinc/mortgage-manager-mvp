@@ -6,8 +6,8 @@ var React = require('react'),
 	Location = Router.HistoryLocation,
 	DocumentActions = require('../../actions/action-document'),
 	DocumentStore = require('../../stores/store-document'),
-	ApplicationStore = require('../../stores/store-application'),
 	Document = require('../../models/model-document'),
+	Application = require('../../models/model-application'),
 	ErrorMessage = require('../../components/error-message'),
 	SuccessMessage = require('../../components/success-msg');
 
@@ -27,23 +27,28 @@ var UploadDocument = React.createClass({
 	],
 
 	getInitialState: function() {
-		var docName = '',
-			type = 'Tax Document',
-			document = this.getParams().document;
-		if(document) {
-			document = JSON.parse(document);
-			docName = document.name;
-			type = document.type;
-		}
 		return {
-			docName: docName,
-			type: type,
+			docName: '',
+			type: 'Tax Document',
 			fileName: '',
 			fileHandler: '',
 			uploadMessage: '',
 			success: false,
 			error: false
 		}
+	},
+
+	componentDidMount: function() {
+		this.getDocument();
+	},
+
+	getDocument: function() {
+		Application.getDocument(this.getParams().appId, this.getParams().documentId).then(function(doc) {
+			this.setState({
+				docName: doc[0].name,
+				type: doc[0].type
+			});
+		}.bind(this));
 	},
 
 	close: function() {
@@ -69,7 +74,7 @@ var UploadDocument = React.createClass({
 		});
 	},
 
-	onUploadDocument: function(e) {
+	onUploadDocument: function() {
 		var documentInfo = {
 			name: this.state.docName,
 			type: this.state.type,
@@ -77,8 +82,12 @@ var UploadDocument = React.createClass({
 		};
 
 		if(validateDocumentInfo(documentInfo)) {
+			var appId = this.getParams().appId;
+
 			documentInfo.file = this.state.fileHandler;
-			Document.upload(this.getParams().appId, documentInfo).then(function(){
+			documentInfo._id = this.getParams().documentId;
+
+			Document.upload(appId, documentInfo).then(function(){
 				DocumentActions.uploadDocument(documentInfo);
 			}.bind(this), function(error){
 				this.setState({
@@ -103,7 +112,7 @@ var UploadDocument = React.createClass({
 	},
 
 	render: function() {
-
+		console.log('Rendering');
 		return (
 			<form className="uploadComponent" encType="multipart/form-data">
 				<legend><h1>Upload Document</h1></legend>
