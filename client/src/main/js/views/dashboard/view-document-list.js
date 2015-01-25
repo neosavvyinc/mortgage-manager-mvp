@@ -67,9 +67,7 @@ var Documents = React.createClass({
             }, uploadButton = {
                 style: 'btn blue six sevenths gap-right'
             };
-
-            console.log('Foo '+document.uploadDate);
-
+            
             if(document.uploadDate !== undefined) {
                 viewButton.disabled = false;
                 viewButton.style =  'btn red three sevenths gap-right';
