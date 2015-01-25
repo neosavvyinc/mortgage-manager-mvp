@@ -16,6 +16,12 @@ module.exports = function(app, router, passport) {
 		dest: './uploads',
 		limits: {
 			fileSize: 25 * 1024 * 1024
+		},
+		onFileUploadStart: function (file) {
+			var extension = file.extension;
+			if (extension!=='pdf' && extension!=='jpg' && extension!=='jpeg' && extension!=='png') {
+				return false;
+			}
 		}
 	}));
 

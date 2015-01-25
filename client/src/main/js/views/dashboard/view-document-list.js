@@ -67,8 +67,8 @@ var Documents = React.createClass({
             }, uploadButton = {
                 style: 'btn blue six sevenths gap-right'
             };
-
-            if(!document.uploadDate) {
+            
+            if(document.uploadDate !== undefined) {
                 viewButton.disabled = false;
                 viewButton.style =  'btn red three sevenths gap-right';
                 uploadButton.style = 'btn blue three sevenths';
@@ -96,8 +96,8 @@ var Documents = React.createClass({
             <div className="container">
                 <div className="gap-top">
                     <div className="row">
-                        <h1 className="one seventh">Documents</h1>
-                        <button className="btn blue one ninth skip-six gap-right gap-top" onClick={this.onNewDocumentUpload}>New Document</button>
+                        <h1 className="one ninth">Documents</h1>
+                        <button className="btn blue one eighth skip-six gap-top" onClick={this.onNewDocumentUpload}>New Document</button>
                     </div>
                     <table className="responsive">
                         <thead>
