@@ -91,12 +91,14 @@ var UploadDocument = React.createClass({
 				DocumentActions.uploadDocument(documentInfo);
 			}.bind(this), function(error){
 				this.setState({
+					success: false,
 					error: true,
 					uploadMessage: error.message
 				});
 			}.bind(this));
 		} else {
 			this.setState({
+				success: false,
 				error: true,
 				uploadMessage: 'All Fields are required'
 			});

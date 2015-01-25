@@ -13,32 +13,36 @@ exports.insertDocument = function(req, res) {
 	var documentObject = JSON.parse(req.body.details),
 		file = req.files.file,
 		appId = req.params.appId,
-		extension = file.extension,
-		uploadPath = file.path,
-		splitPath = uploadPath.split('/'),
+		uploadPath,
+		splitPath,
+		destPath;
+
+	//If file does not exist, multer has filtered it for wrong extension.
+	if(file === undefined) {
+		res.status(415).send({message: 'Unsupported Media type'});
+	} else {
+		uploadPath = file.path;
+		splitPath = uploadPath.split('/');
 		destPath = splitPath[0] + '/' + appId +'/' + splitPath[1];
 
+		//Move the uploaded files before calling the service
+		commonUtils.moveFiles(uploadPath, destPath);
 
-	//Do some validation for document extension
-	if(extension!=='pdf' && extension!=='jpg' && extension!=='jpeg' && extension!=='png') {
-		res.status(415).send({message: 'Unsupported Media type'});
+		_.extend(documentObject, {
+			url: destPath,
+			appId: appId
+		});
+
+		documentService.saveDocument(documentObject, function() {
+			res.send({message: 'Success'});
+			res.end();
+		}, function(error) {
+			if(error) {
+				res.status(500).send({message: 'Internal Server Error'});
+			}
+			res.end();
+		});
 	}
 
-	//Move the uploaded files before calling the service
-	commonUtils.moveFiles(uploadPath, destPath);
 
-	_.extend(documentObject, {
-		url: destPath,
-		appId: appId
-	});
-
-	documentService.saveDocument(documentObject, function() {
-		res.send({message: 'Success'});
-		res.end();
-	}, function(error) {
-		if(error) {
-			res.status(500).send({message: 'Internal Server Error'});
-		}
-		res.end();
-	});
 };
