@@ -68,6 +68,12 @@ exports.createCoApplicant = function(userId, coapplicant, success, failure) {
 	});
 };
 
+/**
+ * Retrieve a user with all the details including type of user
+ * @param uid
+ * @param success
+ * @param failure
+ */
 exports.findUserWithDetails = function(uid, success, failure){
 	var user = new userModel();
 	var userDetails = new userDetailsModel();
@@ -77,15 +83,19 @@ exports.findUserWithDetails = function(uid, success, failure){
 	async.series([
 		function(done){
 			userDetails.retrieve({_id: uid}, function(data){
-				userWithDetails = data[0].toObject();
+				if(data[0].toObject !== undefined ) {
+					userWithDetails = data[0].toObject();
+				}
 				done();
 			}, done);
 		},
 		function(done){
 			user.retrieve({_id: uid}, function(data){
-				_.extend(userWithDetails, {
-					type: data[0].toObject().type
-				});
+				if(data[0].toObject !== undefined ) {
+					_.extend(userWithDetails, {
+						type: data[0].toObject().type
+					});
+				}
 				done();
 			});
 		}

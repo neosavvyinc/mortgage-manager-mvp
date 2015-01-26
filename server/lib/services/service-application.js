@@ -25,7 +25,9 @@ exports.getUserApplications = function(uid, success, failure){
          */
         function(done){
             user.retrieve({_id: uid}, function(userData){
-                userType = userData[0].toObject().type;
+                if(userData[0].toObject !== undefined ) {
+                    userType = userData[0].toObject().type;
+                }
                 done();
             }, function(error){
                 done(error);

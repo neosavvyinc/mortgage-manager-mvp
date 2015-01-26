@@ -6,11 +6,15 @@ var serviceUserDetails = require('../../../lib/services/service-user-details'),
 
 describe('serviceUserDetails', function() {
 	var userInsertSpy,
-		userDetailsInsertSpy;
+		userDetailsInsertSpy,
+		userDetailsRetrieveSpy,
+		userRetrieveSpy;
 
 	beforeEach(function () {
 		userInsertSpy = spyOn(userModel.prototype, 'insertOrUpdate');
 		userDetailsInsertSpy = spyOn(userDetailsModel.prototype, 'insertOrUpdate');
+		userDetailsRetrieveSpy = spyOn(userDetailsModel.prototype, 'retrieve');
+		userRetrieveSpy = spyOn(userModel.prototype, 'retrieve');
 	});
 
 	describe('updateUser', function() {
@@ -108,6 +112,55 @@ describe('serviceUserDetails', function() {
 			function(error) {
 				expect().toHaveNotExecuted('Should not have failed');
 			});
+		});
+	});
+
+	describe('findUserWithDetails', function() {
+		it('should fail if userDetails<pde;.retrieve fails', function() {
+			userDetailsRetrieveSpy.andCallFake(function(conditions, success, failure) {
+				expect(conditions).toEqual({_id:{email: 'bar', password: 'default', type:'dashboard'}});
+				failure('user details find failed');
+			});
+
+			serviceUserDetails.findUserWithDetails({email: 'bar', password: 'default', type:'dashboard'}, function() {
+					expect().toHaveNotExecuted('Should not have succeeded');
+				},
+				function(error) {
+					expect(error).toBe('user details find failed');
+				});
+		});
+
+		it('should fail if userModel.retrieve fails', function() {
+			userRetrieveSpy.andCallFake(function(conditions, success, failure) {
+				expect(conditions).toEqual({email: 'bar', password: 'default', type:'dashboard'});
+				failure('user find failed');
+			});
+
+			serviceUserDetails.findUserWithDetails({email: 'bar', password: 'default', type:'dashboard'}, function() {
+					expect().toHaveNotExecuted('Should not have succeeded');
+				},
+				function(error) {
+					expect(error).toBe('user find failed');
+				});
+		});
+
+		it('should succeed if all insertOrUpdate functions succeed', function() {
+			userRetrieveSpy.andCallFake(function(conditions, success, failure) {
+				expect(conditions).toEqual({_id: '123'});
+				success([{_id: '123'}]);
+			});
+
+			userDetailsRetrieveSpy.andCallFake(function(conditions, success, failure) {
+				expect(conditions).toEqual({_id: '123'});
+				success([{_id: '123', type: 'borrower'}]);
+			});
+
+			serviceUserDetails.findUserWithDetails('123', function() {
+					expect().toHaveExecuted();
+				},
+				function(error) {
+					expect().toHaveNotExecuted('Should not have failed');
+				});
 		});
 	});
 });
