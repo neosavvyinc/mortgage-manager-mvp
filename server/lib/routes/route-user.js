@@ -2,7 +2,8 @@
 
 var bCrypt = require('bcrypt-nodejs'),
 	LocalStrategy = require('passport-local').Strategy,
-	loginService = require('../services/service-user');
+	loginService = require('../services/service-user'),
+	userService = require('../services/service-user');
 /**
  * Initializes passport for the application. Creates function to serialize and deserialize
  * users.
@@ -67,6 +68,24 @@ exports.registerUser = function(passport) {
 			res.end();
 		})(req, res, next);
 	};
+};
+
+/**
+ * Check if user's email already exists when creating a new user
+ *
+ */
+exports.emailExists = function(req, res){
+	var email = req.param("email");
+
+	userService.emailExists(email, function() {
+		res.send({message: 'Success'});
+		res.end();
+	}, function(error) {
+		if(error) {
+			res.status(400).send({message: "The user already exists"});
+		}
+		res.end();
+	});
 };
 
 /**

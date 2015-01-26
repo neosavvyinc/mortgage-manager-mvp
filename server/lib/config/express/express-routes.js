@@ -19,6 +19,10 @@ module.exports = function(router, passport) {
 	router.route('/register')
 		.post(authRoute.registerUser(passport));
 
+	//Check if email exists
+	router.route('/email-exists')
+		.post(authRoute.emailExists);
+
 	//Update a user based on a userId
 	router.route('/user/:uid')
 		.all(_isAuthenticated)

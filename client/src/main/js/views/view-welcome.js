@@ -4,6 +4,8 @@ var Link = Router.Link;
 var Reflux = require('reflux');
 
 var Login = require('../components/login');
+var ErrorMessage = require('../components/error-message');
+var User = require('../models/model-user');
 var UserStore = require('../stores/store-user');
 var LenderStore = require('../stores/store-lender');
 var BorrowerStore = require('../stores/store-borrower');
@@ -29,13 +31,29 @@ var Welcome = React.createClass({
     getInitialState: function(){
         return {
             borrowerEmpty: false,
-            lenderEmpty: false
+            lenderEmpty: false,
+            borrowerError: false,
+            borrowerErrorMessage: "",
+            lenderError: false,
+            lenderErrorMessage: ""
         }
     },
 
     onSignUpBorrower: function(){
         if(this.refs.borrowerEmail.getDOMNode().value){
-            BorrowerActions.newBorrower(this.refs.borrowerEmail.getDOMNode().value);
+            User.emailExists(this.refs.borrowerEmail.getDOMNode().value).then(
+                function(){
+                    BorrowerActions.newBorrower(this.refs.borrowerEmail.getDOMNode().value);
+                }.bind(this),
+                function(error){
+                    this.setState({
+                        borrowerError: true,
+                        borrowerErrorMessage: error.responseJSON.message,
+                        lenderError: false,
+                        lenderErrorMessage: ""
+                    });
+                }.bind(this)
+            );
         } else {
             this.setState({borrowerEmpty: true});
         }
@@ -43,7 +61,19 @@ var Welcome = React.createClass({
 
     onSignUpLender: function(){
         if(this.refs.lenderEmail.getDOMNode().value){
-            LenderActions.newLender(this.refs.lenderEmail.getDOMNode().value);
+            User.emailExists(this.refs.lenderEmail.getDOMNode().value).then(
+                function() {
+                    LenderActions.newLender(this.refs.lenderEmail.getDOMNode().value);
+                }.bind(this),
+                function(error){
+                    this.setState({
+                        lenderError: true,
+                        lenderErrorMessage: error.responseJSON.message,
+                        borrowerError: false,
+                        borrowerErrorMessage: ""
+                    });
+                }.bind(this)
+            );
         } else {
             this.setState({lenderEmpty: true});
         }
@@ -80,6 +110,7 @@ var Welcome = React.createClass({
                             <form>
                                 <input className="double-gap-bottom" ref="borrowerEmail" type="email" placeholder="Email Address" />
                                 <div className={borrowerEmptyClass}>You need to provide a valid email</div>
+                                <ErrorMessage errorDisplay={this.state.borrowerError} errorMessage={this.state.borrowerErrorMessage} />
                                 <button className="block turquoise" onClick={this.onSignUpBorrower}>
                                     Signup as Borrower
                                 </button>
@@ -93,6 +124,7 @@ var Welcome = React.createClass({
                             <form>
                                 <input className="double-gap-bottom" ref="lenderEmail" type="email" placeholder="Email Address" />
                                 <div className={falseEmptyClass}>You need to provide a valid email</div>
+                                <ErrorMessage errorDisplay={this.state.lenderError} errorMessage={this.state.lenderErrorMessage} />
                                 <button className="block turquoise" onClick={this.onSignUpLender}>
                                     Signup as Lender
                                 </button>
