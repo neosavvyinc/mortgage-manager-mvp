@@ -64,7 +64,7 @@ User.getApplications = function(userID){
             .error(function(error){
                 reject(error);
             });
-    })
+    });
 };
 
 User.generateApplication = function(userID){
@@ -76,7 +76,19 @@ User.generateApplication = function(userID){
             .error(function(error){
                 reject(error);
             });
-    })
+    });
+};
+
+User.emailExists = function(email){
+    return Q.promise(function(resolve, reject){
+        $.post(Endpoints.EMAIL.URL, {email: email})
+            .success(function(response){
+                resolve(response);
+            })
+            .error(function(error){
+                reject(error);
+            });
+    });
 };
 
 module.exports = User;
