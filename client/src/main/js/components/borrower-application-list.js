@@ -4,11 +4,11 @@ var Reflux = require('reflux');
 var _ = require('lodash');
 var moment = require('moment');
 
-var User = require('../../models/model-user');
-var ErrorMessage = require('../../components/error-message');
-var UserStore = require('../../stores/store-user');
-var ApplicationStore = require('../../stores/store-application');
-var ApplicationActions = require('../../actions/action-application');
+var User = require('../models/model-user');
+var ErrorMessage = require('../components/error-message');
+var UserStore = require('../stores/store-user');
+var ApplicationStore = require('../stores/store-application');
+var ApplicationActions = require('../actions/action-application');
 
 var Applications = React.createClass({
 
@@ -18,20 +18,22 @@ var Applications = React.createClass({
         Reflux.listenTo(ApplicationStore, 'onApplicationTransition')
     ],
 
-    getInitialState: function(){
+    propTypes: {
+        applications: React.PropTypes.array
+    },
+
+    getDefaultProps: function(){
         return {
             applications: []
         }
     },
 
-    componentDidMount: function(){
-        User.getApplications(UserStore.getCurrentUserId()).then(function(applications){
-            if(this.isMounted()) {
-                this.setState({
-                    applications: applications
-                });
-            }
-        }.bind(this));
+    onApplicationSelect: function(application) {
+        ApplicationActions.selectApplication(application);
+    },
+
+    onApplicationTransition: function(){
+        this.transitionTo('dashboardDocuments', {appId: ApplicationStore.getCurrentApplication()._id});
     },
 
     render: function(){
@@ -39,7 +41,7 @@ var Applications = React.createClass({
         var applicationsTable = [],
             status;
 
-        _.map(this.state.applications, function(app){
+        _.map(this.props.applications, function(app){
             switch(app.status){
                 case 1:
                     status = "New Request";
@@ -71,36 +73,23 @@ var Applications = React.createClass({
             ));
         }, this);
         return (
-            <div className="container">
-                <div className="gap-top">
-                    <h1>Applications</h1>
-                    <table className="responsive">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Last Created</th>
-                                <th>Last Modified</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        {applicationsTable.map(function(application) {
-                            return (application);
-                        })}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+            <table className="responsive">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Last Created</th>
+                        <th>Last Modified</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {applicationsTable.map(function(application) {
+                    return (application);
+                })}
+                </tbody>
+            </table>
         );
-    },
-
-    onApplicationSelect: function(application) {
-        ApplicationActions.selectApplication(application);
-    },
-
-    onApplicationTransition: function(){
-        this.transitionTo('dashboardDocuments', {appId: ApplicationStore.getCurrentApplication()._id});
     }
 });
 

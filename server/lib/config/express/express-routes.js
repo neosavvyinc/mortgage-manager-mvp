@@ -22,6 +22,7 @@ module.exports = function(router, passport) {
 	//Update a user based on a userId
 	router.route('/user/:uid')
 		.all(_isAuthenticated)
+		.get(userRoute.getUserDetails)
 		.post(userRoute.updateUser);
 
 	//Add a coapplicant for a particular userId

@@ -6,6 +6,8 @@ var moment = require('moment');
 
 var User = require('../../models/model-user');
 var ErrorMessage = require('../../components/error-message');
+var ApplicationLenderList = require('../../components/lender-application-list');
+var ApplicationBorrowerList = require('../../components/borrower-application-list');
 var UserStore = require('../../stores/store-user');
 var ApplicationStore = require('../../stores/store-application');
 var ApplicationActions = require('../../actions/action-application');
@@ -20,7 +22,8 @@ var Applications = React.createClass({
 
     getInitialState: function(){
         return {
-            applications: []
+            applications: [],
+            userType: ''
         }
     },
 
@@ -32,67 +35,14 @@ var Applications = React.createClass({
                 });
             }
         }.bind(this));
-    },
 
-    render: function(){
-
-        var applicationsTable = [],
-            status;
-
-        _.map(this.state.applications, function(app){
-            switch(app.status){
-                case 1:
-                    status = "New Request";
-                    break;
-                case 2:
-                    status = "New Explanation";
-                    break;
-                default:
-                    status = "None";
-                    break;
+        User.getUserDetails(UserStore.getCurrentUserId()).then(function(userDetails){
+            if(this.isMounted()){
+                this.setState({
+                    userType: userDetails.type
+                });
             }
-
-            // e.g. Wednesday, January 21, 2015 3:21 PM
-            app.created = moment(app.created).format('llll');
-            app.lastModified = moment(app.lastModified).format('llll');
-            applicationsTable.push((
-                <tr>
-                    <th>{app._id}</th>
-                    <th>{app.created}</th>
-                    <th>{app.lastModified}</th>
-                    <th>{status}</th>
-                    <th>
-                        <div className="row">
-                            <button className="btn turquoise one half" onClick={this.onApplicationSelect.bind(null, app)}>View</button>
-                            <button className="btn red one half">Delete</button>
-                        </div>
-                    </th>
-                </tr>
-            ));
-        }, this);
-        return (
-            <div className="container">
-                <div className="gap-top">
-                    <h1>Applications</h1>
-                    <table className="responsive">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Last Created</th>
-                                <th>Last Modified</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        {applicationsTable.map(function(application) {
-                            return (application);
-                        })}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        );
+        }.bind(this));
     },
 
     onApplicationSelect: function(application) {
@@ -101,6 +51,30 @@ var Applications = React.createClass({
 
     onApplicationTransition: function(){
         this.transitionTo('dashboardDocuments', {appId: ApplicationStore.getCurrentApplication()._id});
+    },
+
+    render: function(){
+
+        var userApplications;
+
+        if(this.state.userType === 'lender'){
+            userApplications = (
+                <ApplicationLenderList applications={this.state.applications} />
+            );
+        } else if(this.state.userType === 'borrower'){
+            userApplications = (
+                <ApplicationBorrowerList applications={this.state.applications} />
+            );
+        }
+
+        return (
+            <div className="container">
+                <div className="gap-top">
+                    <h1>Applications</h1>
+                    {userApplications}
+                </div>
+            </div>
+        );
     }
 });
 

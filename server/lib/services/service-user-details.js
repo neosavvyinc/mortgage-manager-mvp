@@ -1,6 +1,7 @@
 'use strict';
 
 var async = require('async'),
+	_ = require('underscore'),
 	userDetailsModel = require('../db/models/model-user-details').Model,
 	userModel = require('../db/models/model-user').Model;
 
@@ -63,6 +64,36 @@ exports.createCoApplicant = function(userId, coapplicant, success, failure) {
 			failure(error);
 		} else {
 			success();
+		}
+	});
+};
+
+exports.findUserWithDetails = function(uid, success, failure){
+	var user = new userModel();
+	var userDetails = new userDetailsModel();
+
+	var userWithDetails = {};
+
+	async.series([
+		function(done){
+			userDetails.retrieve({_id: uid}, function(data){
+				userWithDetails = data[0].toObject();
+				done();
+			}, done);
+		},
+		function(done){
+			user.retrieve({_id: uid}, function(data){
+				_.extend(userWithDetails, {
+					type: data[0].toObject().type
+				});
+				done();
+			});
+		}
+	], function(error){
+		if(error){
+			failure(error);
+		} else {
+			success(userWithDetails);
 		}
 	});
 };
