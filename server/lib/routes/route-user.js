@@ -75,14 +75,14 @@ exports.registerUser = function(passport) {
  *
  */
 exports.emailExists = function(req, res){
-	var email = req.param("email");
+	var email = req.param('email');
 
 	userService.emailExists(email, function() {
 		res.send({message: 'Success'});
 		res.end();
 	}, function(error) {
 		if(error) {
-			res.status(400).send({message: "The user already exists"});
+			res.status(400).send({message: 'The user already exists'});
 		}
 		res.end();
 	});

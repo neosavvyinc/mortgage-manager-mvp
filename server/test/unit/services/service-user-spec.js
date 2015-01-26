@@ -82,4 +82,42 @@ describe('serviceUser', function() {
 			});
 		});
 	});
+
+	describe('emailExists', function() {
+		var findOneDocumentSpy;
+
+		beforeEach(function() {
+			findOneDocumentSpy = spyOn(userModel.prototype, 'findOneDocument');
+		});
+
+		it('should succeed if userModel.findOneDocument fails', function() {
+			var email = 'email';
+			findOneDocumentSpy.andCallFake(function(email, success, failure) {
+				expect(email).toEqual({email: 'email'});
+			});
+
+			serviceUser.emailExists(email, function(error) {
+				if(error) {
+					expect().toHaveNotExecuted('Should not have failed.');
+				} else {
+					expect(userModel.prototype.findOneDocument.callCount).toBe(1);
+				}
+			});
+		});
+
+		it('should succeed if userModel.findOneDocument succeeds', function() {
+			findOneDocumentSpy.andCallFake(function(email, success, failure) {
+				expect(email).toEqual({email: 'email'});
+				failure('fail');
+			});
+
+			serviceUser.createUser({foo: 'bar', email: 'email'}, function(error) {
+				if(error) {
+					expect(error).toBe('fail');
+				} else {
+					expect().toHaveNotExecuted('Should not have succeeded.');
+				}
+			});
+		});
+	});
 });
