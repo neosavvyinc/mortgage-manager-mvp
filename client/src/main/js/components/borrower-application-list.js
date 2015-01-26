@@ -41,7 +41,7 @@ var Applications = React.createClass({
         var applicationsTable = [],
             status;
 
-        _.map(this.props.applications, function(app){
+        _.forEach(this.props.applications, function(app){
             switch(app.status){
                 case 1:
                     status = "New Request";

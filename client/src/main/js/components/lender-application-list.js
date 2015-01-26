@@ -33,7 +33,7 @@ var Applications = React.createClass({
 
         var applicationsTable = [];
 
-        _.map(this.props.applications, function(app){
+        _.forEach(this.props.applications, function(app){
             // e.g. Wednesday, January 21, 2015 3:21 PM
             app.lastModified = moment(app.lastModified).format('llll');
             applicationsTable.push((
