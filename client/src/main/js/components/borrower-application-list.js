@@ -25,8 +25,8 @@ var Applications = React.createClass({
     },
 
     componentDidMount: function(){
-        User.getApplications(UserStore.getCurrentUserId()).then(function(applications) {
-            if (this.isMounted()) {
+        User.getApplications(UserStore.getCurrentUserId()).then(function(applications){
+            if(this.isMounted()) {
                 this.setState({
                     applications: applications
                 });
@@ -36,16 +36,31 @@ var Applications = React.createClass({
 
     render: function(){
 
-        var applicationsTable = [];
+        var applicationsTable = [],
+            status;
 
         _.map(this.state.applications, function(app){
+            switch(app.status){
+                case 1:
+                    status = "New Request";
+                    break;
+                case 2:
+                    status = "New Explanation";
+                    break;
+                default:
+                    status = "None";
+                    break;
+            }
+
             // e.g. Wednesday, January 21, 2015 3:21 PM
+            app.created = moment(app.created).format('llll');
             app.lastModified = moment(app.lastModified).format('llll');
             applicationsTable.push((
                 <tr>
-                    <th>{app.primaryFirstName + " " + app.primaryLastName}</th>
-                    <th>{app.coappFirstName + " " + app.coappLastName}</th>
-                    <th>{app.lastModified || "None"}</th>
+                    <th>{app._id}</th>
+                    <th>{app.created}</th>
+                    <th>{app.lastModified}</th>
+                    <th>{status}</th>
                     <th>
                         <div className="row">
                             <button className="btn turquoise one half" onClick={this.onApplicationSelect.bind(null, app)}>View</button>
@@ -62,9 +77,10 @@ var Applications = React.createClass({
                     <table className="responsive">
                         <thead>
                             <tr>
-                                <th>Primary Applicant</th>
-                                <th>Co-Applicant</th>
-                                <th>Last Updated</th>
+                                <th>ID</th>
+                                <th>Last Created</th>
+                                <th>Last Modified</th>
+                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -80,11 +96,11 @@ var Applications = React.createClass({
     },
 
     onApplicationSelect: function(application) {
-        //ApplicationActions.selectApplication(application);
+        ApplicationActions.selectApplication(application);
     },
 
     onApplicationTransition: function(){
-        //this.transitionTo('dashboardDocuments', {appId: ApplicationStore.getCurrentApplication()._id});
+        this.transitionTo('dashboardDocuments', {appId: ApplicationStore.getCurrentApplication()._id});
     }
 });
 
