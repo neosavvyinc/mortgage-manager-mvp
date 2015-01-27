@@ -2,11 +2,15 @@
 
 var async = require('async');
 var _ = require('underscore');
+var mandrillConfig = require('../config/app/mandrill');
+var mandrill = require('node-mandrill')(mandrillConfig.API_key);
+var commonUtils = require('../utils/common-utils');
 var applicationModel = require('../db/models/model-application').Model;
 var userDetailsModel = require('../db/models/model-user-details').Model;
 var userModel = require('../db/models/model-user').Model;
 var documentModel = require('../db/models/model-document').Model;
 var applicationLendersModel = require('../db/models/model-application-lenders').Model;
+var lenderInvitesModel = require('../db/models/model-lender-invites').Model;
 var applicationService = require('./service-application');
 var documentService = require('./service-document');
 
@@ -201,4 +205,81 @@ exports.getDocuments = function(appId, docId, success, failure){
     }
 
     documents.retrieve(conditions, success, failure);
+};
+
+exports.getLenders = function(appId, success, failure){
+    var applicationLenders = new applicationLendersModel();
+    var userDetails = new userDetailsModel();
+
+    var lenderIds = [],
+        lendersDetails;
+
+    async.series([
+        function(done){
+            applicationLenders.retrieve({appId: appId}, function(data){
+                _.forEach(data, function(lender){
+                    lenderIds.push(lender.lenderId);
+                });
+                done();
+            }, done);
+        },
+        function(done){
+            async.each(lenderIds, function(lenderId){
+                userDetails.retrieve({_id: lenderId}, function(lender){
+                    lendersDetails.push(lender);
+                    done();
+                }, done);
+            }, function(error){
+                if(error){
+                    failure(error);
+                } else {
+                    done();
+                }
+            });
+        }
+    ], function(error){
+        if(error){
+            failure(error);
+        } else {
+            success(lendersDetails);
+        }
+    });
+};
+
+exports.inviteLender = function(appId, lenderInfo, success, failure){
+
+    var lenderInvites = new lenderInvitesModel();
+
+    async.series([
+        function(done){
+            mandrill('/messages/send', {
+                message: {
+                    to: [{email: lenderInfo.email, name: lenderInfo.firstName + " " + lenderInfo.lastName}],
+                    from_email: mandrillConfig.source_email,
+                    subject: 'You have received an invitation',
+                    text: 'please accept this invitation by clicking here'
+                }
+            }, function(error) {
+                if (error){
+                    done(error);
+                } else {
+                    done();
+                }
+            });
+        },
+        function(done){
+            _.extend(lenderInfo,{
+                _id: commonUtils.generateId(),
+                appId: appId
+            });
+
+            lenderInvites.insert(lenderInfo, done, done);
+        }
+    ], function(error){
+        if(error){
+            failure(error);
+        } else {
+            success();
+        }
+    });
 };

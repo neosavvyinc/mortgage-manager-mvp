@@ -16,6 +16,7 @@ var ApplicantQuestions = require('../views/registration/view-questions');
 var Applications = require('../views/dashboard/view-application-list');
 var Documents = require('../views/dashboard/view-document-list');
 var Upload = require('../views/dashboard/view-upload-document');
+var LenderList = require('../views/dashboard/view-lender-list');
 
 /* Default Root Handler */
 var RootDefault = React.createClass({
@@ -50,11 +51,16 @@ var routes = (
         <Route name="dashboard" handler={Dashboard}>
             <Route name="dashboardApplications" path="applications" handler={Applications} />
             <Route name="dashboardDocuments" path="applications/:appId" handler={Documents}>
-                <Route name="uploadNewDocument" handler={Modal}>
+                <Route name="uploadNewDocument" path="upload" handler={Modal}>
                     <DefaultRoute handler={Upload} />
                 </Route>
                 <Route name="uploadExistingDocument" path="document/:documentId" handler={Modal}>
                     <DefaultRoute handler={Upload} />
+                </Route>
+                <Route name="applicationLenders" path="lenders" handler={LenderList}>
+                    <Route name="inviteLender" path="invite" handler={Modal}>
+                        <DefaultRoute handler={InviteLender} />
+                    </Route>
                 </Route>
             </Route>
             <Route name="routeTester" path="testRoute" handler={TestRoute1} />

@@ -29,4 +29,28 @@ Application.getDocument = function(appId, docId) {
     });
 };
 
+Application.getLenders = function(appId){
+    return Q.promise(function(resolve, reject) {
+        $.get(Endpoints.APPLICATIONS.ONE.LENDERS.URL.replace(':id', appId))
+            .success(function(response){
+                resolve(response);
+            })
+            .error(function(error){
+                reject(error);
+            });
+    });
+};
+
+Application.lenderInvite = function(appId, lenderInfo){
+    return Q.promise(function(resolve, reject) {
+        $.post(Endpoints.APPLICATIONS.ONE.LENDERS.URL.replace(':id', appId), lenderInfo)
+            .success(function(response){
+                resolve(response);
+            })
+            .error(function(error){
+                reject(error);
+            });
+    });
+};
+
 module.exports = Application;

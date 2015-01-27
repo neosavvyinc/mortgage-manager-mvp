@@ -51,10 +51,16 @@ module.exports = function(router, passport) {
 		.get(applicationRoute.getApplicationDocuments)
 		.post(documentRoute.insertDocument);
 
+	router.route('/applications/:appId/lenders')
+		.all(_isAuthenticated)
+		.get(applicationRoute.getApplicationLenders)
+		.post(applicationRoute.inviteLenderToApplication);
+
 	router.route('/applications/:appId/documents/:docId')
 		.all(_isAuthenticated)
 		.get(applicationRoute.getApplicationDocument)
 		.post(documentRoute.insertDocument);
+
 };
 
 /**

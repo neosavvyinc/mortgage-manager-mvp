@@ -10,7 +10,7 @@ var UserStore = require('../stores/store-user');
 var ApplicationStore = require('../stores/store-application');
 var ApplicationActions = require('../actions/action-application');
 
-var Applications = React.createClass({
+var LenderApplications = React.createClass({
 
     mixins: [
         Router.State,
@@ -78,4 +78,4 @@ var Applications = React.createClass({
     }
 });
 
-module.exports = Applications;
+module.exports = LenderApplications;

@@ -65,3 +65,30 @@ exports.getApplicationDocument = function(req, res){
         }
     });
 };
+
+exports.getApplicationLenders = function(req, res){
+    var appId = req.params.appId;
+
+    applicationService.getLenders(appId, function(lenders){
+        res.send(lenders);
+        res.end();
+    }, function(error){
+        if(error){
+            res.status(500).send({message: 'Internal Server Error'});
+        }
+    });
+};
+
+exports.inviteLenderToApplication = function(req, res){
+    var appId = req.params.appId,
+        lenderInfo = req.params("lenderInfo");
+
+    applicationService.inviteLender(appId, lenderInfo, function(){
+        res.send({message: "Success"});
+        res.end();
+    }, function(error){
+        if(error){
+            res.status(500).send({message: 'Internal Server Error'});
+        }
+    });
+};

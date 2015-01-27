@@ -77,6 +77,7 @@ var LenderInfo = React.createClass({
                 {applicantAddress}
 					<h2>{this.state.applicantType}'s Contact Information</h2>
 					<div className="row gap-bottom">
+						<input className="one third half-gap-right" type="text" ref="organization" placeholder="Organization" required />
 						<input className="one third half-gap-right" type="text" ref="phone" placeholder="Mobile Phone" required />
 					</div>
 					<ErrorMessage errorDisplay={this.state.applicantInfoError} errorMessage={this.state.errorText}/>
@@ -97,16 +98,16 @@ var LenderInfo = React.createClass({
 			city: this.refs.city.getDOMNode().value,
 			state: this.refs.state.getDOMNode().value,
 			zip: this.refs.zip.getDOMNode().value,
-			phone: this.refs.phone.getDOMNode().value
+			phone: this.refs.phone.getDOMNode().value,
+			organization: this.refs.organization.getDOMNode().value
 		};
 
 		if(validateLenderInfo(applicantInfo)) {
 			applicantInfo.type = "lender";
-			User.update(UserStore.getCurrentUser()._id, applicantInfo).then(function () {
+			User.update(UserStore.getCurrentUserId(), applicantInfo).then(function () {
 				LenderActions.submitBasicInfo(applicantInfo);
 				this.transitionTo('dashboard');
 			}.bind(this), function (error) {
-				console.log(error.message);
 				this.setState({
 					applicantInfoError: true,
 					errorText: error.message

@@ -10,7 +10,7 @@ var UserStore = require('../stores/store-user');
 var ApplicationStore = require('../stores/store-application');
 var ApplicationActions = require('../actions/action-application');
 
-var Applications = React.createClass({
+var BorrowerApplications = React.createClass({
 
     mixins: [
         Router.State,
@@ -73,24 +73,27 @@ var Applications = React.createClass({
             ));
         }, this);
         return (
-            <table className="responsive">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Last Created</th>
-                        <th>Last Modified</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {applicationsTable.map(function(application) {
-                    return (application);
-                })}
-                </tbody>
-            </table>
+            <div>
+                <button className="btn turquoise" onClick={this.onInviteLender}>Invite Lender</button>
+                <table className="responsive">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Last Created</th>
+                            <th>Last Modified</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {applicationsTable.map(function(application) {
+                        return (application);
+                    })}
+                    </tbody>
+                </table>
+            </div>
         );
     }
 });
 
-module.exports = Applications;
+module.exports = BorrowerApplications;

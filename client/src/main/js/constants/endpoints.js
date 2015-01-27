@@ -29,6 +29,9 @@ module.exports = {
                 ONE: {
                     URL: '/api/applications/:id/documents/:docId'
                 }
+            },
+            LENDERS: {
+                URL: '/api/applications/:id/lenders'
             }
         }
     }
