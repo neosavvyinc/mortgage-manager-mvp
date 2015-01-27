@@ -1,4 +1,6 @@
-'use strict';
+/**
+ * @jsx React.DOM
+ */
 
 var PDF = require('../../components/pdf-viewer'),
 	React = require('react'),
@@ -17,16 +19,6 @@ var ViewPdf = React.createClass({
 			file: 'assets/downloaded.pdf',
 			page: 1
 		}
-	},
-
-	componentDidMount: function() {
-		/*Application.getDocumentFile(this.getParams().appId, this.getParams().documentId).then(function(file) {
-			//saveAs(file, 'assets/downloaded.pdf');
-			//console.log(url);
-			this.setState({
-				file: 'assets/downloaded.pdf'
-			});
-		}.bind(this));*/
 	},
 
 	render: function() {
