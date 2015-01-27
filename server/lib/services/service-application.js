@@ -246,18 +246,30 @@ exports.getLenders = function(appId, success, failure){
     });
 };
 
-exports.inviteLender = function(appId, lenderInfo, success, failure){
+exports.inviteLender = function(appId, userId, lenderInfo, success, failure){
 
     var lenderInvites = new lenderInvitesModel();
+    var userDetails = new userDetailsModel();
+
+    var sender;
 
     async.series([
+        function(done){
+            userDetails.retrieve({_id: userId}, function(userInfo){
+                if(userInfo[0].toObject !== undefined ) {
+                    sender = userInfo[0].toObject();
+                }
+                done();
+            }, done);
+        },
         function(done){
             mandrill('/messages/send', {
                 message: {
                     to: [{email: lenderInfo.email, name: lenderInfo.firstName + " " + lenderInfo.lastName}],
                     from_email: mandrillConfig.source_email,
                     subject: 'You have received an invitation',
-                    text: 'please accept this invitation by clicking here'
+                    html: '<h3>' + sender.firstName + ' ' + sender.lastName + ' has invited you to a mortgage application</h3>' +
+                        '<a href=\'localhost:9991/#/welcome\'>Accept Invitation</a>'
                 }
             }, function(error) {
                 if (error){

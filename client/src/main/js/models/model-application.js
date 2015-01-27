@@ -41,15 +41,20 @@ Application.getLenders = function(appId){
     });
 };
 
-Application.lenderInvite = function(appId, lenderInfo){
+Application.lenderInvite = function(appId, userId, lenderInfo){
+
+    _.extend(lenderInfo,{
+        borrowerId: userId
+    });
+
     return Q.promise(function(resolve, reject) {
         $.post(Endpoints.APPLICATIONS.ONE.LENDERS.URL.replace(':id', appId), lenderInfo)
             .success(function(response){
                 resolve(response);
-            })
-            .error(function(error){
+            }).error(function(error){
                 reject(error);
-            });
+            }
+        );
     });
 };
 

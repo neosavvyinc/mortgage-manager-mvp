@@ -3,7 +3,9 @@
 var React = require('react'),
     Router = require('react-router'),
     Reflux = require('reflux'),
-    ErrorMessage = require('../../components/error-message');
+    ErrorMessage = require('../../components/error-message'),
+    Application = require('../../models/model-application'),
+    UserStore = require('../../stores/store-user');
 
 var validateLenderInfo = function(lenderInfo){
     return (lenderInfo.firstName && lenderInfo.firstName !== '' &&
@@ -41,7 +43,7 @@ var UploadDocument = React.createClass({
         if(validateLenderInfo(lenderInfo)) {
             var appId = this.getParams().appId;
 
-            Application.lenderInvite(appId, lenderInfo).then(function(){
+            Application.lenderInvite(appId, UserStore.getCurrentUserId(), lenderInfo).then(function(){
                 this.close();
             }.bind(this), function(error){
                 this.setState({
