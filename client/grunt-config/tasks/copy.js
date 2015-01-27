@@ -19,6 +19,14 @@ module.exports = {
                 ],
                 dest: '<%= buildOutputDirectoryPath %>/assets/css/'
             },
+            {
+                expand:true,
+                cwd:'<%= sourceDirectoryPath %>/lib/pdfjs-1.0.473-dist/',
+                src:[
+                    '**/*',
+                ],
+                dest: '<%= buildOutputDirectoryPath %>/js/pdfjs-1.0.473-dist'
+            }
         ]
     },
     deploy: {

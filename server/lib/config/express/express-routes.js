@@ -46,10 +46,16 @@ module.exports = function(router, passport) {
 		.get(applicationRoute.getApplicationDocuments)
 		.post(documentRoute.insertDocument);
 
+	//Route for handling one specific document in an application
 	router.route('/applications/:appId/documents/:docId')
 		.all(_isAuthenticated)
 		.get(applicationRoute.getApplicationDocument)
 		.post(documentRoute.insertDocument);
+
+	//Route for getting one file
+	router.route('/applications/:appId/file/:docId')
+		.all(_isAuthenticated)
+		.get(applicationRoute.getFile);
 };
 
 /**

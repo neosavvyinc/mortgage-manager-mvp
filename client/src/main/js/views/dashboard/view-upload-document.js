@@ -114,7 +114,6 @@ var UploadDocument = React.createClass({
 	},
 
 	render: function() {
-		console.log('Rendering');
 		return (
 			<form className="uploadComponent" encType="multipart/form-data">
 				<legend><h1>Upload Document</h1></legend>
