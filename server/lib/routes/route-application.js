@@ -81,7 +81,7 @@ exports.getApplicationLenders = function(req, res){
 
 exports.inviteLenderToApplication = function(req, res){
     var appId = req.params.appId,
-        lenderInfo = req.params("lenderInfo");
+        lenderInfo = req.body;
 
     applicationService.inviteLender(appId, lenderInfo, function(){
         res.send({message: "Success"});
