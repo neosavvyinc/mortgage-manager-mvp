@@ -53,10 +53,7 @@ var Documents = React.createClass({
     onDocumentView: function(document) {
         var appId = this.getParams().appId,
             docId = document._id;
-        Application.getDocumentFile(appId, docId).then(function(file) {
-            console.log(file);
-            this.transitionTo('viewDocument', {appId: appId, documentId: docId});
-        }.bind(this));
+        this.transitionTo('viewDocument', {appId: appId, documentId: docId});
     },
 
     getDocuments: function() {

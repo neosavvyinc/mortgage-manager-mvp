@@ -6,20 +6,8 @@ var PDF = require('../../components/pdf-viewer'),
 	React = require('react'),
 	Router = require('react-router'),
 	Reflux = require('reflux'),
-	Application = require('../../models/model-application');
-var BASE64_MARKER = ';base64,';
-function convertDataURIToBinary(dataURI) {
-	var base64Index = dataURI.indexOf(BASE64_MARKER) + BASE64_MARKER.length;
-	var base64 = dataURI.substring(base64Index);
-	var raw = window.atob(base64);
-	var rawLength = raw.length;
-	var array = new Uint8Array(new ArrayBuffer(rawLength));
-
-	for (i = 0; i < rawLength; i++) {
-		array[i] = raw.charCodeAt(i);
-	}
-	return array;
-}
+	Application = require('../../models/model-application'),
+	EndPoints = require('../../constants/endpoints');
 
 var ViewPdf = React.createClass({
 
@@ -29,7 +17,7 @@ var ViewPdf = React.createClass({
 
 	getInitialState: function() {
 		return {
-			file: 'blah.pdf',
+			file: EndPoints.APPLICATIONS.ONE.FILE.ONE.URL.replace(':id', this.getParams().appId).replace(':docId', this.getParams().documentId),
 			page: 1
 		}
 	},
