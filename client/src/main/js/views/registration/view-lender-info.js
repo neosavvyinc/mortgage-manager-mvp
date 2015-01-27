@@ -102,7 +102,7 @@ var LenderInfo = React.createClass({
 
 		if(validateLenderInfo(applicantInfo)) {
 			applicantInfo.type = "lender";
-			User.update(UserStore.getCurrentUser()._id, applicantInfo).then(function () {
+			User.update(UserStore.getCurrentUserId(), applicantInfo).then(function () {
 				LenderActions.submitBasicInfo(applicantInfo);
 				this.transitionTo('dashboard');
 			}.bind(this), function (error) {
