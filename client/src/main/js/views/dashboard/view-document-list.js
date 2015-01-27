@@ -7,6 +7,7 @@ var moment = require('moment');
 var User = require('../../models/model-user');
 var Application = require('../../models/model-application');
 var ErrorMessage = require('../../components/error-message');
+var fileSaver = require('browser-filesaver');
 
 var arraysEqual = function(arr1, arr2) {
     if(arr1.length !== arr2.length)
@@ -52,11 +53,10 @@ var Documents = React.createClass({
     onDocumentView: function(document) {
         var appId = this.getParams().appId,
             docId = document._id;
-
-        /*Application.getDocumentFile(appId, docId).then(function(file) {
-            console.log('Here')*/
+        Application.getDocumentFile(appId, docId).then(function(file) {
+            console.log(file);
             this.transitionTo('viewDocument', {appId: appId, documentId: docId});
-        //}.bind(this));
+        }.bind(this));
     },
 
     getDocuments: function() {

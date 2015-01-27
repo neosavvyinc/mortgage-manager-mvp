@@ -57,7 +57,7 @@ var routes = (
                 <Route name="uploadExistingDocument" path="document/:documentId/upload" handler={Modal}>
                     <DefaultRoute handler={Upload} />
                 </Route>
-                <Route name="viewDocument" path="document/:documentId" handler={Modal}>
+                <Route name="viewDocument" path="document/:documentId/" handler={Modal}>
                     <DefaultRoute handler={viewPdf} />
                 </Route>
             </Route>

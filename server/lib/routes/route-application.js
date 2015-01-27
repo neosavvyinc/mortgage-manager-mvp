@@ -83,11 +83,16 @@ exports.getFile = function(req, res){
 
         res.sendFile(url, options, function(err) {
             if(err) {
-                console.log(err);
-                res.status(err.status);
+                if (err.code === "ECONNABORT" && res.statusCode == 304) {
+                    // No problem, 304 means client cache hit, so no data sent.
+                    console.log('304 cache hit for ' + url);
+                    return;
+                }
+                res.status(err.status).end();
+            } else {
+                res.status(200).end();
             }
         });
-        res.end();
     }, function(error){
         if(error){
             res.status(500).send({message: 'Internal Server Error'});
