@@ -1,10 +1,12 @@
 'use strict';
 
-var log4js = require('log4js'),
+var handlebars = require("handlebars"),
+	log4js = require('log4js'),
 	uuid = require('node-uuid'),
 	settings = require('../config/app/settings'),
 	fs = require('fs'),
-	mv = require('mv');
+	mv = require('mv'),
+	_templateCache={};
 
 /**
  * Dereference an object chain. For example: var o={ a: { b: { c: 'chuck' } } } could be
@@ -97,4 +99,25 @@ exports.moveFiles = function(source, dest) {
 			console.log('Error moving files '+ err);
 		}
 	});
+};
+
+/**
+ * Renders markup using specified template and context
+ * @param {String} path
+ * @param context properties for binding in template
+ * @returns {String}
+ */
+exports.renderTemplate = function(path, context) {
+	var template, renderer;
+	try {
+		renderer = _templateCache[path];
+		if(renderer === undefined) {
+			template = fs.readFileSync(path, 'utf8');
+			renderer = _templateCache[path] = handlebars.compile(template);
+		}
+		return renderer(context);
+	} catch(e) {
+		console.error("template.renderPath:: attempt to load and render '%s' failed: %s", path, e);
+		throw e;
+	}
 };

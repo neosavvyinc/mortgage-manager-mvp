@@ -17,6 +17,11 @@ exports.saveDocument = function(doc, success, failure) {
 
 	async.series([
 		function(done) {
+			//Check if document already exists and remove the file from server before re-upload
+			//var document = new documentModel();
+			done();
+		},
+		function(done) {
 			//Store the document in mongo
 			var document = new documentModel();
 			if(doc._id === undefined) {
