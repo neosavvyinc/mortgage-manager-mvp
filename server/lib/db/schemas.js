@@ -63,7 +63,8 @@ Schemas.LenderInvitesSchema = new Schema({
 	firstName: { type: String, required: true },
 	lastName: { type: String, required: true },
 	appId: { type: String, required: true, ref: 'ApplicationSchema' },
-	isOpen: { type: Boolean, default: true }
+	isOpen: { type: Boolean, default: true },
+	token: { type: String, required: true }
 });
 
 Schemas.ApplicationLendersSchema = new Schema({

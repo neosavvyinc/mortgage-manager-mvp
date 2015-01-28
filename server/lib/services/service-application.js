@@ -253,7 +253,7 @@ exports.inviteLender = function(appId, userId, lenderInfo, success, failure){
     var userDetails = new userDetailsModel();
 
     var sender,
-        token = '24601';
+        token = commonUtils.generateId();
 
     async.series([
         function(done){
@@ -323,7 +323,8 @@ exports.inviteLender = function(appId, userId, lenderInfo, success, failure){
         function(done){
             _.extend(lenderInfo,{
                 _id: commonUtils.generateId(),
-                appId: appId
+                appId: appId,
+                token: token
             });
 
             lenderInvites.insert(lenderInfo, done, done);
