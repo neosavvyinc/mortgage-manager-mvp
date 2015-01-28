@@ -263,13 +263,45 @@ exports.inviteLender = function(appId, userId, lenderInfo, success, failure){
             }, done);
         },
         function(done){
-            mandrill('/messages/send', {
+            mandrill('/messages/send-template', {
+                template_name: 'lender_invite',
+                template_content: [],
                 message: {
-                    to: [{email: lenderInfo.email, name: lenderInfo.firstName + " " + lenderInfo.lastName}],
+                    auto_html: false,
+                    to: [
+                        {
+                            email: lenderInfo.email,
+                            name: lenderInfo.firstName + " " + lenderInfo.lastName
+                        }
+                    ],
                     from_email: mandrillConfig.source_email,
+                    from_name: 'DoubleApp Team',
                     subject: 'You have received an invitation',
-                    html: '<h3>' + sender.firstName + ' ' + sender.lastName + ' has invited you to a mortgage application</h3>' +
-                        '<a href=\'localhost:9991/#/welcome\'>Accept Invitation</a>'
+                    merge_vars: [{
+                        rcpt: lenderInfo.email,
+                        vars: [
+                            {
+                                name: "lenderFName",
+                                content: lenderInfo.firstName
+                            },
+                            {
+                                name: "lenderLName",
+                                content: lenderInfo.lastName
+                            },
+                            {
+                                name: "senderFName",
+                                content: sender.firstName
+                            },
+                            {
+                                name: "senderLName",
+                                content: sender.lastName
+                            },
+                            {
+                                name: "token",
+                                content: '1234'
+                            }
+                        ]
+                    }]
                 }
             }, function(error) {
                 if (error){
