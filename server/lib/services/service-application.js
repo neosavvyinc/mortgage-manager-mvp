@@ -3,6 +3,7 @@
 var async = require('async');
 var _ = require('underscore');
 var mandrillConfig = require('../config/app/mandrill');
+var serverConfig = require('../config/app/settings');
 var mandrill = require('node-mandrill')(mandrillConfig.API_key);
 var commonUtils = require('../utils/common-utils');
 var applicationModel = require('../db/models/model-application').Model;
@@ -251,7 +252,8 @@ exports.inviteLender = function(appId, userId, lenderInfo, success, failure){
     var lenderInvites = new lenderInvitesModel();
     var userDetails = new userDetailsModel();
 
-    var sender;
+    var sender,
+        token = '24601';
 
     async.series([
         function(done){
@@ -263,6 +265,13 @@ exports.inviteLender = function(appId, userId, lenderInfo, success, failure){
             }, done);
         },
         function(done){
+
+            var redirectURL = serverConfig.getConfig().hostURL +
+                '/welcome?token=' + token +
+                '&email=' + lenderInfo.email +
+                '&firstName=' + lenderInfo.firstName +
+                '&lastName=' + lenderInfo.lastName;
+
             mandrill('/messages/send-template', {
                 template_name: 'lender_invite',
                 template_content: [],
@@ -297,8 +306,8 @@ exports.inviteLender = function(appId, userId, lenderInfo, success, failure){
                                 content: sender.lastName
                             },
                             {
-                                name: "token",
-                                content: '1234'
+                                name: "redirectURL",
+                                content: redirectURL
                             }
                         ]
                     }]
