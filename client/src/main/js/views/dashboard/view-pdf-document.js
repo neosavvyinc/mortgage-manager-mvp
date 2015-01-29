@@ -43,7 +43,7 @@ var ViewPdf = React.createClass({
 
 	download: function() {
 		//Will download file
-		window.open(EndPoints.APPLICATIONS.ONE.FILE.ONE.URL.replace(':id', this.getParams().appId).replace(':docId', this.getParams().documentId));
+		window.open(EndPoints.APPLICATIONS.ONE.DOWNLOAD.ONE.URL.replace(':id', this.getParams().appId).replace(':docId', this.getParams().documentId));
 	},
 
 	render: function() {
