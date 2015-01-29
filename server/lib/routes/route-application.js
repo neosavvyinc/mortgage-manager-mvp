@@ -79,6 +79,19 @@ exports.getApplicationLenders = function(req, res){
     });
 };
 
+exports.getApplicationBorrowers = function(req, res){
+    var appId = req.params.appId;
+
+    applicationService.getBorrowers(appId, function(borrowers){
+        res.send(borrowers);
+        res.end();
+    }, function(error){
+        if(error){
+            res.status(500).send({message: 'Internal Server Error'});
+        }
+    });
+};
+
 exports.inviteLenderToApplication = function(req, res){
     var appId = req.params.appId,
         lenderInfo = req.body,

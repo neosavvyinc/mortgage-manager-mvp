@@ -5,10 +5,8 @@ var _ = require('lodash');
 
 var Application = require('../../models/model-application');
 var Navigation = require('../../components/navigation');
-//var ApplicationStore = require('../../stores/store-application');
-//var ApplicationActions = require('../../actions/action-application');
 
-var LenderInvite = React.createClass({
+var LenderContacts = React.createClass({
 
     mixins: [
         Router.State,
@@ -46,6 +44,7 @@ var LenderInvite = React.createClass({
             }
         ];
 
+        console.log("I am Groot");
         _.forEach(this.state.lenders, function(lender){
             lendersTable.push((
                 <tr>
@@ -90,4 +89,4 @@ var LenderInvite = React.createClass({
     }
 });
 
-module.exports = LenderInvite;
+module.exports = LenderContacts;

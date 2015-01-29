@@ -61,10 +61,6 @@ var Documents = React.createClass({
         this.transitionTo('uploadExistingDocument', {appId: this.getParams().appId, documentId: document._id});
     },
 
-    onInviteLender: function(){
-        this.transitionTo('inviteLender', {appId: this.getParams().appId});
-    },
-
     getDocuments: function() {
         Application.getDocuments(this.getParams().appId).then(function(documents){
             this.setState({
@@ -77,17 +73,23 @@ var Documents = React.createClass({
 
         var documentsTable = [];
 
-        var actions;
+        var actions, tabs;
 
         if(this.state.userType === 'lender'){
             actions = [
                 {
                     tabName: "Request New Document",
-                    tabLink: "routerTester"
+                    tabLink: {
+                        name: "routeTester",
+                        params: []
+                    }
                 },
                 {
                     tabName: "Request Explanation",
-                    tabLink: "routerTester"
+                    tabLink: {
+                        name: "routeTester",
+                        params: []
+                    }
                 }
             ];
         } else if(this.state.userType == 'borrower'){
@@ -138,42 +140,27 @@ var Documents = React.createClass({
         }, this);
 
         return (
-            <div className="container">
-                <div className="gap-top">
-                    <div className="row">
-                        <h2>Application #{this.getParams().appId}</h2>
-                    </div>
-                    <div className="tabs ipad">
-                        <ul role="tablist">
-                            <li role="tab" aria-controls=".documentsTab" className="active">Documents</li>
-                            <li role="tab" aria-controls=".LendersTab">Lenders</li>
-                        </ul>
-                        <div role="tabpanel" className="documentsTab" className="active">
-                            <Navigation navigationItems={actions}/>
-                            <table className="responsive">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Document Name</th>
-                                        <th>Document Type</th>
-                                        <th>Description</th>
-                                        <th>Requested Date</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                        {documentsTable.map(function(document) {
-                            return (document);
-                        })}
-                                </tbody>
-                            </table>
-                        </div>
-                        <div role="tabpanel" className="lendersTab active">
-                            <LendersTable />
-                        </div>
-                    </div>
-                </div>
-                <RouterHandler/>
+            <div>
+
+                <Navigation navigationItems={actions}/>
+                <table className="responsive">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Document Name</th>
+                            <th>Document Type</th>
+                            <th>Description</th>
+                            <th>Requested Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            {documentsTable.map(function(document) {
+                return (document);
+            })}
+                    </tbody>
+                </table>
+
             </div>
         );
     }

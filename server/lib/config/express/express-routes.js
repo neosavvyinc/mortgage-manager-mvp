@@ -56,6 +56,10 @@ module.exports = function(router, passport) {
 		.get(applicationRoute.getApplicationLenders)
 		.post(applicationRoute.inviteLenderToApplication);
 
+	router.route('/applications/:appId/borrowers')
+		.all(_isAuthenticated)
+		.get(applicationRoute.getApplicationBorrowers);
+
 	router.route('/applications/:appId/documents/:docId')
 		.all(_isAuthenticated)
 		.get(applicationRoute.getApplicationDocument)

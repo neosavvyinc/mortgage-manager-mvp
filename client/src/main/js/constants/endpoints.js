@@ -32,6 +32,9 @@ module.exports = {
             },
             LENDERS: {
                 URL: '/api/applications/:id/lenders'
+            },
+            BORROWERS: {
+                URL: '/api/applications/:id/borrowers'
             }
         }
     }

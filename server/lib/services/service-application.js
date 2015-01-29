@@ -242,9 +242,95 @@ exports.getLenders = function(appId, success, failure){
         if(error){
             failure(error);
         } else {
-            success(lendersDetails);
+            success(lendersDetails[0]);
         }
     });
+};
+
+exports.getBorrowers = function(appId, success, failure){
+    var application = new applicationModel();
+    var userDetails = new userDetailsModel();
+    var user = new userModel();
+
+    var borrowersDetails = [],
+        appDetails;
+    async.series([
+        function(done){
+            application.retrieve({_id: appId}, function(application){
+                appDetails = application[0];
+                done();
+            }, done);
+        },
+        function(done){
+            async.parallel([
+                function(cb){
+                    var applicant = {};
+                    async.series([
+                        function(callback){
+                            userDetails.retrieve({_id: appDetails.pUID}, function(userData){
+                                applicant = userData[0].toObject();
+                                callback();
+                            }, callback);
+                        },
+                        function(callback){
+                            user.retrieve({_id: appDetails.pUID}, function(userData){
+                                applicant.email = userData[0].email;
+                                borrowersDetails.push(applicant);
+                                callback();
+                            }, callback);
+                        }
+                    ], function(error){
+                        if(error){
+                            cb(error);
+                        } else {
+                            cb();
+                        }
+                    });
+                },
+                function(cb){
+                    if(application.coUID){
+                        var coapplicant = {};
+                        async.series([
+                            function(callback){
+                                userDetails.retrieve({_id: appDetails.coUID}, function(userData){
+                                    coapplicant = userData[0].toObject();
+                                    callback();
+                                }, callback);
+                            },
+                            function(callback){
+                                user.retrieve({_id: appDetails.coUID}, function(userData){
+                                    coapplicant.email = userData[0].email;
+                                    borrowersDetails.push(coapplicant);
+                                    callback();
+                                }, callback);
+                            }
+                        ], function(error){
+                            if(error){
+                                cb(error);
+                            } else {
+                                cb();
+                            }
+                        });
+                    } else {
+                        cb();
+                    }
+                }
+            ], function(error){
+                if(error){
+                    done(error);
+                } else {
+                    done();
+                }
+            });
+        }
+    ], function(error){
+        if(error){
+            failure(error);
+        } else {
+            success(borrowersDetails);
+        }
+    });
+
 };
 
 exports.inviteLender = function(appId, userId, lenderInfo, success, failure){

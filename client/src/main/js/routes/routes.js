@@ -18,6 +18,7 @@ var Applications = require('../views/dashboard/view-application-list');
 var Documents = require('../views/dashboard/view-document-list');
 var Upload = require('../views/dashboard/view-upload-document');
 var InviteLender = require('../views/dashboard/view-invite-lender');
+var ApplicationDetails = require('../views/dashboard/view-application-details');
 
 /* Default Root Handler */
 var RootDefault = React.createClass({
@@ -52,7 +53,7 @@ var routes = (
         </Route>
         <Route name="dashboard" handler={Dashboard}>
             <Route name="dashboardApplications" path="applications" handler={Applications} />
-            <Route name="dashboardDocuments" path="applications/:appId" handler={Documents}>
+            <Route name="dashboardDocuments" path="applications/:appId" handler={ApplicationDetails}>
                 <Route name="uploadNewDocument" path="upload" handler={Modal}>
                     <DefaultRoute handler={Upload} />
                 </Route>
