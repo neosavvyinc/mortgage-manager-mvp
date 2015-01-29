@@ -61,7 +61,7 @@ exports.validateInviteToken = function(user, success, failure){
 					if (invite && user.token && user.token === invite.token && invite.isOpen) {
 						done();
 					} else {
-						failure(new Error("Invalid Token"));
+						failure(new Error('Invalid Token'));
 					}
 				}, success);
 		},

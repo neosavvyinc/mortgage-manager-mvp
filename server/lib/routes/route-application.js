@@ -100,7 +100,7 @@ exports.inviteLenderToApplication = function(req, res){
     delete lenderInfo.borrowerId;
 
     applicationService.inviteLender(appId, userId, lenderInfo, function(){
-        res.send({message: "Success"});
+        res.send({message: 'Success'});
         res.end();
     }, function(error){
         if(error){

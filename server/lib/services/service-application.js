@@ -1,10 +1,11 @@
 'use strict';
+/* jshint ignore:start */
 
 var async = require('async');
 var _ = require('underscore');
 var mandrillConfig = require('../config/app/mandrill');
 var serverConfig = require('../config/app/settings');
-var mandrill = require('node-mandrill')(mandrillConfig.API_key);
+var mandrill = require('node-mandrill')(mandrillConfig.APIKey);
 var commonUtils = require('../utils/common-utils');
 var applicationModel = require('../db/models/model-application').Model;
 var userDetailsModel = require('../db/models/model-user-details').Model;
@@ -371,7 +372,7 @@ exports.inviteLender = function(appId, userId, lenderInfo, success, failure){
                             name: lenderInfo.firstName + " " + lenderInfo.lastName
                         }
                     ],
-                    from_email: mandrillConfig.source_email,
+                    from_email: mandrillConfig.sourceEmail,
                     from_name: 'DoubleApp Team',
                     subject: 'You have received an invitation',
                     merge_vars: [{
@@ -425,3 +426,4 @@ exports.inviteLender = function(appId, userId, lenderInfo, success, failure){
         }
     });
 };
+/* jshint ignore:end */

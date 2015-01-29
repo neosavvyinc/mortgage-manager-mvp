@@ -1,7 +1,6 @@
 'use strict';
 
 var bCrypt = require('bcrypt-nodejs'),
-	_ = require('underscore'),
 	async = require('async'),
 	LocalStrategy = require('passport-local').Strategy,
 	loginService = require('../services/service-user'),
