@@ -74,18 +74,17 @@ exports.getUserApplications = function(uid, success, failure){
          */
         function(done){
             if( userType === 'lender') {
-                async.each(applications,
+                async.map(applications,
                     function (app, callback) {
+                        var usersInfo = {};
                         async.parallel([
                                 /*
                                     Get all primary user details
                                  */
                                 function (cb) {
                                     userDetails.retrieve({_id: app.pUID}, function (userData) {
-                                        _.extend(app, {
-                                            primaryFirstName: userData[0].firstName,
-                                            primaryLastName: userData[0].lastName
-                                        });
+                                        usersInfo.primaryFirstName = userData[0].firstName;
+                                        usersInfo.primaryLastName = userData[0].lastName;
                                         cb();
                                     }, cb);
                                 },
@@ -95,10 +94,8 @@ exports.getUserApplications = function(uid, success, failure){
                                 function (cb) {
                                     if (app.coUID) {
                                         userDetails.retrieve({_id: app.coUID}, function (userData) {
-                                            _.extend(app, {
-                                                coappFirstName: userData[0].firstName,
-                                                coappLastName: userData[0].lastName
-                                            });
+                                            usersInfo.coappFirstName = userData[0].firstName;
+                                            usersInfo.coappLastName = userData[0].lastName;
                                             cb();
                                         }, cb);
                                     } else {
@@ -108,16 +105,18 @@ exports.getUserApplications = function(uid, success, failure){
                             ],
                             function (error) {
                                 if (error) {
-                                    callback(error);
+                                    callback(error, null);
                                 } else {
-                                    callback();
+                                    _.extend(app._doc, usersInfo);
+                                    callback(null, app);
                                 }
                             });
                     },
-                    function (error) {
+                    function (error, apps) {
                         if (error) {
-                            done(error);
+                            done(error, null);
                         } else {
+                            applications = apps;
                             done();
                         }
                     }
@@ -130,6 +129,7 @@ exports.getUserApplications = function(uid, success, failure){
         if(error){
             failure(error);
         } else {
+            //console.log(applications);
             success(applications);
         }
     });
@@ -213,7 +213,7 @@ exports.getLenders = function(appId, success, failure){
     var userDetails = new userDetailsModel();
 
     var lenderIds = [],
-        lendersDetails;
+        lendersDetails = [];
 
     async.series([
         function(done){
@@ -267,10 +267,12 @@ exports.inviteLender = function(appId, userId, lenderInfo, success, failure){
         function(done){
 
             var redirectURL = serverConfig.getConfig().hostURL +
-                '/welcome?token=' + token +
+                '/register/new-lender?token=' + token +
                 '&email=' + lenderInfo.email +
                 '&firstName=' + lenderInfo.firstName +
-                '&lastName=' + lenderInfo.lastName;
+                '&lastName=' + lenderInfo.lastName +
+                '&organization=' + lenderInfo.organization +
+                '&appId=' + appId;
 
             mandrill('/messages/send-template', {
                 template_name: 'lender_invite',

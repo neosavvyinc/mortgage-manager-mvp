@@ -3,15 +3,8 @@ var Router = require('react-router');
 var Link = Router.Link;
 var _ = require('lodash');
 
-/*
- NavigationItems array schema:
- {
- tabName: "tab1",
- tabLink: "dashboardMain"
- }
- */
-
 var calculateTabSpacing = function(tabNavLength){
+    return "one sixth";
     switch (tabNavLength){
         case 2:
             return "one half";
@@ -42,7 +35,10 @@ var calculateTabSpacing = function(tabNavLength){
 
 var Navigation = React.createClass({
 
-    mixins: [Router.State],
+    mixins: [
+        Router.State,
+        Router.Navigation
+    ],
 
     propTypes: {
         navigationItems: React.PropTypes.array
@@ -52,15 +48,25 @@ var Navigation = React.createClass({
         return {
             navigationItems: [
                 {
-                    tabName: "Applications",
-                    tabLink: "dashboardApplications"
+                    tabName: "Action1",
+                    tabLink: {
+                        name:"dashboardApplications",
+                        params: []
+                    }
                 },
                 {
-                    tabName: "Lenders",
-                    tabLink: "routeTester"
+                    tabName: "Action2",
+                    tabLink: {
+                        name: "routeTester",
+                        params: []
+                    }
                 }
             ]
         }
+    },
+
+    onClickTab: function(destination, params) {
+        this.transitionTo(destination, params[0]);
     },
 
     render: function(){
@@ -72,21 +78,21 @@ var Navigation = React.createClass({
             <div className="container">
                 <div className="row">
                     {this.props.navigationItems.map(function(tab) {
-                        if(this.isActive(tab.tabLink)){
+                        if(this.isActive(tab.tabLink.name)){
                             return (
-                                <Link key={tab.tabName} to={tab.tabLink}>
-                                    <button className={activeTabClass}>
+                                //<Link key={tab.tabName} to={tab.tabLink}>
+                                    <button className={activeTabClass} onClick={this.onClickTab.bind(this, tab.tabLink.name, tab.tabLink.params)}>
                                         <span className="plaintext">{tab.tabName}</span>
                                     </button>
-                                </Link>
+                                //</Link>
                             );
                         } else {
                             return (
-                                <Link key={tab.tabName} to={tab.tabLink}>
-                                    <button className={tabSpacingClass}>
+                                //<Link key={tab.tabName} to={tab.tabLink}>
+                                    <button className={tabSpacingClass} onClick={this.onClickTab.bind(this, tab.tabLink.name, tab.tabLink.params)}>
                                         <span className="plaintext">{tab.tabName}</span>
                                     </button>
-                                </Link>
+                                //</Link>
                             );
                         }
                     }.bind(this))}

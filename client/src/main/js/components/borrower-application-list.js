@@ -6,6 +6,7 @@ var moment = require('moment');
 
 var User = require('../models/model-user');
 var ErrorMessage = require('../components/error-message');
+var Navigation = require('../components/navigation');
 var UserStore = require('../stores/store-user');
 var ApplicationStore = require('../stores/store-application');
 var ApplicationActions = require('../actions/action-application');
@@ -39,7 +40,16 @@ var BorrowerApplications = React.createClass({
     render: function(){
 
         var applicationsTable = [],
-            status;
+            status,
+            actions = [
+                {
+                    tabName: "Create New Application",
+                    tabLink: {
+                        name: "routeTester",
+                        params: []
+                    }
+                }
+            ];
 
         _.forEach(this.props.applications, function(app){
             switch(app.status){
@@ -74,7 +84,7 @@ var BorrowerApplications = React.createClass({
         }, this);
         return (
             <div>
-                <button className="btn turquoise" onClick={this.onInviteLender}>Invite Lender</button>
+                <Navigation navigationItems={actions}/>
                 <table className="responsive">
                     <thead>
                         <tr>

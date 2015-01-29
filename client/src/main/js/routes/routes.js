@@ -13,10 +13,11 @@ var NewPassword = require('../views/registration/view-new-password');
 var ApplicantInfo = require('../views/registration/view-applicant-info');
 var LenderInfo = require('../views/registration/view-lender-info');
 var ApplicantQuestions = require('../views/registration/view-questions');
+var newLenderInvite = require('../views/registration/view-new-lender-invite');
 var Applications = require('../views/dashboard/view-application-list');
 var Documents = require('../views/dashboard/view-document-list');
 var Upload = require('../views/dashboard/view-upload-document');
-var LenderList = require('../views/dashboard/view-lender-list');
+var InviteLender = require('../views/dashboard/view-invite-lender');
 
 /* Default Root Handler */
 var RootDefault = React.createClass({
@@ -47,6 +48,7 @@ var routes = (
             <Route name="applicantQuestions" path="applicant-questions" handler={ApplicantQuestions} />
             <Route name="lenderInfo" path="lender-info" handler={LenderInfo} />
             <Route name="applicantInfo" path="applicant-info" handler={ApplicantInfo} />
+            <Route name="newLender" path="new-lender" handler={newLenderInvite} />
         </Route>
         <Route name="dashboard" handler={Dashboard}>
             <Route name="dashboardApplications" path="applications" handler={Applications} />
@@ -57,10 +59,8 @@ var routes = (
                 <Route name="uploadExistingDocument" path="document/:documentId" handler={Modal}>
                     <DefaultRoute handler={Upload} />
                 </Route>
-                <Route name="applicationLenders" path="lenders" handler={LenderList}>
-                    <Route name="inviteLender" path="invite" handler={Modal}>
-                        <DefaultRoute handler={InviteLender} />
-                    </Route>
+                <Route name="inviteLender" path="invite-lender" handler={Modal}>
+                    <DefaultRoute handler={InviteLender} />
                 </Route>
             </Route>
             <Route name="routeTester" path="testRoute" handler={TestRoute1} />

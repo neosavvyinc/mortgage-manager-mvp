@@ -4,6 +4,7 @@ var Reflux = require('reflux');
 var _ = require('lodash');
 
 var Application = require('../../models/model-application');
+var Navigation = require('../../components/navigation');
 //var ApplicationStore = require('../../stores/store-application');
 //var ApplicationActions = require('../../actions/action-application');
 
@@ -30,12 +31,20 @@ var LenderInvite = React.createClass({
         }.bind(this));
     },
 
-    onInviteLender: function(){
-        this.transitionTo('inviteLender', {appId: this.getParams().appId});
-    },
-
     render: function(){
-        var lendersTable;
+        var lendersTable = [];
+
+        var actions = [
+            {
+                tabName: "Invite Lender",
+                tabLink: {
+                    name: "inviteLender",
+                    params: [{
+                        appId: this.getParams().appId
+                    }]
+                }
+            }
+        ];
 
         _.forEach(this.state.lenders, function(lender){
             lendersTable.push((
@@ -57,8 +66,8 @@ var LenderInvite = React.createClass({
         return (
             <div className="container">
                 <div className="gap-top">
-                    <h1>Lenders</h1>
-                    <button className="btn turquoise" onClick={this.onInviteLender}>Invite Lender</button>
+                    <h2>Lenders</h2>
+                    <Navigation navigationItems={actions}/>
                     <table className="responsive">
                         <thead>
                             <tr>

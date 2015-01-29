@@ -155,7 +155,7 @@ var ApplicantInfo = React.createClass({
 
         var borrowerBasicInfo = this.state.currentBorrower.basicInfo;
 
-        applicantAddress = this.state.shareAddress ?  (
+        var applicantAddress = this.state.shareAddress ?  (
             <div>
                 <div className="row gap-bottom">
                     <input className="three fourths" type="text" ref="address" placeholder="address" value={borrowerBasicInfo.address} required />

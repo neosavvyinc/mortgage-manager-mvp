@@ -5,8 +5,11 @@ var RouterHandler = Router.RouteHandler;
 var _ = require('lodash');
 var moment = require('moment');
 var User = require('../../models/model-user');
+var UserStore = require('../../stores/store-user');
 var Application = require('../../models/model-application');
 var ErrorMessage = require('../../components/error-message');
+var Navigation = require('../../components/navigation');
+var LendersTable = require('./view-lender-list');
 
 var arraysEqual = function(arr1, arr2) {
     if(arr1.length !== arr2.length)
@@ -27,12 +30,21 @@ var Documents = React.createClass({
 
     getInitialState: function(){
         return {
-            documents: []
+            documents: [],
+            userType: ''
         }
     },
 
     componentDidMount: function(){
         this.getDocuments();
+
+        User.getUserDetails(UserStore.getCurrentUserId()).then(function(user){
+            this.setState(
+                {
+                    userType: user.type
+                }
+            );
+        }.bind(this));
     },
 
     componentDidUpdate: function(prevProps, prevState) {
@@ -49,6 +61,10 @@ var Documents = React.createClass({
         this.transitionTo('uploadExistingDocument', {appId: this.getParams().appId, documentId: document._id});
     },
 
+    onInviteLender: function(){
+        this.transitionTo('inviteLender', {appId: this.getParams().appId});
+    },
+
     getDocuments: function() {
         Application.getDocuments(this.getParams().appId).then(function(documents){
             this.setState({
@@ -58,7 +74,36 @@ var Documents = React.createClass({
     },
 
     render: function() {
+
         var documentsTable = [];
+
+        var actions;
+
+        if(this.state.userType === 'lender'){
+            actions = [
+                {
+                    tabName: "Request New Document",
+                    tabLink: "routerTester"
+                },
+                {
+                    tabName: "Request Explanation",
+                    tabLink: "routerTester"
+                }
+            ];
+        } else if(this.state.userType == 'borrower'){
+            actions = [
+                {
+                    tabName: "Upload New Document",
+                    tabLink: {
+                        name: "uploadNewDocument",
+                        params: [{
+                            appId: this.getParams().appId
+                        }]
+                    }
+                }
+            ];
+        }
+
         _.map(this.state.documents, function(document) {
 
             var viewButton = {
@@ -96,26 +141,37 @@ var Documents = React.createClass({
             <div className="container">
                 <div className="gap-top">
                     <div className="row">
-                        <h1 className="one ninth">Documents</h1>
-                        <button className="btn blue one eighth skip-six gap-top" onClick={this.onNewDocumentUpload}>New Document</button>
+                        <h2>Application #{this.getParams().appId}</h2>
                     </div>
-                    <table className="responsive">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Document Name</th>
-                                <th>Document Type</th>
-                                <th>Description</th>
-                                <th>Requested Date</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                    <div className="tabs ipad">
+                        <ul role="tablist">
+                            <li role="tab" aria-controls=".documentsTab" className="active">Documents</li>
+                            <li role="tab" aria-controls=".LendersTab">Lenders</li>
+                        </ul>
+                        <div role="tabpanel" className="documentsTab" className="active">
+                            <Navigation navigationItems={actions}/>
+                            <table className="responsive">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Document Name</th>
+                                        <th>Document Type</th>
+                                        <th>Description</th>
+                                        <th>Requested Date</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
                         {documentsTable.map(function(document) {
                             return (document);
                         })}
-                        </tbody>
-                    </table>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div role="tabpanel" className="lendersTab active">
+                            <LendersTable />
+                        </div>
+                    </div>
                 </div>
                 <RouterHandler/>
             </div>

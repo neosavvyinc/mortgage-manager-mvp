@@ -1,5 +1,6 @@
 var Q = require('q');
 var $ = require('jquery');
+var _ = require('lodash');
 
 var Endpoints = require("../constants/endpoints");
 
