@@ -21,11 +21,11 @@ module.exports = {
             },
             {
                 expand:true,
-                cwd:'<%= sourceDirectoryPath %>/lib/pdfjs-1.0.473-dist/',
+                cwd:'<%= sourceDirectoryPath %>/lib/',
                 src:[
-                    '**/*',
+                    'pdf.worker.js'
                 ],
-                dest: '<%= buildOutputDirectoryPath %>/js/pdfjs-1.0.473-dist'
+                dest: '<%= buildOutputDirectoryPath %>/js/'
             }
         ]
     },

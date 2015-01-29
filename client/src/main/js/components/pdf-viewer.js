@@ -10,7 +10,7 @@ var Pdf = React.createClass({
 
 	componentDidMount: function() {
 		var self = this;
-		PDFJS.workerSrc = "js/pdfjs-1.0.473-dist/build/pdf.worker.js";
+		PDFJS.workerSrc = "js/pdf.worker.js";
 		PDFJS.getDocument(this.props.file).then(function(pdf) {
 			pdf.getPage(self.props.page).then(function(page) {
 				self.setState({pdfPage: page, pdf: pdf});
