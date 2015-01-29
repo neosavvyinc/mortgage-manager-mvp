@@ -1,6 +1,7 @@
 'use strict';
 
-var _ = require('underscore'),
+var path = require('path'),
+	_ = require('underscore'),
 	async = require('async'),
 	commonUtils = require('../../lib/utils/common-utils'),
 	documentModel = require('../db/models/model-document').Model,
@@ -13,20 +14,30 @@ var _ = require('underscore'),
  * @param failure
  */
 exports.saveDocument = function(doc, success, failure) {
-	var currentDate = new Date();
-
+	var currentDate = new Date(),
+		docId = doc._id;
 	async.series([
 		function(done) {
 			//Check if document already exists and remove the file from server before re-upload
-			//var document = new documentModel();
-			done();
+			if(docId !== undefined) {
+				var document = new documentModel();
+				document.retrieve({_id: docId}, function(docs) {
+					var filePath = path.resolve(docs[0].url);
+					if(filePath !== undefined) {
+						commonUtils.deleteFileSync(filePath);
+					}
+					done();
+				}, function(error){
+					failure(error);
+				});
+			} else {
+				doc._id = commonUtils.generateId();
+				done();
+			}
 		},
 		function(done) {
 			//Store the document in mongo
 			var document = new documentModel();
-			if(doc._id === undefined) {
-				doc._id = commonUtils.generateId();
-			}
 			_.extend(doc, {
 				requestDate: currentDate,
 				uploadDate: currentDate,

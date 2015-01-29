@@ -83,7 +83,7 @@ exports.getFile = function(req, res){
 
         res.sendFile(url, options, function(err) {
             if(err) {
-                if (err.code === "ECONNABORT" && res.statusCode == 304) {
+                if (err.code === 'ECONNABORT' && res.statusCode === 304) {
                     // No problem, 304 means client cache hit, so no data sent.
                     console.log('304 cache hit for ' + url);
                     return;

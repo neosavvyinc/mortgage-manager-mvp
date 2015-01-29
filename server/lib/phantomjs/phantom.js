@@ -1,9 +1,6 @@
 'use strict';
 
-var fs = require('fs'),
-	os = require('os'),
-	path = require('path'),
-	util = require('util'),
+var path = require('path'),
 	async = require('async'),
 	childProcess = require('child_process'),
 	phantomjs = require('phantomjs'),
@@ -19,17 +16,15 @@ exports.convertToPdf = function(imageSourcePath, pdfTargetPath, captureOptions, 
 			done();
 		},
 		function(done) {
-			var result = _writeTmpFileSync(html, 'html');
+			var result = utils.writeTmpFileSync(html, 'html');
 			filePath = result.path;
 			done();
 		},
 		function(done) {
-			console.log('done3');
 			_capturePdf(filePath, pdfTargetPath, captureOptions, done, done);
 		},
 		function(done) {
-			console.log('done4');
-			//_deleteFileSync(filePath);
+			utils.deleteFileSync(filePath);
 			done();
 		}
 	], function(error) {
@@ -50,7 +45,6 @@ exports.convertToPdf = function(imageSourcePath, pdfTargetPath, captureOptions, 
  * @param failure
  */
 var _capturePdf = function(htmlSourcePath, pdfTargetPath, captureOptions, success, failure) {
-	console.log(htmlSourcePath);
 	var binPath=phantomjs.path,
 		binArgs=[
 			path.resolve('./lib/phantomjs/scripts/capture.js'),
@@ -92,50 +86,4 @@ var _getImageHtml = function(imagePath, height, width) {
 	context.imageUrl = path.resolve(imagePath);
 	html = utils.renderTemplate('./lib/phantomjs/templates/image-to-pdf.handlebars', context);
 	return html;
-};
-
-/**
- * Works with 'os' to find temporary directory and finds a unique filename within. The reason
- * it is private is because the filename is not guaranteed to remain unique until it physically
- * exists in the filesystem. We leave it to local brains to make sure the path is used immediately
- * @private
- */
-function _getTmpFilePath(prefix, extension) {
-	var index, _path;
-	for(index=0; true; index++) {
-		_path = path.join(os.tmpdir(), util.format("%s-%d.%s", prefix, index, extension));
-		if(fs.existsSync(_path) === false) {
-			break;
-		}
-	}
-	return _path;
-}
-
-/**
- * Creates a temporary file and writes data to it using fs.writeFileSync
- * @param data
- * @param {String} extension - file extension
- * @param {Object} options (optional)
- * @returns {{path: {String}, error:{Error}}}
- */
-var _writeTmpFileSync=function(data, extension, options) {
-	var tmpPath=_getTmpFilePath('MAM', extension),
-		result = {};
-	try {
-		fs.writeFileSync(tmpPath, data, options);
-		result.path = tmpPath;
-	} catch(error) {
-		console.error("file.writeFileSync: attempt to write '%s' failed: %s", path, error);
-		result.error = error;
-	}
-	return result;
-};
-
-
-var _deleteFileSync=function(path) {
-	try {
-		fs.unlinkSync(path);
-	} catch(error) {
-		log.error("file.delete: attempt to delete '%s' failed: %s", path, error);
-	}
 };

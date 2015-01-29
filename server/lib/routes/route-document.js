@@ -24,6 +24,7 @@ exports.insertDocument = function(req, res) {
 		var uploadPath = file.path,
 			extension = file.extension,
 			dimensions = sizeOf(uploadPath),
+			updatedUploadPath,
 			splitPath,
 			destPath;
 
@@ -37,9 +38,10 @@ exports.insertDocument = function(req, res) {
 						},
 						pathArr = uploadPath.split('/'),
 						targetPath = pathArr[0] + '/' + pathArr[1].split('.')[0] + '.pdf';
+
 					//Convert to pdf
 					phantom.convertToPdf(uploadPath, targetPath, captureOptions, function () {
-						uploadPath = targetPath;
+						updatedUploadPath = targetPath;
 						done();
 					}, function (error) {
 						done(new Error('Could not convert to pdf ' + error));
@@ -47,14 +49,23 @@ exports.insertDocument = function(req, res) {
 				}
 			},
 			function(done) {
+				var updatedUploadSplit,
+					updatedDest;
+
+				if(updatedUploadPath !== undefined) {
+					updatedUploadSplit = updatedUploadPath.split('/');
+					updatedDest = updatedUploadSplit[0] + '/' + appId + '/' + updatedUploadSplit[1];
+					commonUtils.moveFiles(updatedUploadPath, updatedDest);
+				}
+
 				splitPath = uploadPath.split('/');
-				destPath = splitPath[0] + '/' + appId +'/' + splitPath[1];
+				destPath = splitPath[0] + '/' + appId + '/' + splitPath[1];
 
 				//Move the uploaded files before calling the service
 				commonUtils.moveFiles(uploadPath, destPath);
 
 				_.extend(documentObject, {
-					url: destPath,
+					url: (updatedDest === undefined) ? destPath : updatedDest,
 					appId: appId
 				});
 
