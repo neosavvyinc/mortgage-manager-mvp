@@ -70,7 +70,8 @@ var UploadDocument = React.createClass({
 	handleFileName: function(event) {
 		this.setState({
 			fileName: event.target.files[0].name,
-			fileHandler: event.target.files[0]
+			fileHandler: event.target.files[0],
+			loader: false
 		});
 	},
 
@@ -89,6 +90,9 @@ var UploadDocument = React.createClass({
 
 			Document.upload(appId, documentInfo).then(function(){
 				DocumentActions.uploadDocument(documentInfo);
+				this.setState({
+					loader: true
+				});
 			}.bind(this), function(error){
 				this.setState({
 					success: false,
@@ -109,12 +113,15 @@ var UploadDocument = React.createClass({
 		this.setState({
 			error: false,
 			success: true,
-			uploadMessage: 'File successfully uploaded!'
+			uploadMessage: 'File successfully uploaded!',
+			loader: false
 		});
+		this.close();
 	},
 
 	render: function() {
-		return (
+		return (this.state.loader) ? (<div className="loader"> <img src="http://www.kingpizza.com.br/imagens/loader.gif"/> </div>) :
+		(
 			<div>
 				<form className="uploadComponent" encType="multipart/form-data">
 					<div onClick={this.close} title="Close" className="close">X</div>

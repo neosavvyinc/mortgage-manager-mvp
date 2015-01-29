@@ -12,13 +12,8 @@ var PDF = require('../../components/pdf-viewer'),
 var ViewPdf = React.createClass({
 
 	mixins: [
-		Router.State,
-		Router.Navigation
+		Router.State
 	],
-
-	close: function() {
-		this.transitionTo('dashboardDocuments', {appId: this.getParams().appId});
-	},
 
 	getInitialState: function() {
 		return {
@@ -56,8 +51,7 @@ var ViewPdf = React.createClass({
 						<li><span onClick={this.download}> Download </span></li>
 					</ul>
 				</nav>
-				<div className="pdfComponent">
-					<div onClick={this.close} title="Close" className="close">X</div>
+				<div>
 				    <PDF file={this.state.file} page={this.state.page} />
 				</div>
 			</div>
