@@ -51,10 +51,16 @@ var Pdf = React.createClass({
 			var canvas = self.refs.canvas.getDOMNode(),
 				context = canvas.getContext('2d'),
 				scale = 1.0,
+				viewport = self.state.pdfPage.getViewport(scale),
+				renderContext = {};
+
+			if(window.innerHeight){
+				scale = (window.innerHeight-100) / viewport.height;
 				viewport = self.state.pdfPage.getViewport(scale);
+			}
 			canvas.height = viewport.height;
 			canvas.width = viewport.width;
-			var renderContext = {
+			renderContext = {
 				canvasContext: context,
 				viewport: viewport
 			};
