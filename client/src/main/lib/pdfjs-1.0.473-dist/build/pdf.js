@@ -2642,10 +2642,8 @@ var WorkerTransport = (function WorkerTransportClosure() {
       var promise = this.messageHandler.sendWithPromise('GetPage', {
         pageIndex: pageIndex
       }).then(function (pageInfo) {
-        console.log('In sendWithPromise success');
         var page = new PDFPageProxy(pageIndex, pageInfo, this);
         this.pageCache[pageIndex] = page;
-        console.log('Returning page ' + page);
         return page;
       }.bind(this));
       this.pagePromises[pageIndex] = promise;

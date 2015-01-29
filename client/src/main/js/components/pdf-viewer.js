@@ -22,6 +22,19 @@ var Pdf = React.createClass({
 		return {page: 1};
 	},
 
+	componentWillReceiveProps: function(newProps) {
+		var self = this;
+		if (newProps.page !== self.props.page) {
+			self.state.pdf.getPage(newProps.page).then(function(page) {
+				self.setState({pdfPage: page, pageId: newProps.page});
+			});
+
+			this.setState({
+				pdfPage: null
+			});
+		}
+	},
+
 	render: function() {
 		var self = this;
 		if (this.state.pdfPage) setTimeout(function() {
@@ -37,7 +50,7 @@ var Pdf = React.createClass({
 			};
 			self.state.pdfPage.render(renderContext);
 		});
-		return this.state.pdfPage ? <canvas></canvas> : <div className="row">Loading Document..</div>;
+		return this.state.pdfPage ? <canvas></canvas> : <div className="row">Loading.</div>;
 	}
 });
 

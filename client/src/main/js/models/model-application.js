@@ -29,9 +29,9 @@ Application.getDocument = function(appId, docId) {
     });
 };
 
-Application.getDocumentFile = function(appId, docId) {
+Application.downloadFile = function(appId, docId) {
     return Q.promise(function(resolve, reject) {
-        $.get(Endpoints.APPLICATIONS.ONE.FILE.ONE.URL.replace(':id', appId).replace(':docId', docId))
+        $.get(Endpoints.APPLICATIONS.ONE.DOWNLOAD.ONE.URL.replace(':id', appId).replace(':docId', docId))
             .success(function(response){
                 resolve(response);
             })
