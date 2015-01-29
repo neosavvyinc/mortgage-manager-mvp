@@ -7,7 +7,6 @@ var moment = require('moment');
 var User = require('../../models/model-user');
 var Application = require('../../models/model-application');
 var ErrorMessage = require('../../components/error-message');
-var fileSaver = require('browser-filesaver');
 
 var arraysEqual = function(arr1, arr2) {
     if(arr1.length !== arr2.length)

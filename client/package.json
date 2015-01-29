@@ -32,8 +32,7 @@
     "browserify": "8.0.3",
     "fluxify": "0.2.1",
     "watchify": "2.2.1",
-    "react-tools": "0.12.2",
-    "browser-filesaver": "1.0.0"
+    "react-tools": "0.12.2"
   },
   "jest": {
     "testDirectoryName": "test",
