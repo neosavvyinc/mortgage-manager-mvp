@@ -22,13 +22,13 @@ exports.saveDocument = function(doc, success, failure) {
 			if(docId !== undefined) {
 				var document = new documentModel();
 				document.retrieve({_id: docId}, function(docs) {
-					var filePath = path.resolve(docs[0].url);
-					if(filePath !== undefined) {
+					if(docs[0].url !== undefined) {
+						var filePath = path.resolve(docs[0].url);
 						commonUtils.deleteFileSync(filePath);
 					}
 					done();
-				}, function(error){
-					failure(error);
+				}, function(error) {
+					done(error);
 				});
 			} else {
 				doc._id = commonUtils.generateId();

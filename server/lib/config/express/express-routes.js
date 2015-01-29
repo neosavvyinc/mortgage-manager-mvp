@@ -56,6 +56,11 @@ module.exports = function(router, passport) {
 	router.route('/applications/:appId/file/:docId')
 		.all(_isAuthenticated)
 		.get(applicationRoute.getFile);
+
+	//Route for downloading file
+	router.route('/applications/:appId/download/:docId')
+		.all(_isAuthenticated)
+		.get(applicationRoute.downloadFile);
 };
 
 /**

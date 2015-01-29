@@ -23,7 +23,6 @@ exports.insertDocument = function(req, res) {
 	} else {
 		var uploadPath = file.path,
 			extension = file.extension,
-			dimensions = sizeOf(uploadPath),
 			updatedUploadPath,
 			splitPath,
 			destPath;
@@ -31,7 +30,8 @@ exports.insertDocument = function(req, res) {
 		async.series([
 			function(done) {
 				if(extension !== 'pdf') {
-					var captureOptions = {
+					var dimensions = sizeOf(uploadPath),
+						captureOptions = {
 							width: dimensions.width,
 							height: dimensions.height,
 							delay: 200
@@ -46,6 +46,8 @@ exports.insertDocument = function(req, res) {
 					}, function (error) {
 						done(new Error('Could not convert to pdf ' + error));
 					});
+				} else {
+					done();
 				}
 			},
 			function(done) {
