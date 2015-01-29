@@ -27,6 +27,20 @@ exports.updateUser = function(req, res) {
 	});
 };
 
+exports.getUserDetails = function(req, res){
+	var uid = req.params.uid;
+
+	userDetailsService.findUserWithDetails(uid, function(userWithDetails) {
+		res.send(userWithDetails);
+		res.end();
+	}, function(error) {
+		if(error) {
+			res.status(500).send({message: 'Internal Server Error'});
+		}
+		res.end();
+	});
+};
+
 /**
  * Route handler for creating a coapplicant for a particular user
  * @param req

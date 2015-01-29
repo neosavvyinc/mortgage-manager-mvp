@@ -31,3 +31,19 @@ exports.createUser = function(userObject, callback) {
 		callback(error);
 	});
 };
+
+/**
+ * Checks it the email is already in the database
+ * @param email
+ * @param success
+ * @param failure
+ */
+exports.emailExists = function(email, success, failure){
+	var user = new userModel();
+	user.findOneDocument({email: email}, function() {
+			failure(new Error('The user already exists'));
+		},
+		function() {
+			success();
+		});
+};

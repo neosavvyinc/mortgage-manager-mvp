@@ -43,6 +43,18 @@ User.update = function (userId, userInfo){
     });
 };
 
+User.getUserDetails = function(userID){
+    return Q.promise(function(resolve, reject){
+        $.get(Endpoints.USER.ONE.URL.replace(':id', userID))
+            .success(function(response){
+                resolve(response);
+            })
+            .error(function(error){
+                reject(error);
+            });
+    })
+};
+
 User.addCoapplicant = function (applicantID, coapplicantInfo){
     return Q.promise(function(resolve, reject){
         $.post(Endpoints.USER.ONE.COAPPLICANT.URL.replace(':id', applicantID), coapplicantInfo)
@@ -64,7 +76,7 @@ User.getApplications = function(userID){
             .error(function(error){
                 reject(error);
             });
-    })
+    });
 };
 
 User.generateApplication = function(userID){
@@ -76,7 +88,19 @@ User.generateApplication = function(userID){
             .error(function(error){
                 reject(error);
             });
-    })
+    });
+};
+
+User.emailExists = function(email){
+    return Q.promise(function(resolve, reject){
+        $.post(Endpoints.EMAIL.URL, {email: email})
+            .success(function(response){
+                resolve(response);
+            })
+            .error(function(error){
+                reject(error);
+            });
+    });
 };
 
 module.exports = User;

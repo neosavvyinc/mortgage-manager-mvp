@@ -17,6 +17,9 @@ module.exports = {
     REGISTER: {
         URL: '/api/register'
     },
+    EMAIL: {
+        URL: '/api/email-exists'
+    },
     APPLICATIONS: {
         URL: '/api/applications',
         ONE: {
