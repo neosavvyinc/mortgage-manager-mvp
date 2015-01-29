@@ -63,9 +63,6 @@ documentModel.insertNewDocument = function(documents,
  * @param failure
  */
 documentModel.insertOrUpdate = function(document, success, failure) {
-	//Check if document URL is already present
-
-
 	documentModel.update(document, {_id: document._id}, {upsert: true}, success, failure);
 };
 
