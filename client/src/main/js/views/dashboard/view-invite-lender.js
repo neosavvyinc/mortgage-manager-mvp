@@ -24,8 +24,8 @@ var UploadDocument = React.createClass({
     getInitialState: function() {
         return {
             inviteError: false,
-            inviteErrorText: ""
-        }
+            inviteErrorText: ''
+        };
     },
 
     close: function() {
@@ -55,7 +55,7 @@ var UploadDocument = React.createClass({
         } else {
             this.setState({
                 inviteError: true,
-                inviteErrorText: "All fields are required"
+                inviteErrorText: 'All fields are required'
             });
         }
     },
@@ -64,6 +64,7 @@ var UploadDocument = React.createClass({
         return (
             <form className="uploadComponent">
                 <legend><h1 className="gap-top">Invite your Lenders</h1></legend>
+                <div onClick={this.close} title="Close" className="close">X</div>
                 <div className="row">
                     <div className="one half padded">
                         <input type="text" ref="firstName" placeholder="First Name"/>

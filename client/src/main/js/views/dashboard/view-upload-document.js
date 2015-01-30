@@ -35,7 +35,7 @@ var UploadDocument = React.createClass({
 			uploadMessage: '',
 			success: false,
 			error: false
-		}
+		};
 	},
 
 	componentDidMount: function() {
