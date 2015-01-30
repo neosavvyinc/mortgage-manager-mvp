@@ -65,3 +65,67 @@ exports.getApplicationDocument = function(req, res){
         }
     });
 };
+
+/**
+ * Route handler that returns the file url for a given docId and appId
+ * @param req
+ * @param res
+ */
+exports.getFile = function(req, res){
+    var appId = req.params.appId,
+        docId = req.params.docId;
+
+    applicationService.getDocuments(appId, docId, function(documents) {
+        var url = documents[0].url,
+            options = {
+                root: __dirname.split('lib')[0]
+            };
+
+        res.sendFile(url, options, function(err) {
+            if(err) {
+                if (err.code === 'ECONNABORT' && res.statusCode === 304) {
+                    // No problem, 304 means client cache hit, so no data sent.
+                    console.log('304 cache hit for ' + url);
+                    return;
+                }
+                res.status(err.status).end();
+            } else {
+                res.status(200).end();
+            }
+        });
+    }, function(error){
+        if(error){
+            res.status(500).send({message: 'Internal Server Error'});
+        }
+    });
+};
+
+/**
+ * Route handler that returns the file url for a given docId and appId
+ * @param req
+ * @param res
+ */
+exports.downloadFile = function(req, res){
+    var appId = req.params.appId,
+        docId = req.params.docId;
+
+    applicationService.getDocuments(appId, docId, function(documents) {
+        var url = documents[0].url,
+            options = {
+                root: __dirname.split('lib')[0]
+            };
+
+        res.download(url, documents[0].name+'.pdf', function(error) {
+            if(error) {
+                console.log(error);
+                res.status(500).send({message: 'Internal Server Error'});
+            } else {
+                res.status(200).end();
+            }
+        });
+    }, function(error){
+        if(error){
+            res.status(500).send({message: 'Internal Server Error'});
+        }
+    });
+};

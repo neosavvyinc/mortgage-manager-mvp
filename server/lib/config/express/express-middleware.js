@@ -25,7 +25,6 @@ module.exports = function(app, router, passport) {
 		}
 	}));
 
-
 	// For passport
 	app.use(expressSession({
 		secret: settings.secretKey,

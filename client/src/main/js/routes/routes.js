@@ -16,6 +16,7 @@ var ApplicantQuestions = require('../views/registration/view-questions');
 var Applications = require('../views/dashboard/view-application-list');
 var Documents = require('../views/dashboard/view-document-list');
 var Upload = require('../views/dashboard/view-upload-document');
+var viewPdf = require('../views/dashboard/view-pdf-document');
 
 /* Default Root Handler */
 var RootDefault = React.createClass({
@@ -53,8 +54,11 @@ var routes = (
                 <Route name="uploadNewDocument" handler={Modal}>
                     <DefaultRoute handler={Upload} />
                 </Route>
-                <Route name="uploadExistingDocument" path="document/:documentId" handler={Modal}>
+                <Route name="uploadExistingDocument" path="document/:documentId/upload" handler={Modal}>
                     <DefaultRoute handler={Upload} />
+                </Route>
+                <Route name="viewDocument" path="document/:documentId/" handler={Modal}>
+                    <DefaultRoute handler={viewPdf} />
                 </Route>
             </Route>
             <Route name="routeTester" path="testRoute" handler={TestRoute1} />

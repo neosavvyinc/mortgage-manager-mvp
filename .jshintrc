@@ -40,6 +40,8 @@
 		"runs"      : false,
 		"waits"     : false,
 		"waitsFor"  : false,
-		"Promise"   : true
+		"Promise"   : true,
+		"phantom"   : true,
+		"window"    : true
 	}
 }

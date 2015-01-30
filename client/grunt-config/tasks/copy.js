@@ -19,6 +19,14 @@ module.exports = {
                 ],
                 dest: '<%= buildOutputDirectoryPath %>/assets/css/'
             },
+            {
+                expand:true,
+                cwd:'<%= sourceDirectoryPath %>/lib/',
+                src:[
+                    'pdf.worker.js'
+                ],
+                dest: '<%= buildOutputDirectoryPath %>/js/'
+            }
         ]
     },
     deploy: {
