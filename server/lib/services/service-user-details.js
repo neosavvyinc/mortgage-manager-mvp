@@ -3,7 +3,9 @@
 var async = require('async'),
 	_ = require('underscore'),
 	userDetailsModel = require('../db/models/model-user-details').Model,
-	userModel = require('../db/models/model-user').Model;
+	userModel = require('../db/models/model-user').Model,
+	lenderInvitesModel = require('../db/models/model-lender-invites').Model,
+	applicationLendersModel = require('../db/models/model-application-lenders').Model;
 
 
 /**
@@ -104,6 +106,72 @@ exports.findUserWithDetails = function(uid, success, failure){
 			failure(error);
 		} else {
 			success(userWithDetails);
+		}
+	});
+};
+
+
+exports.lenderAppInvite = function(email, token, appId, success, failure){
+
+	var user = new userModel(),
+		userDetails = new userDetailsModel(),
+		lenderInvites = new lenderInvitesModel(),
+		applicationLenders = new applicationLendersModel();
+
+	var userBasicInfo;
+	async.series([
+		function(done){
+			user.retrieve({email: email}, function(userData){
+				userBasicInfo = userData[0];
+				done();
+			}, done);
+		},
+		function(done){
+			async.parallel([
+				function(callback){
+					var previousUserDets;
+					async.series([
+						function(cb){
+							userDetails.retrieve({_id: userBasicInfo._id}, function(userDets){
+								previousUserDets = userDets[0];
+								cb();
+							}, cb);
+						},
+						function(cb){
+							if(_.indexOf(previousUserDets.appId, appId) < 0) {
+								previousUserDets.appId.push(appId);
+								userDetails.update({appId: previousUserDets.appId}, {_id: userBasicInfo._id}, null, cb, cb);
+							} else {
+								cb();
+							}
+						}
+					], function(error){
+						if(error){
+							callback(error);
+						} else {
+							callback();
+						}
+					});
+				},
+				function(callback){
+					lenderInvites.update({isOpen: false}, {appId: appId}, null, callback, callback);
+				},
+				function(callback){
+					applicationLenders.insert({lenderId: userBasicInfo._id, appId: appId}, callback, callback);
+				}
+			],function(error){
+				if(error){
+					done(error);
+				} else {
+					done();
+				}
+			});
+		}
+	], function(error){
+		if(error){
+			failure(error);
+		} else {
+			success();
 		}
 	});
 };

@@ -4,7 +4,8 @@ var bCrypt = require('bcrypt-nodejs'),
 	async = require('async'),
 	LocalStrategy = require('passport-local').Strategy,
 	loginService = require('../services/service-user'),
-	userService = require('../services/service-user');
+	userService = require('../services/service-user'),
+	userDetailsService = require('../services/service-user-details');
 /**
  * Initializes passport for the application. Creates function to serialize and deserialize
  * users.
@@ -48,6 +49,32 @@ exports.validateLogin = function(passport) {
 	};
 };
 
+exports.AddAppAndLogin = function(passport){
+	return function(req, res, next) {
+		userDetailsService.lenderAppInvite(req.param('email'), req.param('token'), req.param('appId'),
+			function(){
+				passport.authenticate('login', function(err, user, info) {
+					if (err) {
+						res.status(409).
+							send(err);
+					}
+					if(!user) {
+						res.status(info.code)
+							.send({message: info.message});
+					} else {
+						delete user.password;
+						res.send(user);
+					}
+					res.end();
+				})(req, res, next);
+			}.bind(this), function(error) {
+				if(error) {
+					res.status(400).send({message: 'The user already exists'});
+				}
+				res.end();
+			});
+	};
+};
 /**
  * Register a new user
  * @param passport

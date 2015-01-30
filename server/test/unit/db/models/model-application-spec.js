@@ -121,7 +121,7 @@ describe('modelApplication',  function() {
 				pUID: 'uId',
 				documents: [],
 				status: 0,
-				cUID: 'couId'
+				coUID: 'couId'
 			};
 
 			spyOn(commonUtils, 'generateId').andReturn('fakeId');
@@ -167,7 +167,7 @@ describe('modelApplication',  function() {
 				pUID: 'uId',
 				documents: [],
 				status: 0,
-				cUID: 'couId'
+				coUID: 'couId'
 			};
 
 			spyOn(commonUtils, 'generateId').andReturn('fakeId');

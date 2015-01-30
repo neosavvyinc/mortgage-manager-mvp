@@ -15,6 +15,9 @@ module.exports = function(router, passport) {
 	router.route('/login')
 		.post(authRoute.validateLogin(passport));
 
+	router.route('/login/token')
+		.post(authRoute.AddAppAndLogin(passport));
+
 	//Create a new user
 	router.route('/register')
 		.post(authRoute.registerUser(passport));

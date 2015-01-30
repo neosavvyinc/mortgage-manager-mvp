@@ -110,10 +110,7 @@ exports.downloadFile = function(req, res){
         docId = req.params.docId;
 
     applicationService.getDocuments(appId, docId, function(documents) {
-        var url = documents[0].url,
-            options = {
-                root: __dirname.split('lib')[0]
-            };
+        var url = documents[0].url;
 
         res.download(url, documents[0].name+'.pdf', function(error) {
             if(error) {

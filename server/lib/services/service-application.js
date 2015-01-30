@@ -78,7 +78,8 @@ exports.getUserApplications = function(uid, success, failure){
                 async.map(applications,
                     function (app, callback) {
                         var usersInfo = {};
-                        async.parallel([
+                        if(app){
+                            async.parallel([
                                 /*
                                     Get all primary user details
                                  */
@@ -112,6 +113,9 @@ exports.getUserApplications = function(uid, success, failure){
                                     callback(null, app);
                                 }
                             });
+                        } else {
+                            callback();
+                        }
                     },
                     function (error, apps) {
                         if (error) {
@@ -130,7 +134,6 @@ exports.getUserApplications = function(uid, success, failure){
         if(error){
             failure(error);
         } else {
-            //console.log(applications);
             success(applications);
         }
     });
@@ -289,7 +292,7 @@ exports.getBorrowers = function(appId, success, failure){
                     });
                 },
                 function(cb){
-                    if(application.coUID){
+                    if(appDetails.coUID){
                         var coapplicant = {};
                         async.series([
                             function(callback){

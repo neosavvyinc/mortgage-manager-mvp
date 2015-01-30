@@ -15,6 +15,13 @@ var Login = React.createClass({
         }
     },
 
+    getDefaultProps: function(){
+        return {
+            loginType: 'regular',
+            userData: null
+        };
+    },
+
     render: function(){
         return (
             <form>
@@ -36,16 +43,31 @@ var Login = React.createClass({
         var email = this.refs.userEmail.getDOMNode().value,
             password = this.refs.userPassword.getDOMNode().value;
 
-        User.login(email, password).then(
-            function(user){
-                UserActions.login(user);
-            }, function(error){
-                this.setState({
-                    loginError:true,
-                    loginErrorText: error.responseJSON.message
-                });
-            }.bind(this)
-        );
+        if(this.props.loginType === 'new-invite' && this.props.userData){
+            User.addAppAndLogin(email, password, this.props.userData.token, this.props.userData.appId).then(
+                function(user){
+                    UserActions.login(user);
+                }, function(error){
+                    this.setState({
+                        loginError:true,
+                        loginErrorText: error.responseJSON.message
+                    });
+                }.bind(this)
+            );
+        } else {
+            User.login(email, password).then(
+                function(user){
+                    UserActions.login(user);
+                }, function(error){
+                    this.setState({
+                        loginError:true,
+                        loginErrorText: error.responseJSON.message
+                    });
+                }.bind(this)
+            );
+        }
+
+
     }
 });
 
