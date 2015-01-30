@@ -44,7 +44,6 @@ var LenderContacts = React.createClass({
             }
         ];
 
-        console.log("I am Groot");
         _.forEach(this.state.lenders, function(lender){
             lendersTable.push((
                 <tr>

@@ -75,6 +75,11 @@ module.exports = function(router, passport) {
 	router.route('/applications/:appId/download/:docId')
 		.all(_isAuthenticated)
 		.get(applicationRoute.downloadFile);
+
+	//Route for creating a new document entry
+	router.route('/applications/:appId/documentEntry')
+		.all(_isAuthenticated)
+		.post(documentRoute.insertDocumentEntry);
 };
 
 /**

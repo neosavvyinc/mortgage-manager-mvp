@@ -30,6 +30,9 @@ module.exports = {
                     URL: '/api/applications/:id/documents/:docId'
                 }
             },
+            DOCUMENTENTRY: {
+                URL: '/api/applications/:id/documentEntry'
+            },
             FILE :{
                 ONE: {
                     URL: '/api/applications/:id/file/:docId'
