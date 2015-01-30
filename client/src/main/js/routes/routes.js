@@ -17,6 +17,7 @@ var newLenderInvite = require('../views/registration/view-new-lender-invite');
 var Applications = require('../views/dashboard/view-application-list');
 var Documents = require('../views/dashboard/view-document-list');
 var Upload = require('../views/dashboard/view-upload-document');
+var viewPdf = require('../views/dashboard/view-pdf-document');
 var InviteLender = require('../views/dashboard/view-invite-lender');
 var ApplicationDetails = require('../views/dashboard/view-application-details');
 
@@ -57,8 +58,11 @@ var routes = (
                 <Route name="uploadNewDocument" path="upload" handler={Modal}>
                     <DefaultRoute handler={Upload} />
                 </Route>
-                <Route name="uploadExistingDocument" path="document/:documentId" handler={Modal}>
+                <Route name="uploadExistingDocument" path="document/:documentId/upload" handler={Modal}>
                     <DefaultRoute handler={Upload} />
+                </Route>
+                <Route name="viewDocument" path="document/:documentId/" handler={Modal}>
+                    <DefaultRoute handler={viewPdf} />
                 </Route>
                 <Route name="inviteLender" path="invite-lender" handler={Modal}>
                     <DefaultRoute handler={InviteLender} />

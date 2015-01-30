@@ -61,6 +61,12 @@ var Documents = React.createClass({
         this.transitionTo('uploadExistingDocument', {appId: this.getParams().appId, documentId: document._id});
     },
 
+    onDocumentView: function(document) {
+        var appId = this.getParams().appId,
+            docId = document._id;
+        this.transitionTo('viewDocument', {appId: appId, documentId: docId});
+    },
+
     getDocuments: function() {
         Application.getDocuments(this.getParams().appId).then(function(documents){
             this.setState({
@@ -141,7 +147,7 @@ var Documents = React.createClass({
                     <th>{document.description}</th>
                     <th>{document.requestDate}</th>
                     <th>
-                        <button className={viewButton.style} disabled={viewButton.disabled}>View</button>
+                        <button className={viewButton.style} disabled={viewButton.disabled} onClick={this.onDocumentView.bind(this, document)}>View</button>
                         <button className={uploadButton.style} onClick={this.onDocumentUpload.bind(this, document)}>Upload</button>
                     </th>
                 </tr>

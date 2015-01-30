@@ -3,7 +3,6 @@
 
 node_modules/
 
-build/
 
 coverage/
 
@@ -12,5 +11,4 @@ uploads/
 .DS_Store
 client/node_modules
 client/target
-client/src/main/lib
 **/*.swp

@@ -14,7 +14,6 @@ var Modal = React.createClass({
 		return (
 			<div className="modalDialog">
 				<div className="row">
-					<div onClick={this.closeModal} title="Close" className="close">X</div>
 					<RouterHandler/>
 				</div>
 			</div>

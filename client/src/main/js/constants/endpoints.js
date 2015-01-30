@@ -30,6 +30,16 @@ module.exports = {
                     URL: '/api/applications/:id/documents/:docId'
                 }
             },
+            FILE :{
+                ONE: {
+                    URL: '/api/applications/:id/file/:docId'
+                }
+            },
+            DOWNLOAD :{
+                ONE: {
+                    URL: '/api/applications/:id/download/:docId'
+                }
+            },
             LENDERS: {
                 URL: '/api/applications/:id/lenders'
             },

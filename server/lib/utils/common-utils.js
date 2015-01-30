@@ -1,10 +1,15 @@
 'use strict';
 
-var log4js = require('log4js'),
+var handlebars = require('handlebars'),
+	log4js = require('log4js'),
 	uuid = require('node-uuid'),
 	settings = require('../config/app/settings'),
 	fs = require('fs'),
-	mv = require('mv');
+	mv = require('mv'),
+	os = require('os'),
+	path = require('path'),
+	util = require('util'),
+	_templateCache={};
 
 /**
  * Dereference an object chain. For example: var o={ a: { b: { c: 'chuck' } } } could be
@@ -97,4 +102,70 @@ exports.moveFiles = function(source, dest) {
 			console.log('Error moving files '+ err);
 		}
 	});
+};
+
+/**
+ * Renders markup using specified template and context
+ * @param {String} path
+ * @param context properties for binding in template
+ * @returns {String}
+ */
+exports.renderTemplate = function(path, context) {
+	var template, renderer;
+	try {
+		renderer = _templateCache[path];
+		if(renderer === undefined) {
+			template = fs.readFileSync(path, 'utf8');
+			renderer = _templateCache[path] = handlebars.compile(template);
+		}
+		return renderer(context);
+	} catch(e) {
+		console.error('template.renderPath:: attempt to load and render \'%s\' failed: %s', path, e);
+		throw e;
+	}
+};
+
+/**
+ * Works with 'os' to find temporary directory and finds a unique filename within. The reason
+ * it is private is because the filename is not guaranteed to remain unique until it physically
+ * exists in the filesystem. We leave it to local brains to make sure the path is used immediately
+ * @private
+ */
+exports.getTmpFilePath = function(prefix, extension) {
+	var index, _path;
+	for(index=0; true; index++) {
+		_path = path.join(os.tmpdir(), util.format('%s-%d.%s', prefix, index, extension));
+		if(fs.existsSync(_path) === false) {
+			break;
+		}
+	}
+	return _path;
+};
+
+/**
+ * Creates a temporary file and writes data to it using fs.writeFileSync
+ * @param data
+ * @param {String} extension - file extension
+ * @param {Object} options (optional)
+ * @returns {{path: {String}, error:{Error}}}
+ */
+exports.writeTmpFileSync = function(data, extension, options) {
+	var tmpPath = exports.getTmpFilePath('MAM', extension),
+		result = {};
+	try {
+		fs.writeFileSync(tmpPath, data, options);
+		result.path = tmpPath;
+	} catch(error) {
+		console.error('file.writeFileSync: attempt to write \'%s\' failed: %s', path, error);
+		result.error = error;
+	}
+	return result;
+};
+
+exports.deleteFileSync = function(path) {
+	try {
+		fs.unlinkSync(path);
+	} catch(error) {
+		console.error('file.delete: attempt to delete \'%s\' failed: %s', path, error);
+	}
 };
