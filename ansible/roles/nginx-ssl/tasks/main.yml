@@ -1,0 +1,27 @@
+
+- name: Install basic packages
+  action: apt pkg={{ item }} state=installed update_cache=yes
+  with_items:
+    - nginx
+
+- name: Set up nginx default site
+  template: src=shoutout-api dest=/opt/shoutout/shoutout-api owner={{ shoutoutUID }} group={{ shoutoutGID }} mode=644
+
+- name: enable the shoutout-api site
+  file: src=/opt/shoutout/shoutout-api dest=/etc/nginx/sites-enabled/shoutout-api state=link
+
+- name: Make sure the /opt/shoutout/certificates directory exists
+  file: dest=/opt/shoutout/certificates mode=755 state=directory owner={{ shoutoutUID }} group={{ shoutoutGID }}
+
+- name: Make sure the /opt/shoutout/logs directory exists
+  file: dest=/opt/shoutout/logs mode=755 state=directory owner={{ shoutoutUID }} group={{ shoutoutGID }}
+
+
+- name: Copy Shoutout SSL cert
+  copy: src=shoutout.crt dest=/opt/shoutout/certificates/shoutout.crt
+
+- name: Copy Shoutout SSL key
+  copy: src=shoutout.key dest=/opt/shoutout/certificates/shoutout.key
+
+- name: restart nginx
+  service: name=nginx state=restarted

@@ -1,0 +1,16 @@
+- hosts: staging
+  remote_user: root
+  roles:
+    - ubuntu
+#    - common
+#    - deploy
+#    - nginx-ssl
+  vars:
+      serverListenPort: "8090"
+      serverListenAddress: "0.0.0.0"
+      nginxProxyToAddress: "0.0.0.0"
+      nginxProxyToPort: "8090"
+      apiBackendDNSName: "api.phantom.neosavvy.com"
+      adminContact: "admin@shoutoutwith.us"
+      shoutoutUID: "root"
+      shoutoutGID: "root"
