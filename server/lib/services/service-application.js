@@ -229,14 +229,14 @@ exports.getLenders = function(appId, success, failure){
             }, done);
         },
         function(done){
-            async.each(lenderIds, function(lenderId){
+            async.each(lenderIds, function(lenderId, cb){
                 userDetails.retrieve({_id: lenderId}, function(lender){
-                    lendersDetails.push(lender);
-                    done();
-                }, done);
+                    lendersDetails.push(lender[0]);
+                    cb();
+                }, cb);
             }, function(error){
                 if(error){
-                    failure(error);
+                    done(error);
                 } else {
                     done();
                 }
@@ -246,7 +246,7 @@ exports.getLenders = function(appId, success, failure){
         if(error){
             failure(error);
         } else {
-            success(lendersDetails[0]);
+            success(lendersDetails);
         }
     });
 };
