@@ -96,15 +96,6 @@ var Documents = React.createClass({
                         name: "routeTester",
                         params: []
                     }
-                },
-                {
-                    tabName: "Sushi eats tacos",
-                    tabLink: {
-                        name: "routeTester",
-                        params: [
-
-                        ]
-                    }
                 }
             ];
         } else if(this.state.userType == 'borrower'){
