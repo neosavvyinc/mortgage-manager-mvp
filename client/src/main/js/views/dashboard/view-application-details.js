@@ -11,7 +11,7 @@ var LendersTable = require('./view-lender-list');
 var BorrowersTable = require('./view-borrower-list');
 var DocumentsTable = require('./view-document-list');
 
-var Documents = React.createClass({
+var ApplicationDetails = React.createClass({
 
     mixins: [
         Router.State,
@@ -100,4 +100,4 @@ var Documents = React.createClass({
     }
 });
 
-module.exports = Documents;
+module.exports = ApplicationDetails;

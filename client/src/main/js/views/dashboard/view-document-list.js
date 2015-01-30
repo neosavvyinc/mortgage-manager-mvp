@@ -90,6 +90,15 @@ var Documents = React.createClass({
                         name: "routeTester",
                         params: []
                     }
+                },
+                {
+                    tabName: "Sushi eats tacos",
+                    tabLink: {
+                        name: "routeTester",
+                        params: [
+
+                        ]
+                    }
                 }
             ];
         } else if(this.state.userType == 'borrower'){
@@ -140,27 +149,28 @@ var Documents = React.createClass({
         }, this);
 
         return (
-            <div>
-
-                <Navigation navigationItems={actions}/>
-                <table className="responsive">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Document Name</th>
-                            <th>Document Type</th>
-                            <th>Description</th>
-                            <th>Requested Date</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            {documentsTable.map(function(document) {
-                return (document);
-            })}
-                    </tbody>
-                </table>
-
+            <div className="container">
+                <div className="gap-top">
+                    <h2>Documents</h2>
+                    <Navigation navigationItems={actions}/>
+                    <table className="responsive">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Document Name</th>
+                                <th>Document Type</th>
+                                <th>Description</th>
+                                <th>Requested Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {documentsTable.map(function(document) {
+                                return (document);
+                            })}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         );
     }
