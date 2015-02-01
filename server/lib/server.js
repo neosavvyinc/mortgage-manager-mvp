@@ -32,8 +32,8 @@ exports.listen = function () {
  */
 var loadConfig = function() {
 	var env = process.env.NODE_ENV || 'development',
-		rootPath = __dirname.split('server')[0],
-		configPath = path.resolve(rootPath + '/server/config'),
+		rootPath = __dirname.split('lib')[0],
+		configPath = path.resolve(rootPath + 'config'),
 		configFile = path.join(configPath + '/', env + '.json'),
 		config = fs.readFileSync(configFile, 'utf8');
 	settings.setConfig(config);
