@@ -3,6 +3,11 @@
 
 node_modules/
 
+server/build
+npm-debug.log
+
+client/deployment
+
 
 coverage/
 
@@ -12,3 +17,6 @@ uploads/
 client/node_modules
 client/target
 **/*.swp
+
+
+ansible/roles/deploy/files/*

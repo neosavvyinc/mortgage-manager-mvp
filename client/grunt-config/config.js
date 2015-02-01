@@ -1,6 +1,7 @@
-var path = require("path");
+var path = require('path');
 
 module.exports = function (grunt, dirname, config) {
+    'use strict';
     var _ = grunt.util._;
     var configPath = config.root ? path.join(dirname, 'grunt-config/tasks') : path.join(dirname, '../grunt-config/tasks');
 
@@ -10,10 +11,10 @@ module.exports = function (grunt, dirname, config) {
             overridePath: path.join(dirname, 'tasks'),
             init: false,
             data: {
-                name: "<%= pkg.name %>",
-                librariesPath: "<%= pkg.paths.libraries %>",
-                buildOutputDirectoryPath: "<%= pkg.paths.buildOutputDirectory %>",
-                sourceDirectoryPath: "<%= pkg.paths.sourceDirectory %>"
+                name: '<%= pkg.name %>',
+                librariesPath: '<%= pkg.paths.libraries %>',
+                buildOutputDirectoryPath: '<%= pkg.paths.buildOutputDirectory %>',
+                sourceDirectoryPath: '<%= pkg.paths.sourceDirectory %>'
             },
             loadGruntTasks: {
                 pattern: 'grunt-*',
@@ -23,5 +24,6 @@ module.exports = function (grunt, dirname, config) {
         })
     );
 
+    console.log(JSON.stringify(config))
     grunt.initConfig(config);
 };

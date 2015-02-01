@@ -1,0 +1,38 @@
+####
+#
+# From the documentation provided by Mongo's website:
+#
+# http://docs.mongodb.org/manual/tutorial/install-mongodb-on-ubuntu/
+#
+####
+
+- name: Install Mongo's Key
+  apt_key: keyserver=keyserver.ubuntu.com id=0x7F0CEB10
+
+- name: Install Mongo's Repository
+  apt_repository: repo='deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' state=present
+
+- name: Install mongodb-org package
+  apt: name=mongodb-org=2.6.6 update_cache=yes force=yes
+
+- name: Install mongodb-org-server=2.6.6
+  apt: name=mongodb-org-server=2.6.6 update_cache=yes force=yes
+
+- name: Install mongodb-org-shell=2.6.6
+  apt: name=mongodb-org-shell=2.6.6 update_cache=yes force=yes
+
+# Sharding support may not be needed
+#- name: Install mongodb-org-mongos=2.6.6
+#  apt: name=mongodb-org-mongos=2.6.6 update_cache=yes force=yes
+
+- name: Install mongodb-org-tools=2.6.6
+  apt: name=mongodb-org-tools=2.6.6 update_cache=yes force=yes
+
+- name: Lock MongoDB Versions
+  shell: 'echo "{{ item }}" hold | sudo dpkg --set-selections'
+  with_items:
+    - mongodb-org
+    - mongodb-org-server
+    - mongodb-org-shell
+    - mongodb-org-mongos
+    - mongodb-org-tools

@@ -1,14 +1,21 @@
-#- name: Make sure the /opt/shoutout directory exists
-#  file: dest=/opt/shoutout mode=755 state=directory owner={{ shoutoutUID }} group={{ shoutoutGID }}
-#
-#- name: Make sure the /opt/shoutout/logs directory exists
-#  file: dest=/opt/shoutout mode=755 state=directory owner={{ shoutoutUID }} group={{ shoutoutGID }}
-#
-#- name: Copy the deployable jar file to the target server
-#  copy: src=shoutout.jar dest=/opt/shoutout/shoutout.jar
-#
+- name: Delete old /opt/mam directory
+  file: dest=/opt/mam state=absent
+
+- name: Make sure the /opt/mam directory exists
+  file: dest=/opt/mam mode=755 state=directory owner={{ mamUID }} group={{ mamGID }}
+
+- name: Make sure the /opt/mam/logs directory exists
+  file: dest=/opt/mam mode=755 state=directory owner={{ mamUID }} group={{ mamGID }}
+
+- name: Copy the deployable jar file to the target server
+  copy: src=MAM.tgz dest=/opt/MAM.tgz
+
+- name: Untar the Application
+  unarchive: src=/opt/MAM.tgz dest=/opt/mam copy=no
+
+
 #- name: Copy the Healthcheck Script
-#  template: src=checkHealth.sh dest=/opt/shoutout/checkHealth.sh mode=0755
+#  template: src=checkHealth.sh dest=/opt/mam/checkHealth.sh mode=0755
 #
 #- name: Copy the Restart Script
-#  template: src=restart.sh dest=/opt/shoutout/restart.sh mode=0755
+#  template: src=restart.sh dest=/opt/mam/restart.sh mode=0755
