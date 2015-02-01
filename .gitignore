@@ -9,7 +9,7 @@ npm-debug.log
 client/deployment
 
 client/MAM-client.zip
-server/MAM-server.zip
+server/MAM-server.tgz
 
 coverage/
 
