@@ -21,4 +21,3 @@ client/target
 **/*.swp
 
 
-ansible/roles/deploy/files/*
