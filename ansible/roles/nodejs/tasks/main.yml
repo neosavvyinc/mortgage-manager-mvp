@@ -3,3 +3,34 @@
 
 - name: Update Apt Cache and Install NodeJS
   apt: name=nodejs update_cache=yes
+
+- name: python header
+  apt: name=python-dev state=present
+
+- name: python setup tools
+  apt: name=python-setuptools state=present
+
+- name: Install supervisord
+  easy_install: name=supervisor
+
+- name: Initialize our supervisor directory
+  file: path=/etc/supervisor owner=root group=root state=directory
+
+- name: Fresh Supervisor Node Conf
+  copy: src=supervisord.node.mam.conf dest=/etc/supervisor/supervisord.node.mam.conf
+
+- name: Copy the Supervisord Startup Script
+  copy: src=supervisord.node.mam dest=/etc/init.d/supervisord.node.mam mode=0755
+
+- name: Ensure both are in default run levels
+  command: update-rc.d supervisord.{{ item }} defaults
+  with_items:
+    - node.mam
+
+- name: Kill any running Supervisord scripts
+  shell: kill -9 $(ps aux | grep '[s]upervisord' | grep 'node.map' | awk '{print $2}')
+  ignore_errors: yes
+  sudo: True
+
+- name: Restart the Supervisord Script
+  command: /etc/init.d/supervisord.node.mam restart
