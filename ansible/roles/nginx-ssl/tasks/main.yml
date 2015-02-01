@@ -4,6 +4,12 @@
   with_items:
     - nginx
 
+- name: Remove all default nginx configs
+  file: dest=/etc/nginx/sites-enabled/default state=absent
+
+- name: Remove all default nginx configs
+  file: dest=/etc/nginx/sites-available/default state=absent
+
 - name: Make sure the /opt/mam-nginx/ directory exists
   file: dest=/opt/mam-nginx/ mode=755 state=directory owner={{ mamUID }} group={{ mamGID }}
 

@@ -1,15 +1,15 @@
 - hosts: staging
   remote_user: root
   roles:
-#    - ubuntu
-#    - nodejs
-#    - mongodb
-#    - deploy
+    - ubuntu
+    - nodejs
+    - mongodb
+    - deploy
     - nginx-ssl
   vars:
       serverListenPort: "8090" # used by healthcheck
       nginxProxyToPort: "3000"
-      apiBackendDNSName: "mam.neosavvy.com"
+      applicationHostname: "mam-staging.neosavvy.com"
       adminContact: "contact@neosavvy.com"
       mamUID: "root"
       mamGID: "root"

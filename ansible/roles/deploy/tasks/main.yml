@@ -4,15 +4,26 @@
 - name: Make sure the /opt/mam directory exists
   file: dest=/opt/mam mode=755 state=directory owner={{ mamUID }} group={{ mamGID }}
 
+- name: Delete old /opt/mam-client directory
+  file: dest=/opt/mam-client state=absent
+
+- name: Make sure the /opt/mam-client directory exists
+  file: dest=/opt/mam-client mode=755 state=directory owner={{ mamUID }} group={{ mamGID }}
+
 - name: Make sure the /opt/mam/logs directory exists
   file: dest=/opt/mam mode=755 state=directory owner={{ mamUID }} group={{ mamGID }}
 
-- name: Copy the deployable jar file to the target server
-  copy: src=MAM.tgz dest=/opt/MAM.tgz
+- name: Copy the deployable server tgz file to the target server
+  copy: src=MAM-server.tgz dest=/opt/MAM-server.tgz
 
 - name: Untar the Application
-  unarchive: src=/opt/MAM.tgz dest=/opt/mam copy=no
+  unarchive: src=/opt/MAM-server.tgz dest=/opt/mam copy=no
 
+- name: Copy the client side zip file to the target server
+  copy: src=MAM-client.zip dest=/opt/MAM-client.zip
+
+- name: Unzip the Client Application
+  unarchive: src=/opt/MAM-client.zip dest=/opt/mam-client copy=no
 
 #- name: Copy the Healthcheck Script
 #  template: src=checkHealth.sh dest=/opt/mam/checkHealth.sh mode=0755

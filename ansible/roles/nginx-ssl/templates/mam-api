@@ -1,17 +1,14 @@
 server {
     listen 80;
-    server_name {{ apiBackendDNSName }};
+    server_name {{ applicationHostname }};
 
     access_log /opt/mam-nginx/logs/non-ssl.log;
-
-    location /shoutout/1.0/ {
-      proxy_pass        http://localhost:{{ nginxProxyToPort }}/;
-    }
+    return 301 https://$server_name$request_uri;
 }
 
 server {
     listen 443;
-    server_name {{ apiBackendDNSName }};
+    server_name {{ applicationHostname }};
 
     access_log /opt/mam-nginx/logs/ssl-log.log;
 

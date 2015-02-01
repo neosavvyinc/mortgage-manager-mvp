@@ -24,6 +24,5 @@ module.exports = function (grunt, dirname, config) {
         })
     );
 
-    console.log(JSON.stringify(config))
     grunt.initConfig(config);
 };
