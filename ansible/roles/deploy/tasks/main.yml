@@ -25,8 +25,8 @@
 - name: Unzip the Client Application
   unarchive: src=/opt/MAM-client.zip dest=/opt/mam-client copy=no
 
-#- name: Copy the Healthcheck Script
-#  template: src=checkHealth.sh dest=/opt/mam/checkHealth.sh mode=0755
-#
-#- name: Copy the Restart Script
-#  template: src=restart.sh dest=/opt/mam/restart.sh mode=0755
+- name: Copy the Healthcheck Script
+  template: src=checkHealth.sh dest=/opt/mam/checkHealth.sh mode=0755
+
+- name: Copy the Restart Script
+  template: src=restart.sh dest=/opt/mam/restart.sh mode=0755

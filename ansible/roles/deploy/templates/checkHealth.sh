@@ -1,6 +1,6 @@
 #!/bin/bash
 
-HEALTH_CHECK_RETURN_CODE="`curl -sL -w "%{http_code}\\n" "http://localhost:{{serverListenPort}}/health/check" -o /dev/null`"
+HEALTH_CHECK_RETURN_CODE="`curl -sL -w "%{http_code}\\n" "http://localhost:{{serverListenPort}}/healthcheck" -o /dev/null`"
 
 if [ $HEALTH_CHECK_RETURN_CODE -eq "200" ]
 then
