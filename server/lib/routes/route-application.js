@@ -135,7 +135,6 @@ exports.getApplicationLenders = function(req, res){
             res.status(500).send({message: 'Internal Server Error'});
         }
     });
-
 };
 
 exports.getApplicationBorrowers = function(req, res){

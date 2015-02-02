@@ -81,7 +81,6 @@ exports.insertDocument = function(req, res) {
 			}
 		], function(error) {
 			if(error) {
-				console.log(error);
 				res.status(500).send({message: 'Internal Server Error'});
 			} else {
 				res.send({message: 'Success'});
@@ -89,4 +88,20 @@ exports.insertDocument = function(req, res) {
 			res.end();
 		});
 	}
+};
+
+exports.insertDocumentEntry = function(req, res) {
+	var documentObject = req.body;
+
+	_.extend(documentObject, {
+		appId: req.params.appId
+	});
+
+	documentService.createDocument(documentObject, function() {
+		res.send({message: 'Success'}).end();
+	}, function(error) {
+		console.log(error);
+		res.status(500).send({message: 'Internal Server Error'}).end();
+	});
+
 };

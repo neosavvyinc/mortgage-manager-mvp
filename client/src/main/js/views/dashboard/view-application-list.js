@@ -24,7 +24,7 @@ var Applications = React.createClass({
         return {
             applications: [],
             userType: ''
-        }
+        };
     },
 
     componentDidMount: function(){
@@ -57,7 +57,7 @@ var Applications = React.createClass({
 
         var userApplications;
 
-        if(this.state.userType === 'lender'){
+        if(this.state.userType === 'lender') {
             userApplications = (
                 <ApplicationLenderList applications={this.state.applications} />
             );

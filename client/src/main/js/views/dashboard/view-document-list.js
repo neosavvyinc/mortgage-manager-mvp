@@ -86,15 +86,21 @@ var Documents = React.createClass({
                 {
                     tabName: "Request New Document",
                     tabLink: {
-                        name: "routeTester",
-                        params: []
+                        name: "requestDocument",
+                        params: [{
+                            appId: this.getParams().appId,
+                            docType: 'standard'
+                        }]
                     }
                 },
                 {
                     tabName: "Request Explanation",
                     tabLink: {
-                        name: "routeTester",
-                        params: []
+                        name: "requestDocument",
+                        params: [{
+                            appId: this.getParams().appId,
+                            docType: 'explanation'
+                        }]
                     }
                 }
             ];
