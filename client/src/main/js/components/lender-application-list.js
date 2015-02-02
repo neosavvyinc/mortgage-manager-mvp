@@ -5,7 +5,7 @@ var _ = require('lodash');
 var moment = require('moment');
 
 var User = require('../models/model-user');
-var ErrorMessage = require('../components/error-message');
+var MessageBox = require('./message-box');
 var Navigation = require('../components/navigation');
 var UserStore = require('../stores/store-user');
 var ApplicationStore = require('../stores/store-application');

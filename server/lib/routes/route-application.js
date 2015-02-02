@@ -169,7 +169,21 @@ exports.inviteLenderToApplication = function(req, res){
         res.end();
     }, function(error){
         if(error){
-            res.status(500).send({message: 'Internal Server Error'});
+            res.status(500).send({message: 'There was an error sending the invitation'});
+        }
+    });
+};
+
+exports.reSendLenderInvite = function(req, res){
+    var inviteInfo = req.body,
+        appId = req.params.appId;
+
+    applicationService.reSendLenderInvitation(appId, inviteInfo, function(){
+        res.send({message: 'Success'});
+        res.end();
+    }, function(error){
+        if(error){
+            res.status(500).send({message: 'There was an error sending the new invitation'});
         }
     });
 };

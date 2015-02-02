@@ -3,7 +3,7 @@ var Router = require('react-router');
 var Reflux = require('reflux');
 
 var User = require('../../models/model-user');
-var ErrorMessage = require('../../components/error-message');
+var MessageBox = require('../../components/message-box');
 var BorrowerStore = require('../../stores/store-borrower');
 var LenderStore = require('../../stores/store-lender');
 var BorrowerActions = require('../../actions/action-borrower');
@@ -94,7 +94,7 @@ var NewPassword = React.createClass({
                     <div className="one fourth">
                         <input className="gap-bottom" type="password" ref="newPassword" placeholder="New Password" />
                         <input className="gap-bottom" type="password" ref="confirmPassword" placeholder="Confirm Password" />
-                        <ErrorMessage errorDisplay={this.state.passwordError} errorMessage={this.state.errorText}/>
+                        <MessageBox displayMessage={this.state.passwordError} message={this.state.errorText} type='error' />
                         <button className="block turquoise" onClick={this.onCheckPassword}>Continue</button>
                     </div>
                 </div>

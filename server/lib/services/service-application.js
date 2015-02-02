@@ -16,6 +16,65 @@ var lenderInvitesModel = require('../db/models/model-lender-invites').Model;
 var applicationService = require('./service-application');
 var documentService = require('./service-document');
 
+
+var sendInvite = function(lenderInfo, sender, appId, token, callback){
+    var redirectURL = serverConfig.getConfig().hostURL +
+        '/register/new-lender?token=' + token +
+        '&email=' + lenderInfo.email +
+        '&firstName=' + lenderInfo.firstName +
+        '&lastName=' + lenderInfo.lastName +
+        '&organization=' + lenderInfo.organization +
+        '&appId=' + appId;
+
+    mandrill('/messages/send-template', {
+        template_name: 'lender_invite',
+        template_content: [],
+        message: {
+            auto_html: false,
+            to: [
+                {
+                    email: lenderInfo.email,
+                    name: lenderInfo.firstName + " " + lenderInfo.lastName
+                }
+            ],
+            from_email: mandrillConfig.sourceEmail,
+            from_name: 'DoubleApp Team',
+            subject: 'You have received an invitation',
+            merge_vars: [{
+                rcpt: lenderInfo.email,
+                vars: [
+                    {
+                        name: "lenderFName",
+                        content: lenderInfo.firstName
+                    },
+                    {
+                        name: "lenderLName",
+                        content: lenderInfo.lastName
+                    },
+                    {
+                        name: "senderFName",
+                        content: sender.firstName
+                    },
+                    {
+                        name: "senderLName",
+                        content: sender.lastName
+                    },
+                    {
+                        name: "redirectURL",
+                        content: redirectURL
+                    }
+                ]
+            }]
+        }
+    }, function(error) {
+        if (error){
+            callback(error);
+        } else {
+            callback();
+        }
+    });
+};
+
 exports.getUserApplications = function(uid, success, failure){
     var application = new applicationModel();
     var applicationLenders = new applicationLendersModel();
@@ -31,7 +90,7 @@ exports.getUserApplications = function(uid, success, failure){
          */
         function(done){
             user.retrieve({_id: uid}, function(userData){
-                if(userData[0].toObject !== undefined ) {
+                if(userData[0] && userData[0].toObject !== undefined ) {
                     userType = userData[0].toObject().type;
                 }
                 done();
@@ -215,11 +274,30 @@ exports.getDocuments = function(appId, docId, success, failure){
 exports.getLenders = function(appId, success, failure){
     var applicationLenders = new applicationLendersModel();
     var userDetails = new userDetailsModel();
+    var lenderInvites = new lenderInvitesModel();
+    var user = new userModel();
 
     var lenderIds = [],
         lendersDetails = [];
 
     async.series([
+        function(done){
+            lenderInvites.retrieve({appId: appId}, function(invites){
+                _.forEach(invites, function(invite){
+                    if(invite.isOpen){
+                        lendersDetails.push({
+                            _id: invite._id,
+                            email: invite.email,
+                            firstName: invite.firstName,
+                            lastName: invite.lastName,
+                            organization: invite.organization,
+                            status: 'Pending'
+                        });
+                    }
+                });
+                done();
+            }, done);
+        },
         function(done){
             applicationLenders.retrieve({appId: appId}, function(data){
                 _.forEach(data, function(lender){
@@ -230,10 +308,30 @@ exports.getLenders = function(appId, success, failure){
         },
         function(done){
             async.each(lenderIds, function(lenderId, cb){
-                userDetails.retrieve({_id: lenderId}, function(lender){
-                    lendersDetails.push(lender[0]);
-                    cb();
-                }, cb);
+                var newLenderInfo;
+                async.series([
+                    function(callback){
+                        userDetails.retrieve({_id: lenderId}, function(lender){
+                            newLenderInfo = _.extend(lender[0].toObject(), {
+                                status: 'Accepted'
+                            });
+                            callback();
+                        }, callback);
+                    },
+                    function(callback){
+                        user.retrieve({_id: lenderId}, function(userBasic){
+                            newLenderInfo.email = userBasic[0].email;
+                            lendersDetails.push(newLenderInfo);
+                            callback();
+                        }, callback);
+                    }
+                ], function(error){
+                    if(error){
+                        cb(error);
+                    } else {
+                        cb();
+                    }
+                });
             }, function(error){
                 if(error){
                     done(error);
@@ -356,70 +454,108 @@ exports.inviteLender = function(appId, userId, lenderInfo, success, failure){
         },
         function(done){
 
-            var redirectURL = serverConfig.getConfig().hostURL +
-                '/register/new-lender?token=' + token +
-                '&email=' + lenderInfo.email +
-                '&firstName=' + lenderInfo.firstName +
-                '&lastName=' + lenderInfo.lastName +
-                '&organization=' + lenderInfo.organization +
-                '&appId=' + appId;
-
-            mandrill('/messages/send-template', {
-                template_name: 'lender_invite',
-                template_content: [],
-                message: {
-                    auto_html: false,
-                    to: [
-                        {
-                            email: lenderInfo.email,
-                            name: lenderInfo.firstName + " " + lenderInfo.lastName
-                        }
-                    ],
-                    from_email: mandrillConfig.sourceEmail,
-                    from_name: 'DoubleApp Team',
-                    subject: 'You have received an invitation',
-                    merge_vars: [{
-                        rcpt: lenderInfo.email,
-                        vars: [
-                            {
-                                name: "lenderFName",
-                                content: lenderInfo.firstName
-                            },
-                            {
-                                name: "lenderLName",
-                                content: lenderInfo.lastName
-                            },
-                            {
-                                name: "senderFName",
-                                content: sender.firstName
-                            },
-                            {
-                                name: "senderLName",
-                                content: sender.lastName
-                            },
-                            {
-                                name: "redirectURL",
-                                content: redirectURL
-                            }
-                        ]
-                    }]
-                }
-            }, function(error) {
-                if (error){
-                    done(error);
-                } else {
-                    done();
-                }
-            });
+            sendInvite(lenderInfo, sender, appId, token, done);
+            //var redirectURL = serverConfig.getConfig().hostURL +
+            //    '/register/new-lender?token=' + token +
+            //    '&email=' + lenderInfo.email +
+            //    '&firstName=' + lenderInfo.firstName +
+            //    '&lastName=' + lenderInfo.lastName +
+            //    '&organization=' + lenderInfo.organization +
+            //    '&appId=' + appId;
+            //
+            //mandrill('/messages/send-template', {
+            //    template_name: 'lender_invite',
+            //    template_content: [],
+            //    message: {
+            //        auto_html: false,
+            //        to: [
+            //            {
+            //                email: lenderInfo.email,
+            //                name: lenderInfo.firstName + " " + lenderInfo.lastName
+            //            }
+            //        ],
+            //        from_email: mandrillConfig.sourceEmail,
+            //        from_name: 'DoubleApp Team',
+            //        subject: 'You have received an invitation',
+            //        merge_vars: [{
+            //            rcpt: lenderInfo.email,
+            //            vars: [
+            //                {
+            //                    name: "lenderFName",
+            //                    content: lenderInfo.firstName
+            //                },
+            //                {
+            //                    name: "lenderLName",
+            //                    content: lenderInfo.lastName
+            //                },
+            //                {
+            //                    name: "senderFName",
+            //                    content: sender.firstName
+            //                },
+            //                {
+            //                    name: "senderLName",
+            //                    content: sender.lastName
+            //                },
+            //                {
+            //                    name: "redirectURL",
+            //                    content: redirectURL
+            //                }
+            //            ]
+            //        }]
+            //    }
+            //}, function(error) {
+            //    if (error){
+            //        done(error);
+            //    } else {
+            //        done();
+            //    }
+            //});
         },
         function(done){
             _.extend(lenderInfo,{
                 _id: commonUtils.generateId(),
                 appId: appId,
+                senderId: userId,
                 token: token
             });
 
             lenderInvites.insert(lenderInfo, done, done);
+        }
+    ], function(error){
+        if(error){
+            failure(error);
+        } else {
+            success();
+        }
+    });
+};
+
+exports.reSendLenderInvitation = function(appId, inviteInfo, success, failure){
+
+    var lenderInvites = new lenderInvitesModel();
+    var userDetails = new userDetailsModel();
+
+    var sender,
+        token = commonUtils.generateId();
+
+    async.series([
+        function(done){
+            userDetails.retrieve({_id: inviteInfo.senderId}, function(userInfo){
+                if(userInfo[0].toObject !== undefined ) {
+                    sender = userInfo[0].toObject();
+                }
+                done();
+            }, done);
+        },
+        function(done){
+            sendInvite(inviteInfo, sender, appId, token, done);
+        },
+        function(done){
+            _.extend(inviteInfo, {
+                token: token
+            });
+
+            lenderInvites.update(inviteInfo, { _id: inviteInfo._id }, done, done);
         }
     ], function(error){
         if(error){

@@ -71,4 +71,17 @@ Application.lenderInvite = function(appId, userId, lenderInfo){
     });
 };
 
+Application.reSendInvite = function(userId, appId, inviteInfo){
+    inviteInfo.senderId = userId;
+    return Q.promise(function(resolve, reject) {
+        $.post(Endpoints.APPLICATIONS.ONE.LENDERS.REINVITE.URL.replace(':id', appId), inviteInfo)
+            .success(function(response){
+                resolve(response);
+            }).error(function(error){
+                reject(error);
+            }
+        );
+    });
+};
+
 module.exports = Application;

@@ -62,8 +62,10 @@ Schemas.LenderInvitesSchema = new Schema({
 	email: { type: String, required: true, unique: true },
 	firstName: { type: String, required: true },
 	lastName: { type: String, required: true },
+    organization: { type: String, required: true },
 	appId: { type: String, required: true, ref: 'ApplicationSchema' },
-	isOpen: { type: Boolean, default: true },
+    senderId: { type: String, required: true, ref: 'UserSchema' },
+    isOpen: { type: Boolean, default: true },
 	token: { type: String, required: true }
 });
 

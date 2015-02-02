@@ -3,7 +3,7 @@
 var React = require('react'),
 	Router = require('react-router'),
 	Reflux = require('reflux'),
-	ErrorMessage = require('../../components/error-message'),
+	MessageBox = require('../../components/message-box'),
 	User = require('../../models/model-user'),
 	UserStore = require('../../stores/store-user'),
 	LenderStore = require('../../stores/store-lender'),
@@ -116,7 +116,7 @@ var LenderInfo = React.createClass({
                 {lenderAddress}
 					<h2>{this.state.applicantType}'s Contact Information</h2>
 				{lenderContact}
-					<ErrorMessage errorDisplay={this.state.applicantInfoError} errorMessage={this.state.errorText}/>
+					<MessageBox displayMessage={this.state.applicantInfoError} message={this.state.errorText} type='error' />
 					<div className="row">
 						<button className="one third turquoise button" onClick={this.onSubmitInfo}>Continue</button>
 					</div>
