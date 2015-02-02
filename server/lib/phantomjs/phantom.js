@@ -47,7 +47,7 @@ exports.convertToPdf = function(imageSourcePath, pdfTargetPath, captureOptions, 
 var _capturePdf = function(htmlSourcePath, pdfTargetPath, captureOptions, success, failure) {
 	var binPath=phantomjs.path,
 		binArgs=[
-			path.resolve('./lib/phantomjs/scripts/capture.js'),
+			path.resolve(__dirname, './scripts/capture.js'),
 			path.resolve(htmlSourcePath),
 			path.resolve(pdfTargetPath)
 		];
@@ -84,6 +84,6 @@ var _getImageHtml = function(imagePath, height, width) {
 	context.imageWidth = width;
 	context.imageHeight = height;
 	context.imageUrl = path.resolve(imagePath);
-	html = utils.renderTemplate('./lib/phantomjs/templates/image-to-pdf.handlebars', context);
+	html = utils.renderTemplate(path.resolve(__dirname, './templates/image-to-pdf.handlebars'), context);
 	return html;
 };

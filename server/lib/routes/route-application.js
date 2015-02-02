@@ -76,12 +76,9 @@ exports.getFile = function(req, res){
         docId = req.params.docId;
 
     applicationService.getDocuments(appId, docId, function(documents) {
-        var url = documents[0].url,
-            options = {
-                root: __dirname.split('lib')[0]
-            };
+        var url = documents[0].url;
 
-        res.sendFile(url, options, function(err) {
+        res.sendFile(url, null, function(err) {
             if(err) {
                 if (err.code === 'ECONNABORT' && res.statusCode === 304) {
                     // No problem, 304 means client cache hit, so no data sent.
@@ -111,9 +108,6 @@ exports.downloadFile = function(req, res){
 
     applicationService.getDocuments(appId, docId, function(documents) {
         var url = documents[0].url;
-
-        //linter hack
-        options;
 
         res.download(url, documents[0].name+'.pdf', function(error) {
             if(error) {
