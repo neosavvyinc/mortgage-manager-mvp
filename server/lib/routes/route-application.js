@@ -112,6 +112,9 @@ exports.downloadFile = function(req, res){
     applicationService.getDocuments(appId, docId, function(documents) {
         var url = documents[0].url;
 
+        //linter hack
+        options;
+
         res.download(url, documents[0].name+'.pdf', function(error) {
             if(error) {
                 console.log(error);
