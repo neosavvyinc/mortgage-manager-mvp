@@ -20,6 +20,7 @@ var Upload = require('../views/dashboard/view-upload-document');
 var viewPdf = require('../views/dashboard/view-pdf-document');
 var InviteLender = require('../views/dashboard/view-invite-lender');
 var ApplicationDetails = require('../views/dashboard/view-application-details');
+var RequestDocument = require('../views/dashboard/view-lender-request-document');
 
 /* Default Root Handler */
 var RootDefault = React.createClass({
@@ -66,6 +67,9 @@ var routes = (
                 </Route>
                 <Route name="inviteLender" path="invite-lender" handler={Modal}>
                     <DefaultRoute handler={InviteLender} />
+                </Route>
+                <Route name="requestDocument" path="lender/document-request/:docType" handler={Modal}>
+                    <DefaultRoute handler={RequestDocument}/>
                 </Route>
             </Route>
             <Route name="routeTester" path="testRoute" handler={TestRoute1} />

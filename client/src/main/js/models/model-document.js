@@ -37,4 +37,16 @@ Document.upload = function (applicationId, document) {
 	});
 };
 
+Document.create = function(applicationId, documentDetails) {
+	return Q.promise(function(resolve, reject){
+		$.post(Endpoints.APPLICATIONS.ONE.DOCUMENTENTRY.URL.replace(':id', applicationId), documentDetails)
+			.success(function(response){
+				resolve(response);
+			})
+			.error(function(error){
+				reject(error);
+			});
+	});
+};
+
 module.exports = Document;
