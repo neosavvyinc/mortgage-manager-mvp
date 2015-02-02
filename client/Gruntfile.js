@@ -42,7 +42,12 @@ module.exports = function (grunt) {
         'resolve',
         'compile',
         'runTests',
-        'deploy'
+        'deploy',
+        'compress'
+    ]);
+
+    grunt.registerTask('compressAll', [
+      'compress'
     ]);
 
     grunt.registerTask('fuckYoTest', [
@@ -69,6 +74,6 @@ module.exports = function (grunt) {
     grunt.registerTask('restart', [
         'stop',
         'start'
-    ])
+    ]);
 
-}
+};

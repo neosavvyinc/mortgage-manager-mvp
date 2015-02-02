@@ -12,7 +12,10 @@ module.exports = {
         }
     },
     LOGIN: {
-        URL: '/api/login'
+        URL: '/api/login',
+        WITHTOKEN: {
+            URL: '/api/login/token'
+        }
     },
     REGISTER: {
         URL: '/api/register'

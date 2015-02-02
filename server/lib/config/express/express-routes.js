@@ -15,6 +15,9 @@ module.exports = function(router, passport) {
 	router.route('/login')
 		.post(authRoute.validateLogin(passport));
 
+	router.route('/login/token')
+		.post(authRoute.AddAppAndLogin(passport));
+
 	//Create a new user
 	router.route('/register')
 		.post(authRoute.registerUser(passport));
@@ -54,6 +57,10 @@ module.exports = function(router, passport) {
 	router.route('/applications/:appId/lenders')
 		.all(_isAuthenticated)
 		.get(applicationRoute.getApplicationLenders)
+		//.get(function(req, res){
+		//	res.send({cool: 'empty'});
+		//	res.end();
+		//})
 		.post(applicationRoute.inviteLenderToApplication);
 
 	router.route('/applications/:appId/borrowers')

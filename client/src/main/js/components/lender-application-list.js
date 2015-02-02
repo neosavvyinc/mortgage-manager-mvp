@@ -43,21 +43,23 @@ var LenderApplications = React.createClass({
             ];
 
         _.forEach(this.props.applications, function(app){
-            // e.g. Wednesday, January 21, 2015 3:21 PM
-            app.lastModified = moment(app.lastModified).format('llll');
-            applicationsTable.push((
-                <tr>
-                    <th>{app.primaryFirstName + " " + app.primaryLastName}</th>
-                    <th>{app.coappFirstName ? (app.coappFirstName + " " + app.coappLastName) : "None"}</th>
-                    <th>{app.lastModified || "None"}</th>
-                    <th>
-                        <div className="row">
-                            <button className="btn turquoise one half" onClick={this.onApplicationSelect.bind(null, app)}>View</button>
-                            <button className="btn red one half">Delete</button>
-                        </div>
-                    </th>
-                </tr>
-            ));
+            if(app) {
+                // e.g. Wednesday, January 21, 2015 3:21 PM
+                app.lastModified = moment(app.lastModified).format('llll');
+                applicationsTable.push((
+                    <tr>
+                        <th>{app.primaryFirstName + " " + app.primaryLastName}</th>
+                        <th>{app.coappFirstName ? (app.coappFirstName + " " + app.coappLastName) : "None"}</th>
+                        <th>{app.lastModified || "None"}</th>
+                        <th>
+                            <div className="row">
+                                <button className="btn turquoise one half" onClick={this.onApplicationSelect.bind(null, app)}>View</button>
+                                <button className="btn red one half">Delete</button>
+                            </div>
+                        </th>
+                    </tr>
+                ));
+            }
         }, this);
         return (
             <div>

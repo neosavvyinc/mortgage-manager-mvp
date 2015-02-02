@@ -53,32 +53,35 @@ exports.emailExists = function(email, success, failure){
 exports.validateInviteToken = function(user, success, failure){
 
 	var lenderInvites = new lenderInvitesModel();
-
-	async.series([
-		function(done){
-			lenderInvites.findOneDocument({ email: user.email },
-				function(invite) {
-					if (invite && user.token && user.token === invite.token && invite.isOpen) {
-						done();
-					} else {
-						failure(new Error('Invalid Token'));
-					}
-				}, success);
-		},
-		function(done){
-			lenderInvites.update({
-				email: user.email
-			}, {
-				isOpen: false
-			}, null, done, done);
-		}
-	], function(error){
-		if(error){
-			failure(error);
-		} else {
-			success();
-		}
-	});
+	if (user.token) {
+		async.series([
+			function (done) {
+				lenderInvites.findOneDocument({email: user.email},
+					function (invite) {
+						if (invite && user.token && user.token === invite.token && invite.isOpen) {
+							done();
+						} else {
+							failure(new Error('Invalid Token'));
+						}
+					}, success);
+			},
+			function (done) {
+				lenderInvites.update({
+					isOpen: false
+				}, {
+					email: user.email
+				}, null, done, done);
+			}
+		], function (error) {
+			if (error) {
+				failure(error);
+			} else {
+				success();
+			}
+		});
+	} else {
+		success();
+	}
 
 };
 
