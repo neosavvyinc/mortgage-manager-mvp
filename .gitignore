@@ -3,6 +3,13 @@
 
 node_modules/
 
+server/build
+npm-debug.log
+
+client/deployment
+
+client/MAM-client.zip
+server/MAM-server.tgz
 
 coverage/
 
@@ -12,3 +19,6 @@ uploads/
 client/node_modules
 client/target
 **/*.swp
+
+
+ansible/roles/deploy/files/*

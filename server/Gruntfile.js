@@ -55,11 +55,11 @@ module.exports = function gruntFile(grunt) {
 		compress: {
 			build: {
 				options: {
-					archive: 'build/MAM.tgz',
+					archive: 'MAM-server.tgz',
 					mode: 'tgz'
 				},
 				files: [
-					{src: ['build/**']}
+					{cwd: 'build', src: ['**']}
 				]
 			}
 		},
@@ -67,10 +67,9 @@ module.exports = function gruntFile(grunt) {
 		copy: {
 			build: {
 				files: [
+					{ expand: true, src: ['node_modules/**'], dest: 'build/' },
 					{ expand: true, src: ['lib/**'], dest: 'build/' },
 					{ expand: true, src: ['config/**'], dest: 'build/' },
-					{ expand: true, src: ['tasks/**'], dest: 'build/' },
-					{ expand: true, src: ['Gruntfile.js'], dest: 'build/' },
 					{ expand: true, src: ['package.json'], dest: 'build/' }
 				]
 			},

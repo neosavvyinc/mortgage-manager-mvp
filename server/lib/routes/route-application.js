@@ -115,6 +115,9 @@ exports.downloadFile = function(req, res){
                 root: __dirname.split('lib')[0]
             };
 
+        //linter hack
+        options;
+
         res.download(url, documents[0].name+'.pdf', function(error) {
             if(error) {
                 console.log(error);

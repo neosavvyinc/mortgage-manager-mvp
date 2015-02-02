@@ -1,0 +1,11 @@
+- name: install pycurl
+  action: apt pkg=python-pycurl state=present
+
+- name: git binaries
+  apt: name=git state=present
+
+- name: mail utilities
+  apt: name=mailutils state=present
+
+- name: unzip utilities
+  apt: name=unzip state=present
