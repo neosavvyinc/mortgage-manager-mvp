@@ -110,10 +110,7 @@ exports.downloadFile = function(req, res){
         docId = req.params.docId;
 
     applicationService.getDocuments(appId, docId, function(documents) {
-        var url = documents[0].url,
-            options = {
-                root: __dirname.split('lib')[0]
-            };
+        var url = documents[0].url;
 
         //linter hack
         options;
@@ -126,6 +123,50 @@ exports.downloadFile = function(req, res){
                 res.status(200).end();
             }
         });
+    }, function(error){
+        if(error){
+            res.status(500).send({message: 'Internal Server Error'});
+        }
+    });
+};
+
+exports.getApplicationLenders = function(req, res){
+    var appId = req.params.appId;
+
+    applicationService.getLenders(appId, function(lenders){
+        res.send(lenders);
+        res.end();
+    }, function(error){
+        if(error){
+            res.status(500).send({message: 'Internal Server Error'});
+        }
+    });
+
+};
+
+exports.getApplicationBorrowers = function(req, res){
+    var appId = req.params.appId;
+
+    applicationService.getBorrowers(appId, function(borrowers){
+        res.send(borrowers);
+        res.end();
+    }, function(error){
+        if(error){
+            res.status(500).send({message: 'Internal Server Error'});
+        }
+    });
+};
+
+exports.inviteLenderToApplication = function(req, res){
+    var appId = req.params.appId,
+        lenderInfo = req.body,
+        userId = lenderInfo.borrowerId;
+
+    delete lenderInfo.borrowerId;
+
+    applicationService.inviteLender(appId, userId, lenderInfo, function(){
+        res.send({message: 'Success'});
+        res.end();
     }, function(error){
         if(error){
             res.status(500).send({message: 'Internal Server Error'});

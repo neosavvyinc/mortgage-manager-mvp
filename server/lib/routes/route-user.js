@@ -1,9 +1,11 @@
 'use strict';
 
 var bCrypt = require('bcrypt-nodejs'),
+	async = require('async'),
 	LocalStrategy = require('passport-local').Strategy,
 	loginService = require('../services/service-user'),
-	userService = require('../services/service-user');
+	userService = require('../services/service-user'),
+	userDetailsService = require('../services/service-user-details');
 /**
  * Initializes passport for the application. Creates function to serialize and deserialize
  * users.
@@ -30,7 +32,7 @@ exports.initPassport = function(passport) {
  */
 exports.validateLogin = function(passport) {
 	return function(req, res, next) {
-		passport.authenticate('local', function(err, user, info) {
+		passport.authenticate('login', function(err, user, info) {
 			if (err) {
 				res.status(409).
 					send(err);
@@ -47,6 +49,32 @@ exports.validateLogin = function(passport) {
 	};
 };
 
+exports.AddAppAndLogin = function(passport){
+	return function(req, res, next) {
+		userDetailsService.lenderAppInvite(req.param('email'), req.param('token'), req.param('appId'),
+			function(){
+				passport.authenticate('login', function(err, user, info) {
+					if (err) {
+						res.status(409).
+							send(err);
+					}
+					if(!user) {
+						res.status(info.code)
+							.send({message: info.message});
+					} else {
+						delete user.password;
+						res.send(user);
+					}
+					res.end();
+				})(req, res, next);
+			}.bind(this), function(error) {
+				if(error) {
+					res.status(400).send({message: 'The user already exists'});
+				}
+				res.end();
+			});
+	};
+};
 /**
  * Register a new user
  * @param passport
@@ -94,7 +122,7 @@ exports.emailExists = function(req, res){
  * @private
  */
 var _loginSetup = function(passport) {
-	passport.use('local', new LocalStrategy({
+	passport.use('login', new LocalStrategy({
 			usernameField: 'email',
 			passwordField: 'password',
 			passReqToCallback : true
@@ -139,8 +167,8 @@ var _registerSetup = function(passport){
 			function(req, username, password, done) {
 				var findOrCreateUser = function() {
 					// find a user in Mongo with provided username
-					loginService.findUser({email :  username },
-						 function(err, users) {
+					loginService.findUser({ email : username },
+						function(err, users) {
 							var user = users[0];
 							// In case of any error, return using the done method
 							if (err) {
@@ -152,17 +180,34 @@ var _registerSetup = function(passport){
 							} else {
 								// if there is no user with that email
 								// create the user
-								var userObject = req.body;
-								loginService.createUser(userObject, function(err, userDoc) {
-									if(err) {
-										//log.fatal
+								var userObject = req.body,
+									userRegistered;
+
+								async.series([
+									function(callback){
+										loginService.validateInviteToken(userObject, callback, callback);
+									},
+									function(callback){
+										loginService.createUser(userObject, function(err, userDoc) {
+											if(err) {
+												//log.fatal
+												callback({message: 'The user couldn\'t be created'});
+											} else {
+												userRegistered = userDoc;
+												callback();
+											}
+										});
+									}
+								], function(error){
+									if(error){
 										return done(null, false, {code: 500, message: 'Internal server error'});
 									} else {
-										return done(null, userDoc);
+										return done(null, userRegistered);
 									}
 								});
+
 							}
-					});
+						});
 				};
 
 				// Delay the execution of findOrCreateUser and execute the method

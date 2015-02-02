@@ -48,7 +48,7 @@ applicationModel.insertNewApp = function(applicantDetails,
 			});
 			if(coapplicantDetails){
 				_.extend(item, {
-					cUID: coapplicantDetails._id
+					coUID: coapplicantDetails._id
 				});
 			}
 			application.insert(item, done, done);

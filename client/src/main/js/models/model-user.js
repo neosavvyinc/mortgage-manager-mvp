@@ -32,6 +32,7 @@ User.register = function (newUser){
 };
 
 User.update = function (userId, userInfo){
+    if(userInfo.token) delete userInfo.token;
     return Q.promise(function(resolve, reject){
         $.post(Endpoints.USER.ONE.URL.replace(':id', userId), userInfo)
             .success(function(response){
@@ -100,6 +101,22 @@ User.emailExists = function(email){
             .error(function(error){
                 reject(error);
             });
+    });
+};
+
+User.addAppAndLogin = function(email, password, token, appId){
+    return Q.promise(function(resolve, reject){
+        $.post(Endpoints.LOGIN.WITHTOKEN.URL, {
+            email: email,
+            password: password,
+            token: token,
+            appId: appId
+        }).success(function(response){
+            resolve(response);
+        }).error(function(error){
+            reject(error);
+        });
+
     });
 };
 

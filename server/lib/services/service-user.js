@@ -1,6 +1,8 @@
 'use strict';
 
+var async = require('async');
 var userModel = require('../db/models/model-user').Model;
+var lenderInvitesModel = require('../db/models/model-lender-invites').Model;
 
 /**
  * Function that gets the user document based on conditions specified.
@@ -47,3 +49,68 @@ exports.emailExists = function(email, success, failure){
 			success();
 		});
 };
+
+exports.validateInviteToken = function(user, success, failure){
+
+	var lenderInvites = new lenderInvitesModel();
+	if (user.token) {
+		async.series([
+			function (done) {
+				lenderInvites.findOneDocument({email: user.email},
+					function (invite) {
+						if (invite && user.token && user.token === invite.token && invite.isOpen) {
+							done();
+						} else {
+							failure(new Error('Invalid Token'));
+						}
+					}, success);
+			},
+			function (done) {
+				lenderInvites.update({
+					isOpen: false
+				}, {
+					email: user.email
+				}, null, done, done);
+			}
+		], function (error) {
+			if (error) {
+				failure(error);
+			} else {
+				success();
+			}
+		});
+	} else {
+		success();
+	}
+
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

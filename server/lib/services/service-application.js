@@ -1,12 +1,18 @@
 'use strict';
+/* jshint ignore:start */
 
 var async = require('async');
 var _ = require('underscore');
+var mandrillConfig = require('../config/app/mandrill');
+var serverConfig = require('../config/app/settings');
+var mandrill = require('node-mandrill')(mandrillConfig.APIKey);
+var commonUtils = require('../utils/common-utils');
 var applicationModel = require('../db/models/model-application').Model;
 var userDetailsModel = require('../db/models/model-user-details').Model;
 var userModel = require('../db/models/model-user').Model;
 var documentModel = require('../db/models/model-document').Model;
 var applicationLendersModel = require('../db/models/model-application-lenders').Model;
+var lenderInvitesModel = require('../db/models/model-lender-invites').Model;
 var applicationService = require('./service-application');
 var documentService = require('./service-document');
 
@@ -69,18 +75,18 @@ exports.getUserApplications = function(uid, success, failure){
          */
         function(done){
             if( userType === 'lender') {
-                async.each(applications,
+                async.map(applications,
                     function (app, callback) {
-                        async.parallel([
+                        var usersInfo = {};
+                        if(app){
+                            async.parallel([
                                 /*
                                     Get all primary user details
                                  */
                                 function (cb) {
                                     userDetails.retrieve({_id: app.pUID}, function (userData) {
-                                        _.extend(app, {
-                                            primaryFirstName: userData[0].firstName,
-                                            primaryLastName: userData[0].lastName
-                                        });
+                                        usersInfo.primaryFirstName = userData[0].firstName;
+                                        usersInfo.primaryLastName = userData[0].lastName;
                                         cb();
                                     }, cb);
                                 },
@@ -90,10 +96,8 @@ exports.getUserApplications = function(uid, success, failure){
                                 function (cb) {
                                     if (app.coUID) {
                                         userDetails.retrieve({_id: app.coUID}, function (userData) {
-                                            _.extend(app, {
-                                                coappFirstName: userData[0].firstName,
-                                                coappLastName: userData[0].lastName
-                                            });
+                                            usersInfo.coappFirstName = userData[0].firstName;
+                                            usersInfo.coappLastName = userData[0].lastName;
                                             cb();
                                         }, cb);
                                     } else {
@@ -103,16 +107,21 @@ exports.getUserApplications = function(uid, success, failure){
                             ],
                             function (error) {
                                 if (error) {
-                                    callback(error);
+                                    callback(error, null);
                                 } else {
-                                    callback();
+                                    _.extend(app._doc, usersInfo);
+                                    callback(null, app);
                                 }
                             });
-                    },
-                    function (error) {
-                        if (error) {
-                            done(error);
                         } else {
+                            callback();
+                        }
+                    },
+                    function (error, apps) {
+                        if (error) {
+                            done(error, null);
+                        } else {
+                            applications = apps;
                             done();
                         }
                     }
@@ -202,3 +211,222 @@ exports.getDocuments = function(appId, docId, success, failure){
 
     documents.retrieve(conditions, success, failure);
 };
+
+exports.getLenders = function(appId, success, failure){
+    var applicationLenders = new applicationLendersModel();
+    var userDetails = new userDetailsModel();
+
+    var lenderIds = [],
+        lendersDetails = [];
+
+    async.series([
+        function(done){
+            applicationLenders.retrieve({appId: appId}, function(data){
+                _.forEach(data, function(lender){
+                    lenderIds.push(lender.lenderId);
+                });
+                done();
+            }, done);
+        },
+        function(done){
+            async.each(lenderIds, function(lenderId, cb){
+                userDetails.retrieve({_id: lenderId}, function(lender){
+                    lendersDetails.push(lender[0]);
+                    cb();
+                }, cb);
+            }, function(error){
+                if(error){
+                    done(error);
+                } else {
+                    done();
+                }
+            });
+        }
+    ], function(error){
+        if(error){
+            failure(error);
+        } else {
+            success(lendersDetails);
+        }
+    });
+};
+
+exports.getBorrowers = function(appId, success, failure){
+    var application = new applicationModel();
+    var userDetails = new userDetailsModel();
+    var user = new userModel();
+
+    var borrowersDetails = [],
+        appDetails;
+    async.series([
+        function(done){
+            application.retrieve({_id: appId}, function(application){
+                appDetails = application[0];
+                done();
+            }, done);
+        },
+        function(done){
+            async.parallel([
+                function(cb){
+                    var applicant = {};
+                    async.series([
+                        function(callback){
+                            userDetails.retrieve({_id: appDetails.pUID}, function(userData){
+                                applicant = userData[0].toObject();
+                                callback();
+                            }, callback);
+                        },
+                        function(callback){
+                            user.retrieve({_id: appDetails.pUID}, function(userData){
+                                applicant.email = userData[0].email;
+                                borrowersDetails.push(applicant);
+                                callback();
+                            }, callback);
+                        }
+                    ], function(error){
+                        if(error){
+                            cb(error);
+                        } else {
+                            cb();
+                        }
+                    });
+                },
+                function(cb){
+                    if(appDetails.coUID){
+                        var coapplicant = {};
+                        async.series([
+                            function(callback){
+                                userDetails.retrieve({_id: appDetails.coUID}, function(userData){
+                                    coapplicant = userData[0].toObject();
+                                    callback();
+                                }, callback);
+                            },
+                            function(callback){
+                                user.retrieve({_id: appDetails.coUID}, function(userData){
+                                    coapplicant.email = userData[0].email;
+                                    borrowersDetails.push(coapplicant);
+                                    callback();
+                                }, callback);
+                            }
+                        ], function(error){
+                            if(error){
+                                cb(error);
+                            } else {
+                                cb();
+                            }
+                        });
+                    } else {
+                        cb();
+                    }
+                }
+            ], function(error){
+                if(error){
+                    done(error);
+                } else {
+                    done();
+                }
+            });
+        }
+    ], function(error){
+        if(error){
+            failure(error);
+        } else {
+            success(borrowersDetails);
+        }
+    });
+
+};
+
+exports.inviteLender = function(appId, userId, lenderInfo, success, failure){
+
+    var lenderInvites = new lenderInvitesModel();
+    var userDetails = new userDetailsModel();
+
+    var sender,
+        token = commonUtils.generateId();
+
+    async.series([
+        function(done){
+            userDetails.retrieve({_id: userId}, function(userInfo){
+                if(userInfo[0].toObject !== undefined ) {
+                    sender = userInfo[0].toObject();
+                }
+                done();
+            }, done);
+        },
+        function(done){
+
+            var redirectURL = serverConfig.getConfig().hostURL +
+                '/register/new-lender?token=' + token +
+                '&email=' + lenderInfo.email +
+                '&firstName=' + lenderInfo.firstName +
+                '&lastName=' + lenderInfo.lastName +
+                '&organization=' + lenderInfo.organization +
+                '&appId=' + appId;
+
+            mandrill('/messages/send-template', {
+                template_name: 'lender_invite',
+                template_content: [],
+                message: {
+                    auto_html: false,
+                    to: [
+                        {
+                            email: lenderInfo.email,
+                            name: lenderInfo.firstName + " " + lenderInfo.lastName
+                        }
+                    ],
+                    from_email: mandrillConfig.sourceEmail,
+                    from_name: 'DoubleApp Team',
+                    subject: 'You have received an invitation',
+                    merge_vars: [{
+                        rcpt: lenderInfo.email,
+                        vars: [
+                            {
+                                name: "lenderFName",
+                                content: lenderInfo.firstName
+                            },
+                            {
+                                name: "lenderLName",
+                                content: lenderInfo.lastName
+                            },
+                            {
+                                name: "senderFName",
+                                content: sender.firstName
+                            },
+                            {
+                                name: "senderLName",
+                                content: sender.lastName
+                            },
+                            {
+                                name: "redirectURL",
+                                content: redirectURL
+                            }
+                        ]
+                    }]
+                }
+            }, function(error) {
+                if (error){
+                    done(error);
+                } else {
+                    done();
+                }
+            });
+        },
+        function(done){
+            _.extend(lenderInfo,{
+                _id: commonUtils.generateId(),
+                appId: appId,
+                token: token
+            });
+
+            lenderInvites.insert(lenderInfo, done, done);
+        }
+    ], function(error){
+        if(error){
+            failure(error);
+        } else {
+            success();
+        }
+    });
+};
+/* jshint ignore:end */
