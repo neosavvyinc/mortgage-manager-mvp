@@ -4,8 +4,7 @@ var React = require('react'),
 	Router = require('react-router'),
 	Reflux = require('reflux'),
 	modelDocument = require('../../models/model-document'),
-	ErrorMessage = require('../../components/error-message'),
-	SuccessMessage = require('../../components/success-msg'),
+	MessageBox = require('../../components/message-box'),
 	UserStore = require('../../stores/store-user');
 
 var validateInfo = function(document) {
@@ -112,8 +111,8 @@ var RequestDocument = React.createClass({
 					</div>
 					<div className="row">
 						<div className="two fourths skip-one">
-							<SuccessMessage successDisplay={this.state.success} message={this.state.message}/>
-							<ErrorMessage errorDisplay={this.state.error} errorMessage={this.state.message}/>
+							<MessageBox displayMessage={this.state.success} message={this.state.message} type='success' />
+							<MessageBox displayMessage={this.state.error} message={this.state.message} type='error' />
 						</div>
 					</div>
 				</form>
