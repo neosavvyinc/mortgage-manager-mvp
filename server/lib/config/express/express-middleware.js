@@ -1,5 +1,7 @@
 'use strict';
-var expressSession = require('express-session'),
+
+var path = require('path'),
+	expressSession = require('express-session'),
 	bodyParser = require('body-parser'),
 	multer = require('multer'),
 	settings = require('../app/settings');
@@ -13,7 +15,7 @@ module.exports = function(app, router, passport) {
 
 	// for parsing multipart data
 	app.use(multer({
-		dest: './uploads',
+		dest: path.resolve(__dirname, '../../../uploads'),
 		limits: {
 			fileSize: 25 * 1024 * 1024
 		},
