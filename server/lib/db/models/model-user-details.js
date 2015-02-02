@@ -4,6 +4,7 @@ var util = require('util'),
 	_ = require('underscore'),
 	async = require('async'),
 	baseModel = require('./model-base'),
+	applicationLendersModel = require('./model-application-lenders').Model,
 	Schemas = require('../schemas').Schemas,
 	userDetailsSchema = Schemas.UserInfoSchema,
 	userDetailsModel;
@@ -28,6 +29,7 @@ userDetailsModel = UserDetailsModel.prototype;
  * @private
  */
 userDetailsModel.insertOrUpdate = function(item, success, failure) {
+	var applicationLenders = new applicationLendersModel();
 	var currentDate = new Date(),
 		docs;
 
@@ -43,9 +45,29 @@ userDetailsModel.insertOrUpdate = function(item, success, failure) {
 				_.extend(item, {
 					created: currentDate,
 					lastLogin: currentDate,
-					appId: []
+					appId: item.appId ? [item.appId] : []
 				});
-				userDetailsModel.insert(item, done, done);
+				async.parallel([
+					function(cb){
+						userDetailsModel.insert(item, cb, cb);
+					},
+					function(cb){
+						if(item.appId){
+							applicationLenders.insert({
+								lenderId: item._id,
+								appId: [item.appId]
+							}, cb, cb);
+						} else {
+							cb();
+						}
+					}
+				],function(error){
+					if(error){
+						done(error);
+					} else {
+						done();
+					}
+				});
 			} else {
 				userDetailsModel.update(item, {_id: docs[0]._id }, null, done, done);
 			}

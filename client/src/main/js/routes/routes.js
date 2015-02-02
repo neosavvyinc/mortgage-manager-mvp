@@ -13,10 +13,13 @@ var NewPassword = require('../views/registration/view-new-password');
 var ApplicantInfo = require('../views/registration/view-applicant-info');
 var LenderInfo = require('../views/registration/view-lender-info');
 var ApplicantQuestions = require('../views/registration/view-questions');
+var newLenderInvite = require('../views/registration/view-new-lender-invite');
 var Applications = require('../views/dashboard/view-application-list');
 var Documents = require('../views/dashboard/view-document-list');
 var Upload = require('../views/dashboard/view-upload-document');
 var viewPdf = require('../views/dashboard/view-pdf-document');
+var InviteLender = require('../views/dashboard/view-invite-lender');
+var ApplicationDetails = require('../views/dashboard/view-application-details');
 
 /* Default Root Handler */
 var RootDefault = React.createClass({
@@ -47,11 +50,12 @@ var routes = (
             <Route name="applicantQuestions" path="applicant-questions" handler={ApplicantQuestions} />
             <Route name="lenderInfo" path="lender-info" handler={LenderInfo} />
             <Route name="applicantInfo" path="applicant-info" handler={ApplicantInfo} />
+            <Route name="newLender" path="new-lender" handler={newLenderInvite} />
         </Route>
         <Route name="dashboard" handler={Dashboard}>
             <Route name="dashboardApplications" path="applications" handler={Applications} />
-            <Route name="dashboardDocuments" path="applications/:appId" handler={Documents}>
-                <Route name="uploadNewDocument" handler={Modal}>
+            <Route name="dashboardDocuments" path="applications/:appId" handler={ApplicationDetails}>
+                <Route name="uploadNewDocument" path="upload" handler={Modal}>
                     <DefaultRoute handler={Upload} />
                 </Route>
                 <Route name="uploadExistingDocument" path="document/:documentId/upload" handler={Modal}>
@@ -59,6 +63,9 @@ var routes = (
                 </Route>
                 <Route name="viewDocument" path="document/:documentId/" handler={Modal}>
                     <DefaultRoute handler={viewPdf} />
+                </Route>
+                <Route name="inviteLender" path="invite-lender" handler={Modal}>
+                    <DefaultRoute handler={InviteLender} />
                 </Route>
             </Route>
             <Route name="routeTester" path="testRoute" handler={TestRoute1} />

@@ -2,9 +2,6 @@ var Reflux = require('reflux');
 
 var UserActions = require('../actions/action-user');
 
-var _currentUser = {};
-var _isAuthenticated = false;
-
 var UserStore = Reflux.createStore({
 
     listenables: UserActions,

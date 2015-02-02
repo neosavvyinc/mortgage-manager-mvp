@@ -5,8 +5,11 @@ var RouterHandler = Router.RouteHandler;
 var _ = require('lodash');
 var moment = require('moment');
 var User = require('../../models/model-user');
+var UserStore = require('../../stores/store-user');
 var Application = require('../../models/model-application');
 var ErrorMessage = require('../../components/error-message');
+var Navigation = require('../../components/navigation');
+var LendersTable = require('./view-lender-list');
 
 var arraysEqual = function(arr1, arr2) {
     if(arr1.length !== arr2.length)
@@ -27,12 +30,21 @@ var Documents = React.createClass({
 
     getInitialState: function(){
         return {
-            documents: []
+            documents: [],
+            userType: ''
         }
     },
 
     componentDidMount: function(){
         this.getDocuments();
+
+        User.getUserDetails(UserStore.getCurrentUserId()).then(function(user){
+            this.setState(
+                {
+                    userType: user.type
+                }
+            );
+        }.bind(this));
     },
 
     componentDidUpdate: function(prevProps, prevState) {
@@ -64,7 +76,42 @@ var Documents = React.createClass({
     },
 
     render: function() {
+
         var documentsTable = [];
+
+        var actions, tabs;
+
+        if(this.state.userType === 'lender'){
+            actions = [
+                {
+                    tabName: "Request New Document",
+                    tabLink: {
+                        name: "routeTester",
+                        params: []
+                    }
+                },
+                {
+                    tabName: "Request Explanation",
+                    tabLink: {
+                        name: "routeTester",
+                        params: []
+                    }
+                }
+            ];
+        } else if(this.state.userType == 'borrower'){
+            actions = [
+                {
+                    tabName: "Upload New Document",
+                    tabLink: {
+                        name: "uploadNewDocument",
+                        params: [{
+                            appId: this.getParams().appId
+                        }]
+                    }
+                }
+            ];
+        }
+
         _.map(this.state.documents, function(document) {
 
             var viewButton = {
@@ -101,10 +148,8 @@ var Documents = React.createClass({
         return (
             <div className="container">
                 <div className="gap-top">
-                    <div className="row">
-                        <h1 className="one ninth">Documents</h1>
-                        <button className="btn blue one eighth skip-six gap-top" onClick={this.onNewDocumentUpload}>New Document</button>
-                    </div>
+                    <h2>Documents</h2>
+                    <Navigation navigationItems={actions}/>
                     <table className="responsive">
                         <thead>
                             <tr>
@@ -117,13 +162,12 @@ var Documents = React.createClass({
                             </tr>
                         </thead>
                         <tbody>
-                        {documentsTable.map(function(document) {
-                            return (document);
-                        })}
+                            {documentsTable.map(function(document) {
+                                return (document);
+                            })}
                         </tbody>
                     </table>
                 </div>
-                <RouterHandler/>
             </div>
         );
     }

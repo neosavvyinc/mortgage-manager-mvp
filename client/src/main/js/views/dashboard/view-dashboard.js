@@ -9,7 +9,6 @@ var Link = require('react-router').Link;
 
 var Header = require('../../components/header');
 var Footer = require('../../components/footer');
-var Navigation = require('../../components/navigation');
 
 var Dashboard = React.createClass({
 
@@ -29,7 +28,6 @@ var Dashboard = React.createClass({
         return (
             <div>
                 <Header />
-                <Navigation />
                 <RouterHandler />
                 <Footer />
             </div>

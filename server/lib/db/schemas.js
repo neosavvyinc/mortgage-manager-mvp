@@ -25,6 +25,7 @@ Schemas.UserInfoSchema = new Schema({
 	coUID: { type: String, ref: 'UserSchema' },
 	created: { type: Date, required: true },
 	lastLogin: { type: Date, required: true },
+	organization: { type: String },
 	appId: [{ type: String, required: true, ref: 'ApplicationSchema' }],
 	isSelfEmployed: { type: Boolean, default: false },
 	renting: { type: Boolean, default: false },
@@ -62,7 +63,8 @@ Schemas.LenderInvitesSchema = new Schema({
 	firstName: { type: String, required: true },
 	lastName: { type: String, required: true },
 	appId: { type: String, required: true, ref: 'ApplicationSchema' },
-	isOpen: { type: Boolean, default: true }
+	isOpen: { type: Boolean, default: true },
+	token: { type: String, required: true }
 });
 
 Schemas.ApplicationLendersSchema = new Schema({

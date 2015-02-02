@@ -12,7 +12,10 @@ module.exports = {
         }
     },
     LOGIN: {
-        URL: '/api/login'
+        URL: '/api/login',
+        WITHTOKEN: {
+            URL: '/api/login/token'
+        }
     },
     REGISTER: {
         URL: '/api/register'
@@ -39,6 +42,12 @@ module.exports = {
                 ONE: {
                     URL: '/api/applications/:id/download/:docId'
                 }
+            },
+            LENDERS: {
+                URL: '/api/applications/:id/lenders'
+            },
+            BORROWERS: {
+                URL: '/api/applications/:id/borrowers'
             }
         }
     }

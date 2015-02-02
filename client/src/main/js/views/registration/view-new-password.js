@@ -50,8 +50,12 @@ var NewPassword = React.createClass({
                 newUser.email = borrowerEmail;
                 newUser.type = "borrower";
             } else if(lenderEmail) {
+                console.log("lender info before endpoint", LenderStore.getLender());
                 newUser.email = lenderEmail;
                 newUser.type = "lender";
+                if(LenderStore.getLender().token){
+                    newUser.token = LenderStore.getLender().token;
+                }
             }
             newUser.password = newPassword;
 
@@ -65,9 +69,9 @@ var NewPassword = React.createClass({
             }, function(error){
                 this.setState({
                     passwordError: true,
-                    errorText: error.message
+                    errorText: error.responseJSON.message
                 }, console.log(this.state));
-            });
+            }.bind(this));
         }
     },
 
