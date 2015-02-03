@@ -6,6 +6,7 @@ var path = require('path'),
 	sizeOf = require('image-size'),
 	phantom = require('../phantomjs/phantom'),
 	commonUtils = require('../utils/common-utils'),
+	settings = require('../config/app/settings'),
 	documentService = require('../services/service-document');
 
 /**
@@ -20,6 +21,7 @@ exports.insertDocument = function(req, res) {
 
 	//If file does not exist, multer has filtered it for wrong extension.
 	if(file === undefined) {
+		settings.log.fatal('Unsupported media type');
 		res.status(415).send({message: 'Unsupported Media type'});
 	} else {
 		var uploadPath = file.path,
@@ -48,6 +50,7 @@ exports.insertDocument = function(req, res) {
 						done(new Error('Could not convert to pdf ' + error));
 					});
 				} else {
+					settings.log.info('Successfully converted pdf. Updated path is '+updatedUploadPath);
 					done();
 				}
 			},
@@ -81,9 +84,11 @@ exports.insertDocument = function(req, res) {
 			}
 		], function(error) {
 			if(error) {
+				settings.log.fatal(error.message);
 				res.status(500).send({message: 'Internal Server Error'});
 			} else {
 				res.send({message: 'Success'});
+				settings.log.info('Successfully uploaded document ' + file.name + '. AppId: '+appId);
 			}
 			res.end();
 		});
@@ -99,8 +104,9 @@ exports.insertDocumentEntry = function(req, res) {
 
 	documentService.createDocument(documentObject, function() {
 		res.send({message: 'Success'}).end();
+		settings.log.info('Successfully created a doc entry. AppId: '+req.params.appId);
 	}, function(error) {
-		console.log(error);
+		settings.log.fatal(error.message);
 		res.status(500).send({message: 'Internal Server Error'}).end();
 	});
 

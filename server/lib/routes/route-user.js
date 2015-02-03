@@ -3,6 +3,7 @@
 var bCrypt = require('bcrypt-nodejs'),
 	async = require('async'),
 	LocalStrategy = require('passport-local').Strategy,
+	settings = require('../config/app/settings'),
 	loginService = require('../services/service-user'),
 	userService = require('../services/service-user'),
 	userDetailsService = require('../services/service-user-details');
@@ -40,15 +41,23 @@ exports.validateLogin = function(passport) {
 			if(!user) {
 				res.status(info.code)
 					.send({message: info.message});
+				settings.log.error(info.message);
 			} else {
 				delete user.password;
 				res.send(user);
+				settings.log.info('User validated');
 			}
 			res.end();
 		})(req, res, next);
 	};
 };
 
+/**
+ * Adds an application for lender invites and logs in the new lender
+ * @param passport
+ * @returns {Function}
+ * @constructor
+ */
 exports.AddAppAndLogin = function(passport){
 	return function(req, res, next) {
 		userDetailsService.lenderAppInvite(req.param('email'), req.param('token'), req.param('appId'),
@@ -61,20 +70,24 @@ exports.AddAppAndLogin = function(passport){
 					if(!user) {
 						res.status(info.code)
 							.send({message: info.message});
+						settings.log.error(info.message);
 					} else {
 						delete user.password;
 						res.send(user);
+						settings.log.info('Lender invite login success');
 					}
 					res.end();
 				})(req, res, next);
 			}.bind(this), function(error) {
 				if(error) {
+					settings.log.error('User already exists');
 					res.status(400).send({message: 'The user already exists'});
 				}
 				res.end();
 			});
 	};
 };
+
 /**
  * Register a new user
  * @param passport
@@ -90,6 +103,7 @@ exports.registerUser = function(passport) {
 			if(!user) {
 				res.status(info.code)
 					.send({message: info.message});
+				settings.log.error(info.message);
 			} else {
 				res.send(user);
 			}
@@ -107,9 +121,11 @@ exports.emailExists = function(req, res){
 
 	userService.emailExists(email, function() {
 		res.send({message: 'Success'});
+		settings.log.info('Email does not exist already and is valid');
 		res.end();
 	}, function(error) {
 		if(error) {
+			settings.log.fatal(error.message);
 			res.status(400).send({message: 'The user already exists'});
 		}
 		res.end();
@@ -135,6 +151,7 @@ var _loginSetup = function(passport) {
 
 					// In case of any error, return using the done method
 					if (err) {
+						settings.log.fatal(err.message);
 						return done(err);
 					}
 					// Username does not exist, log error & redirect back
@@ -190,16 +207,18 @@ var _registerSetup = function(passport){
 									function(callback){
 										loginService.createUser(userObject, function(err, userDoc) {
 											if(err) {
-												//log.fatal
+												settings.log.error(err);
 												callback({message: 'The user couldn\'t be created'});
 											} else {
 												userRegistered = userDoc;
+												settings.log.info('User successfully registered');
 												callback();
 											}
 										});
 									}
 								], function(error){
 									if(error){
+										settings.log.fatal(error.message);
 										return done(null, false, {code: 500, message: 'Internal server error'});
 									} else {
 										return done(null, userRegistered);
