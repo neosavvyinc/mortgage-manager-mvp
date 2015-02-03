@@ -123,6 +123,9 @@ exports.lenderAppInvite = function(email, token, appId, success, failure){
 		function(done){
 			user.retrieve({email: email}, function(userData){
 				userBasicInfo = userData[0];
+                if(!userBasicInfo){
+                    done(new Error('This user doesn\'t exist'));
+                }
 				done();
 			}, done);
 		},

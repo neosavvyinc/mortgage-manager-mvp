@@ -4,28 +4,53 @@ var Reflux = require('reflux');
 var _ = require('lodash');
 
 var Application = require('../../models/model-application');
+var ApplicationActions = require('../../actions/action-application');
+var ApplicationStore = require('../../stores/store-application');
+var UserStore = require('../../stores/store-user');
 var Navigation = require('../../components/navigation');
+
+var loadLenders = function(){
+    Application.getLenders(this.getParams().appId).then(function(lenders){
+        this.setState({
+            lenders: lenders
+        });
+    }.bind(this));
+};
 
 var LenderContacts = React.createClass({
 
     mixins: [
         Router.State,
-        Router.Navigation
+        Router.Navigation,
+        Reflux.listenTo(ApplicationStore, "reloadLenders")
     ],
 
     getInitialState: function(){
         return {
-            lenders: []
+            lenders: [],
+            actionError: false,
+            actionErrorMessage: ''
         };
     },
 
     componentDidMount: function(){
-        Application.getLenders(this.getParams().appId).then(function(lenders){
-            if(this.isMounted()) {
-                this.setState({
-                    lenders: lenders
-                });
-            }
+        if(this.isMounted()) {
+            loadLenders.bind(this)();
+        }
+    },
+
+    reloadLenders: function(){
+        loadLenders.bind(this)();
+    },
+
+    onReSendInvite: function(lender){
+        Application.reSendInvite(UserStore.getCurrentUserId(), this.getParams().appId, lender).then(function(){
+            ApplicationActions.reSendInvite();
+        }.bind(this), function(error){
+            this.setState({
+                actionError: true,
+                actionErrorMessage: error.responseJSON.message
+            });
         }.bind(this));
     },
 
@@ -45,18 +70,34 @@ var LenderContacts = React.createClass({
         ];
 
         _.forEach(this.state.lenders, function(lender){
-            lendersTable.push((
-                <tr>
-                    <th>{lender.firstName + " " + lender.lastName}</th>
-                    <th>{lender.organization}</th>
-                    <th>{lender.email}</th>
-                    <th>{lender.status}</th>
+
+            var actionBtns;
+
+            if(lender.status === 'Pending'){
+                actionBtns = (
+                    <th>
+                        <div className="row">
+                            <button className="btn turquoise one centered mobile half" onClick={this.onReSendInvite.bind(null, lender)}>Send Again</button>
+                        </div>
+                    </th>
+                )
+            } else {
+                actionBtns = (
                     <th>
                         <div className="row">
                             <button className="btn turquoise one half">Email</button>
                             <button className="btn red one half">Delete</button>
                         </div>
                     </th>
+                )
+            }
+            lendersTable.push((
+                <tr>
+                    <th>{lender.firstName + " " + lender.lastName}</th>
+                    <th>{lender.organization}</th>
+                    <th>{lender.email}</th>
+                    <th>{lender.status}</th>
+                {actionBtns}
                 </tr>
             ));
         }, this);

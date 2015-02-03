@@ -7,7 +7,7 @@ var moment = require('moment');
 var User = require('../../models/model-user');
 var UserStore = require('../../stores/store-user');
 var Application = require('../../models/model-application');
-var ErrorMessage = require('../../components/error-message');
+var MessageBox = require('../../components/message-box');
 var Navigation = require('../../components/navigation');
 var LendersTable = require('./view-lender-list');
 

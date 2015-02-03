@@ -47,7 +47,10 @@ module.exports = {
                 }
             },
             LENDERS: {
-                URL: '/api/applications/:id/lenders'
+                URL: '/api/applications/:id/lenders',
+                REINVITE: {
+                    URL: '/api/applications/:id/lenders/resend-invite'
+                }
             },
             BORROWERS: {
                 URL: '/api/applications/:id/borrowers'

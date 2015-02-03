@@ -3,7 +3,7 @@
 var React = require('react'),
     Router = require('react-router'),
     Reflux = require('reflux'),
-    ErrorMessage = require('../../components/error-message'),
+    MessageBox = require('../../components/message-box'),
     Application = require('../../models/model-application'),
     UserStore = require('../../stores/store-user');
 

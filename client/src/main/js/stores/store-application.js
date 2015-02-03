@@ -14,6 +14,10 @@ var ApplicationStore = Reflux.createStore({
         this.trigger();
     },
 
+    onReSendInvite: function(){
+        this.trigger();
+    },
+
     getCurrentApplication: function(){
         return _application;
     }

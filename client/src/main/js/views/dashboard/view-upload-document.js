@@ -8,8 +8,7 @@ var React = require('react'),
 	DocumentStore = require('../../stores/store-document'),
 	Document = require('../../models/model-document'),
 	Application = require('../../models/model-application'),
-	ErrorMessage = require('../../components/error-message'),
-	SuccessMessage = require('../../components/success-msg');
+	MessageBox = require('../../components/message-box');
 
 //Validate Document Info
 var validateDocumentInfo = function(document) {
@@ -161,8 +160,8 @@ var UploadDocument = React.createClass({
 						</div>
 						<div className="row">
 							<div className="two fourths skip-one">
-								<SuccessMessage successDisplay={this.state.success} message={this.state.uploadMessage}/>
-								<ErrorMessage errorDisplay={this.state.error} errorMessage={this.state.uploadMessage}/>
+								<MessageBox displayMessage={this.state.success} message={this.state.uploadMessage} type='success' />
+								<MessageBox displayMessage={this.state.error} message={this.state.uploadMessage} type='error' />
 							</div>
 						</div>
 					</form>

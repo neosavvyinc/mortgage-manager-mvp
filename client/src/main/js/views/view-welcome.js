@@ -4,7 +4,7 @@ var Link = Router.Link;
 var Reflux = require('reflux');
 
 var Login = require('../components/login');
-var ErrorMessage = require('../components/error-message');
+var MessageBox = require('../components/message-box');
 var User = require('../models/model-user');
 var UserStore = require('../stores/store-user');
 var LenderStore = require('../stores/store-lender');
@@ -110,7 +110,7 @@ var Welcome = React.createClass({
                             <form>
                                 <input className="double-gap-bottom" ref="borrowerEmail" type="email" placeholder="Email Address" />
                                 <div className={borrowerEmptyClass}>You need to provide a valid email</div>
-                                <ErrorMessage errorDisplay={this.state.borrowerError} errorMessage={this.state.borrowerErrorMessage} />
+                                <MessageBox displayMessage={this.state.borrowerError} message={this.state.borrowerErrorMessage} type='error' />
                                 <button className="block turquoise" onClick={this.onSignUpBorrower}>
                                     Signup as Borrower
                                 </button>
@@ -124,7 +124,7 @@ var Welcome = React.createClass({
                             <form>
                                 <input className="double-gap-bottom" ref="lenderEmail" type="email" placeholder="Email Address" />
                                 <div className={falseEmptyClass}>You need to provide a valid email</div>
-                                <ErrorMessage errorDisplay={this.state.lenderError} errorMessage={this.state.lenderErrorMessage} />
+                                <MessageBox displayMessage={this.state.lenderError} message={this.state.lenderErrorMessage} type='error' />
                                 <button className="block turquoise" onClick={this.onSignUpLender}>
                                     Signup as Lender
                                 </button>

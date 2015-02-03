@@ -3,7 +3,7 @@ var Router = require('react-router');
 var Reflux = require('reflux');
 
 var Constants = require('../../constants/constants');
-var ErrorMessage = require('../../components/error-message');
+var MessageBox = require('../../components/message-box');
 var User = require('../../models/model-user');
 var BorrowerStore = require('../../stores/store-borrower');
 var BorrowerActions = require('../../actions/action-borrower');
@@ -207,7 +207,7 @@ var ApplicantInfo = React.createClass({
                         <input className="one third half-gap-right" type="text" ref="phone" placeholder="Mobile Phone" required />
                         <input className={showEmailClass} type="email" ref="email" placeholder="Email" required />
                     </div>
-                    <ErrorMessage errorDisplay={this.state.applicantInfoError} errorMessage={this.state.errorText}/>
+                    <MessageBox displayMessage={this.state.applicantInfoError} message={this.state.errorText} type='error' />
                     <div className="row">
                         <button className="one third turquoise button" onClick={this.onSubmitInfo}>Continue</button>
                     </div>
