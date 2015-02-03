@@ -52,7 +52,7 @@ module.exports = function(router, passport) {
 	router.route('/applications/:appId/documents')
 		.all(_isAuthenticated)
 		.get(applicationRoute.getApplicationDocuments)
-		.post(documentRoute.insertDocument);
+        .post(documentRoute.insertDocument);
 
 	router.route('/applications/:appId/lenders')
 		.all(_isAuthenticated)

@@ -27,7 +27,10 @@ module.exports = {
                 ],
                 dest: '<%= buildOutputDirectoryPath %>/js/'
             }
-        ]
+        ],
+        options: {
+            mode: true
+        }
     },
     deploy: {
         files: [
@@ -38,7 +41,10 @@ module.exports = {
                     'assets/css/main.min.css'
                 ],
                 dest: 'deployment/'
-            },
-        ]
+            }
+        ],
+        options: {
+            mode: true
+        }
     }
 };
