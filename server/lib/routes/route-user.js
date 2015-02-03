@@ -151,7 +151,7 @@ var _loginSetup = function(passport) {
 
 					// In case of any error, return using the done method
 					if (err) {
-						settings.log.fatal(error.message);
+						settings.log.fatal(err.message);
 						return done(err);
 					}
 					// Username does not exist, log error & redirect back
