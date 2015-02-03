@@ -1,6 +1,8 @@
 #Webstorm settings
 .idea/
 
+mam-nginx/
+
 node_modules/
 
 server/build

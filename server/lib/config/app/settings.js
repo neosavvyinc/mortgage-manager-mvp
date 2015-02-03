@@ -15,3 +15,5 @@ exports.getConfig = function() {
 };
 
 exports.secretKey = 'MamSecretKey';
+
+exports.log = {};

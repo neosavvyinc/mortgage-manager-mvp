@@ -1,0 +1,17 @@
+{
+	"port": 3000,
+	"hostURL": "http://localhost:9991/#",
+	"dbURL": "mongodb://localhost/MAM",
+	"logging": {
+		"levels": {
+			"staging": "all"
+		},
+		"appenders": [
+			{
+				"type": "file",
+				"filename": "../mam-nginx/node-server/staging-server.log",
+				"category": "staging"
+			}
+		]
+	}
+}

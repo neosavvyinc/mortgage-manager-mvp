@@ -59,6 +59,7 @@ async.series([
 	},
 	function(done) {
 		log = require('./utils/common-utils').getLogger();
+		settings.log = log;
 		done();
 	},
 	function(done) {

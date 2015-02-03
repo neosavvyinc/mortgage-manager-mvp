@@ -9,6 +9,7 @@ var handlebars = require('handlebars'),
 	os = require('os'),
 	path = require('path'),
 	util = require('util'),
+	mkdirp = require('mkdirp'),
 	_templateCache={};
 
 /**
@@ -39,7 +40,18 @@ exports.dereference=function(object, path, dfault) {
  */
 exports.getLogger = function() {
 	var config = settings.getConfig(),
-		category = exports.dereference(config.logging.appenders[0], 'category', 'dev');
+		category = exports.dereference(config.logging.appenders[0], 'category', 'dev'),
+		type = exports.dereference(config.logging.appenders[0], 'type', 'console'),
+		filename;
+
+	if(type === 'file') {
+		var logPath = path.resolve(__dirname.split('lib')[0], '../mam-nginx/node-server');
+		mkdirp.sync(logPath);
+		filename = exports.dereference(config.logging.appenders[0], 'filename', 'prod.log');
+
+		//Set the log file path to the absolute path
+		config.logging.appenders[0].filename = path.join(__dirname.split('lib')[0], filename);
+	}
 	log4js.configure(config.logging, {});
 	return log4js.getLogger(category);
 };

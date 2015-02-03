@@ -1,6 +1,7 @@
 'use strict';
 
-var applicationService = require('../services/service-application');
+var applicationService = require('../services/service-application'),
+    settings = require('../config/app/settings');
 
 exports.getAllApplications = function(req, res){
     var uid = req.params.uid;
@@ -8,8 +9,10 @@ exports.getAllApplications = function(req, res){
     applicationService.getUserApplications(uid, function(applications) {
         res.send(applications);
         res.end();
+        settings.log.info('Get all applications success');
     }, function(error) {
         if(error) {
+            settings.log.fatal(error.message);
             res.status(500).send({message: 'Internal Server Error'});
         }
         res.end();
@@ -22,8 +25,10 @@ exports.createApplication = function(req, res){
     applicationService.createApplication(uid, function(){
         res.send({message: 'success'});
         res.end();
+        settings.log.info('Create applications success');
     }, function(error){
         if(error){
+            settings.log.fatal(error.message);
             res.status(500).send({message: 'Internal Server Error'});
         }
     });
@@ -40,8 +45,10 @@ exports.getApplicationDocuments = function(req, res){
     applicationService.getDocuments(appId, null, function(documents) {
         res.send(documents);
         res.end();
+        settings.log.info('Get documents for appId: '+ appId);
     }, function(error){
-        if(error){
+        if(error) {
+            settings.log.fatal(error.message);
             res.status(500).send({message: 'Internal Server Error'});
         }
     });
@@ -59,8 +66,10 @@ exports.getApplicationDocument = function(req, res){
     applicationService.getDocuments(appId, docId, function(documents) {
         res.send(documents);
         res.end();
+        settings.log.info('Get one document for appId '+appId + ' and docId '+ docId);
     }, function(error){
         if(error){
+            settings.log.fatal(error.message);
             res.status(500).send({message: 'Internal Server Error'});
         }
     });
@@ -82,16 +91,18 @@ exports.getFile = function(req, res){
             if(err) {
                 if (err.code === 'ECONNABORT' && res.statusCode === 304) {
                     // No problem, 304 means client cache hit, so no data sent.
-                    console.log('304 cache hit for ' + url);
+                    settings.log.warn('304 cache hit for ' + url);
                     return;
                 }
                 res.status(err.status).end();
             } else {
                 res.status(200).end();
+                settings.log.info('Successfully sending pdf with docId: '+ docId);
             }
         });
     }, function(error){
-        if(error){
+        if(error) {
+            settings.log.fatal(error.message);
             res.status(500).send({message: 'Internal Server Error'});
         }
     });
@@ -111,14 +122,16 @@ exports.downloadFile = function(req, res){
 
         res.download(url, documents[0].name+'.pdf', function(error) {
             if(error) {
-                console.log(error);
+                settings.log.fatal(error);
                 res.status(500).send({message: 'Internal Server Error'});
             } else {
                 res.status(200).end();
+                settings.log.info('Successfully downloading pdf with docId: '+ docId);
             }
         });
     }, function(error){
         if(error){
+            settings.log.fatal(error.message);
             res.status(500).send({message: 'Internal Server Error'});
         }
     });
@@ -130,8 +143,10 @@ exports.getApplicationLenders = function(req, res){
     applicationService.getLenders(appId, function(lenders){
         res.send(lenders);
         res.end();
+        settings.log.info('Get application lenders for application: '+ appId);
     }, function(error){
-        if(error){
+        if(error) {
+            settings.log.fatal(error.message);
             res.status(500).send({message: 'Internal Server Error'});
         }
     });
@@ -143,8 +158,10 @@ exports.getApplicationBorrowers = function(req, res){
     applicationService.getBorrowers(appId, function(borrowers){
         res.send(borrowers);
         res.end();
+        settings.log.info('Get application borrowers for application: '+ appId);
     }, function(error){
-        if(error){
+        if(error) {
+            settings.log.fatal(error.message);
             res.status(500).send({message: 'Internal Server Error'});
         }
     });
@@ -160,8 +177,10 @@ exports.inviteLenderToApplication = function(req, res){
     applicationService.inviteLender(appId, userId, lenderInfo, function(){
         res.send({message: 'Success'});
         res.end();
-    }, function(error){
-        if(error){
+        settings.log.info('Lender invited by '+ userId + '. Application: ' + appId);
+    }, function(error) {
+        if(error) {
+            settings.log.fatal(error.message);
             res.status(500).send({message: 'There was an error sending the invitation'});
         }
     });
@@ -174,8 +193,10 @@ exports.reSendLenderInvite = function(req, res){
     applicationService.reSendLenderInvitation(appId, inviteInfo, function(){
         res.send({message: 'Success'});
         res.end();
-    }, function(error){
-        if(error){
+        settings.log.info('Resending lender invite. Application: ' + appId);
+    }, function(error) {
+        if(error) {
+            settings.log.fatal(error.message);
             res.status(500).send({message: 'There was an error sending the new invitation'});
         }
     });
