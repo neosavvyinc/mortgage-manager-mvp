@@ -19,6 +19,18 @@ User.login = function (email, password){
     });
 };
 
+User.logOut = function (){
+    return Q.promise(function(resolve, reject){
+        $.post(Endpoints.LOGOUT.URL)
+            .success(function(response){
+                resolve(response);
+            })
+            .error(function(error){
+                reject(error);
+            });
+    });
+};
+
 User.register = function (newUser){
     return Q.promise(function(resolve, reject){
         $.post(Endpoints.REGISTER.URL, newUser)

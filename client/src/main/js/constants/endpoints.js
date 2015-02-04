@@ -17,6 +17,9 @@ module.exports = {
             URL: '/api/login/token'
         }
     },
+    LOGOUT: {
+        URL: '/api/logout'
+    },
     REGISTER: {
         URL: '/api/register'
     },

@@ -2,6 +2,7 @@ var React = require('react');
 var Router = require('react-router');
 var Reflux = require('reflux');
 
+var User = require('../models/model-user');
 var UserStore = require('../stores/store-user');
 var UserActions = require('../actions/action-user');
 
@@ -36,7 +37,9 @@ var Header = React.createClass({
     },
 
     onLogout: function(e){
-        UserActions.logout();
+        User.logOut().then(function(){
+            UserActions.logout();
+        });
     },
 
     onLogoutTransition: function(){

@@ -18,6 +18,9 @@ module.exports = function(router, passport) {
 	router.route('/login/token')
 		.post(authRoute.AddAppAndLogin(passport));
 
+    router.route('/logout')
+        .post(authRoute.userLogOut);
+
 	//Create a new user
 	router.route('/register')
 		.post(authRoute.registerUser(passport));
@@ -97,7 +100,7 @@ module.exports = function(router, passport) {
  * @private
  */
 var _isAuthenticated = function(req, res, next){
-	if(req.sessionID){
+	if(req.isAuthenticated()){
 		next();
 	} else {
 		res.status(401).end();

@@ -43,13 +43,32 @@ exports.validateLogin = function(passport) {
 					.send({message: info.message});
 				settings.log.error(info.message);
 			} else {
-				delete user.password;
-				res.send(user);
-				settings.log.info('User validated');
+                if (user.password) delete user.password;
+                req.logIn(user, function(err){
+                    if(err){
+                        res.status(401)
+                            .send({message: "User Unauthorized"});
+                        settings.log.error({message: "User Unauthorized"});
+                    } else {
+                        res.send(user);
+                        settings.log.info('User validated');
+                    }
+                });
 			}
 			res.end();
 		})(req, res, next);
 	};
+};
+
+/**
+ * Close PassportJS session
+ * @param req
+ * @param res
+ */
+exports.userLogOut = function(req, res) {
+    req.logout();
+    res.send({message: "Success"});
+    res.end();
 };
 
 /**
@@ -72,9 +91,17 @@ exports.AddAppAndLogin = function(passport){
 							.send({message: info.message});
 						settings.log.error(info.message);
 					} else {
-						delete user.password;
-						res.send(user);
-						settings.log.info('Lender invite login success');
+                        if (user.password) delete user.password;
+                        req.logIn(user, function(err){
+                            if(err){
+                                res.status(401)
+                                    .send({message: "User Unauthorized"});
+                                settings.log.error({message: "User Unauthorized"});
+                            } else {
+                                res.send(user);
+                                settings.log.info('User validated');
+                            }
+                        });
 					}
 					res.end();
 				})(req, res, next);
@@ -105,7 +132,17 @@ exports.registerUser = function(passport) {
 					.send({message: info.message});
 				settings.log.error(info.message);
 			} else {
-				res.send(user);
+                if (user.password) delete user.password;
+                req.logIn(user, function(err){
+                    if(err){
+                        res.status(401)
+                            .send({message: "User Unauthorized"});
+                        settings.log.error({message: "User Unauthorized"});
+                    } else {
+                        res.send(user);
+                        settings.log.info('User validated');
+                    }
+                });
 			}
 			res.end();
 		})(req, res, next);
