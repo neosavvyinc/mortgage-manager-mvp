@@ -43,6 +43,10 @@ var ApplicationDetails = React.createClass({
         }
     },
 
+    onViewApplications: function(){
+        this.transitionTo('dashboardApplications');
+    },
+
     render: function() {
 
         var tabInfo = [{
@@ -77,11 +81,12 @@ var ApplicationDetails = React.createClass({
                 </div>
             ));
         }
+
         return (
             <div className="container">
                 <div className="gap-top">
                     <div className="row">
-                        <h2>Application #{this.getParams().appId}</h2>
+                        <h2><i className="fa fa-chevron-left pointer" onClick={this.onViewApplications}></i> Application #{this.getParams().appId}</h2>
                     </div>
                     <div className="tabs ipad">
                         <ul role="tablist">
