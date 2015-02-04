@@ -26,11 +26,19 @@ module.exports = function(router, passport) {
 	router.route('/email-exists')
 		.post(authRoute.emailExists);
 
+	//Forgot password
+	router.route('/forgot-password')
+		.post(authRoute.forgotPassword);
+
 	//Update a user based on a userId
 	router.route('/user/:uid')
 		.all(_isAuthenticated)
 		.get(userRoute.getUserDetails)
 		.post(userRoute.updateUser);
+
+	//Update password
+	router.route('/user/:uid/update-password')
+		.post(authRoute.updatePassword);
 
 	//Add a coapplicant for a particular userId
 	router.route('/user/:uid/coapplicant')
@@ -52,7 +60,7 @@ module.exports = function(router, passport) {
 	router.route('/applications/:appId/documents')
 		.all(_isAuthenticated)
 		.get(applicationRoute.getApplicationDocuments)
-        .post(documentRoute.insertDocument);
+	        .post(documentRoute.insertDocument);
 
 	router.route('/applications/:appId/lenders')
 		.all(_isAuthenticated)

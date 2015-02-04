@@ -8,6 +8,9 @@ module.exports = {
             },
             APPLICATIONS: {
                 URL: '/api/user/:id/applications'
+            },
+            UPDATEPASSWORD: {
+                URL: '/api/user/:id/update-password'
             }
         }
     },
@@ -19,6 +22,9 @@ module.exports = {
     },
     REGISTER: {
         URL: '/api/register'
+    },
+    FORGOTPASSWORD: {
+        URL: '/api/forgot-password'
     },
     EMAIL: {
         URL: '/api/email-exists'
