@@ -30,3 +30,6 @@
 
 - name: Copy the Restart Script
   template: src=restart.sh dest=/opt/mam/restart.sh mode=0755
+
+- name: Restart the Server
+  shell: /opt/mam/restart.sh

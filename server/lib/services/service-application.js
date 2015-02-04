@@ -455,61 +455,7 @@ exports.inviteLender = function(appId, userId, lenderInfo, success, failure){
         function(done){
 
             sendInvite(lenderInfo, sender, appId, token, done);
-            //var redirectURL = serverConfig.getConfig().hostURL +
-            //    '/register/new-lender?token=' + token +
-            //    '&email=' + lenderInfo.email +
-            //    '&firstName=' + lenderInfo.firstName +
-            //    '&lastName=' + lenderInfo.lastName +
-            //    '&organization=' + lenderInfo.organization +
-            //    '&appId=' + appId;
-            //
-            //mandrill('/messages/send-template', {
-            //    template_name: 'lender_invite',
-            //    template_content: [],
-            //    message: {
-            //        auto_html: false,
-            //        to: [
-            //            {
-            //                email: lenderInfo.email,
-            //                name: lenderInfo.firstName + " " + lenderInfo.lastName
-            //            }
-            //        ],
-            //        from_email: mandrillConfig.sourceEmail,
-            //        from_name: 'DoubleApp Team',
-            //        subject: 'You have received an invitation',
-            //        merge_vars: [{
-            //            rcpt: lenderInfo.email,
-            //            vars: [
-            //                {
-            //                    name: "lenderFName",
-            //                    content: lenderInfo.firstName
-            //                },
-            //                {
-            //                    name: "lenderLName",
-            //                    content: lenderInfo.lastName
-            //                },
-            //                {
-            //                    name: "senderFName",
-            //                    content: sender.firstName
-            //                },
-            //                {
-            //                    name: "senderLName",
-            //                    content: sender.lastName
-            //                },
-            //                {
-            //                    name: "redirectURL",
-            //                    content: redirectURL
-            //                }
-            //            ]
-            //        }]
-            //    }
-            //}, function(error) {
-            //    if (error){
-            //        done(error);
-            //    } else {
-            //        done();
-            //    }
-            //});
+
         },
         function(done){
             _.extend(lenderInfo,{

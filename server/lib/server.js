@@ -36,6 +36,9 @@ var loadConfig = function() {
 		configFile = path.join(configPath + '/', env + '.json'),
 		config = fs.readFileSync(configFile, 'utf8');
 	settings.setConfig(config);
+
+    log = require('./utils/common-utils').getLogger();
+    log.info('NODE_ENV ', process.env.NODE_ENV);
 };
 
 /**
