@@ -40,11 +40,15 @@ var RequestDocument = React.createClass({
 			}) : null;
 	},
 
-	close: function() {
+	close: function(e) {
+        e.preventDefault();
+
 		this.transitionTo('dashboardDocuments', {appId: this.getParams().appId});
 	},
 
-	onRequestDocument: function() {
+	onRequestDocument: function(e) {
+        e.preventDefault();
+
 		var documentInfo = {
 			name: this.refs.docName.getDOMNode().value,
 			type: (this.getParams().docType === 'standard') ? this.refs.docType.getDOMNode().value : 'Explanation',

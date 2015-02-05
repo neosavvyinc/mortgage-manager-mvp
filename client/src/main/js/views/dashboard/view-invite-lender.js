@@ -28,11 +28,14 @@ var UploadDocument = React.createClass({
         };
     },
 
-    close: function() {
+    close: function(e) {
+        e.preventDefault();
         this.transitionTo('dashboardDocuments', {appId: this.getParams().appId});
     },
 
-    onInviteLender: function(){
+    onInviteLender: function(e){
+        e.preventDefault();
+
         var lenderInfo = {
             firstName: this.refs.firstName.getDOMNode().value,
             lastName: this.refs.lastName.getDOMNode().value,
@@ -43,7 +46,7 @@ var UploadDocument = React.createClass({
         if(validateLenderInfo(lenderInfo)) {
             var appId = this.getParams().appId;
 
-            Application.lenderInvite(appId, UserStore.getCurrentUserId(), lenderInfo).then(function(){
+            Application.lenderInvite(appId, lenderInfo).then(function(){
                 this.close();
             }.bind(this), function(error){
                 this.setState({

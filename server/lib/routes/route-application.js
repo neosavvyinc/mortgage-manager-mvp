@@ -6,32 +6,43 @@ var applicationService = require('../services/service-application'),
 exports.getAllApplications = function(req, res){
     var uid = req.params.uid;
 
-    applicationService.getUserApplications(uid, function(applications) {
-        res.send(applications);
+    if( uid === req.user._id){
+        applicationService.getUserApplications(uid, function(applications) {
+            res.send(applications);
+            res.end();
+            settings.log.info('Get all applications success');
+        }, function(error) {
+            if(error) {
+                settings.log.fatal(error.message);
+                res.status(500).send({message: 'Internal Server Error'});
+            }
+            res.end();
+        });
+    } else {
+        res.status(500).send({message: 'Internal Server Error'});
         res.end();
-        settings.log.info('Get all applications success');
-    }, function(error) {
-        if(error) {
-            settings.log.fatal(error.message);
-            res.status(500).send({message: 'Internal Server Error'});
-        }
-        res.end();
-    });
+    }
+
 };
 
 exports.createApplication = function(req, res){
     var uid = req.params.uid;
 
-    applicationService.createApplication(uid, function(){
-        res.send({message: 'success'});
+    if( uid === req.user._id){
+        applicationService.createApplication(uid, function(){
+            res.send({message: 'success'});
+            res.end();
+            settings.log.info('Create applications success');
+        }, function(error){
+            if(error){
+                settings.log.fatal(error.message);
+                res.status(500).send({message: 'Internal Server Error'});
+            }
+        });
+    } else {
+        res.status(500).send({message: 'Internal Server Error'});
         res.end();
-        settings.log.info('Create applications success');
-    }, function(error){
-        if(error){
-            settings.log.fatal(error.message);
-            res.status(500).send({message: 'Internal Server Error'});
-        }
-    });
+    }
 };
 
 /**
@@ -170,9 +181,7 @@ exports.getApplicationBorrowers = function(req, res){
 exports.inviteLenderToApplication = function(req, res){
     var appId = req.params.appId,
         lenderInfo = req.body,
-        userId = lenderInfo.borrowerId;
-
-    delete lenderInfo.borrowerId;
+        userId = req.user._id;
 
     applicationService.inviteLender(appId, userId, lenderInfo, function(){
         res.send({message: 'Success'});
@@ -189,6 +198,8 @@ exports.inviteLenderToApplication = function(req, res){
 exports.reSendLenderInvite = function(req, res){
     var inviteInfo = req.body,
         appId = req.params.appId;
+
+    inviteInfo.senderId = req.user._id;
 
     applicationService.reSendLenderInvitation(appId, inviteInfo, function(){
         res.send({message: 'Success'});

@@ -50,7 +50,9 @@ var UploadDocument = React.createClass({
 		}.bind(this));
 	},
 
-	close: function() {
+	close: function(e) {
+        e.preventDefault();
+
 		this.transitionTo('dashboardDocuments', {appId: this.getParams().appId});
 	},
 
@@ -74,7 +76,9 @@ var UploadDocument = React.createClass({
 		});
 	},
 
-	onUploadDocument: function() {
+	onUploadDocument: function(e) {
+        e.preventDefault();
+
 		var documentInfo = {
 			name: this.state.docName,
 			type: this.state.type,

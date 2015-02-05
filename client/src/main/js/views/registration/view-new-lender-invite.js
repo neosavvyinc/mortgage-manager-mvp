@@ -12,9 +12,20 @@ var newLenderInvite = React.createClass({
     mixins: [
         Router.State,
         Router.Navigation,
-        Reflux.listenTo(LenderStore, "onNewLender"),
-        Reflux.listenTo(UserStore, 'onLogin')
+        Reflux.listenTo(LenderStore, "onNewLender")
     ],
+
+    statics: {
+        willTransitionTo: function (transition){
+            transition.wait(
+                User.isAuthenticated().then(function (res) {
+                    if (res.isAuthenticated) {
+                        transition.redirect('dashboardApplications');
+                    }
+                })
+            );
+        }
+    },
 
     onAcceptInvite: function(newLender){
         LenderStore.onLenderInvite(newLender);
@@ -22,12 +33,6 @@ var newLenderInvite = React.createClass({
 
     onNewLender: function(){
         this.transitionTo("newPassword");
-    },
-
-    onLogin: function(){
-        if(UserStore.isAuthenticated()) {
-            this.transitionTo('dashboardApplications');
-        }
     },
 
     render: function(){

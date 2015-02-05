@@ -54,12 +54,7 @@ Application.getBorrowers = function(appId){
     });
 };
 
-Application.lenderInvite = function(appId, userId, lenderInfo){
-
-    _.extend(lenderInfo,{
-        borrowerId: userId
-    });
-
+Application.lenderInvite = function(appId, lenderInfo){
     return Q.promise(function(resolve, reject) {
         $.post(Endpoints.APPLICATIONS.ONE.LENDERS.URL.replace(':id', appId), lenderInfo)
             .success(function(response){
@@ -71,8 +66,7 @@ Application.lenderInvite = function(appId, userId, lenderInfo){
     });
 };
 
-Application.reSendInvite = function(userId, appId, inviteInfo){
-    inviteInfo.senderId = userId;
+Application.reSendInvite = function(appId, inviteInfo){
     return Q.promise(function(resolve, reject) {
         $.post(Endpoints.APPLICATIONS.ONE.LENDERS.REINVITE.URL.replace(':id', appId), inviteInfo)
             .success(function(response){

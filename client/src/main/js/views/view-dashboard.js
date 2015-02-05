@@ -5,7 +5,6 @@ var Reflux = require('reflux');
 
 var User = require('../models/model-user');
 var UserStore = require('../stores/store-user');
-var UserActions = require('../actions/action-user');
 
 var Header = require('../components/header');
 var Footer = require('../components/footer');
@@ -19,9 +18,13 @@ var Dashboard = React.createClass({
 
     statics: {
         willTransitionTo: function (transition){
-            if(!UserStore.isAuthenticated()){
-                transition.redirect('welcome');
-            }
+            transition.wait(
+                User.isAuthenticated().then(function (res) {
+                    if (!res.isAuthenticated) {
+                        transition.redirect('welcome');
+                    }
+                })
+            );
         }
     },
 

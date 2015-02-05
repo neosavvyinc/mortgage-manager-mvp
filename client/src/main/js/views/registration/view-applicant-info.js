@@ -45,9 +45,16 @@ var ApplicantInfo = React.createClass({
     
     statics: {
         willTransitionTo: function (transition){
-            if(!UserStore.isAuthenticated() || !BorrowerStore.getBorrower()){
+            if(!BorrowerStore.getBorrower()) {
                 transition.redirect('welcome');
             }
+            transition.wait(
+                User.isAuthenticated().then(function (res) {
+                    if (!res.isAuthenticated) {
+                        transition.redirect('welcome');
+                    }
+                })
+            );
         }
     },
 

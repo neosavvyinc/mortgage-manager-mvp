@@ -20,21 +20,17 @@ var UserStore = Reflux.createStore({
     */
 
     onLogin: function(user){
-        localStorage.setItem("userId", user._id);
+        sessionStorage.setItem("userId", user._id);
         this.trigger();
     },
 
     onLogout: function(){
-        localStorage.removeItem("userId");
+        sessionStorage.removeItem("userId");
         this.trigger();
     },
 
-    isAuthenticated: function(){
-        return (localStorage.getItem("userId") != undefined);
-    },
-
     getCurrentUserId: function(){
-        return localStorage.getItem("userId");
+        return sessionStorage.getItem("userId");
     }
 });
 
