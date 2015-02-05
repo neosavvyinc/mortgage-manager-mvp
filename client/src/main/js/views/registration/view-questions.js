@@ -20,9 +20,13 @@ var ApplicantQuestions = React.createClass({
 
     statics: {
         willTransitionTo: function (transition){
-            if(!UserStore.isAuthenticated()){
-                transition.redirect('welcome');
-            }
+            transition.wait(
+                User.isAuthenticated().then(function (res) {
+                    if (!res.isAuthenticated) {
+                        transition.redirect('welcome');
+                    }
+                })
+            );
         }
     },
 

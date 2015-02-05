@@ -31,9 +31,13 @@ var LenderInfo = React.createClass({
 
 	statics: {
 		willTransitionTo: function (transition){
-			if(!UserStore.isAuthenticated()){
-				transition.redirect('welcome');
-			}
+            transition.wait(
+                User.isAuthenticated().then(function (req) {
+                    if (!req.isAuthenticated) {
+                        transition.redirect( 'welcome' );
+                    }
+                })
+            );
 		}
 	},
 
