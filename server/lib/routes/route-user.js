@@ -210,7 +210,11 @@ exports.forgotPassword = function(req, res) {
 	}, function(error) {
 		if(error) {
 			settings.log.fatal(error.message);
-			res.status(500).send({message: 'Internal Server Error'});
+			if(error.message === 'User does not exist!') {
+				res.status(400).send({message: error.message});
+			} else {
+				res.status(500).send({message: 'Internal Server Error'});
+			}
 		}
 		res.end();
 	});

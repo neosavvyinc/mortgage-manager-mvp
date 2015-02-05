@@ -21,32 +21,21 @@ var ForgotPassword = React.createClass({
 	onValidateEmail: function() {
 		var email = this.refs.email.getDOMNode().value;
 		if(email) {
-			User.emailExists(email).then(
+			User.forgotPassword(email).then(
 				function() {
 					this.setState({
 						display: true,
-						displayText: 'Email does not exist!',
-						type: 'error'
+						displayText: 'Email sent! Follow instructions on the email to reset your password.',
+						type: 'success',
+						disabled: true
 					});
 				}.bind(this),
-				function(error){
-					User.forgotPassword(email).then(
-						function() {
-							this.setState({
-								display: true,
-								displayText: 'Email sent! Follow instructions on the email to reset your password.',
-								type: 'success',
-								disabled: true
-							});
-						}.bind(this),
-						function(error) {
-							this.setState({
-								display: true,
-								displayText: error.responseJSON.message,
-								type: 'failure'
-							});
-						}.bind(this)
-					);
+				function(error) {
+					this.setState({
+						display: true,
+						displayText: error.responseJSON.message,
+						type: 'error'
+					});
 				}.bind(this)
 			);
 		}
