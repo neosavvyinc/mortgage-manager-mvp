@@ -15,7 +15,16 @@ module.exports = {
                 expand:true,
                 cwd:'<%= sourceDirectoryPath %>/assets/lib/groundworkcss',
                 src:[
+                    '*'
+                ],
+                dest: '<%= buildOutputDirectoryPath %>/assets/css/'
+            },
+            {
+                expand: true,
+                cwd: '<%= sourceDirectoryPath %>/assets/lib/fontawesome',
+                src:[
                     '*',
+                    '**/*'
                 ],
                 dest: '<%= buildOutputDirectoryPath %>/assets/css/'
             },
