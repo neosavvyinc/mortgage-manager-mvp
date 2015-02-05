@@ -44,7 +44,7 @@ var LenderContacts = React.createClass({
     },
 
     onReSendInvite: function(lender){
-        Application.reSendInvite(UserStore.getCurrentUserId(), this.getParams().appId, lender).then(function(){
+        Application.reSendInvite(this.getParams().appId, lender).then(function(){
             ApplicationActions.reSendInvite();
         }.bind(this), function(error){
             this.setState({

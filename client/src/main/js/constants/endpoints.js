@@ -20,6 +20,9 @@ module.exports = {
     LOGOUT: {
         URL: '/api/logout'
     },
+    ISAUTHENTICATED: {
+        URL: '/api/is-authenticated'
+    },
     REGISTER: {
         URL: '/api/register'
     },

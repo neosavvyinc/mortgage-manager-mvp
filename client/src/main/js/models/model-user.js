@@ -19,9 +19,21 @@ User.login = function (email, password){
     });
 };
 
-User.logOut = function (){
+User.logOut = function () {
     return Q.promise(function(resolve, reject){
         $.post(Endpoints.LOGOUT.URL)
+            .success(function(response){
+                resolve(response);
+            })
+            .error(function(error){
+                reject(error);
+            });
+    });
+};
+
+User.isAuthenticated = function () {
+    return Q.promise(function(resolve, reject){
+        $.post(Endpoints.ISAUTHENTICATED.URL)
             .success(function(response){
                 resolve(response);
             })

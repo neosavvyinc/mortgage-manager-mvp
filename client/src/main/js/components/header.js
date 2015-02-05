@@ -21,6 +21,16 @@ var Header = React.createClass({
         }
     },
 
+    onLogout: function(e){
+        User.logOut().then(function(){
+            UserActions.logout();
+        });
+    },
+
+    onLogoutTransition: function(){
+        this.transitionTo('welcome');
+    },
+
     render: function(){
         return (
             <div className="row gap-top">
@@ -34,18 +44,7 @@ var Header = React.createClass({
                 </div>
             </div>
         );
-    },
-
-    onLogout: function(e){
-        User.logOut().then(function(){
-            UserActions.logout();
-        });
-    },
-
-    onLogoutTransition: function(){
-        this.transitionTo('welcome');
     }
-
 
 });
 

@@ -21,6 +21,9 @@ module.exports = function(router, passport) {
     router.route('/logout')
         .post(authRoute.userLogOut);
 
+    router.route('/is-authenticated')
+        .post(authRoute.isAuthenticated);
+
 	//Create a new user
 	router.route('/register')
 		.post(authRoute.registerUser(passport));
@@ -39,11 +42,6 @@ module.exports = function(router, passport) {
 	router.route('/user/:uid/coapplicant')
 		.all(_isAuthenticated)
 		.post(userRoute.addCoApplicant);
-	
-	//Get all applications for a particular userId
-	router.route('/user/:uid/applications')
-		.all(_isAuthenticated)
-		.get(applicationRoute.getAllApplications);
 
 	//Create application for a particular userId
 	router.route('/user/:uid/applications')

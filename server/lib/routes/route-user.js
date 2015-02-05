@@ -19,7 +19,16 @@ exports.initPassport = function(passport) {
 	});
 
 	passport.deserializeUser(function(id, done) {
-		loginService.findUser({ _id: id }, done);
+		loginService.findUser({ _id: id }, function(err, doc){
+            var user;
+            if(doc && doc[0]){
+                user = doc[0].toObject();
+                if (user.password) delete user.password;
+                done(null, user);
+            } else {
+                done(new Error("Error deserializing user"));
+            }
+        });
 	});
 
 	// Setting up Passport Strategies for Login and SignUp/Registration
@@ -68,6 +77,15 @@ exports.validateLogin = function(passport) {
 exports.userLogOut = function(req, res) {
     req.logout();
     res.send({message: "Success"});
+    res.end();
+};
+
+exports.isAuthenticated = function(req, res){
+    if(req.isAuthenticated()){
+        res.send({isAuthenticated: true});
+    } else {
+        res.send({isAuthenticated: false});
+    }
     res.end();
 };
 
@@ -131,7 +149,7 @@ exports.registerUser = function(passport) {
 				res.status(info.code)
 					.send({message: info.message});
 				settings.log.error(info.message);
-			} else {
+			} else { // GOOD
                 if (user.password) delete user.password;
                 req.logIn(user, function(err){
                     if(err){
