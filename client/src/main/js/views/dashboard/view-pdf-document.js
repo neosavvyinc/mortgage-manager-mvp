@@ -41,7 +41,7 @@ var ViewPdf = React.createClass({
 	render: function() {
 		return (
 			<div>
-				<div className="button pdfDownload">Download <i className="fa fa-download pointer" onClick={this.download}></i></div>
+				<div className="button pdfDownload" onClick={this.download}>Download <i className="fa fa-download pointer"></i></div>
 				<div className="row">
 					<div className>
 					    <PDF file={this.state.file} page={this.state.page}/>
