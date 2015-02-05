@@ -36,7 +36,7 @@ var Header = React.createClass({
             <div className="row gap-top">
                 <div className="container">
                     <div className="one half">
-                        <h3>NeosavvyLabs</h3>
+                        <h3><a href="http://www.neosavvy.com/"> Neosavvy Labs </a></h3>
                     </div>
                     <div className="one half">
                         <button className="error one fourth skip-three" onClick={this.onLogout}>Logout</button>
