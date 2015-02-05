@@ -18,13 +18,18 @@ var Welcome = React.createClass({
         Router.Navigation,
         Reflux.listenTo(UserStore, 'onLogin'),
         Reflux.listenTo(LenderStore, 'onNewLender'),
-        Reflux.listenTo(BorrowerStore, 'onNewBorrower')],
+        Reflux.listenTo(BorrowerStore, 'onNewBorrower')
+    ],
 
     statics: {
         willTransitionTo: function (transition){
-            if(UserStore.isAuthenticated()){
-                transition.redirect('dashboardApplications');
-            }
+            transition.wait(
+                User.isAuthenticated().then(function (res) {
+                    if (res.isAuthenticated) {
+                        transition.redirect('dashboardApplications');
+                    }
+                })
+            );
         }
     },
 
@@ -39,7 +44,8 @@ var Welcome = React.createClass({
         }
     },
 
-    onSignUpBorrower: function(){
+    onSignUpBorrower: function(e){
+        e.preventDefault();
         if(this.refs.borrowerEmail.getDOMNode().value){
             User.emailExists(this.refs.borrowerEmail.getDOMNode().value).then(
                 function(){
@@ -59,7 +65,8 @@ var Welcome = React.createClass({
         }
     },
 
-    onSignUpLender: function(){
+    onSignUpLender: function(e){
+        e.preventDefault();
         if(this.refs.lenderEmail.getDOMNode().value){
             User.emailExists(this.refs.lenderEmail.getDOMNode().value).then(
                 function() {
@@ -80,9 +87,7 @@ var Welcome = React.createClass({
     },
 
     onLogin: function(){
-        if(UserStore.isAuthenticated()) {
-            this.transitionTo('dashboardApplications');
-        }
+        this.transitionTo('dashboardApplications');
     },
 
     onNewLender: function(){
