@@ -113,8 +113,12 @@ exports.forgotPassword = function (email, success, failure) {
 	async.series([
 		function(done) {
 			user.retrieve({email: email}, function(doc) {
-				userDoc = doc[0].toObject();
-				done();
+				if(doc.length > 0) {
+					userDoc = doc[0].toObject();
+					done();
+				} else {
+					done(new Error('User does not exist!'));
+				}
 			}, function(error) {
 				done(error);
 			});
