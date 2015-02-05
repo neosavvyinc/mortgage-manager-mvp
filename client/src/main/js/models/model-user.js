@@ -1,3 +1,5 @@
+'use strict';
+
 var Q = require('q');
 var _ = require('lodash');
 var $ = require('jquery');
@@ -53,7 +55,7 @@ User.getUserDetails = function(userID){
             .error(function(error){
                 reject(error);
             });
-    })
+    });
 };
 
 User.addCoapplicant = function (applicantID, coapplicantInfo){
@@ -117,6 +119,31 @@ User.addAppAndLogin = function(email, password, token, appId){
             reject(error);
         });
 
+    });
+};
+
+User.forgotPassword = function(email) {
+    return Q.promise(function(resolve, reject) {
+        $.post(Endpoints.FORGOTPASSWORD.URL, {
+            email: email
+        }).success(function(response) {
+            resolve(response);
+        }).error(function(error) {
+            reject(error);
+        });
+    });
+};
+
+User.updatePassword = function(uid, password, token) {
+    return Q.promise(function(resolve, reject) {
+        $.post(Endpoints.USER.ONE.UPDATEPASSWORD.URL.replace(':id', uid), {
+            password: password,
+            token: token
+        }).success(function(response) {
+            resolve(response);
+        }).error(function(error) {
+            reject(error);
+        });
     });
 };
 

@@ -1,11 +1,7 @@
 'use strict';
-/* jshint ignore:start */
 
 var async = require('async');
 var _ = require('underscore');
-var mandrillConfig = require('../config/app/mandrill');
-var serverConfig = require('../config/app/settings');
-var mandrill = require('node-mandrill')(mandrillConfig.APIKey);
 var commonUtils = require('../utils/common-utils');
 var applicationModel = require('../db/models/model-application').Model;
 var userDetailsModel = require('../db/models/model-user-details').Model;
@@ -15,65 +11,7 @@ var applicationLendersModel = require('../db/models/model-application-lenders').
 var lenderInvitesModel = require('../db/models/model-lender-invites').Model;
 var applicationService = require('./service-application');
 var documentService = require('./service-document');
-
-
-var sendInvite = function(lenderInfo, sender, appId, token, callback){
-    var redirectURL = serverConfig.getConfig().hostURL +
-        '/register/new-lender?token=' + token +
-        '&email=' + lenderInfo.email +
-        '&firstName=' + lenderInfo.firstName +
-        '&lastName=' + lenderInfo.lastName +
-        '&organization=' + lenderInfo.organization +
-        '&appId=' + appId;
-
-    mandrill('/messages/send-template', {
-        template_name: 'lender_invite',
-        template_content: [],
-        message: {
-            auto_html: false,
-            to: [
-                {
-                    email: lenderInfo.email,
-                    name: lenderInfo.firstName + " " + lenderInfo.lastName
-                }
-            ],
-            from_email: mandrillConfig.sourceEmail,
-            from_name: 'DoubleApp Team',
-            subject: 'You have received an invitation',
-            merge_vars: [{
-                rcpt: lenderInfo.email,
-                vars: [
-                    {
-                        name: "lenderFName",
-                        content: lenderInfo.firstName
-                    },
-                    {
-                        name: "lenderLName",
-                        content: lenderInfo.lastName
-                    },
-                    {
-                        name: "senderFName",
-                        content: sender.firstName
-                    },
-                    {
-                        name: "senderLName",
-                        content: sender.lastName
-                    },
-                    {
-                        name: "redirectURL",
-                        content: redirectURL
-                    }
-                ]
-            }]
-        }
-    }, function(error) {
-        if (error){
-            callback(error);
-        } else {
-            callback();
-        }
-    });
-};
+var mandrillService = require('./service-mandrill');
 
 exports.getUserApplications = function(uid, success, failure){
     var application = new applicationModel();
@@ -453,63 +391,7 @@ exports.inviteLender = function(appId, userId, lenderInfo, success, failure){
             }, done);
         },
         function(done){
-
-            sendInvite(lenderInfo, sender, appId, token, done);
-            //var redirectURL = serverConfig.getConfig().hostURL +
-            //    '/register/new-lender?token=' + token +
-            //    '&email=' + lenderInfo.email +
-            //    '&firstName=' + lenderInfo.firstName +
-            //    '&lastName=' + lenderInfo.lastName +
-            //    '&organization=' + lenderInfo.organization +
-            //    '&appId=' + appId;
-            //
-            //mandrill('/messages/send-template', {
-            //    template_name: 'lender_invite',
-            //    template_content: [],
-            //    message: {
-            //        auto_html: false,
-            //        to: [
-            //            {
-            //                email: lenderInfo.email,
-            //                name: lenderInfo.firstName + " " + lenderInfo.lastName
-            //            }
-            //        ],
-            //        from_email: mandrillConfig.sourceEmail,
-            //        from_name: 'DoubleApp Team',
-            //        subject: 'You have received an invitation',
-            //        merge_vars: [{
-            //            rcpt: lenderInfo.email,
-            //            vars: [
-            //                {
-            //                    name: "lenderFName",
-            //                    content: lenderInfo.firstName
-            //                },
-            //                {
-            //                    name: "lenderLName",
-            //                    content: lenderInfo.lastName
-            //                },
-            //                {
-            //                    name: "senderFName",
-            //                    content: sender.firstName
-            //                },
-            //                {
-            //                    name: "senderLName",
-            //                    content: sender.lastName
-            //                },
-            //                {
-            //                    name: "redirectURL",
-            //                    content: redirectURL
-            //                }
-            //            ]
-            //        }]
-            //    }
-            //}, function(error) {
-            //    if (error){
-            //        done(error);
-            //    } else {
-            //        done();
-            //    }
-            //});
+            mandrillService.sendInvite(lenderInfo, sender, appId, token, done);
         },
         function(done){
             _.extend(lenderInfo,{
@@ -548,7 +430,7 @@ exports.reSendLenderInvitation = function(appId, inviteInfo, success, failure){
             }, done);
         },
         function(done){
-            sendInvite(inviteInfo, sender, appId, token, done);
+            mandrillService.sendInvite(inviteInfo, sender, appId, token, done);
         },
         function(done){
             _.extend(inviteInfo, {
@@ -565,4 +447,3 @@ exports.reSendLenderInvitation = function(appId, inviteInfo, success, failure){
         }
     });
 };
-/* jshint ignore:end */
