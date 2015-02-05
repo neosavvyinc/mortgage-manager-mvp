@@ -12,6 +12,12 @@ Schemas.UserSchema = new Schema({
 	type: { type: String, required: true }
 });
 
+Schemas.PasswordResetSchema = new Schema({
+	_id: {type: String, required: true, unique: true, ref: 'UserSchema'},
+	token: {type: String},
+	tokenExpiry: {type: Date, expires: '24h', default: Date.now}
+});
+
 Schemas.UserInfoSchema = new Schema({
 	_id: { type: String, required: true, unique: true , ref: 'UserSchema'},
 	firstName: { type: String, required: true },
