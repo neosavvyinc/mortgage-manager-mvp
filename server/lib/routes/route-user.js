@@ -197,6 +197,52 @@ exports.emailExists = function(req, res){
 };
 
 /**
+ * Route handler for forgot password
+ * @param req
+ * @param res
+ */
+exports.forgotPassword = function(req, res) {
+	var email = req.body.email;
+
+	userService.forgotPassword(email, function() {
+		res.send({message: 'Success'});
+		settings.log.info('Email sent for password reset successfully. Email: '+email);
+		res.end();
+	}, function(error) {
+		if(error) {
+			settings.log.fatal(error.message);
+			if(error.message === 'User does not exist!') {
+				res.status(400).send({message: error.message});
+			} else {
+				res.status(500).send({message: 'Internal Server Error'});
+			}
+		}
+		res.end();
+	});
+};
+
+/**
+ * Route handler that updates the user password
+ * @param req
+ * @param res
+ */
+exports.updatePassword = function(req, res) {
+	var userdetails = req.body,
+		uid = req.params.uid;
+
+	userService.updatePassword(uid, userdetails, function() {
+		res.send({message: 'Success'}).end();
+		settings.log.info('Password reset successfully');
+	}, function(error) {
+		if(error) {
+			settings.log.fatal(error.message);
+			res.status(500).send({message: 'Internal Server Error'});
+		}
+		res.end();
+	});
+};
+
+/**
  * Private function that configures passport to check if username and password are valid.
  * @param passport
  * @private

@@ -2,7 +2,11 @@
 
 var async = require('async');
 var userModel = require('../db/models/model-user').Model;
+var userDetailsModel = require('../db/models/model-user-details').Model;
+var passwordResetModel = require('../db/models/model-password-reset').Model;
 var lenderInvitesModel = require('../db/models/model-lender-invites').Model;
+var commonUtils = require('../utils/common-utils');
+var mandrillService = require('./service-mandrill');
 
 /**
  * Function that gets the user document based on conditions specified.
@@ -50,6 +54,12 @@ exports.emailExists = function(email, success, failure){
 		});
 };
 
+/**
+ * Validates the user invite token
+ * @param user
+ * @param success
+ * @param failure
+ */
 exports.validateInviteToken = function(user, success, failure){
 
 	var lenderInvites = new lenderInvitesModel();
@@ -85,19 +95,128 @@ exports.validateInviteToken = function(user, success, failure){
 
 };
 
+/**
+ * Sends an email using mandril
+ * @param email
+ * @param success
+ * @param failure
+ */
+exports.forgotPassword = function (email, success, failure) {
+	var user = new userModel(),
+		userDetails = new userDetailsModel(),
+		passwordReset = new passwordResetModel(),
+		token = commonUtils.generateId(),
+		passwordResetObject,
+		userDet = {},
+		userDoc = {};
 
+	async.series([
+		function(done) {
+			user.retrieve({email: email}, function(doc) {
+				if(doc.length > 0) {
+					userDoc = doc[0].toObject();
+					done();
+				} else {
+					done(new Error('User does not exist!'));
+				}
+			}, function(error) {
+				done(error);
+			});
+		},
+		function(done) {
+			//Check if password reset already exists and remove
+			passwordReset.retrieve({_id: userDoc._id}, function(doc) {
+				if(doc.length > 0) {
+					passwordResetObject = doc[0].toObject();
+					passwordReset.remove(passwordResetObject, done, done);
+				} else {
+					done();
+				}
+			}, done);
+		},
+		function(done) {
+			//Insert new entry into password reset
+			passwordResetObject = {
+				_id: userDoc._id,
+				token: token
+			};
+			passwordReset.insert(passwordResetObject, done, done);
+		},
+		function(done) {
+			userDetails.retrieve({_id: userDoc._id}, function(doc) {
+				userDet = doc[0].toObject();
+				done();
+			}, function(error) {
+				done(error);
+			});
+		},
+		function(done) {
+			mandrillService.forgotPassword(email, userDet, token, done);
+		}
+	], function(error) {
+		if(error) {
+			failure(error);
+		} else {
+			success();
+		}
+	});
+};
 
+/**
+ * Updates the user password by validating the token and checking for expiry
+ * @param uid
+ * @param userDetails
+ * @param success
+ * @param failure
+ */
+exports.updatePassword = function(uid, userDetails, success, failure) {
+	var user = new userModel(),
+		passwordReset = new passwordResetModel(),
+		passwordResetObject,
+		userDoc;
 
-
-
-
-
-
-
-
-
-
-
+	async.series([
+		function(done) {
+			//Get the user from mongo
+			user.retrieve({_id: uid}, function(doc) {
+				userDoc = doc[0].toObject();
+				done();
+			}, done);
+		},
+		function(done) {
+			//Check if token matches
+			passwordReset.retrieve({_id: uid}, function(doc) {
+				if(doc.length > 0) {
+					passwordResetObject = doc[0].toObject();
+					if(passwordResetObject.token !== userDetails.token) {
+						done(new Error('Token mismatch'));
+					} else {
+						done();
+					}
+				} else {
+					done();
+				}
+			}, done);
+		},
+		function(done) {
+			//Delete password reset entry
+			passwordReset.remove(passwordResetObject, done, done);
+		},
+		function(done) {
+			//Update user with new password
+			userDoc.password = userDetails.password;
+			user.insertOrUpdate(userDoc, {_id: userDoc._id}, function() {
+				done();
+			}, done);
+		}
+	], function(error) {
+		if(error) {
+			failure(error);
+		} else {
+			success();
+		}
+	});
+};
 
 
 
