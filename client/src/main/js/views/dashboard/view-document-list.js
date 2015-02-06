@@ -144,18 +144,38 @@ var Documents = React.createClass({
             // e.g. Wednesday, January 21, 2015 3:21 PM
             document.requestDate = moment(document.requestDate).format('llll');
 
-            documentsTable.push((
-                <tr>
-                    <th>{document.name}</th>
-                    <th>{document.type}</th>
-                    <th>{document.description}</th>
-                    <th>{document.requestDate}</th>
-                    <th>
-                        <button className={viewButton.style} disabled={viewButton.disabled} onClick={this.onDocumentView.bind(this, document)}><i className="fa fa-eye"></i></button>
-                        <button className={uploadButton.style} onClick={this.onDocumentUpload.bind(this, document)}>{uploadButton.text}<i className="fa fa-upload"></i></button>
-                    </th>
-                </tr>
-            ));
+	        if(this.state.userType === 'lender') {
+		        documentsTable.push((
+			        <tr>
+				        <th>{document.name}</th>
+				        <th>{document.type}</th>
+				        <th>{document.description}</th>
+				        <th>{document.requestDate}</th>
+				        <th>
+					        <button className={viewButton.style} disabled={viewButton.disabled} onClick={this.onDocumentView.bind(this, document)}>
+						        View <i className="fa fa-binoculars"></i>
+					        </button>
+				        </th>
+			        </tr>
+		        ));
+	        } else {
+		        documentsTable.push((
+			        <tr>
+				        <th>{document.name}</th>
+				        <th>{document.type}</th>
+				        <th>{document.description}</th>
+				        <th>{document.requestDate}</th>
+				        <th>
+					        <button className={viewButton.style} disabled={viewButton.disabled} onClick={this.onDocumentView.bind(this, document)}>
+						        <i className="fa fa-eye"></i>
+					        </button>
+					        <button className={uploadButton.style} onClick={this.onDocumentUpload.bind(this, document)}>{uploadButton.text}
+						        <i className="fa fa-upload"></i>
+					        </button>
+				        </th>
+			        </tr>
+		        ));
+	        }
         }, this);
 
         return (
@@ -175,7 +195,7 @@ var Documents = React.createClass({
                                 <th>Document Type</th>
                                 <th>Description</th>
                                 <th>Requested Date</th>
-                                <th>View/Upload</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>

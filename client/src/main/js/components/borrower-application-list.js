@@ -43,9 +43,9 @@ var BorrowerApplications = React.createClass({
             status,
             actions = [
                 {
-                    tabName: "Create New Application",
+                    tabName: 'Create New Application',
                     tabLink: {
-                        name: "routeTester",
+                        name: 'routeTester',
                         params: []
                     }
                 }
@@ -64,13 +64,13 @@ var BorrowerApplications = React.createClass({
         _.forEach(this.props.applications, function(app){
             switch(app.status){
                 case 1:
-                    status = "New Request";
+                    status = 'New Request';
                     break;
                 case 2:
-                    status = "New Explanation";
+                    status = 'New Explanation';
                     break;
                 default:
-                    status = "None";
+                    status = 'None';
                     break;
             }
 
@@ -85,7 +85,7 @@ var BorrowerApplications = React.createClass({
                     <th>{status}</th>
                     <th>
                         <div className="row">
-                            <button className="btn turquoise" onClick={this.onApplicationSelect.bind(null, app)}>View <i className="fa fa-binoculars"></i></button>
+                            <button className="btn red" onClick={this.onApplicationSelect.bind(null, app)}>View <i className="fa fa-binoculars"></i></button>
                         </div>
                     </th>
                 </tr>
