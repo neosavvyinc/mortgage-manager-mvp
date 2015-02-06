@@ -2,6 +2,7 @@ var React = require('react');
 var Router = require('react-router');
 var Reflux = require('reflux');
 
+var User = require('../../models/model-user');
 var Navigation = require('../../components/navigation');
 var LenderStore = require('../../stores/store-lender');
 var UserStore = require('../../stores/store-user');

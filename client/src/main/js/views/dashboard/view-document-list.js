@@ -81,6 +81,12 @@ var Documents = React.createClass({
 
         var actions, tabs;
 
+	    var actionStyle = {
+	        width: '12%'
+	    }, otherColStyle ={
+	        width: '22%'
+	    };
+
         if(this.state.userType === 'lender'){
             actions = [
                 {
@@ -124,13 +130,15 @@ var Documents = React.createClass({
                 disabled: true,
                 style: 'disabled hidden'
             }, uploadButton = {
-                style: 'btn blue six sevenths gap-right'
+                style: 'btn blue align-left',
+	            text: 'Upload '
             };
             
             if(document.uploadDate !== undefined) {
                 viewButton.disabled = false;
-                viewButton.style =  'btn red three sevenths gap-right';
-                uploadButton.style = 'btn blue three sevenths';
+                viewButton.style =  'btn red gap-right';
+                uploadButton.style = 'btn blue';
+	            uploadButton.text = '';
             }
 
             // e.g. Wednesday, January 21, 2015 3:21 PM
@@ -138,14 +146,13 @@ var Documents = React.createClass({
 
             documentsTable.push((
                 <tr>
-                    <th>{document._id}</th>
                     <th>{document.name}</th>
                     <th>{document.type}</th>
                     <th>{document.description}</th>
                     <th>{document.requestDate}</th>
                     <th>
-                        <button className={viewButton.style} disabled={viewButton.disabled} onClick={this.onDocumentView.bind(this, document)}>View</button>
-                        <button className={uploadButton.style} onClick={this.onDocumentUpload.bind(this, document)}>Upload</button>
+                        <button className={viewButton.style} disabled={viewButton.disabled} onClick={this.onDocumentView.bind(this, document)}><i className="fa fa-eye"></i></button>
+                        <button className={uploadButton.style} onClick={this.onDocumentUpload.bind(this, document)}>{uploadButton.text}<i className="fa fa-upload"></i></button>
                     </th>
                 </tr>
             ));
@@ -157,14 +164,18 @@ var Documents = React.createClass({
                     <h2>Documents</h2>
                     <Navigation navigationItems={actions}/>
                     <table className="responsive">
+	                    <col style={otherColStyle}/>
+	                    <col style={otherColStyle}/>
+	                    <col style={otherColStyle}/>
+	                    <col style={otherColStyle}/>
+	                    <col style={actionStyle}/>
                         <thead>
                             <tr>
-                                <th>ID</th>
                                 <th>Document Name</th>
                                 <th>Document Type</th>
                                 <th>Description</th>
                                 <th>Requested Date</th>
-                                <th>Action</th>
+                                <th>View/Upload</th>
                             </tr>
                         </thead>
                         <tbody>
