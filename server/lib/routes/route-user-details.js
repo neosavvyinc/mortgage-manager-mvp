@@ -2,7 +2,8 @@
 
 var _ = require('underscore'),
 	userDetailsService = require('../services/service-user-details'),
-	settings = require('../config/app/settings');
+	settings = require('../config/app/settings'),
+    validationUtils = require('../utils/validation-utils');
 
 /**
  * Route handler for updating a particular user's details
@@ -18,17 +19,22 @@ exports.updateUser = function(req, res) {
             _id: uid
         });
 
-        userDetailsService.updateUser(userObject, function() {
-            settings.log.info('Successfully updated user. User Id ' + uid);
-            res.send({message: 'Success'});
+        if(validationUtils.validatePhone(userObject.phone).errors.length){
+            res.status(400).send({message: 'You have to provide a valid phone'});
             res.end();
-        }, function(error) {
-            if(error) {
-                settings.log.fatal(error.message);
-                res.status(500).send({message: 'Internal Server Error'});
-            }
-            res.end();
-        });
+        } else {
+            userDetailsService.updateUser(userObject, function() {
+                settings.log.info('Successfully updated user. User Id ' + uid);
+                res.send({message: 'Success'});
+                res.end();
+            }, function(error) {
+                if(error) {
+                    settings.log.fatal(error.message);
+                    res.status(500).send({message: 'Internal Server Error'});
+                }
+                res.end();
+            });
+        }
     } else {
         res.status(500).send({message: 'Internal Server Error'});
         res.end();

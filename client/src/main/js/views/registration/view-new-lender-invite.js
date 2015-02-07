@@ -7,6 +7,7 @@ var Navigation = require('../../components/navigation');
 var LenderStore = require('../../stores/store-lender');
 var UserStore = require('../../stores/store-user');
 var Login = require('../../components/login');
+var User = require('../../models/model-user');
 
 var newLenderInvite = React.createClass({
 
