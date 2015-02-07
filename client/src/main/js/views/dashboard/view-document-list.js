@@ -1,3 +1,5 @@
+'use strict';
+
 var React = require('react');
 var Router = require('react-router');
 var Reflux = require('reflux');
@@ -10,13 +12,15 @@ var Application = require('../../models/model-application');
 var MessageBox = require('../../components/message-box');
 var Navigation = require('../../components/navigation');
 var LendersTable = require('./view-lender-list');
+var EndPoints = require('../../constants/endpoints');
 
 var arraysEqual = function(arr1, arr2) {
     if(arr1.length !== arr2.length)
         return false;
     for(var i = arr1.length; i--;) {
-        if(arr1[i] !== arr2[i])
-            return false;
+        if(arr1[i] !== arr2[i]) {
+	        return false;
+        }
     }
     return true;
 };
@@ -32,7 +36,7 @@ var Documents = React.createClass({
         return {
             documents: [],
             userType: ''
-        }
+        };
     },
 
     componentDidMount: function(){
@@ -61,6 +65,11 @@ var Documents = React.createClass({
         this.transitionTo('uploadExistingDocument', {appId: this.getParams().appId, documentId: document._id});
     },
 
+	onDocumentDownload: function(document) {
+		//Will download file
+		window.open(EndPoints.APPLICATIONS.ONE.DOWNLOAD.ONE.URL.replace(':id', this.getParams().appId).replace(':docId',document._id));
+	},
+
     onDocumentView: function(document) {
         var appId = this.getParams().appId,
             docId = document._id;
@@ -82,9 +91,9 @@ var Documents = React.createClass({
         var actions, tabs;
 
 	    var actionStyle = {
-	        width: '12%'
+	        width: '16%'
 	    }, otherColStyle ={
-	        width: '22%'
+	        width: '21%'
 	    };
 
         if(this.state.userType === 'lender'){
@@ -102,7 +111,7 @@ var Documents = React.createClass({
                 {
                     tabName: "Request Explanation",
                     tabLink: {
-                        name: "requestDocument",
+                        name: 'requestDocument',
                         params: [{
                             appId: this.getParams().appId,
                             docType: 'explanation'
@@ -110,12 +119,12 @@ var Documents = React.createClass({
                     }
                 }
             ];
-        } else if(this.state.userType == 'borrower'){
+        } else if(this.state.userType === 'borrower'){
             actions = [
                 {
-                    tabName: "Upload New Document",
+                    tabName: 'Upload New Document',
                     tabLink: {
-                        name: "uploadNewDocument",
+                        name: 'uploadNewDocument',
                         params: [{
                             appId: this.getParams().appId
                         }]
@@ -132,13 +141,18 @@ var Documents = React.createClass({
             }, uploadButton = {
                 style: 'btn blue align-left',
 	            text: 'Upload '
+            }, downloadButton = {
+	            disabled: true,
+	            style: 'disabled hidden'
             };
             
             if(document.uploadDate !== undefined) {
                 viewButton.disabled = false;
-                viewButton.style =  'btn red gap-right';
-                uploadButton.style = 'btn blue';
+                viewButton.style =  'btn red gap-right gap-bottom tooltip';
+                uploadButton.style = 'btn blue gap-right gap-bottom tooltip';
 	            uploadButton.text = '';
+	            downloadButton.disabled = false;
+	            downloadButton.style =  'btn green tooltip';
             }
 
             // e.g. Wednesday, January 21, 2015 3:21 PM
@@ -166,11 +180,14 @@ var Documents = React.createClass({
 				        <th>{document.description}</th>
 				        <th>{document.requestDate}</th>
 				        <th>
-					        <button className={viewButton.style} disabled={viewButton.disabled} onClick={this.onDocumentView.bind(this, document)}>
-						        <i className="fa fa-eye"></i>
+					        <button className={viewButton.style} disabled={viewButton.disabled} onClick={this.onDocumentView.bind(this, document)} data-tooltip="View">
+						        <i className="fa fa-binoculars"></i>
 					        </button>
-					        <button className={uploadButton.style} onClick={this.onDocumentUpload.bind(this, document)}>{uploadButton.text}
+					        <button className={uploadButton.style} onClick={this.onDocumentUpload.bind(this, document)} data-tooltip="Upload">{uploadButton.text}
 						        <i className="fa fa-upload"></i>
+					        </button>
+					        <button className={downloadButton.style} disabled={downloadButton.disabled} onClick={this.onDocumentDownload.bind(this, document)} data-tooltip="Download">
+						        <i className="fa fa-download"></i>
 					        </button>
 				        </th>
 			        </tr>
