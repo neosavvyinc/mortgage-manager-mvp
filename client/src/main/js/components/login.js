@@ -15,21 +15,6 @@ var Login = React.createClass({
         }
     },
 
-    render: function(){
-        return (
-            <form>
-                <h4>Already a User?</h4>
-                <input className="gap-bottom" ref="userEmail" type="email" placeholder="Email Address" />
-                <input className="gap-bottom" ref="userPassword" type="password" placeholder="Password" />
-                <ErrorMessage errorDisplay={this.state.loginError} errorMessage={this.state.loginErrorText}/>
-                <button className="block turquoise" onClick={this.onLogin}>
-                    Login
-                </button>
-                <Link to="forgotPassword">Forgot Password?</Link>
-            </form>
-        )
-    },
-
     onLogin: function(e){
         e.preventDefault();
 
@@ -46,7 +31,22 @@ var Login = React.createClass({
                 });
             }.bind(this)
         );
-    }
+    },
+    
+    render: function(){
+        return (
+            <form>
+                <h4>Already a User?</h4>
+                <input className="gap-bottom" ref="userEmail" type="email" placeholder="Email Address" />
+                <input className="gap-bottom" ref="userPassword" type="password" placeholder="Password" />
+                <ErrorMessage errorDisplay={this.state.loginError} errorMessage={this.state.loginErrorText}/>
+                <button className="block turquoise" onClick={this.onLogin}>
+                    Login
+                </button>
+                <Link to="forgotPassword">Forgot Password?</Link>
+            </form>
+        )
+    },
 });
 
 module.exports = Login;
