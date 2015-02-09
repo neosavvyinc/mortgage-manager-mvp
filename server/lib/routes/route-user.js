@@ -133,7 +133,7 @@ exports.AddAppAndLogin = function(passport){
 			}.bind(this), function(error) {
 				if(error) {
 					settings.log.error(error.message);
-					res.status(400).send(error.message);
+					res.status(400).send(error);
 				}
 				res.end();
 			});

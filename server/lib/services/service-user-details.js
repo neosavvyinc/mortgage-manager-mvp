@@ -177,9 +177,9 @@ exports.lenderAppInvite = function(email, token, appId, success, failure){
 			user.retrieve({email: email}, function(userData){
 				userBasicInfo = userData[0];
                 if(!userBasicInfo){
-                    done({message:'This user doesn\'t exist'});
+                    done({message: 'This user doesn\'t exist'});
                 } else {
-	                done();
+                    done();
                 }
 				
 			}, done);
@@ -231,6 +231,7 @@ exports.lenderAppInvite = function(email, token, appId, success, failure){
 		}
 	], function(error){
 		if(error){
+            console.log(error);
 			failure(error);
 		} else {
 			success();
