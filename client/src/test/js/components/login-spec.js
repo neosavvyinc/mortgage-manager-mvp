@@ -1,11 +1,48 @@
 jest.dontMock('../../../main/js/components/login');
 
 var React = require('react/addons');
+var func = React.PropTypes.func;
 var TestUtils = React.addons.TestUtils;
 var User = require('../../../main/js/models/model-user');
-//var Router = require('react-router');
+var Router = require('react-router');
 
 var Login = require('../../../main/js/components/login');
+
+var TestWrapper = React.createClass({
+  childContextTypes: {
+    makePath: func,
+    makeHref: func,
+    transitionTo: func,
+    replaceWith: func,
+    goBack: func,
+    getCurrentPath: func,
+    getCurrentRoutes: func,
+    getCurrentPathname: func,
+    getCurrentParams: func,
+    getCurrentQuery: func,
+    isActive: func,
+  },
+
+  getChildContext: function () {
+    return {
+      makePath: function () {},
+      makeHref : function () {},
+      transitionTo: function  () {},
+      replaceWith: function  () {},
+      goBack: function  () {},
+      getCurrentPath: function  () {},
+      getCurrentRoutes: function  () {},
+      getCurrentPathname: function  () {},
+      getCurrentParams: function  () {},
+      getCurrentQuery: function  () {},
+      isActive: function  () {},
+    };
+  },
+
+  render: function () {
+    return (<Login />);
+  }
+});
 
 describe('Login', function () {
     var loginForm,
@@ -17,10 +54,7 @@ describe('Login', function () {
             then: function () { }
         });
 
-        loginForm = TestUtils.renderIntoDocument(
-            <Login />
-        );
-
+        loginForm = TestUtils.renderIntoDocument(<TestWrapper />);
         formInstance = loginForm.getDOMNode();
     });
 
