@@ -27,7 +27,12 @@ var Welcome = React.createClass({
             transition.wait(
                 User.isAuthenticated().then(function (res) {
                     if (res.isAuthenticated) {
-                        transition.redirect('dashboardApplications');
+                        if(!UserStore.getCurrentUser().hasUserDetails){
+                            var transitionRoute = UserStore.getCurrentUser().type == 'lender' ? 'lenderInfo' : 'applicantQuestions';
+                            transition.redirect(transitionRoute);
+                        } else {
+                            transition.redirect('dashboardApplications');
+                        }
                     }
                 })
             );
@@ -108,7 +113,12 @@ var Welcome = React.createClass({
     },
 
     onLogin: function(){
-        this.transitionTo('dashboardApplications');
+        if(!UserStore.getCurrentUser().hasUserDetails){
+            var transitionRoute = UserStore.getCurrentUser().type == 'lender' ? 'lenderInfo' : 'applicantQuestions' ;
+            this.transitionTo(transitionRoute);
+        } else {
+            this.transitionTo('dashboardApplications');
+        }
     },
 
     onNewLender: function(){

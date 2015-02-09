@@ -130,6 +130,8 @@ var LenderInfo = React.createClass({
 	},
 	onSubmitInfo: function(e){
 
+        e.preventDefault();
+
 		var applicantInfo = {
 			firstName: this.refs.firstName.getDOMNode().value,
 			middleName: this.refs.middleName.getDOMNode().value || "",
@@ -140,7 +142,7 @@ var LenderInfo = React.createClass({
 			zip: this.refs.zip.getDOMNode().value,
 			phone: this.refs.phone.getDOMNode().value,
 			organization: this.refs.organization.getDOMNode().value,
-			appId: LenderStore.getLender().appId || null
+			appId: [this.getQuery().appId] || null
 		};
 
 		if(validateLenderInfo(applicantInfo)) {
@@ -151,7 +153,7 @@ var LenderInfo = React.createClass({
 			}.bind(this), function (error) {
 				this.setState({
 					applicantInfoError: true,
-					errorText: error.message
+					errorText: error.responseJSON.message
 				});
 			}.bind(this));
 		} else {

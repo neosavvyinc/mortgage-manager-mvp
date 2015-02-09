@@ -32,15 +32,7 @@ var LenderApplications = React.createClass({
     render: function(){
 
         var applicationsTable = [],
-            actions = [
-                {
-                    tabName: "Create New Application",
-                    tabLink: {
-                        name: "routeTester",
-                        params: []
-                    }
-                }
-            ];
+            actions = [];
 
 	    var actionStyle = {
 		    width: '10%'

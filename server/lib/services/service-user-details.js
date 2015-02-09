@@ -15,8 +15,52 @@ var async = require('async'),
  * @param failure
  */
 exports.updateUser = function(userObject, success, failure) {
-	var userDetails = new userDetailsModel();
-	userDetails.insertOrUpdate(userObject, success, failure);
+	var userDetails = new userDetailsModel(),
+        user = new userModel(),
+        lenderInvites = new lenderInvitesModel();
+
+    async.series([
+        function(done){
+            async.series([
+                function(cb){
+                    userDetails.insertOrUpdate(userObject, cb, cb);
+                },
+                function(cb){
+                    if(userObject.appId && userObject.appId.length){
+                        async.parallel([
+                            function(callback){
+                                lenderInvites.update({isOpen: false}, {appId: userObject.appId[0]}, null, callback, callback);
+                            }
+                        ], function(error){
+                            if(error){
+                                cb(error);
+                            } else {
+                                cb();
+                            }
+                        });
+                    } else {
+                        cb();
+                    }
+                }
+            ], function(error){
+                if(error){
+                    done(error);
+                } else {
+                    done();
+                }
+            });
+
+        },
+        function(done){
+            user.update({hasUserDetails: true}, {_id:userObject._id}, done, done);
+        }
+    ], function(error){
+        if(error){
+            failure(error);
+        } else {
+            success();
+        }
+    });
 };
 
 /**
@@ -120,58 +164,74 @@ exports.lenderAppInvite = function(email, token, appId, success, failure){
 
 	var userBasicInfo;
 	async.series([
+        function(done){
+            lenderInvites.retrieve({email:email, token: token, isOpen:true}, function(invite){
+                if(invite.length){
+                    done();
+                } else {
+                    done({message: 'There is no active invite for this email.'});
+                }
+            });
+        },
 		function(done){
 			user.retrieve({email: email}, function(userData){
 				userBasicInfo = userData[0];
                 if(!userBasicInfo){
-                    done(new Error('This user doesn\'t exist'));
+                    done({message: 'This user doesn\'t exist'});
+                } else {
+                    done();
                 }
-				done();
+				
 			}, done);
 		},
 		function(done){
-			async.parallel([
-				function(callback){
-					var previousUserDets;
-					async.series([
-						function(cb){
-							userDetails.retrieve({_id: userBasicInfo._id}, function(userDets){
-								previousUserDets = userDets[0];
-								cb();
-							}, cb);
-						},
-						function(cb){
-							if(_.indexOf(previousUserDets.appId, appId) < 0) {
-								previousUserDets.appId.push(appId);
-								userDetails.update({appId: previousUserDets.appId}, {_id: userBasicInfo._id}, null, cb, cb);
-							} else {
-								cb();
-							}
-						}
-					], function(error){
-						if(error){
-							callback(error);
-						} else {
-							callback();
-						}
-					});
-				},
-				function(callback){
-					lenderInvites.update({isOpen: false}, {appId: appId}, null, callback, callback);
-				},
-				function(callback){
-					applicationLenders.insert({lenderId: userBasicInfo._id, appId: appId}, callback, callback);
-				}
-			],function(error){
-				if(error){
-					done(error);
-				} else {
-					done();
-				}
-			});
+            if(userBasicInfo && !userBasicInfo.hasUserDetails){
+                done();
+            } else {
+                async.parallel([
+                    function(callback){
+                        var previousUserDets;
+                        async.series([
+                            function(cb){
+                                userDetails.retrieve({_id: userBasicInfo._id}, function(userDets){
+                                    previousUserDets = userDets[0];
+                                    cb();
+                                }, cb);
+                            },
+                            function(cb){
+                                if(_.indexOf(previousUserDets.appId, appId) < 0) {
+                                    previousUserDets.appId.push(appId);
+                                    userDetails.update({appId: previousUserDets.appId}, {_id: userBasicInfo._id}, null, cb, cb);
+                                } else {
+                                    cb();
+                                }
+                            }
+                        ], function(error){
+                            if(error){
+                                callback(error);
+                            } else {
+                                callback();
+                            }
+                        });
+                    },
+                    function(callback){
+                        lenderInvites.update({isOpen: false}, {appId: appId}, null, callback, callback);
+                    },
+                    function(callback){
+                        applicationLenders.insert({lenderId: userBasicInfo._id, appId: appId}, callback, callback);
+                    }
+                ],function(error){
+                    if(error){
+                        done(error);
+                    } else {
+                        done();
+                    }
+                });
+            }
 		}
 	], function(error){
 		if(error){
+            console.log(error);
 			failure(error);
 		} else {
 			success();

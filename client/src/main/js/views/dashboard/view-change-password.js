@@ -62,22 +62,20 @@ var ChangePassword = React.createClass({
 	render: function() {
 		return (
 			<div className="container">
-				<div className="gap-top">
-					<div className="row">
-						<div className="one third">
-							<h1><span className="tooltip" data-tooltip="Back"><i className="fa fa-chevron-left pointer" onClick={this.back}></i></span> Update your password</h1>
-						</div>
-					</div>
-					<div className="row divBorder">
-						<div className="one third gap-top gap-bottom">
-							<input className="gap-bottom" type="password" ref="oldPassword" placeholder="Old Password" />
-							<input className="gap-bottom" type="password" ref="newPassword" placeholder="New Password" />
-							<input className="gap-bottom" type="password" ref="confirmPassword" placeholder="Confirm Password"/>
-							<MessageBox displayMessage={this.state.passwordError} message={this.state.messageText} type={this.state.messageType} />
-							<button className="block turquoise" onClick={this.onCheckPassword}>Continue</button>
-						</div>
-					</div>
-				</div>
+                <div className="row">
+                    <div className="one third">
+                        <h1><span className="tooltip" data-tooltip="Back"><i className="fa fa-chevron-left pointer" onClick={this.back}></i></span> Update your password</h1>
+                    </div>
+                </div>
+                <div className="row divBorder">
+                    <div className="one third gap-top gap-bottom">
+                        <input className="gap-bottom" type="password" ref="oldPassword" placeholder="Old Password" />
+                        <input className="gap-bottom" type="password" ref="newPassword" placeholder="New Password" />
+                        <input className="gap-bottom" type="password" ref="confirmPassword" placeholder="Confirm Password"/>
+                        <MessageBox displayMessage={this.state.passwordError} message={this.state.messageText} type={this.state.messageType} />
+                        <button className="block turquoise" onClick={this.onCheckPassword}>Continue</button>
+                    </div>
+                </div>
 			</div>
 		);
 	}

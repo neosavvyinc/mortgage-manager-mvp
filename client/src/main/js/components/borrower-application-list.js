@@ -41,15 +41,7 @@ var BorrowerApplications = React.createClass({
 
         var applicationsTable = [],
             status,
-            actions = [
-                {
-                    tabName: 'Create New Application',
-                    tabLink: {
-                        name: 'routeTester',
-                        params: []
-                    }
-                }
-            ];
+            actions = [];
 
 	    var actionStyle = {
 		    width: '12%'
