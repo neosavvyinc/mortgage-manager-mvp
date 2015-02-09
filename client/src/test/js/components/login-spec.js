@@ -98,8 +98,8 @@ describe('Login', function () {
 		password.getDOMNode().value = '*****';
 
 		TestUtils.Simulate.click(button);
-		expect(messageBox[0].props.className).toBe('message gap-bottom error hidden');
-		expect(messageBox[0].props.children).toBe('You must enter the username and password');
+		expect(messageBox[0].props.className).toBe('message gap-bottom error');
+		expect(messageBox[0].props.children).toBe('You must enter both username and password.');
 	});
 
 	it('should not call User.login if password field is empty', function() {
@@ -107,8 +107,8 @@ describe('Login', function () {
 		password.getDOMNode().value = '';
 
 		TestUtils.Simulate.click(button);
-		expect(messageBox[0].props.className).toBe('message gap-bottom error hidden');
-		expect(messageBox[0].props.children).toBe('You must enter the username and password');
+		expect(messageBox[0].props.className).toBe('message gap-bottom error');
+		expect(messageBox[0].props.children).toBe('You must enter both username and password.');
 	});
 
 	it('should not call User.login if any of the fields are empty', function() {
@@ -116,8 +116,8 @@ describe('Login', function () {
 		password.getDOMNode().value = '';
 
 		TestUtils.Simulate.click(button);
-		expect(messageBox[0].props.className).toBe('message gap-bottom error hidden');
-		expect(messageBox[0].props.children).toBe('You must enter the username and password');
+		expect(messageBox[0].props.className).toBe('message gap-bottom error');
+		expect(messageBox[0].props.children).toBe('You must enter both username and password.');
 	});
 
 	it('should submit email and password to User.login', function() {
