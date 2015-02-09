@@ -8,7 +8,7 @@ var User = require('../../models/model-user');
 var MessageBox = require('../../components/message-box');
 var UserStore = require('../../stores/store-user');
 
-var NewPassword = React.createClass({
+var UpdatePassword = React.createClass({
 	mixins: [
 		Router.State,
 		Router.Navigation,
@@ -84,4 +84,4 @@ var NewPassword = React.createClass({
 	}
 });
 
-module.exports = NewPassword;
+module.exports = UpdatePassword;
