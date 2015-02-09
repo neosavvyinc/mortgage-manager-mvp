@@ -8,14 +8,29 @@ module.exports = {
             },
             APPLICATIONS: {
                 URL: '/api/user/:id/applications'
+            },
+            UPDATEPASSWORD: {
+                URL: '/api/user/:id/update-password'
             }
         }
     },
     LOGIN: {
-        URL: '/api/login'
+        URL: '/api/login',
+        WITHTOKEN: {
+            URL: '/api/login/token'
+        }
+    },
+    LOGOUT: {
+        URL: '/api/logout'
+    },
+    ISAUTHENTICATED: {
+        URL: '/api/is-authenticated'
     },
     REGISTER: {
         URL: '/api/register'
+    },
+    FORGOTPASSWORD: {
+        URL: '/api/forgot-password'
     },
     EMAIL: {
         URL: '/api/email-exists'
@@ -30,6 +45,9 @@ module.exports = {
                     URL: '/api/applications/:id/documents/:docId'
                 }
             },
+            DOCUMENTENTRY: {
+                URL: '/api/applications/:id/documentEntry'
+            },
             FILE :{
                 ONE: {
                     URL: '/api/applications/:id/file/:docId'
@@ -39,6 +57,15 @@ module.exports = {
                 ONE: {
                     URL: '/api/applications/:id/download/:docId'
                 }
+            },
+            LENDERS: {
+                URL: '/api/applications/:id/lenders',
+                REINVITE: {
+                    URL: '/api/applications/:id/lenders/resend-invite'
+                }
+            },
+            BORROWERS: {
+                URL: '/api/applications/:id/borrowers'
             }
         }
     }

@@ -82,7 +82,7 @@ describe('modelUserDetails',  function() {
 
 			user.insertOrUpdate({dummy: 'dummy'}, function() {
 				expect(user.retrieve.callCount).toBe(1);
-				expect(user.insert.callCount).toBe(1);
+				expect(user.insert.callCount).toBe(2);
 				expect(user.update.callCount).toBe(0);
 			}, function(error) {
 				expect().toHaveNotExecuted('should not have failed');

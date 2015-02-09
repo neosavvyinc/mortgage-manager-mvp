@@ -8,6 +8,24 @@ var path = require('path'),
 	applicationModel = require('../db/models/model-application').Model;
 
 /**
+ * Service that inserts a document entry when requested by lender into mongo
+ * @param doc
+ * @param success
+ * @param failure
+ */
+exports.createDocument = function(doc, success, failure) {
+	var currentDate = new Date(),
+		docId = commonUtils.generateId(),
+		document = new documentModel();
+
+	_.extend(doc, {
+		requestDate: currentDate,
+		_id: docId
+	});
+	document.insert(doc, success, failure);
+};
+
+/**
  * Service that handles storing a document in mongo for a particular application
  * @param doc
  * @param success

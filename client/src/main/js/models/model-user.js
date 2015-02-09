@@ -1,3 +1,5 @@
+'use strict';
+
 var Q = require('q');
 var _ = require('lodash');
 var $ = require('jquery');
@@ -19,6 +21,30 @@ User.login = function (email, password){
     });
 };
 
+User.logOut = function () {
+    return Q.promise(function(resolve, reject){
+        $.post(Endpoints.LOGOUT.URL)
+            .success(function(response){
+                resolve(response);
+            })
+            .error(function(error){
+                reject(error);
+            });
+    });
+};
+
+User.isAuthenticated = function () {
+    return Q.promise(function(resolve, reject){
+        $.post(Endpoints.ISAUTHENTICATED.URL)
+            .success(function(response){
+                resolve(response);
+            })
+            .error(function(error){
+                reject(error);
+            });
+    });
+};
+
 User.register = function (newUser){
     return Q.promise(function(resolve, reject){
         $.post(Endpoints.REGISTER.URL, newUser)
@@ -32,6 +58,7 @@ User.register = function (newUser){
 };
 
 User.update = function (userId, userInfo){
+    if(userInfo.token) delete userInfo.token;
     return Q.promise(function(resolve, reject){
         $.post(Endpoints.USER.ONE.URL.replace(':id', userId), userInfo)
             .success(function(response){
@@ -52,7 +79,7 @@ User.getUserDetails = function(userID){
             .error(function(error){
                 reject(error);
             });
-    })
+    });
 };
 
 User.addCoapplicant = function (applicantID, coapplicantInfo){
@@ -100,6 +127,47 @@ User.emailExists = function(email){
             .error(function(error){
                 reject(error);
             });
+    });
+};
+
+User.addAppAndLogin = function(email, password, token, appId){
+    return Q.promise(function(resolve, reject){
+        $.post(Endpoints.LOGIN.WITHTOKEN.URL, {
+            email: email,
+            password: password,
+            token: token,
+            appId: appId
+        }).success(function(response){
+            resolve(response);
+        }).error(function(error){
+            reject(error);
+        });
+
+    });
+};
+
+User.forgotPassword = function(email) {
+    return Q.promise(function(resolve, reject) {
+        $.post(Endpoints.FORGOTPASSWORD.URL, {
+            email: email
+        }).success(function(response) {
+            resolve(response);
+        }).error(function(error) {
+            reject(error);
+        });
+    });
+};
+
+User.updatePassword = function(uid, password, token) {
+    return Q.promise(function(resolve, reject) {
+        $.post(Endpoints.USER.ONE.UPDATEPASSWORD.URL.replace(':id', uid), {
+            password: password,
+            token: token
+        }).success(function(response) {
+            resolve(response);
+        }).error(function(error) {
+            reject(error);
+        });
     });
 };
 

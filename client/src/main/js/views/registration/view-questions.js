@@ -8,7 +8,7 @@ var UserStore = require('../../stores/store-user');
 
 var User = require('../../models/model-user');
 
-var ErrorMessage = require('../../components/error-message');
+var MessageBox = require('../../components/message-box');
 
 var ApplicantQuestions = React.createClass({
 
@@ -20,9 +20,13 @@ var ApplicantQuestions = React.createClass({
 
     statics: {
         willTransitionTo: function (transition){
-            if(!UserStore.isAuthenticated()){
-                transition.redirect('welcome');
-            }
+            transition.wait(
+                User.isAuthenticated().then(function (res) {
+                    if (!res.isAuthenticated) {
+                        transition.redirect('welcome');
+                    }
+                })
+            );
         }
     },
 
@@ -125,7 +129,7 @@ var ApplicantQuestions = React.createClass({
                         </div>
                     </div>
                     <div className="one fourth row">
-                        <ErrorMessage errorDisplay={this.state.questionsError} errorMessage={this.state.errorText}/>
+                        <MessageBox displayMessage={this.state.questionsError} message={this.state.errorText} type='error' />
                         <button className="row block turquoise" onClick={this.onSubmitQuestions}>Continue</button>
                     </div>
                 </div>

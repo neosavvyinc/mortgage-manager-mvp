@@ -15,7 +15,16 @@ module.exports = {
                 expand:true,
                 cwd:'<%= sourceDirectoryPath %>/assets/lib/groundworkcss',
                 src:[
+                    '*'
+                ],
+                dest: '<%= buildOutputDirectoryPath %>/assets/css/'
+            },
+            {
+                expand: true,
+                cwd: '<%= sourceDirectoryPath %>/assets/lib/fontawesome',
+                src:[
                     '*',
+                    '**/*'
                 ],
                 dest: '<%= buildOutputDirectoryPath %>/assets/css/'
             },
@@ -27,7 +36,10 @@ module.exports = {
                 ],
                 dest: '<%= buildOutputDirectoryPath %>/js/'
             }
-        ]
+        ],
+        options: {
+            mode: true
+        }
     },
     deploy: {
         files: [
@@ -38,7 +50,10 @@ module.exports = {
                     'assets/css/main.min.css'
                 ],
                 dest: 'deployment/'
-            },
-        ]
+            }
+        ],
+        options: {
+            mode: true
+        }
     }
 };

@@ -12,6 +12,12 @@ Schemas.UserSchema = new Schema({
 	type: { type: String, required: true }
 });
 
+Schemas.PasswordResetSchema = new Schema({
+	_id: {type: String, required: true, unique: true, ref: 'UserSchema'},
+	token: {type: String},
+	tokenExpiry: {type: Date, expires: '24h', default: Date.now}
+});
+
 Schemas.UserInfoSchema = new Schema({
 	_id: { type: String, required: true, unique: true , ref: 'UserSchema'},
 	firstName: { type: String, required: true },
@@ -20,11 +26,12 @@ Schemas.UserInfoSchema = new Schema({
 	address: { type: String, required: true },
 	city: {type: String, required: true },
 	state: { type: String, required: true },
-	zip: { type: Number, required: true },
-	phone: { type: Number, required: true, unique: true },
+	zip: { type: String, required: true },
+	phone: { type: String, required: true, unique: true },
 	coUID: { type: String, ref: 'UserSchema' },
 	created: { type: Date, required: true },
 	lastLogin: { type: Date, required: true },
+	organization: { type: String },
 	appId: [{ type: String, required: true, ref: 'ApplicationSchema' }],
 	isSelfEmployed: { type: Boolean, default: false },
 	renting: { type: Boolean, default: false },
@@ -61,8 +68,11 @@ Schemas.LenderInvitesSchema = new Schema({
 	email: { type: String, required: true, unique: true },
 	firstName: { type: String, required: true },
 	lastName: { type: String, required: true },
+    organization: { type: String, required: true },
 	appId: { type: String, required: true, ref: 'ApplicationSchema' },
-	isOpen: { type: Boolean, default: true }
+    senderId: { type: String, required: true, ref: 'UserSchema' },
+    isOpen: { type: Boolean, default: true },
+	token: { type: String, required: true }
 });
 
 Schemas.ApplicationLendersSchema = new Schema({

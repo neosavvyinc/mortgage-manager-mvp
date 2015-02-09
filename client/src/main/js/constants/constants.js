@@ -51,5 +51,7 @@ module.exports = {
         {data: "WI", label: "Wisconsin"},
         {data: "WV", label: "West Virginia"},
         {data: "WY", label: "Wyoming"}
-    ]
+    ],
+
+    emailRegExp: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$'
 };

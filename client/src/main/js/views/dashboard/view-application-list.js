@@ -5,7 +5,7 @@ var _ = require('lodash');
 var moment = require('moment');
 
 var User = require('../../models/model-user');
-var ErrorMessage = require('../../components/error-message');
+var MessageBox = require('../../components/message-box');
 var ApplicationLenderList = require('../../components/lender-application-list');
 var ApplicationBorrowerList = require('../../components/borrower-application-list');
 var UserStore = require('../../stores/store-user');
@@ -24,7 +24,7 @@ var Applications = React.createClass({
         return {
             applications: [],
             userType: ''
-        }
+        };
     },
 
     componentDidMount: function(){
@@ -57,7 +57,7 @@ var Applications = React.createClass({
 
         var userApplications;
 
-        if(this.state.userType === 'lender'){
+        if(this.state.userType === 'lender') {
             userApplications = (
                 <ApplicationLenderList applications={this.state.applications} />
             );

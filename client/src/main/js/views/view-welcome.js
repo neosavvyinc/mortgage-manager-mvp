@@ -4,13 +4,14 @@ var Link = Router.Link;
 var Reflux = require('reflux');
 
 var Login = require('../components/login');
-var ErrorMessage = require('../components/error-message');
+var MessageBox = require('../components/message-box');
 var User = require('../models/model-user');
 var UserStore = require('../stores/store-user');
 var LenderStore = require('../stores/store-lender');
 var BorrowerStore = require('../stores/store-borrower');
 var BorrowerActions = require('../actions/action-borrower');
 var LenderActions = require('../actions/action-lender');
+var Constants = require('../constants/constants');
 
 var Welcome = React.createClass({
 
@@ -18,13 +19,18 @@ var Welcome = React.createClass({
         Router.Navigation,
         Reflux.listenTo(UserStore, 'onLogin'),
         Reflux.listenTo(LenderStore, 'onNewLender'),
-        Reflux.listenTo(BorrowerStore, 'onNewBorrower')],
+        Reflux.listenTo(BorrowerStore, 'onNewBorrower')
+    ],
 
     statics: {
         willTransitionTo: function (transition){
-            if(UserStore.isAuthenticated()){
-                transition.redirect('dashboardApplications');
-            }
+            transition.wait(
+                User.isAuthenticated().then(function (res) {
+                    if (res.isAuthenticated) {
+                        transition.redirect('dashboardApplications');
+                    }
+                })
+            );
         }
     },
 
@@ -39,50 +45,70 @@ var Welcome = React.createClass({
         }
     },
 
-    onSignUpBorrower: function(){
+    onSignUpBorrower: function(e){
+        e.preventDefault();
         if(this.refs.borrowerEmail.getDOMNode().value){
-            User.emailExists(this.refs.borrowerEmail.getDOMNode().value).then(
-                function(){
-                    BorrowerActions.newBorrower(this.refs.borrowerEmail.getDOMNode().value);
-                }.bind(this),
-                function(error){
-                    this.setState({
-                        borrowerError: true,
-                        borrowerErrorMessage: error.responseJSON.message,
-                        lenderError: false,
-                        lenderErrorMessage: ""
-                    });
-                }.bind(this)
-            );
+            var emailRegExp = new RegExp(Constants.emailRegExp);
+            if(!emailRegExp.test(this.refs.borrowerEmail.getDOMNode().value)){
+                this.setState({
+                    borrowerError: true,
+                    borrowerErrorMessage: "You have to provide a valid email",
+                    lenderError: false,
+                    lenderErrorMessage: ""
+                });
+            } else {
+                User.emailExists(this.refs.borrowerEmail.getDOMNode().value).then(
+                    function(){
+                        BorrowerActions.newBorrower(this.refs.borrowerEmail.getDOMNode().value);
+                    }.bind(this),
+                    function(error){
+                        this.setState({
+                            borrowerError: true,
+                            borrowerErrorMessage: error.responseJSON.message,
+                            lenderError: false,
+                            lenderErrorMessage: ""
+                        });
+                    }.bind(this)
+                );
+            }
         } else {
             this.setState({borrowerEmpty: true});
         }
     },
 
-    onSignUpLender: function(){
+    onSignUpLender: function(e){
+        e.preventDefault();
         if(this.refs.lenderEmail.getDOMNode().value){
-            User.emailExists(this.refs.lenderEmail.getDOMNode().value).then(
-                function() {
-                    LenderActions.newLender(this.refs.lenderEmail.getDOMNode().value);
-                }.bind(this),
-                function(error){
-                    this.setState({
-                        lenderError: true,
-                        lenderErrorMessage: error.responseJSON.message,
-                        borrowerError: false,
-                        borrowerErrorMessage: ""
-                    });
-                }.bind(this)
-            );
+            var emailRegExp = new RegExp(Constants.emailRegExp);
+            if(!emailRegExp.test(this.refs.lenderEmail.getDOMNode().value)){
+                this.setState({
+                    borrowerError: false,
+                    borrowerErrorMessage: "",
+                    lenderError: true,
+                    lenderErrorMessage: "You have to provide a valid email"
+                });
+            } else {
+                User.emailExists(this.refs.lenderEmail.getDOMNode().value).then(
+                    function () {
+                        LenderActions.newLender(this.refs.lenderEmail.getDOMNode().value);
+                    }.bind(this),
+                    function (error) {
+                        this.setState({
+                            lenderError: true,
+                            lenderErrorMessage: error.responseJSON.message,
+                            borrowerError: false,
+                            borrowerErrorMessage: ""
+                        });
+                    }.bind(this)
+                );
+            }
         } else {
             this.setState({lenderEmpty: true});
         }
     },
 
     onLogin: function(){
-        if(UserStore.isAuthenticated()) {
-            this.transitionTo('dashboardApplications');
-        }
+        this.transitionTo('dashboardApplications');
     },
 
     onNewLender: function(){
@@ -110,7 +136,7 @@ var Welcome = React.createClass({
                             <form>
                                 <input className="double-gap-bottom" ref="borrowerEmail" type="email" placeholder="Email Address" />
                                 <div className={borrowerEmptyClass}>You need to provide a valid email</div>
-                                <ErrorMessage errorDisplay={this.state.borrowerError} errorMessage={this.state.borrowerErrorMessage} />
+                                <MessageBox displayMessage={this.state.borrowerError} message={this.state.borrowerErrorMessage} type='error' />
                                 <button className="block turquoise" onClick={this.onSignUpBorrower}>
                                     Signup as Borrower
                                 </button>
@@ -124,7 +150,7 @@ var Welcome = React.createClass({
                             <form>
                                 <input className="double-gap-bottom" ref="lenderEmail" type="email" placeholder="Email Address" />
                                 <div className={falseEmptyClass}>You need to provide a valid email</div>
-                                <ErrorMessage errorDisplay={this.state.lenderError} errorMessage={this.state.lenderErrorMessage} />
+                                <MessageBox displayMessage={this.state.lenderError} message={this.state.lenderErrorMessage} type='error' />
                                 <button className="block turquoise" onClick={this.onSignUpLender}>
                                     Signup as Lender
                                 </button>

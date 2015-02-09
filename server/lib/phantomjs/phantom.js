@@ -3,7 +3,6 @@
 var path = require('path'),
 	async = require('async'),
 	childProcess = require('child_process'),
-	phantomjs = require('phantomjs'),
 	utils = require('../utils/common-utils');
 
 exports.convertToPdf = function(imageSourcePath, pdfTargetPath, captureOptions, success, failure) {
@@ -45,19 +44,23 @@ exports.convertToPdf = function(imageSourcePath, pdfTargetPath, captureOptions, 
  * @param failure
  */
 var _capturePdf = function(htmlSourcePath, pdfTargetPath, captureOptions, success, failure) {
-	var binPath=phantomjs.path,
-		binArgs=[
-			path.resolve('./lib/phantomjs/scripts/capture.js'),
+	var binArgs=[
+			path.resolve(__dirname, './scripts/capture.js'),
 			path.resolve(htmlSourcePath),
 			path.resolve(pdfTargetPath)
-		];
+		], command = 'phantomjs';
 
 	// the arguments in capture.js are handled by position.  In order to makes
 	// sure we get things in the proper place we make defaults where args are not explicit in captureOptions
 	binArgs.push(utils.dereference(captureOptions, 'width', 600));
 	binArgs.push(utils.dereference(captureOptions, 'height', 480));
 	binArgs.push(utils.dereference(captureOptions, 'delay', 0));
-	childProcess.execFile(binPath, binArgs, function(error, stdout, stderr) {
+
+    for (var i=0; i<binArgs.length; i++){
+        command += ' ' + binArgs[i];
+    }
+
+	childProcess.exec(command, function(error, stdout, stderr) {
 		if(stdout) {
 			console.log('phantomjs.capturePdf: stdout=' + stdout);
 		}
@@ -84,6 +87,6 @@ var _getImageHtml = function(imagePath, height, width) {
 	context.imageWidth = width;
 	context.imageHeight = height;
 	context.imageUrl = path.resolve(imagePath);
-	html = utils.renderTemplate('./lib/phantomjs/templates/image-to-pdf.handlebars', context);
+	html = utils.renderTemplate(path.resolve(__dirname, './templates/image-to-pdf.handlebars'), context);
 	return html;
 };

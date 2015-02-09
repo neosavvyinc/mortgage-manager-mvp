@@ -3,7 +3,7 @@ var Router = require('react-router');
 var Reflux = require('reflux');
 
 var Constants = require('../../constants/constants');
-var ErrorMessage = require('../../components/error-message');
+var MessageBox = require('../../components/message-box');
 var User = require('../../models/model-user');
 var BorrowerStore = require('../../stores/store-borrower');
 var BorrowerActions = require('../../actions/action-borrower');
@@ -45,9 +45,16 @@ var ApplicantInfo = React.createClass({
     
     statics: {
         willTransitionTo: function (transition){
-            if(!UserStore.isAuthenticated() || !BorrowerStore.getBorrower()){
+            if(!BorrowerStore.getBorrower()) {
                 transition.redirect('welcome');
             }
+            transition.wait(
+                User.isAuthenticated().then(function (res) {
+                    if (!res.isAuthenticated) {
+                        transition.redirect('welcome');
+                    }
+                })
+            );
         }
     },
 
@@ -68,6 +75,7 @@ var ApplicantInfo = React.createClass({
     },
 
     onSubmitInfo: function(e){
+        e.preventDefault();
 
         var applicantInfo = {
             firstName: this.refs.firstName.getDOMNode().value,
@@ -83,6 +91,7 @@ var ApplicantInfo = React.createClass({
 
         if(validateApplicantInfo(this.state.applicantType, applicantInfo)) {
             if(this.state.applicantType == "Applicant") {
+                applicantInfo.phone = applicantInfo.phone.replace(/\D/g, '');
                 delete applicantInfo.email;
                 applicantInfo.isSelfEmployed = this.state.currentBorrower.isSelfEmployed;
                 applicantInfo.recentlyMarried = this.state.currentBorrower.recentlyMarried;
@@ -155,7 +164,7 @@ var ApplicantInfo = React.createClass({
 
         var borrowerBasicInfo = this.state.currentBorrower.basicInfo;
 
-        applicantAddress = this.state.shareAddress ?  (
+        var applicantAddress = this.state.shareAddress ?  (
             <div>
                 <div className="row gap-bottom">
                     <input className="three fourths" type="text" ref="address" placeholder="address" value={borrowerBasicInfo.address} required />
@@ -207,7 +216,7 @@ var ApplicantInfo = React.createClass({
                         <input className="one third half-gap-right" type="text" ref="phone" placeholder="Mobile Phone" required />
                         <input className={showEmailClass} type="email" ref="email" placeholder="Email" required />
                     </div>
-                    <ErrorMessage errorDisplay={this.state.applicantInfoError} errorMessage={this.state.errorText}/>
+                    <MessageBox displayMessage={this.state.applicantInfoError} message={this.state.errorText} type='error' />
                     <div className="row">
                         <button className="one third turquoise button" onClick={this.onSubmitInfo}>Continue</button>
                     </div>

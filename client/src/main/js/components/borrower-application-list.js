@@ -5,12 +5,13 @@ var _ = require('lodash');
 var moment = require('moment');
 
 var User = require('../models/model-user');
-var ErrorMessage = require('../components/error-message');
+var MessageBox = require('./message-box');
+var Navigation = require('../components/navigation');
 var UserStore = require('../stores/store-user');
 var ApplicationStore = require('../stores/store-application');
 var ApplicationActions = require('../actions/action-application');
 
-var Applications = React.createClass({
+var BorrowerApplications = React.createClass({
 
     mixins: [
         Router.State,
@@ -39,7 +40,16 @@ var Applications = React.createClass({
     render: function(){
 
         var applicationsTable = [],
-            status;
+            status,
+            actions = [
+                {
+                    tabName: "Create New Application",
+                    tabLink: {
+                        name: "routeTester",
+                        params: []
+                    }
+                }
+            ];
 
         _.forEach(this.props.applications, function(app){
             switch(app.status){
@@ -73,24 +83,27 @@ var Applications = React.createClass({
             ));
         }, this);
         return (
-            <table className="responsive">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Last Created</th>
-                        <th>Last Modified</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {applicationsTable.map(function(application) {
-                    return (application);
-                })}
-                </tbody>
-            </table>
+            <div>
+                <Navigation navigationItems={actions}/>
+                <table className="responsive">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Last Created</th>
+                            <th>Last Modified</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {applicationsTable.map(function(application) {
+                        return (application);
+                    })}
+                    </tbody>
+                </table>
+            </div>
         );
     }
 });
 
-module.exports = Applications;
+module.exports = BorrowerApplications;

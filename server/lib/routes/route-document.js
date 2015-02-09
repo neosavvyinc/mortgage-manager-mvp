@@ -1,10 +1,12 @@
 'use strict';
 
-var _ = require('underscore'),
+var path = require('path'),
+	_ = require('underscore'),
 	async = require('async'),
 	sizeOf = require('image-size'),
 	phantom = require('../phantomjs/phantom'),
 	commonUtils = require('../utils/common-utils'),
+	settings = require('../config/app/settings'),
 	documentService = require('../services/service-document');
 
 /**
@@ -19,6 +21,7 @@ exports.insertDocument = function(req, res) {
 
 	//If file does not exist, multer has filtered it for wrong extension.
 	if(file === undefined) {
+		settings.log.fatal('Unsupported media type');
 		res.status(415).send({message: 'Unsupported Media type'});
 	} else {
 		var uploadPath = file.path,
@@ -36,8 +39,8 @@ exports.insertDocument = function(req, res) {
 							height: dimensions.height,
 							delay: 200
 						},
-						pathArr = uploadPath.split('/'),
-						targetPath = pathArr[0] + '/' + pathArr[1].split('.')[0] + '.pdf';
+						pathArr = uploadPath.split('.'),
+						targetPath = pathArr[0] + '.pdf';
 
 					//Convert to pdf
 					phantom.convertToPdf(uploadPath, targetPath, captureOptions, function () {
@@ -47,6 +50,7 @@ exports.insertDocument = function(req, res) {
 						done(new Error('Could not convert to pdf ' + error));
 					});
 				} else {
+					settings.log.info('Successfully converted pdf. Updated path is '+updatedUploadPath);
 					done();
 				}
 			},
@@ -55,16 +59,16 @@ exports.insertDocument = function(req, res) {
 					updatedDest;
 
 				if(updatedUploadPath !== undefined) {
-					updatedUploadSplit = updatedUploadPath.split('/');
-					updatedDest = updatedUploadSplit[0] + '/' + appId + '/' + updatedUploadSplit[1];
-					commonUtils.moveFiles(updatedUploadPath, updatedDest);
+					updatedUploadSplit = updatedUploadPath.split('uploads');
+					updatedDest = updatedUploadSplit[0] + 'uploads/' + appId + '/' + updatedUploadSplit[1];
+					commonUtils.moveFiles(path.resolve(updatedUploadPath), path.resolve(updatedDest));
 				}
 
-				splitPath = uploadPath.split('/');
-				destPath = splitPath[0] + '/' + appId + '/' + splitPath[1];
+				splitPath = uploadPath.split('uploads');
+				destPath = splitPath[0] + 'uploads/' + appId + '/' + splitPath[1];
 
 				//Move the uploaded files before calling the service
-				commonUtils.moveFiles(uploadPath, destPath);
+				commonUtils.moveFiles(path.resolve(uploadPath), path.resolve(destPath));
 
 				_.extend(documentObject, {
 					url: (updatedDest === undefined) ? destPath : updatedDest,
@@ -80,12 +84,30 @@ exports.insertDocument = function(req, res) {
 			}
 		], function(error) {
 			if(error) {
-				console.log(error);
+				settings.log.fatal(error.message);
 				res.status(500).send({message: 'Internal Server Error'});
 			} else {
 				res.send({message: 'Success'});
+				settings.log.info('Successfully uploaded document ' + file.name + '. AppId: '+appId);
 			}
 			res.end();
 		});
 	}
+};
+
+exports.insertDocumentEntry = function(req, res) {
+	var documentObject = req.body;
+
+	_.extend(documentObject, {
+		appId: req.params.appId
+	});
+
+	documentService.createDocument(documentObject, function() {
+		res.send({message: 'Success'}).end();
+		settings.log.info('Successfully created a doc entry. AppId: '+req.params.appId);
+	}, function(error) {
+		settings.log.fatal(error.message);
+		res.status(500).send({message: 'Internal Server Error'}).end();
+	});
+
 };

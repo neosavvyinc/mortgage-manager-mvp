@@ -14,12 +14,6 @@ var path = require('path'),
 	passport = require('passport/'),
 	server, log;
 
-// Configure middleware
-middleware(app, router, passport);
-
-// Configure routes
-routes(router, passport);
-
 /**
  * Listens on a port
  */
@@ -32,8 +26,7 @@ exports.listen = function () {
  */
 var loadConfig = function() {
 	var env = process.env.NODE_ENV || 'development',
-		rootPath = __dirname.split('server')[0],
-		configPath = path.resolve(rootPath + '/server/config'),
+		configPath = path.resolve(__dirname, '../config'),
 		configFile = path.join(configPath + '/', env + '.json'),
 		config = fs.readFileSync(configFile, 'utf8');
 	settings.setConfig(config);
@@ -60,15 +53,24 @@ async.series([
 	},
 	function(done) {
 		log = require('./utils/common-utils').getLogger();
-		done();
-	},
-	function(done) {
-		loginRoute.initPassport(passport);
+		settings.log = log;
 		done();
 	},
 	function(done) {
 		db.connect(settings.getConfig().dbURL, done, done);
 	},
+    function(done){
+        loginRoute.initPassport(passport);
+        done();
+    },
+    function(done){
+        middleware(app, router, passport);
+        done();
+    },
+    function(done){
+        routes(router, passport);
+        done();
+    },
 	function(done) {
 		runServer();
 		done();

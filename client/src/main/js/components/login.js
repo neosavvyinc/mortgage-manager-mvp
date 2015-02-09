@@ -4,7 +4,7 @@ var Link = require('react-router').Link;
 var User = require('../models/model-user');
 var UserActions = require('../actions/action-user');
 
-var ErrorMessage = require('../components/error-message');
+var MessageBox = require('./message-box');
 
 var Login = React.createClass({
 
@@ -15,31 +15,20 @@ var Login = React.createClass({
         }
     },
 
-    onLogin: function(e){
-        e.preventDefault();
-
-        var email = this.refs.userEmail.getDOMNode().value,
-            password = this.refs.userPassword.getDOMNode().value;
-
-        User.login(email, password).then(
-            function(user){
-                UserActions.login(user);
-            }, function(error){
-                this.setState({
-                    loginError:true,
-                    loginErrorText: error.responseJSON.message
-                });
-            }.bind(this)
-        );
+    getDefaultProps: function(){
+        return {
+            loginType: 'regular',
+            userData: null
+        };
     },
-    
+
     render: function(){
         return (
             <form>
                 <h4>Already a User?</h4>
                 <input className="gap-bottom" ref="userEmail" type="email" placeholder="Email Address" />
                 <input className="gap-bottom" ref="userPassword" type="password" placeholder="Password" />
-                <ErrorMessage errorDisplay={this.state.loginError} errorMessage={this.state.loginErrorText}/>
+                <MessageBox displayMessage={this.state.loginError} message={this.state.loginErrorText} type='error'/>
                 <button className="block turquoise" onClick={this.onLogin}>
                     Login
                 </button>
@@ -47,6 +36,37 @@ var Login = React.createClass({
             </form>
         )
     },
+
+    onLogin: function(e){
+        e.preventDefault();
+
+        var email = this.refs.userEmail.getDOMNode().value,
+            password = this.refs.userPassword.getDOMNode().value;
+
+        if(this.props.loginType === 'new-invite' && this.props.userData){
+            User.addAppAndLogin(email, password, this.props.userData.token, this.props.userData.appId).then(
+                function(user){
+                    UserActions.login(user);
+                }, function(error){
+                    this.setState({
+                        loginError:true,
+                        loginErrorText: error.responseJSON.message
+                    });
+                }.bind(this)
+            );
+        } else {
+            User.login(email, password).then(
+                function(user){
+                    UserActions.login(user);
+                }, function(error){
+                    this.setState({
+                        loginError:true,
+                        loginErrorText: error.responseJSON.message
+                    });
+                }.bind(this)
+            );
+        }
+    }
 });
 
 module.exports = Login;

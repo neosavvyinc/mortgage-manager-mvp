@@ -25,6 +25,20 @@ var LenderStore = Reflux.createStore({
 
     getLender: function(){
         return _newLender;
+    },
+
+    onLenderInvite: function(lenderInfo){
+        _newLender = {
+            email: lenderInfo.email,
+            basicInfo: {
+                firstName: lenderInfo.firstName,
+                lastName: lenderInfo.lastName,
+                organization: lenderInfo.organization
+            },
+            token: lenderInfo.token,
+            appId: lenderInfo.appId
+        };
+        this.trigger();
     }
 });
 

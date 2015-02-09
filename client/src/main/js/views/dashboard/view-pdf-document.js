@@ -1,11 +1,8 @@
-/**
- * @jsx React.DOM
- */
+'use strict';
 
 var PDF = require('../../components/pdf-viewer'),
 	React = require('react'),
 	Router = require('react-router'),
-	Reflux = require('reflux'),
 	Application = require('../../models/model-application'),
 	EndPoints = require('../../constants/endpoints');
 
@@ -19,7 +16,7 @@ var ViewPdf = React.createClass({
 		return {
 			file: EndPoints.APPLICATIONS.ONE.FILE.ONE.URL.replace(':id', this.getParams().appId).replace(':docId', this.getParams().documentId),
 			page: 1
-		}
+		};
 	},
 
 	prevPage: function(ev) {
@@ -44,15 +41,13 @@ var ViewPdf = React.createClass({
 	render: function() {
 		return (
 			<div>
-				<nav>
-					<ul className = "nav-bar">
-						<li><span onClick={this.nextPage}> Next </span></li>
-						<li><span onClick={this.prevPage}> Prev </span></li>
-						<li><span onClick={this.download}> Download </span></li>
-					</ul>
-				</nav>
-				<div>
-				    <PDF file={this.state.file} page={this.state.page} />
+				<div className="button pdfDownload" onClick={this.download}>Download <i className="fa fa-download pointer"></i></div>
+				<div className="row">
+					<div className>
+					    <PDF file={this.state.file} page={this.state.page}/>
+					</div>
+					<div> <i className="fa fa-chevron-left pointer pdfPrev" onClick={this.prevPage}></i> </div>
+					<div> <i className="fa fa-chevron-right pointer pdfNext" onClick={this.nextPage}></i> </div>
 				</div>
 			</div>
 		)
