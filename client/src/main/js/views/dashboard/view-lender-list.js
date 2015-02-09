@@ -126,11 +126,11 @@ var LenderContacts = React.createClass({
                 actionBtns = (
                     <th>
                         <div className="row">
-                            <button href={mailTo} className="btn blue one mobile half">&nbsp;Email&nbsp;&nbsp;<i className="fa fa-envelope-o"></i>&nbsp;</button>
-                            <button href={callTo} className="btn blue one mobile half">&nbsp;Call&nbsp;&nbsp;<i className="fa fa-phone"></i>&nbsp;</button>
+                            <a href={mailTo}><button className="btn blue mobile gap-right tooltip" data-tooltip="Email"><i className="fa fa-envelope-o"></i></button></a>
+                            <a href={callTo}><button className="btn green mobile tooltip" data-tooltip="Call"><i className="fa fa-phone"></i></button></a>
                         </div>
                     </th>
-                )
+                );
             }
             lendersTable.push((
                 <tr>

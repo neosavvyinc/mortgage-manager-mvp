@@ -3,7 +3,12 @@ textarea, input, select, option {
   font-family: FontAwesome;
 }
 a:after{content:none !important;}
-
+a:not(.noicon)[href^="mailto:"]:before{
+  content: "";
+}
+a:not(.noicon)[href^="tel:"]:before{
+  content: "";
+}
 .plaintext{
   color: white;
 }
