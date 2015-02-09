@@ -58,6 +58,7 @@ User.register = function (newUser){
 };
 
 User.update = function (userId, userInfo){
+    debugger;
     if(userInfo.token) delete userInfo.token;
     return Q.promise(function(resolve, reject){
         $.post(Endpoints.USER.ONE.URL.replace(':id', userId), userInfo)

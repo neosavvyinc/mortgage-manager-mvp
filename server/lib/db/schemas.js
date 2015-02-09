@@ -9,7 +9,8 @@ Schemas.UserSchema = new Schema({
 	_id: { type: String, required: true, unique: true },
 	email: { type: String, required: true, unique: true },
 	password: { type: String, required: true },
-	type: { type: String, required: true }
+	type: { type: String, required: true },
+    hasUserDetails: { type: Boolean, required: true, default: false }
 });
 
 Schemas.PasswordResetSchema = new Schema({

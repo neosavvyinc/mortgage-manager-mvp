@@ -9,12 +9,14 @@ var ApplicationStore = require('../../stores/store-application');
 var UserStore = require('../../stores/store-user');
 var Navigation = require('../../components/navigation');
 
-var loadLenders = function(){
-    Application.getLenders(this.getParams().appId).then(function(lenders){
-        this.setState({
-            lenders: lenders
-        });
-    }.bind(this));
+var arraysEqual = function(arr1, arr2) {
+    if(arr1.length !== arr2.length)
+        return false;
+    for(var i = arr1.length; i--;) {
+        if(arr1[i] !== arr2[i])
+            return false;
+    }
+    return true;
 };
 
 var LenderContacts = React.createClass({
@@ -34,18 +36,44 @@ var LenderContacts = React.createClass({
     },
 
     componentDidMount: function(){
-        if(this.isMounted()) {
-            loadLenders.bind(this)();
+       if(this.isMounted()){
+           this.getLenders();
+       }
+    },
+
+    componentDidUpdate: function(prevProps, prevState) {
+        if(arraysEqual(prevState.lenders, this.state.lenders)) {
+            this.getLenders();
         }
     },
 
+    getLenders: function(){
+        Application.getLenders(this.getParams().appId).then(function(lenders){
+            this.setState({
+                lenders: lenders
+            });
+        }.bind(this));
+    },
+
     reloadLenders: function(){
-        loadLenders.bind(this)();
+        this.getLenders();
     },
 
     onReSendInvite: function(lender){
         Application.reSendInvite(this.getParams().appId, lender).then(function(){
+            // TODO: NOT NEED. A message should be displayed
             ApplicationActions.reSendInvite();
+        }.bind(this), function(error){
+            this.setState({
+                actionError: true,
+                actionErrorMessage: error.responseJSON.message
+            });
+        }.bind(this));
+    },
+
+    onDeleteInvite: function(lender){
+        Application.deleteInvite(this.getParams().appId, lender).then(function(){
+            this.reloadLenders();
         }.bind(this), function(error){
             this.setState({
                 actionError: true,
@@ -71,13 +99,16 @@ var LenderContacts = React.createClass({
 
         _.forEach(this.state.lenders, function(lender){
 
-            var actionBtns;
+            var actionBtns,
+                mailTo = "mailto:" + lender.email,
+                callTo = "tel:" + lender.phone;
 
             if(lender.status === 'Pending'){
                 actionBtns = (
                     <th>
                         <div className="row">
                             <button className="btn turquoise one centered mobile half" onClick={this.onReSendInvite.bind(null, lender)}>Send Again</button>
+                            <button className="btn red one centered mobile half" onClick={this.onDeleteInvite.bind(null, lender)}>Delete</button>
                         </div>
                     </th>
                 )
@@ -85,8 +116,12 @@ var LenderContacts = React.createClass({
                 actionBtns = (
                     <th>
                         <div className="row">
-                            <button className="btn turquoise one half">Email</button>
-                            <button className="btn red one half">Delete</button>
+                            <button href={mailTo} className="btn turquoise one half">
+                                <i class="fa fa-envelope-o"></i> Email
+                            </button>
+                            <button href={callTo} className="btn turquoise one half">
+                                <i class="fa fa-phone"></i> Call
+                            </button>
                         </div>
                     </th>
                 )
