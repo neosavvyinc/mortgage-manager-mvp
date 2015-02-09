@@ -46,6 +46,7 @@ exports.getUserDetails = function(req, res){
     if(uid === req.user._id){
         userDetailsService.findUserWithDetails(uid, function(userWithDetails) {
             settings.log.info('Get user details success. Uid: ' + uid);
+	        userWithDetails.email = req.user.email;
             res.send(userWithDetails);
             res.end();
         }, function(error) {

@@ -21,7 +21,6 @@ var UserStore = Reflux.createStore({
 
     onLogin: function(user){
         sessionStorage.setItem("userId", user._id);
-	    sessionStorage.setItem("userEmail", user.email);
         this.trigger();
     },
 
@@ -32,11 +31,7 @@ var UserStore = Reflux.createStore({
 
     getCurrentUserId: function(){
         return sessionStorage.getItem("userId");
-    },
-
-	getCurrentUserEmail: function(){
-		return sessionStorage.getItem("userEmail");
-	}
+    }
 });
 
 module.exports = UserStore;

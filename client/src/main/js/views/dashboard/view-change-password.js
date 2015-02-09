@@ -19,13 +19,12 @@ var ChangePassword = React.createClass({
 		return {
 			passwordError: false,
 			messageText: '',
-			messageType: 'error',
-			updatedPassword: false
+			messageType: 'error'
 		};
 	},
 
 	back: function() {
-		Location.pop();
+		this.transitionTo('dashboardApplications');
 	},
 
 	onUpdatedPassword: function() {
@@ -46,7 +45,6 @@ var ChangePassword = React.createClass({
 		} else {
 			User.updatePassword(UserStore.getCurrentUserId(), oldPassword, newPassword, null).then(function() {
 				this.setState({
-					updatedPassword: true,
 					passwordError: true,
 					messageText: 'Password successfully updated. Click below to login',
 					messageType: 'success'
@@ -62,25 +60,22 @@ var ChangePassword = React.createClass({
 	},
 
 	render: function() {
-		return this.state.updatedPassword ? (
+		return (
 			<div className="container">
 				<div className="gap-top">
-					<div className="one fourth">
-						<MessageBox displayMessage={this.state.passwordError} message={this.state.messageText} type={this.state.messageType} />
-						<button className="block turquoise" onClick={this.onUpdatedPassword}>Login</button>
+					<div className="row">
+						<div className="one third">
+							<h2><span className="tooltip" data-tooltip="Back"><i className="fa fa-chevron-left pointer" onClick={this.back}></i></span> Update your password</h2>
+						</div>
 					</div>
-				</div>
-			</div>
-		) : (
-			<div className="container">
-				<div className="gap-top">
-					<h1><span className="tooltip" data-tooltip="Back"><i className="fa fa-chevron-left pointer" onClick={this.back}></i></span>Update your password</h1>
-					<div className="one fourth">
-						<input className="gap-bottom" type="password" ref="oldPassword" placeholder="Old Password" />
-						<input className="gap-bottom" type="password" ref="newPassword" placeholder="New Password" />
-						<input className="gap-bottom" type="password" ref="confirmPassword" placeholder="Confirm Password"/>
-						<MessageBox displayMessage={this.state.passwordError} message={this.state.messageText} type={this.state.messageType} />
-						<button className="block turquoise" onClick={this.onCheckPassword}>Continue</button>
+					<div className="row divBorder">
+						<div className="one third gap-top gap-bottom">
+							<input className="gap-bottom" type="password" ref="oldPassword" placeholder="Old Password" />
+							<input className="gap-bottom" type="password" ref="newPassword" placeholder="New Password" />
+							<input className="gap-bottom" type="password" ref="confirmPassword" placeholder="Confirm Password"/>
+							<MessageBox displayMessage={this.state.passwordError} message={this.state.messageText} type={this.state.messageType} />
+							<button className="block turquoise" onClick={this.onCheckPassword}>Continue</button>
+						</div>
 					</div>
 				</div>
 			</div>

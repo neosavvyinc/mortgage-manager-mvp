@@ -49,8 +49,6 @@ var ApplicantInfo = React.createClass({
 	},
 
 	componentDidMount: function() {
-		var email = UserStore.getCurrentUserEmail();
-
 		User.getUserDetails(UserStore.getCurrentUserId()).then(function(userDetails) {
 			this.refs.firstName.getDOMNode().value = userDetails.firstName;
 			this.refs.middleName.getDOMNode().value = userDetails.middleName;
@@ -60,7 +58,7 @@ var ApplicantInfo = React.createClass({
 			this.refs.state.getDOMNode().value = userDetails.state;
 			this.refs.zip.getDOMNode().value = userDetails.zip;
 			this.refs.phone.getDOMNode().value = userDetails.phone;
-			this.refs.email.getDOMNode().value = email;
+			this.refs.email.getDOMNode().value = userDetails.email;
 		}.bind(this), function(error) {
 			this.setState({
 				showMessage: true,
@@ -71,7 +69,7 @@ var ApplicantInfo = React.createClass({
 	},
 
 	back: function() {
-		Location.pop();	
+		this.transitionTo('dashboardApplications');
 	},
 	
 	onSubmitInfo: function(e){
@@ -119,7 +117,7 @@ var ApplicantInfo = React.createClass({
 		return (
 			<div className="container">
 				<h1><span className="tooltip" data-tooltip="Back"><i className="fa fa-chevron-left pointer" onClick={this.back}></i></span> Edit Profile</h1>
-				<div className="gap-top">
+				<div className="gap-top divBorder">
 					<h2>Name</h2>
 					<div className="row gap-bottom">
 						<input className="one fourth half-gap-right" type="text" ref="firstName" placeholder="First Name" required />
@@ -154,7 +152,6 @@ var ApplicantInfo = React.createClass({
 					<div className="row one third gap-top">
 						<MessageBox displayMessage={this.state.showMessage} message={this.state.messageText} type={this.state.messageType} />
 					</div>
-
 				</div>
 			</div>
 		)
