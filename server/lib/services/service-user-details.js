@@ -164,17 +164,26 @@ exports.lenderAppInvite = function(email, token, appId, success, failure){
 
 	var userBasicInfo;
 	async.series([
+        function(done){
+            lenderInvites.retrieve({email:email, token: token, isOpen:true}, function(invite){
+                if(invite.length){
+                    done();
+                } else {
+                    done({message: "There is no active invite for this email."});
+                }
+            })
+        },
 		function(done){
 			user.retrieve({email: email}, function(userData){
 				userBasicInfo = userData[0];
                 if(!userBasicInfo){
-                    done(new Error('This user doesn\'t exist'));
+                    done({message:'This user doesn\'t exist'});
                 }
 				done();
 			}, done);
 		},
 		function(done){
-            if(!userBasicInfo.hasUserDetails){
+            if(userBasicInfo && !userBasicInfo.hasUserDetails){
                 done();
             } else {
                 async.parallel([

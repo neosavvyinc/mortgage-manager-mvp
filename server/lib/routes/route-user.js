@@ -132,8 +132,8 @@ exports.AddAppAndLogin = function(passport){
 				})(req, res, next);
 			}.bind(this), function(error) {
 				if(error) {
-					settings.log.error('User already exists');
-					res.status(400).send({message: 'The user already exists'});
+					settings.log.error(error.message);
+					res.status(400).send(error.message);
 				}
 				res.end();
 			});
