@@ -5,8 +5,6 @@ var Reflux = require('reflux');
 
 var User = require('../../models/model-user');
 var UserStore = require('../../stores/store-user');
-var Link = require('react-router').Link;
-
 var Header = require('../../components/header');
 var Footer = require('../../components/footer');
 

@@ -1,3 +1,5 @@
+'use strict';
+
 var React = require('react');
 var Router = require('react-router');
 var Reflux = require('reflux');
@@ -40,7 +42,7 @@ var NewPassword = React.createClass({
         if (!newPassword || newPassword === ''){
             this.setState({
                 passwordError: true,
-                errorText: "Pleasqewrwe enter a password"
+                errorText: "Please enter a password"
             });
         } else if (newPassword != confirmPassword){
             this.setState({

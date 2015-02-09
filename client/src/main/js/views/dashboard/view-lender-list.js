@@ -97,6 +97,16 @@ var LenderContacts = React.createClass({
             }
         ];
 
+	    var actionStyle = {
+		    width: '16%'
+	    }, statusColStyle = {
+			width: '16%'
+	    }, orgColStyle ={
+		    width: '16%'
+	    }, otherColStyle ={
+	        width: '26%'
+	    };
+
         _.forEach(this.state.lenders, function(lender){
 
             var actionBtns,
@@ -107,8 +117,8 @@ var LenderContacts = React.createClass({
                 actionBtns = (
                     <th>
                         <div className="row">
-                            <button className="btn turquoise one centered mobile half" onClick={this.onReSendInvite.bind(null, lender)}>Send Again</button>
-                            <button className="btn red one centered mobile half" onClick={this.onDeleteInvite.bind(null, lender)}>Delete</button>
+                            <button className="btn turquoise one centered mobile half" onClick={this.onReSendInvite.bind(null, lender)}> Remind <i className="fa fa-mail-reply"></i></button>
+                            <button className="btn red one centered mobile half" onClick={this.onDeleteInvite.bind(null, lender)}> Delete <i className="fa fa-trash-o"></i></button>
                         </div>
                     </th>
                 )
@@ -116,12 +126,8 @@ var LenderContacts = React.createClass({
                 actionBtns = (
                     <th>
                         <div className="row">
-                            <button href={mailTo} className="btn turquoise one half">
-                                <i class="fa fa-envelope-o"></i> Email
-                            </button>
-                            <button href={callTo} className="btn turquoise one half">
-                                <i class="fa fa-phone"></i> Call
-                            </button>
+                            <button href={mailTo} className="btn blue one mobile half">&nbsp;Email&nbsp;&nbsp;<i className="fa fa-envelope-o"></i>&nbsp;</button>
+                            <button href={callTo} className="btn blue one mobile half">&nbsp;Call&nbsp;&nbsp;<i className="fa fa-phone"></i>&nbsp;</button>
                         </div>
                     </th>
                 )
@@ -143,7 +149,12 @@ var LenderContacts = React.createClass({
                     <h2>Lenders</h2>
                     <Navigation navigationItems={actions}/>
                     <table className="responsive">
-                        <thead>
+	                    <col style={otherColStyle}/>
+	                    <col style={orgColStyle}/>
+	                    <col style={otherColStyle}/>
+	                    <col style={statusColStyle}/>
+	                    <col style={actionStyle}/>
+	                    <thead>
                             <tr>
                                 <th>Lender Name</th>
                                 <th>Organization</th>

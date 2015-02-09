@@ -158,10 +158,12 @@ User.forgotPassword = function(email) {
     });
 };
 
-User.updatePassword = function(uid, password, token) {
+User.updatePassword = function(uid, oldPassword, newPassword, token) {
+	console.log(uid);
     return Q.promise(function(resolve, reject) {
         $.post(Endpoints.USER.ONE.UPDATEPASSWORD.URL.replace(':id', uid), {
-            password: password,
+	        oldPassword: oldPassword,
+            password: newPassword,
             token: token
         }).success(function(response) {
             resolve(response);
