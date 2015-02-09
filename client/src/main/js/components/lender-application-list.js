@@ -42,6 +42,12 @@ var LenderApplications = React.createClass({
                 }
             ];
 
+	    var actionStyle = {
+		    width: '10%'
+	    }, otherColStyle ={
+		    width: '30%'
+	    };
+
         _.forEach(this.props.applications, function(app){
             if(app) {
                 // e.g. Wednesday, January 21, 2015 3:21 PM
@@ -53,8 +59,7 @@ var LenderApplications = React.createClass({
                         <th>{app.lastModified || "None"}</th>
                         <th>
                             <div className="row">
-                                <button className="btn turquoise one half" onClick={this.onApplicationSelect.bind(null, app)}>View</button>
-                                <button className="btn red one half">Delete</button>
+	                            <button className="btn red" onClick={this.onApplicationSelect.bind(null, app)}>View <i className="fa fa-binoculars"></i></button>
                             </div>
                         </th>
                     </tr>
@@ -65,6 +70,10 @@ var LenderApplications = React.createClass({
             <div>
                 <Navigation navigationItems={actions}/>
                 <table className="responsive">
+	                <col style={otherColStyle}/>
+	                <col style={otherColStyle}/>
+	                <col style={otherColStyle}/>
+	                <col style={actionStyle}/>
                     <thead>
                         <tr>
                             <th>Primary Applicant</th>

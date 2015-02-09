@@ -19,6 +19,11 @@ var ViewPdf = React.createClass({
 		};
 	},
 
+	onPdfLoad: function(numPages) {
+		console.log(numPages);
+		this.setState({numPages: numPages});
+	},
+
 	prevPage: function(ev) {
 		ev.preventDefault();
 		this.setState({
@@ -29,7 +34,7 @@ var ViewPdf = React.createClass({
 	nextPage: function(ev) {
 		ev.preventDefault();
 		this.setState({
-			page: this.state.page + 1
+			page: this.state.page < this.state.numPages ? this.state.page + 1 : this.state.page
 		});
 	},
 
@@ -44,7 +49,7 @@ var ViewPdf = React.createClass({
 				<div className="button pdfDownload" onClick={this.download}>Download <i className="fa fa-download pointer"></i></div>
 				<div className="row">
 					<div className>
-					    <PDF file={this.state.file} page={this.state.page}/>
+					    <PDF file={this.state.file} page={this.state.page} onLoadCallback={this.onPdfLoad}/>
 					</div>
 					<div> <i className="fa fa-chevron-left pointer pdfPrev" onClick={this.prevPage}></i> </div>
 					<div> <i className="fa fa-chevron-right pointer pdfNext" onClick={this.nextPage}></i> </div>

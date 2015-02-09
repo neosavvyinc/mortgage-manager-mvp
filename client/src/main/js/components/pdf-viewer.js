@@ -22,6 +22,7 @@ var Pdf = React.createClass({
 		PDFJS.workerSrc = "js/pdf.worker.js";
 		PDFJS.getDocument(this.props.file).then(function(pdf) {
 			pdf.getPage(self.props.page).then(function(page) {
+				self.props.onLoadCallback(pdf.numPages);
 				self.setState({pdfPage: page, pdf: pdf});
 			});
 		});
