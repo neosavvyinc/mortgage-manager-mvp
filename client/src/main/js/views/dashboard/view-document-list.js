@@ -166,7 +166,7 @@ var Documents = React.createClass({
 				        <th>{document.description}</th>
 				        <th>{document.requestDate}</th>
 				        <th>
-					        <button className={viewButton.style} disabled={viewButton.disabled} onClick={this.onDocumentView.bind(this, document)}>
+					        <button className={viewButton.style} disabled={viewButton.disabled} onClick={this.onDocumentView.bind(this, document)} data-tooltip="View">
 						        View <i className="fa fa-binoculars"></i>
 					        </button>
 				        </th>
