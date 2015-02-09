@@ -50,7 +50,7 @@ var Login = React.createClass({
                 }, function(error){
                     this.setState({
                         loginError:true,
-                        loginErrorText: error
+                        loginErrorText: error.responseJSON.message
                     });
                 }.bind(this)
             );
