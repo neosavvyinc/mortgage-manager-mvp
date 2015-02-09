@@ -99,7 +99,7 @@ describe('Login', function () {
 
 		TestUtils.Simulate.click(button);
 		expect(messageBox[0].props.className).toBe('message gap-bottom error hidden');
-		expect(messageBox[0].props.children).toBe('There was an error with your credentials. Please try again.');
+		expect(messageBox[0].props.children).toBe('You must enter the username and password');
 	});
 
 	it('should not call User.login if password field is empty', function() {
@@ -108,7 +108,7 @@ describe('Login', function () {
 
 		TestUtils.Simulate.click(button);
 		expect(messageBox[0].props.className).toBe('message gap-bottom error hidden');
-		expect(messageBox[0].props.children).toBe('There was an error with your credentials. Please try again.');
+		expect(messageBox[0].props.children).toBe('You must enter the username and password');
 	});
 
 	it('should not call User.login if any of the fields are empty', function() {
@@ -117,7 +117,7 @@ describe('Login', function () {
 
 		TestUtils.Simulate.click(button);
 		expect(messageBox[0].props.className).toBe('message gap-bottom error hidden');
-		expect(messageBox[0].props.children).toBe('There was an error with your credentials. Please try again.');
+		expect(messageBox[0].props.children).toBe('You must enter the username and password');
 	});
 
 	it('should submit email and password to User.login', function() {
