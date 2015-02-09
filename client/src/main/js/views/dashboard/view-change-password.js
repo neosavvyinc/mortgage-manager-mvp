@@ -65,7 +65,7 @@ var ChangePassword = React.createClass({
 				<div className="gap-top">
 					<div className="row">
 						<div className="one third">
-							<h2><span className="tooltip" data-tooltip="Back"><i className="fa fa-chevron-left pointer" onClick={this.back}></i></span> Update your password</h2>
+							<h1><span className="tooltip" data-tooltip="Back"><i className="fa fa-chevron-left pointer" onClick={this.back}></i></span> Update your password</h1>
 						</div>
 					</div>
 					<div className="row divBorder">
