@@ -139,7 +139,7 @@ var Documents = React.createClass({
                 disabled: true,
                 style: 'disabled hidden'
             }, uploadButton = {
-                style: 'btn blue align-left',
+                style: 'btn blue block gap-right five sixths',
 	            text: 'Upload '
             }, downloadButton = {
 	            disabled: true,
