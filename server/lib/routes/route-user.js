@@ -236,7 +236,11 @@ exports.updatePassword = function(req, res) {
 	}, function(error) {
 		if(error) {
 			settings.log.fatal(error.message);
-			res.status(500).send({message: 'Internal Server Error'});
+			if(error.message === 'Password entered is incorrect') {
+				res.status(500).send({message: error.message});
+			} else {
+				res.status(500).send({message: 'Internal Server Error'});
+			}
 		}
 		res.end();
 	});

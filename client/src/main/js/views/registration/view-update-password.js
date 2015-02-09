@@ -8,7 +8,7 @@ var User = require('../../models/model-user');
 var MessageBox = require('../../components/message-box');
 var UserStore = require('../../stores/store-user');
 
-var NewPassword = React.createClass({
+var UpdatePassword = React.createClass({
 	mixins: [
 		Router.State,
 		Router.Navigation,
@@ -40,7 +40,7 @@ var NewPassword = React.createClass({
 			});
 		} else {
 			if(this.state.token) {
-				User.updatePassword(this.getQuery().uid, newPassword, this.state.token).then(function() {
+				User.updatePassword(this.getQuery().uid, null, newPassword, this.state.token).then(function() {
 					this.setState({
 						updatedPassword: true,
 						passwordError: true,
@@ -84,4 +84,4 @@ var NewPassword = React.createClass({
 	}
 });
 
-module.exports = NewPassword;
+module.exports = UpdatePassword;

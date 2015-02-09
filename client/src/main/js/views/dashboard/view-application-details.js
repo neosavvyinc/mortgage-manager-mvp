@@ -86,7 +86,7 @@ var ApplicationDetails = React.createClass({
             <div className="container">
                 <div className="gap-top">
                     <div className="row">
-                        <h2><i className="fa fa-chevron-left pointer" onClick={this.onViewApplications}></i> Application #{this.getParams().appId}</h2>
+                        <h2><span className="tooltip" data-tooltip="Back"><i className="fa fa-chevron-left pointer" onClick={this.onViewApplications}></i></span> Application Dashboard</h2>
                     </div>
                     <div className="tabs ipad">
                         <ul role="tablist">
