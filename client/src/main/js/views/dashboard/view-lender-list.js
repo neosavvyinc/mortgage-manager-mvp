@@ -117,8 +117,8 @@ var LenderContacts = React.createClass({
                 actionBtns = (
                     <th>
                         <div className="row">
-                            <button className="btn turquoise one centered mobile half" onClick={this.onReSendInvite.bind(null, lender)}> Remind <i className="fa fa-mail-reply"></i></button>
-                            <button className="btn red one centered mobile half" onClick={this.onDeleteInvite.bind(null, lender)}> Delete <i className="fa fa-trash-o"></i></button>
+                            <button className="btn turquoise mobile gap-right tooltip" data-tooltip="Remind" onClick={this.onReSendInvite.bind(null, lender)}><i className="fa fa-paper-plane"></i></button>
+                            <button className="btn red mobile tooltip" data-tooltip="Delete" onClick={this.onDeleteInvite.bind(null, lender)}><i className="fa fa-trash-o"></i></button>
                         </div>
                     </th>
                 )
