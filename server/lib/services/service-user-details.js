@@ -48,7 +48,7 @@ exports.updateUser = function(userObject, success, failure) {
                 } else {
                     done();
                 }
-            })
+            });
 
         },
         function(done){
@@ -169,17 +169,19 @@ exports.lenderAppInvite = function(email, token, appId, success, failure){
                 if(invite.length){
                     done();
                 } else {
-                    done({message: "There is no active invite for this email."});
+                    done({message: 'There is no active invite for this email.'});
                 }
-            })
+            });
         },
 		function(done){
 			user.retrieve({email: email}, function(userData){
 				userBasicInfo = userData[0];
                 if(!userBasicInfo){
                     done({message:'This user doesn\'t exist'});
+                } else {
+	                done();
                 }
-				done();
+				
 			}, done);
 		},
 		function(done){
