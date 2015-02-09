@@ -3,21 +3,20 @@
 var React = require('react');
 var Router = require('react-router');
 var Reflux = require('reflux');
+var Location = Router.HistoryLocation;
 
 var User = require('../../models/model-user');
 var MessageBox = require('../../components/message-box');
 var UserStore = require('../../stores/store-user');
 
-var UpdatePassword = React.createClass({
+var ChangePassword = React.createClass({
 	mixins: [
 		Router.State,
-		Router.Navigation,
-		Reflux.listenTo(UserStore, 'onNewAccount')
+		Router.Navigation
 	],
 
 	getInitialState: function() {
 		return {
-			token: this.getQuery().token,
 			passwordError: false,
 			messageText: '',
 			messageType: 'error',
@@ -25,13 +24,19 @@ var UpdatePassword = React.createClass({
 		};
 	},
 
+	back: function() {
+		Location.pop();
+	},
+
 	onUpdatedPassword: function() {
 		this.transitionTo('welcome');
 	},
 
 	onCheckPassword: function(){
-		var newPassword = this.refs.newPassword.getDOMNode().value,
+		var oldPassword = this.refs.oldPassword.getDOMNode().value,
+			newPassword = this.refs.newPassword.getDOMNode().value,
 			confirmPassword = this.refs.confirmPassword.getDOMNode().value;
+
 		if(newPassword !== confirmPassword) {
 			this.setState({
 				passwordError: true,
@@ -39,22 +44,20 @@ var UpdatePassword = React.createClass({
 				messageType: 'error'
 			});
 		} else {
-			if(this.state.token) {
-				User.updatePassword(this.getQuery().uid, null, newPassword, this.state.token).then(function() {
-					this.setState({
-						updatedPassword: true,
-						passwordError: true,
-						messageText: 'Password successfully updated. Click below to login',
-						messageType: 'success'
-					});
-				}.bind(this), function(error) {
-					this.setState({
-						passwordError: true,
-						messageText: error.responseJSON.message,
-						messageType: 'error'
-					});
-				}.bind(this));
-			}
+			User.updatePassword(UserStore.getCurrentUserId(), oldPassword, newPassword, null).then(function() {
+				this.setState({
+					updatedPassword: true,
+					passwordError: true,
+					messageText: 'Password successfully updated. Click below to login',
+					messageType: 'success'
+				});
+			}.bind(this), function(error) {
+				this.setState({
+					passwordError: true,
+					messageText: error.responseJSON.message,
+					messageType: 'error'
+				});
+			}.bind(this));
 		}
 	},
 
@@ -71,8 +74,9 @@ var UpdatePassword = React.createClass({
 		) : (
 			<div className="container">
 				<div className="gap-top">
-					<h1>Please enter your new password</h1>
+					<h1><span className="tooltip" data-tooltip="Back"><i className="fa fa-chevron-left pointer" onClick={this.back}></i></span>Update your password</h1>
 					<div className="one fourth">
+						<input className="gap-bottom" type="password" ref="oldPassword" placeholder="Old Password" />
 						<input className="gap-bottom" type="password" ref="newPassword" placeholder="New Password" />
 						<input className="gap-bottom" type="password" ref="confirmPassword" placeholder="Confirm Password"/>
 						<MessageBox displayMessage={this.state.passwordError} message={this.state.messageText} type={this.state.messageType} />
@@ -84,4 +88,4 @@ var UpdatePassword = React.createClass({
 	}
 });
 
-module.exports = UpdatePassword;
+module.exports = ChangePassword;

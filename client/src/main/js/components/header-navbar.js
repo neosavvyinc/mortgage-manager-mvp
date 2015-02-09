@@ -17,13 +17,21 @@ var HeaderNav = React.createClass({
 	],
 
 	onLogout: function(){
-		User.logOut().then(function(){
+		User.logOut().then(function() {
 			UserActions.logout();
 		});
 	},
 
-	onLogoutTransition: function(){
+	onLogoutTransition: function() {
 		this.transitionTo('welcome');
+	},
+
+	onChangePassword: function() {
+		this.transitionTo('changePassword');
+	},
+
+	onViewProfile: function() {
+		this.transitionTo('viewProfile');
 	},
 
 	render: function() {
@@ -33,8 +41,8 @@ var HeaderNav = React.createClass({
 					<ul>
 						<li><span className="row"><i className="fa fa-gear one third"></i></span>
 							<ul>
-								<li><div className="align-right">View Profile</div></li>
-								<li><div>Change Password</div></li>
+								<li><div onClick={this.onViewProfile}>View Profile</div></li>
+								<li><div onClick={this.onChangePassword}>Change Password</div></li>
 								<li><div onClick={this.onLogout}>Logout</div></li>
 							</ul>
 						</li>

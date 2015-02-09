@@ -11,6 +11,7 @@ var Dashboard = require('../views/dashboard/view-dashboard');
 var Modal = require('../components/modal');
 var NewPassword = require('../views/registration/view-new-password');
 var UpdatePassword = require('../views/registration/view-update-password');
+var ChangePassword = require('../views/registration/view-change-password');
 var ApplicantInfo = require('../views/registration/view-applicant-info');
 var LenderInfo = require('../views/registration/view-lender-info');
 var ApplicantQuestions = require('../views/registration/view-questions');
@@ -23,6 +24,7 @@ var InviteLender = require('../views/dashboard/view-invite-lender');
 var ApplicationDetails = require('../views/dashboard/view-application-details');
 var RequestDocument = require('../views/dashboard/view-lender-request-document');
 var ForgotPassword = require('../views/registration/view-forgot-password');
+var ViewProfile = require('../views/registration/view-update-profile');
 
 /* Default Root Handler */
 var RootDefault = React.createClass({
@@ -51,10 +53,12 @@ var routes = (
         <Route name="register" handler={RootDefault}>
             <Route name="newPassword" path="new-password" handler={NewPassword}/>
             <Route name="updatePassword" path="update-password" handler={UpdatePassword}/>
+	        <Route name="changePassword" path="change-password" handler={ChangePassword}/>
             <Route name="applicantQuestions" path="applicant-questions" handler={ApplicantQuestions} />
             <Route name="lenderInfo" path="lender-info" handler={LenderInfo} />
             <Route name="applicantInfo" path="applicant-info" handler={ApplicantInfo} />
             <Route name="newLender" path="new-lender" handler={newLenderInvite} />
+	        <Route name="viewProfile" path="view-profile" handler={ViewProfile} />
         </Route>
         <Route name="dashboard" handler={Dashboard}>
             <Route name="dashboardApplications" path="applications" handler={Applications} />

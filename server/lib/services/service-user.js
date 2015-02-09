@@ -180,7 +180,12 @@ exports.updatePassword = function(uid, userDetails, success, failure) {
 			//Get the user from mongo
 			user.retrieve({_id: uid}, function(doc) {
 				userDoc = doc[0].toObject();
-				done();
+				console.log(userDoc.password);
+				if(userDetails.oldPassword !== null && userDetails.oldPassword !== userDoc.password) {
+					done(new Error('Password entered is incorrect.'));
+				} else {
+					done();
+				}
 			}, done);
 		},
 		function(done) {
@@ -188,7 +193,7 @@ exports.updatePassword = function(uid, userDetails, success, failure) {
 			passwordReset.retrieve({_id: uid}, function(doc) {
 				if(doc.length > 0) {
 					passwordResetObject = doc[0].toObject();
-					if(passwordResetObject.token !== userDetails.token) {
+					if(userDetails.token !== null && passwordResetObject.token !== userDetails.token) {
 						done(new Error('Token mismatch'));
 					} else {
 						done();

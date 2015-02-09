@@ -2,13 +2,9 @@
 
 var React = require('react'),
 	Router = require('react-router'),
-	RouterHandler = Router.RouteHandler,
-	Location = Router.HistoryLocation;
+	RouterHandler = Router.RouteHandler;
 
 var Modal = React.createClass({
-	closeModal: function() {
-		Location.pop();
-	},
 
 	render: function() {
 		return (
