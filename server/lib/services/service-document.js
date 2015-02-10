@@ -52,6 +52,7 @@ exports.saveDocument = function(doc, success, failure) {
 						});
 					} else {
 						_.extend(doc, {
+							uploadDate: currentDate,
 							requestDate: currentDate,
 							amount: 1
 						});

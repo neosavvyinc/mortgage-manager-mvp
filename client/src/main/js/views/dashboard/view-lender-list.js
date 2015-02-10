@@ -14,7 +14,7 @@ var arraysEqual = function(arr1, arr2) {
         return false;
     }
     for(var i = arr1.length; i--;) {
-        if(arr1[i] != arr2[i]) {
+        if(arr1[i] !== arr2[i]) {
             return false;
         }
     }
@@ -44,8 +44,7 @@ var LenderContacts = React.createClass({
     },
 
     componentDidUpdate: function(prevProps, prevState) {
-	    console.log(prevState.lenders, this.state.lenders);
-        if (prevState.lenders.length>0 && arraysEqual(prevState.lenders, this.state.lenders)) {
+	    if (prevState.lenders.length>0 && arraysEqual(prevState.lenders, this.state.lenders)) {
             this.getLenders();
         }
     },
