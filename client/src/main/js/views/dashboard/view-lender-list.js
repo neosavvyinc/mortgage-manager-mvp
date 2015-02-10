@@ -44,7 +44,8 @@ var LenderContacts = React.createClass({
     },
 
     componentDidUpdate: function(prevProps, prevState) {
-        if (arraysEqual(prevState.lenders, this.state.lenders)){
+	    console.log(prevState.lenders, this.state.lenders);
+        if (prevState.lenders.length>0 && arraysEqual(prevState.lenders, this.state.lenders)) {
             this.getLenders();
         }
     },
