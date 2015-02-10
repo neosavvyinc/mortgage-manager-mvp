@@ -5,42 +5,38 @@ var settings = require('./config/settings').getConfig(),
 	mandrill = require('node-mandrill')(settings.mandrill.APIKey);
 
 
-exports.sendBorrowerDigest = function(borrowerEmail, borrowerInfo, callback){
+exports.sendBorrowerDigest = function(recipients, borrowersInfo, callback){
 
     var redirectURL = settings.hostURL;
 
-    if(borrowerInfo) {
+    if(borrowersInfo) {
+
+        console.log(borrowersInfo[0].rcpt);
+        console.log(borrowersInfo[0].vars);
+        console.log(borrowersInfo[1].rcpt);
+        console.log(borrowersInfo[1].vars);
+
         mandrill('/messages/send-template', {
             template_name: 'borrower_digest',
             template_content: [],
             message: {
                 auto_html: false,
-                to: [
+                merge_language: 'handlebars',
+                from_email: settings.mandrill.sourceEmail,
+                from_name: 'NeoDoc',
+                to: recipients,
+                subject: 'Daily Digest',
+                global_merge_vars: [
                     {
-                        email: borrowerEmail,
-                        name: borrowerInfo.firstName + " " + borrowerInfo.lastName
+                        name: "companyName",
+                        content: "NeoDoc"
+                    },
+                    {
+                        name: "redirectURL",
+                        content: redirectURL
                     }
                 ],
-                from_email: settings.mandrill.sourceEmail,
-                from_name: 'DoubleApp Team',
-                subject: 'Daily Digest',
-                merge_vars: [{
-                    rcpt: borrowerEmail,
-                    vars: [
-                        {
-                            name: "borrowerFName",
-                            content: borrowerInfo.firstName
-                        },
-                        {
-                            name: "borrowerLName",
-                            content: borrowerInfo.lastName
-                        },
-                        {
-                            name: "redirectURL",
-                            content: redirectURL
-                        }
-                    ]
-                }]
+                merge_vars: borrowersInfo
             }
         }, function (error) {
             if (error) {
@@ -50,8 +46,7 @@ exports.sendBorrowerDigest = function(borrowerEmail, borrowerInfo, callback){
             }
         });
     } else {
-        // LOG ERRROR
-        callback();
+        callback(new Error('there was an error sending the email.'));
     }
 };
 

@@ -1,8 +1,6 @@
 'use strict';
 
-var path = require('path'),
-    bodyParser = require('body-parser'),
-    settings = require('../config/settings');
+var  bodyParser = require('body-parser');
 
 module.exports = function(app, router, passport) {
     // for parsing application/json

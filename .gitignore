@@ -6,12 +6,16 @@ mam-nginx/
 node_modules/
 
 server/build
+scheduler/build
+scheduler/node_modules
+
 npm-debug.log
 
 client/deployment
 
 client/MAM-client.zip
 server/MAM-server.tgz
+scheduler/*.tgz
 
 coverage/
 
@@ -24,3 +28,5 @@ client/target
 
 
 ansible/roles/deploy/files/*
+
+

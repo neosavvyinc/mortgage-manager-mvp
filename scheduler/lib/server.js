@@ -21,7 +21,8 @@ exports.listen = function () {
  * Function to load the config
  */
 var loadConfig = function() {
-    var config = fs.readFileSync('./config/scheduler-config.json', 'utf8');
+    var config = fs.readFileSync('./lib/config/scheduler-config.json', 'utf8');
+    //var config = fs.readFileSync('./config/scheduler-config.json', 'utf8');
     settings.setConfig(config);
 };
 
