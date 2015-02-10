@@ -78,4 +78,16 @@ Application.reSendInvite = function(appId, inviteInfo){
     });
 };
 
+Application.deleteInvite = function(appId, inviteInfo){
+    return Q.promise(function(resolve, reject) {
+        $.post(Endpoints.APPLICATIONS.ONE.LENDERS.UNINVITE.URL.replace(':id', appId), inviteInfo)
+            .success(function(response){
+                resolve(response);
+            }).error(function(error){
+                reject(error);
+            }
+        );
+    });
+};
+
 module.exports = Application;

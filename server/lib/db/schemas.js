@@ -9,7 +9,8 @@ Schemas.UserSchema = new Schema({
 	_id: { type: String, required: true, unique: true },
 	email: { type: String, required: true, unique: true },
 	password: { type: String, required: true },
-	type: { type: String, required: true }
+	type: { type: String, required: true },
+    hasUserDetails: { type: Boolean, required: true, default: false }
 });
 
 Schemas.PasswordResetSchema = new Schema({
@@ -26,8 +27,8 @@ Schemas.UserInfoSchema = new Schema({
 	address: { type: String, required: true },
 	city: {type: String, required: true },
 	state: { type: String, required: true },
-	zip: { type: Number, required: true },
-	phone: { type: Number, required: true, unique: true },
+	zip: { type: String, required: true },
+	phone: { type: String, required: true, unique: true },
 	coUID: { type: String, ref: 'UserSchema' },
 	created: { type: Date, required: true },
 	lastLogin: { type: Date, required: true },

@@ -447,3 +447,9 @@ exports.reSendLenderInvitation = function(appId, inviteInfo, success, failure){
         }
     });
 };
+
+exports.deleteInvitation = function(appId, inviteInfo, success, failure){
+    var lenderInvites = new lenderInvitesModel();
+
+    lenderInvites.remove(inviteInfo, success, failure);
+};

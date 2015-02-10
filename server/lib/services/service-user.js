@@ -7,6 +7,7 @@ var passwordResetModel = require('../db/models/model-password-reset').Model;
 var lenderInvitesModel = require('../db/models/model-lender-invites').Model;
 var commonUtils = require('../utils/common-utils');
 var mandrillService = require('./service-mandrill');
+var bCrypt = require('bcrypt-nodejs');
 
 /**
  * Function that gets the user document based on conditions specified.
@@ -180,7 +181,11 @@ exports.updatePassword = function(uid, userDetails, success, failure) {
 			//Get the user from mongo
 			user.retrieve({_id: uid}, function(doc) {
 				userDoc = doc[0].toObject();
-				done();
+				if(userDetails.oldPassword !== null && _isValidPassword(userDetails.oldPassword, userDoc.password)) {
+					done(new Error('Password entered is incorrect.'));
+				} else {
+					done();
+				}
 			}, done);
 		},
 		function(done) {
@@ -188,7 +193,7 @@ exports.updatePassword = function(uid, userDetails, success, failure) {
 			passwordReset.retrieve({_id: uid}, function(doc) {
 				if(doc.length > 0) {
 					passwordResetObject = doc[0].toObject();
-					if(passwordResetObject.token !== userDetails.token) {
+					if(userDetails.token !== null && passwordResetObject.token !== userDetails.token) {
 						done(new Error('Token mismatch'));
 					} else {
 						done();
@@ -218,9 +223,16 @@ exports.updatePassword = function(uid, userDetails, success, failure) {
 	});
 };
 
-
-
-
+/**
+ * Checks if a password is valid
+ * @param user
+ * @param password
+ * @returns {*}
+ * @private
+ */
+var _isValidPassword = function(oldPassword, newPassword) {
+	return bCrypt.compareSync(oldPassword, newPassword);
+};
 
 
 

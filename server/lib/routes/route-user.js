@@ -6,7 +6,8 @@ var bCrypt = require('bcrypt-nodejs'),
 	settings = require('../config/app/settings'),
 	loginService = require('../services/service-user'),
 	userService = require('../services/service-user'),
-	userDetailsService = require('../services/service-user-details');
+	userDetailsService = require('../services/service-user-details'),
+    validationUtils = require('../utils/validation-utils');
 /**
  * Initializes passport for the application. Creates function to serialize and deserialize
  * users.
@@ -131,8 +132,8 @@ exports.AddAppAndLogin = function(passport){
 				})(req, res, next);
 			}.bind(this), function(error) {
 				if(error) {
-					settings.log.error('User already exists');
-					res.status(400).send({message: 'The user already exists'});
+					settings.log.error(error.message);
+					res.status(400).send(error);
 				}
 				res.end();
 			});
@@ -235,7 +236,11 @@ exports.updatePassword = function(req, res) {
 	}, function(error) {
 		if(error) {
 			settings.log.fatal(error.message);
-			res.status(500).send({message: 'Internal Server Error'});
+			if(error.message === 'Password entered is incorrect') {
+				res.status(500).send({message: error.message});
+			} else {
+				res.status(500).send({message: 'Internal Server Error'});
+			}
 		}
 		res.end();
 	});
@@ -314,21 +319,26 @@ var _registerSetup = function(passport){
 										loginService.validateInviteToken(userObject, callback, callback);
 									},
 									function(callback){
-										loginService.createUser(userObject, function(err, userDoc) {
-											if(err) {
-												settings.log.error(err);
-												callback({message: 'The user couldn\'t be created'});
-											} else {
-												userRegistered = userDoc;
-												settings.log.info('User successfully registered');
-												callback();
-											}
-										});
+                                        var isValid = validationUtils.validateUser(userObject);
+                                        if(isValid.errors.length){
+                                            callback({message: 'The password didn\'t match the criteria.'});
+                                        } else {
+                                            loginService.createUser(userObject, function(err, userDoc) {
+                                                if(err) {
+                                                    settings.log.error(err);
+                                                    callback({message: 'The user couldn\'t be created'});
+                                                } else {
+                                                    userRegistered = userDoc;
+                                                    settings.log.info('User successfully registered');
+                                                    callback();
+                                                }
+                                            });
+                                        }
 									}
 								], function(error){
 									if(error){
 										settings.log.fatal(error.message);
-										return done(null, false, {code: 500, message: 'Internal server error'});
+										return done(null, false, {code: 500, message: error.message});
 									} else {
 										return done(null, userRegistered);
 									}

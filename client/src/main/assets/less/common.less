@@ -3,11 +3,26 @@ textarea, input, select, option {
   font-family: FontAwesome;
 }
 a:after{content:none !important;}
-
+a:not(.noicon)[href^="mailto:"]:before{
+  content: "";
+}
+a:not(.noicon)[href^="tel:"]:before{
+  content: "";
+}
+a:before {
+  padding-right: 0;
+}
 .plaintext{
   color: white;
 }
 
 .pointer {
   cursor: pointer;
+}
+
+.divBorder {
+  align-content: center;
+  height: 40%;
+  padding: 15px;
+  border: 1px solid #DDDDDD;
 }

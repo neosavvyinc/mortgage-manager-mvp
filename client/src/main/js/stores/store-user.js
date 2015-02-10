@@ -2,6 +2,8 @@ var Reflux = require('reflux');
 
 var UserActions = require('../actions/action-user');
 
+var currentUser = {};
+
 var UserStore = Reflux.createStore({
 
     listenables: UserActions,
@@ -21,16 +23,22 @@ var UserStore = Reflux.createStore({
 
     onLogin: function(user){
         sessionStorage.setItem("userId", user._id);
+        currentUser = user;
         this.trigger();
     },
 
     onLogout: function(){
         sessionStorage.removeItem("userId");
+        currentUser = {};
         this.trigger();
     },
 
     getCurrentUserId: function(){
         return sessionStorage.getItem("userId");
+    },
+
+    getCurrentUser: function(){
+        return currentUser;
     }
 });
 

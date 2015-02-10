@@ -212,3 +212,22 @@ exports.reSendLenderInvite = function(req, res){
         }
     });
 };
+
+exports.deleteInvite = function(req, res){
+    var inviteInfo = req.body,
+        appId = req.params.appId;
+
+    inviteInfo.senderId = req.user._id;
+
+    applicationService.deleteInvitation(appId, inviteInfo, function(){
+        res.send({message: 'Success'});
+        res.end();
+        settings.log.info('Deleting lender invite. Application: ' + appId);
+    }, function(error){
+        if(error) {
+            settings.log.fatal(error.message);
+            res.status(500).send({message: 'There was an error deleting the invitation'});
+        }
+    });
+
+};
