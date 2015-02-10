@@ -95,7 +95,8 @@ var LenderContacts = React.createClass({
                     params: [{
                         appId: this.getParams().appId
                     }]
-                }
+                },
+	            icon: 'fa fa-user-plus'
             }
         ];
 

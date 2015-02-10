@@ -149,8 +149,10 @@ var ApplicantInfo = React.createClass({
 					<div className="row">
 						<button className="one third turquoise button" onClick={this.onSubmitInfo}>Continue</button>
 					</div>
-					<div className="row one third gap-top">
-						<MessageBox displayMessage={this.state.showMessage} message={this.state.messageText} type={this.state.messageType} />
+					<div className="row gap-top">
+						<div className="one third">
+							<MessageBox displayMessage={this.state.showMessage} message={this.state.messageText} type={this.state.messageType} />
+						</div>
 					</div>
 				</div>
 			</div>

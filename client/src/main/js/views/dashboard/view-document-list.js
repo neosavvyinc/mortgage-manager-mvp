@@ -118,19 +118,40 @@ var Documents = React.createClass({
                             docType: 'explanation'
                         }]
                     }
-                }
+                },
+	            {
+		            tabName: 'Download All',
+		            tabLink: {
+			            callback: function() {
+				            //Download a zip of all files
+				            window.open(EndPoints.APPLICATIONS.ONE.DOWNLOAD.URL.replace(':id', this.getParams().appId));
+			            }.bind(this)
+		            },
+		            icon: 'fa fa-download'
+	            }
             ];
         } else if(this.state.userType === 'borrower'){
             actions = [
                 {
-                    tabName: 'Upload New Document',
+                    tabName: 'New Document',
                     tabLink: {
                         name: 'uploadNewDocument',
                         params: [{
                             appId: this.getParams().appId
                         }]
-                    }
-                }
+                    },
+	                icon: 'fa fa-upload'
+                },
+	            {
+		            tabName: 'Download All',
+		            tabLink: {
+			            callback: function() {
+				            //Download a zip of all files
+				            window.open(EndPoints.APPLICATIONS.ONE.DOWNLOAD.URL.replace(':id', this.getParams().appId));
+			            }.bind(this)
+		            },
+		            icon: 'fa fa-download'
+	            }
             ];
         }
 
@@ -168,7 +189,10 @@ var Documents = React.createClass({
 				        <th>{document.requestDate}</th>
 				        <th>
 					        <button className={viewButton.style} disabled={viewButton.disabled} onClick={this.onDocumentView.bind(this, document)} data-tooltip="View">
-						        View <i className="fa fa-binoculars"></i>
+						        <i className="fa fa-binoculars"></i>
+					        </button>
+					        <button className={downloadButton.style} disabled={downloadButton.disabled} onClick={this.onDocumentDownload.bind(this, document)} data-tooltip="Download">
+						        <i className="fa fa-download"></i>
 					        </button>
 				        </th>
 			        </tr>
