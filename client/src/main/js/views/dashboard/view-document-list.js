@@ -118,19 +118,40 @@ var Documents = React.createClass({
                             docType: 'explanation'
                         }]
                     }
-                }
+                },
+	            {
+		            tabName: 'Download All',
+		            tabLink: {
+			            callback: function() {
+				            //Download a zip of all files
+				            window.open(EndPoints.APPLICATIONS.ONE.DOWNLOAD.URL.replace(':id', this.getParams().appId));
+			            }.bind(this)
+		            },
+		            icon: 'fa fa-download'
+	            }
             ];
         } else if(this.state.userType === 'borrower'){
             actions = [
                 {
-                    tabName: 'Upload New Document',
+                    tabName: 'New Document',
                     tabLink: {
                         name: 'uploadNewDocument',
                         params: [{
                             appId: this.getParams().appId
                         }]
-                    }
-                }
+                    },
+	                icon: 'fa fa-upload'
+                },
+	            {
+		            tabName: 'Download All',
+		            tabLink: {
+			            callback: function() {
+				            //Download a zip of all files
+				            window.open(EndPoints.APPLICATIONS.ONE.DOWNLOAD.URL.replace(':id', this.getParams().appId));
+			            }.bind(this)
+		            },
+		            icon: 'fa fa-download'
+	            }
             ];
         }
 

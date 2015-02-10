@@ -1,8 +1,10 @@
 'use strict';
 
 var path = require('path'),
+	fs = require('fs'),
 	_ = require('underscore'),
 	async = require('async'),
+	archiver = require('archiver'),
 	commonUtils = require('../../lib/utils/common-utils'),
 	documentModel = require('../db/models/model-document').Model,
 	applicationModel = require('../db/models/model-application').Model;
@@ -80,6 +82,31 @@ exports.saveDocument = function(doc, success, failure) {
 			success();
 		}
 	});
+};
+
+/**
+ * Creates a zip file for all documents in an application
+ * @param appId
+ * @param success
+ * @param failure
+ */
+exports.createDocumentZip = function(appId, success, failure) {
+	var zipArchive = archiver.create('zip'),
+		output = fs.createWriteStream('./uploads/MortgageDocuments.zip');
+
+	output.on('close', function() {
+		success('./uploads/MortgageDocuments.zip');
+	});
+
+	zipArchive.on('error', function(err) {
+		failure(err);
+	});
+
+	zipArchive.pipe(output);
+
+	zipArchive.directory('./uploads/'+appId, '/');
+
+	zipArchive.finalize();
 };
 
 /**
