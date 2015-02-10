@@ -77,9 +77,10 @@ var Documents = React.createClass({
     },
 
     getDocuments: function() {
-        Application.getDocuments(this.getParams().appId).then(function(documents){
+        Application.getDocuments(this.getParams().appId).then(function(documents) {
+	        var sortedDocs = _.sortBy(documents, 'uploadDate');
             this.setState({
-                documents: documents
+                documents: sortedDocs.reverse()
             });
         }.bind(this));
     },

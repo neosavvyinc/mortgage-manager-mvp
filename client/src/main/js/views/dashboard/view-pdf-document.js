@@ -15,26 +15,43 @@ var ViewPdf = React.createClass({
 	getInitialState: function() {
 		return {
 			file: EndPoints.APPLICATIONS.ONE.FILE.ONE.URL.replace(':id', this.getParams().appId).replace(':docId', this.getParams().documentId),
-			page: 1
+			page: 1,
+			prevClass: 'hidden',
+			nextClass: 'hidden'
 		};
 	},
 
 	onPdfLoad: function(numPages) {
-		console.log(numPages);
-		this.setState({numPages: numPages});
+		if(numPages > 1) {
+			this.setState({numPages: numPages, nextClass: 'fa fa-chevron-right pointer pdfNext'});
+		}
 	},
 
 	prevPage: function(ev) {
 		ev.preventDefault();
+
+		var page = this.state.page > 1 ? this.state.page - 1 : 1,
+			prevClass = page>1 ? 'fa fa-chevron-left pointer pdfPrev' : 'hidden',
+			nextClass = page===this.state.numPages ? 'hidden' : 'fa fa-chevron-right pointer pdfNext';
+
 		this.setState({
-			page: this.state.page > 1 ? this.state.page - 1 : 1
+			page: page,
+			prevClass: prevClass,
+			nextClass: nextClass
 		});
 	},
 
 	nextPage: function(ev) {
 		ev.preventDefault();
+
+		var page = this.state.page < this.state.numPages ? this.state.page + 1 : this.state.page,
+			prevClass = page>1 ? 'fa fa-chevron-left pointer pdfPrev' : 'hidden',
+			nextClass = page===this.state.numPages ? 'hidden' : 'fa fa-chevron-right pointer pdfNext';
+
 		this.setState({
-			page: this.state.page < this.state.numPages ? this.state.page + 1 : this.state.page
+			page: page,
+			prevClass: prevClass,
+			nextClass: nextClass
 		});
 	},
 
@@ -51,8 +68,8 @@ var ViewPdf = React.createClass({
 					<div className>
 					    <PDF file={this.state.file} page={this.state.page} onLoadCallback={this.onPdfLoad}/>
 					</div>
-					<div> <i className="fa fa-chevron-left pointer pdfPrev" onClick={this.prevPage}></i> </div>
-					<div> <i className="fa fa-chevron-right pointer pdfNext" onClick={this.nextPage}></i> </div>
+					<div> <i className={this.state.prevClass} onClick={this.prevPage}></i> </div>
+					<div> <i className={this.state.nextClass} onClick={this.nextPage}></i> </div>
 				</div>
 			</div>
 		)
