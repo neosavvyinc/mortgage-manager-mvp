@@ -189,7 +189,10 @@ var Documents = React.createClass({
 				        <th>{document.requestDate}</th>
 				        <th>
 					        <button className={viewButton.style} disabled={viewButton.disabled} onClick={this.onDocumentView.bind(this, document)} data-tooltip="View">
-						        View <i className="fa fa-binoculars"></i>
+						        <i className="fa fa-binoculars"></i>
+					        </button>
+					        <button className={downloadButton.style} disabled={downloadButton.disabled} onClick={this.onDocumentDownload.bind(this, document)} data-tooltip="Download">
+						        <i className="fa fa-download"></i>
 					        </button>
 				        </th>
 			        </tr>
