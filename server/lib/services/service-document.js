@@ -93,10 +93,11 @@ exports.saveDocument = function(doc, success, failure) {
  */
 exports.createDocumentZip = function(appId, success, failure) {
 	var zipArchive = archiver.create('zip'),
-		output = fs.createWriteStream('./uploads/MortgageDocuments.zip');
+		uploadPath = __dirname.split('lib')[0] + 'uploads/MortgageDocuments.zip',
+		output = fs.createWriteStream(uploadPath);
 
 	output.on('close', function() {
-		success('./uploads/MortgageDocuments.zip');
+		success(uploadPath);
 	});
 
 	zipArchive.on('error', function(err) {
@@ -105,7 +106,7 @@ exports.createDocumentZip = function(appId, success, failure) {
 
 	zipArchive.pipe(output);
 
-	zipArchive.directory('./uploads/'+appId, '/');
+	zipArchive.directory(__dirname.split('lib')[0] + 'uploads/' +appId, '/');
 
 	zipArchive.finalize();
 };
