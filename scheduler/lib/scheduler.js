@@ -6,7 +6,8 @@ var schedule = require('node-schedule'),
     UserModel = require('./db/models/model-user').Model,
     UserDetailsModel = require('./db/models/model-user-details').Model,
     ApplicationModel = require('./db/models/model-application').Model,
-    DocumentModel = require('./db/models/model-document').Model;
+    DocumentModel = require('./db/models/model-document').Model,
+    settings = require('./config/settings');
 
 /**
  * Add the interval in which you want to send the emails to the following object
@@ -141,19 +142,24 @@ var borrowerDigest = function(done){
                              */
                             function(applications, userCallback){
                                 if(applications && applications.length){
-
+                                    var apps = [];
                                     async.each(applications,
                                         function(app, cback){
-                                            app.documents = [];
+                                            var today = new Date();
+                                            var newApp = {
+                                                name: app.name,
+                                                documentsCount: 0,
+                                                newDocuments: 0
+                                            };
                                             async.each(app.docIds,
                                                 function(docId, callbk){
-                                                    var doc = {};
                                                     Document.retrieve({_id: docId}, function(docData){
-                                                        if(docData){
-                                                            doc.name = docData[0].toObject().name;
-                                                            doc.description = docData[0].toObject().description;
-                                                            doc.type = docData[0].toObject().type;
-                                                            app.documents.push(doc);
+                                                        if(docData && !docData[0].url){
+                                                            if(today - docData[0].requestDate < 604800000){
+                                                                newApp.newDocuments++;
+                                                            } else {
+                                                                newApp.documentsCount++;
+                                                            }
                                                             callbk();
                                                         } else {
                                                             callbk();
@@ -164,11 +170,7 @@ var borrowerDigest = function(done){
                                                     if(error){
                                                         cback(error);
                                                     } else {
-                                                        delete app.docIds;
-                                                        userInfo.vars.push({
-                                                            name: 'applicationData',
-                                                            content: app
-                                                        });
+                                                        apps.push(newApp);
                                                         cback();
                                                     }
                                                 });
@@ -178,6 +180,10 @@ var borrowerDigest = function(done){
                                             if(error){
                                                 userCallback(error);
                                             } else {
+                                                userInfo.vars.push({
+                                                    name: 'applicationData',
+                                                    content: apps
+                                                });
                                                 userCallback();
                                             }
                                         }
@@ -256,14 +262,12 @@ var borrowerDigest = function(done){
 
 
 exports.initScheduler = function(){
-
     async.parallel([
             borrowerDigest
         ],
     function(error){
         if(error){
-            //log(error);
+            settings.log.fatal(error);
         }
     });
-
 };

@@ -4,18 +4,11 @@
 var settings = require('./config/settings').getConfig(),
 	mandrill = require('node-mandrill')(settings.mandrill.APIKey);
 
-
 exports.sendBorrowerDigest = function(recipients, borrowersInfo, callback){
 
     var redirectURL = settings.hostURL;
 
     if(borrowersInfo) {
-
-        console.log(borrowersInfo[0].rcpt);
-        console.log(borrowersInfo[0].vars);
-        console.log(borrowersInfo[1].rcpt);
-        console.log(borrowersInfo[1].vars);
-
         mandrill('/messages/send-template', {
             template_name: 'borrower_digest',
             template_content: [],
