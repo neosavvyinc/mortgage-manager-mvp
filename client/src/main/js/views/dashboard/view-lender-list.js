@@ -10,11 +10,13 @@ var UserStore = require('../../stores/store-user');
 var Navigation = require('../../components/navigation');
 
 var arraysEqual = function(arr1, arr2) {
-    if(arr1.length !== arr2.length)
+    if(arr1.length !== arr2.length){
         return false;
+    }
     for(var i = arr1.length; i--;) {
-        if(arr1[i] !== arr2[i])
+        if(arr1[i] != arr2[i]) {
             return false;
+        }
     }
     return true;
 };
@@ -42,7 +44,7 @@ var LenderContacts = React.createClass({
     },
 
     componentDidUpdate: function(prevProps, prevState) {
-        if(arraysEqual(prevState.lenders, this.state.lenders)) {
+        if (arraysEqual(prevState.lenders, this.state.lenders)){
             this.getLenders();
         }
     },
@@ -93,7 +95,8 @@ var LenderContacts = React.createClass({
                     params: [{
                         appId: this.getParams().appId
                     }]
-                }
+                },
+	            icon: 'fa fa-user-plus'
             }
         ];
 

@@ -95,6 +95,11 @@ exports.insertDocument = function(req, res) {
 	}
 };
 
+/**
+ * Insert an entry for one document in mongo
+ * @param req
+ * @param res
+ */
 exports.insertDocumentEntry = function(req, res) {
 	var documentObject = req.body;
 
@@ -110,4 +115,25 @@ exports.insertDocumentEntry = function(req, res) {
 		res.status(500).send({message: 'Internal Server Error'}).end();
 	});
 
+};
+
+/**
+ * Download all documents in a zip format
+ * @param req
+ * @param res
+ */
+exports.downloadAllDocuments = function(req, res) {
+	var appId = req.params.appId;
+
+	documentService.createDocumentZip(appId, function(zipUrl) {
+		res.download(zipUrl, 'MortgageDocuments.zip', function(error) {
+			if (error) {
+				settings.log.fatal(error);
+				res.status(500).send({message: 'Internal Server Error'});
+			} else {
+				res.status(200).end();
+				settings.log.info('Successfully downloading all documents for appId: ' + appId);
+			}
+		});
+	});
 };

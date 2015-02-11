@@ -62,23 +62,33 @@ var Navigation = React.createClass({
                     }
                 }
             ]
-        }
+        };
     },
 
     onClickTab: function(destination, params) {
-        this.transitionTo(destination, params[0]);
+		if(typeof destination === "function") {
+			destination();
+		} else {
+		    this.transitionTo(destination, params[0]);
+	    }
     },
 
-    render: function(){
-        var tabSpacingClass = calculateTabSpacing(this.props.navigationItems.length) + " blue";
+    render: function() {
+        var tabSpacingClass = calculateTabSpacing(this.props.navigationItems.length) + ' blue gap-right';
 
         var activeTabClass = tabSpacingClass + " turquoise";
-
         return (
             <div className="container">
                 <div className="row gap-bottom">
                     {this.props.navigationItems.map(function(tab) {
-                        if(this.isActive(tab.tabLink.name)){
+
+	                    if(typeof tab.tabLink.callback === "function") {
+		                    return (
+			                    <button className={tabSpacingClass} onClick={tab.tabLink.callback}>
+				                    <span className="plaintext">{tab.tabName}</span>  <i className={tab.icon}></i>
+			                    </button>
+		                    );
+	                    } else if(this.isActive(tab.tabLink.name)){
                             return (
                                 <button className={activeTabClass} onClick={this.onClickTab.bind(this, tab.tabLink.name, tab.tabLink.params)}>
                                     <span className="plaintext">{tab.tabName}</span>
@@ -87,7 +97,7 @@ var Navigation = React.createClass({
                         } else {
                             return (
                                 <button className={tabSpacingClass} onClick={this.onClickTab.bind(this, tab.tabLink.name, tab.tabLink.params)}>
-                                    <span className="plaintext">{tab.tabName}</span>
+                                    <span className="plaintext">{tab.tabName}</span>  <i className={tab.icon}></i>
                                 </button>
                             );
                         }

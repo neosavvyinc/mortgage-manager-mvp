@@ -1,8 +1,10 @@
 'use strict';
 
 var path = require('path'),
+	fs = require('fs'),
 	_ = require('underscore'),
 	async = require('async'),
+	archiver = require('archiver'),
 	commonUtils = require('../../lib/utils/common-utils'),
 	documentModel = require('../db/models/model-document').Model,
 	applicationModel = require('../db/models/model-application').Model;
@@ -34,15 +36,25 @@ exports.createDocument = function(doc, success, failure) {
 exports.saveDocument = function(doc, success, failure) {
 	var currentDate = new Date(),
 		docId = doc._id;
+
 	async.series([
 		function(done) {
 			//Check if document already exists and remove the file from server before re-upload
 			if(docId !== undefined) {
 				var document = new documentModel();
 				document.retrieve({_id: docId}, function(docs) {
+					//After removing the file update upload date. If file does not exists, set the request date.
 					if(docs[0].url !== undefined) {
 						var filePath = path.resolve(docs[0].url);
 						commonUtils.deleteFileSync(filePath);
+						_.extend(doc, {
+							uploadDate: currentDate
+						});
+					} else {
+						_.extend(doc, {
+							requestDate: currentDate,
+							amount: 1
+						});
 					}
 					done();
 				}, function(error) {
@@ -56,11 +68,6 @@ exports.saveDocument = function(doc, success, failure) {
 		function(done) {
 			//Store the document in mongo
 			var document = new documentModel();
-			_.extend(doc, {
-				requestDate: currentDate,
-				uploadDate: currentDate,
-				amount: 1
-			});
 			document.insertOrUpdate(doc, done, done);
 		},
 		function(done) {
@@ -75,6 +82,31 @@ exports.saveDocument = function(doc, success, failure) {
 			success();
 		}
 	});
+};
+
+/**
+ * Creates a zip file for all documents in an application
+ * @param appId
+ * @param success
+ * @param failure
+ */
+exports.createDocumentZip = function(appId, success, failure) {
+	var zipArchive = archiver.create('zip'),
+		output = fs.createWriteStream('./uploads/MortgageDocuments.zip');
+
+	output.on('close', function() {
+		success('./uploads/MortgageDocuments.zip');
+	});
+
+	zipArchive.on('error', function(err) {
+		failure(err);
+	});
+
+	zipArchive.pipe(output);
+
+	zipArchive.directory('./uploads/'+appId, '/');
+
+	zipArchive.finalize();
 };
 
 /**

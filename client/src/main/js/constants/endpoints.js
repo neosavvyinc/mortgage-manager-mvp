@@ -54,6 +54,7 @@ module.exports = {
                 }
             },
             DOWNLOAD :{
+	            URL: '/api/applications/:id/download',
                 ONE: {
                     URL: '/api/applications/:id/download/:docId'
                 }

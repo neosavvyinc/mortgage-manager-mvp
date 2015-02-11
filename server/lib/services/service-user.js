@@ -93,7 +93,6 @@ exports.validateInviteToken = function(user, success, failure){
 	} else {
 		success();
 	}
-
 };
 
 /**

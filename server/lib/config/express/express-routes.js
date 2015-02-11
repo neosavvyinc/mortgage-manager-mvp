@@ -80,6 +80,11 @@ module.exports = function(router, passport) {
 		.all(_isAuthenticated)
 		.get(applicationRoute.getApplicationBorrowers);
 
+	//Route for handling all documents in an application
+	router.route('/applications/:appId/download')
+		.all(_isAuthenticated)
+		.get(documentRoute.downloadAllDocuments);
+
 	//Route for handling one specific document in an application
 	router.route('/applications/:appId/documents/:docId')
 		.all(_isAuthenticated)
