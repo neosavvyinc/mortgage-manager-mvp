@@ -3,11 +3,12 @@ module.exports = {
         options: {
             compress: {
                 drop_console: true
-            }
+            },
+	        mangle: true
         },
         files: {
-            'deployment/bundle.min.js': ['target/js/bundle.js'],
-            'deployment/vendor.min.js': ['target/js/vendor.js']
+            'deployment/js/bundle.min.js': ['target/js/bundle.js'],
+            'deployment/js/vendor.min.js': ['target/js/vendor.js']
         }
     }
 };

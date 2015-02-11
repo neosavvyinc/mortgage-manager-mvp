@@ -5,7 +5,7 @@ module.exports = {
         },
         files: {
             'target/js/bundle.js': ['src/main/js/**/*.js'],
-            'target/js/vendor.js': ['src/main/lib/*.js']
+            'target/js/vendor.js': ['src/main/lib/pdf.js']
         }
     },
     watch: {

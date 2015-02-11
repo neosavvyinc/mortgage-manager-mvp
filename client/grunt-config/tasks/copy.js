@@ -27,7 +27,15 @@ module.exports = {
                     '**/*'
                 ],
                 dest: '<%= buildOutputDirectoryPath %>/assets/css/'
-            }
+            },
+	        {
+		        expand: true,
+		        cwd: '<%= sourceDirectoryPath %>/lib/',
+		        src:[
+			        'pdf.worker.js'
+		        ],
+		        dest: '<%= buildOutputDirectoryPath %>/js/'
+	        }
         ],
         options: {
             mode: true
@@ -42,7 +50,39 @@ module.exports = {
                     'assets/css/main.min.css'
                 ],
                 dest: 'deployment/'
-            }
+            },
+	        {
+		        expand:true,
+		        cwd:'<%= buildOutputDirectoryPath %>/',
+		        src: [
+			        'assets/css/**/*'
+		        ],
+		        dest: 'deployment/'
+	        },
+	        {
+		        expand:true,
+		        cwd:'<%= buildOutputDirectoryPath %>/',
+		        src: [
+			        'assets/fonts/**/*'
+		        ],
+		        dest: 'deployment/'
+	        },
+	        {
+		        expand:true,
+		        cwd:'<%= buildOutputDirectoryPath %>/',
+		        src: [
+			        'assets/images/**/*'
+		        ],
+		        dest: 'deployment/'
+	        },
+	        {
+		        expand:true,
+		        cwd:'<%= buildOutputDirectoryPath %>/',
+		        src: [
+			        'js/pdf.worker.js'
+		        ],
+		        dest: 'deployment/'
+	        }
         ],
         options: {
             mode: true
