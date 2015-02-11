@@ -101,7 +101,7 @@ module.exports = {
             }
         },
         command: [
-            "if [ ! -L /tmp/<%= pkg.name %> ]; then ln -s `pwd`/deployment/ /tmp/<%= pkg.name %>; fi",
+            "if [ ! -L /tmp/<%= pkg.name %> ]; then ln -s `pwd`/target/ /tmp/<%= pkg.name %>; fi",
             "if [ ! -L /tmp/<%= pkg.name %>-build ]; then ln -s `pwd`/deployment/ /tmp/<%= pkg.name %>-build; fi"
         ].join('&&')
     },

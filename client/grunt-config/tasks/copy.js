@@ -74,14 +74,6 @@ module.exports = {
 			        'assets/images/**/*'
 		        ],
 		        dest: 'deployment/'
-	        },
-	        {
-		        expand:true,
-		        cwd:'<%= buildOutputDirectoryPath %>/',
-		        src: [
-			        'js/pdf.worker.js'
-		        ],
-		        dest: 'deployment/'
 	        }
         ],
         options: {

@@ -8,7 +8,8 @@ module.exports = {
         },
         files: {
             'deployment/js/bundle.min.js': ['target/js/bundle.js'],
-            'deployment/js/vendor.min.js': ['target/js/vendor.js']
+            'deployment/js/vendor.min.js': ['target/js/vendor.js'],
+	        'deployment/js/pdf.worker.js': ['target/js/pdf.worker.js']
         }
     }
 };
