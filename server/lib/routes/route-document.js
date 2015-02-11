@@ -127,12 +127,15 @@ exports.downloadAllDocuments = function(req, res) {
 
 	documentService.createDocumentZip(appId, function(zipUrl) {
 		res.download(zipUrl, 'MortgageDocuments.zip', function(error) {
+			settings.log.info('Downloading all documents for appId: ' + appId);
 			if (error) {
 				settings.log.fatal(error);
-				res.status(500).send({message: 'Internal Server Error'});
 			} else {
-				res.status(200).end();
-				settings.log.info('Successfully downloading all documents for appId: ' + appId);
+				documentService.deleteZip(zipUrl, function() {
+					settings.log.info('Deleted zip file successfully');
+				}, function(error) {
+					settings.log.fatal(error);
+				});
 			}
 		});
 	}, function(error) {
