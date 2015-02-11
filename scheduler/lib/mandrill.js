@@ -43,41 +43,32 @@ exports.sendBorrowerDigest = function(recipients, borrowersInfo, callback){
     }
 };
 
-exports.sendLenderDigest = function(lenderEmail, lenderInfo, callback){
+exports.sendLenderDigest = function(recipients, lendersInfo, callback){
+
     var redirectURL = settings.hostURL;
 
-    if(lenderInfo) {
+    if(lendersInfo) {
         mandrill('/messages/send-template', {
             template_name: 'lender_digest',
             template_content: [],
             message: {
                 auto_html: false,
-                to: [
+                merge_language: 'handlebars',
+                from_email: settings.mandrill.sourceEmail,
+                from_name: 'NeoDoc',
+                to: recipients,
+                subject: 'Daily Digest',
+                global_merge_vars: [
                     {
-                        email: lenderEmail,
-                        name: lenderInfo.firstName + " " + lenderInfo.lastName
+                        name: "companyName",
+                        content: "NeoDoc"
+                    },
+                    {
+                        name: "redirectURL",
+                        content: redirectURL
                     }
                 ],
-                from_email: settings.mandrill.sourceEmail,
-                from_name: 'DoubleApp Team',
-                subject: 'Daily Digest',
-                merge_vars: [{
-                    rcpt: lenderEmail,
-                    vars: [
-                        {
-                            name: "borrowerFName",
-                            content: lenderInfo.firstName
-                        },
-                        {
-                            name: "borrowerLName",
-                            content: lenderInfo.lastName
-                        },
-                        {
-                            name: "redirectURL",
-                            content: redirectURL
-                        }
-                    ]
-                }]
+                merge_vars: borrowersInfo
             }
         }, function (error) {
             if (error) {
@@ -87,8 +78,7 @@ exports.sendLenderDigest = function(lenderEmail, lenderInfo, callback){
             }
         });
     } else {
-        // log error
-        callback();
+        callback(new Error('there was an error sending the email.'));
     }
 };
 
