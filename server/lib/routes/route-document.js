@@ -135,5 +135,8 @@ exports.downloadAllDocuments = function(req, res) {
 				settings.log.info('Successfully downloading all documents for appId: ' + appId);
 			}
 		});
+	}, function(error) {
+		settings.log.fatal(error);
+		res.status(500).send({message: 'Internal Server Error'});
 	});
 };
