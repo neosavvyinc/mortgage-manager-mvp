@@ -7,7 +7,7 @@ module.exports = {
     files: [
       {
         expand: true,
-        cwd: '<%= buildOutputDirectoryPath %>/',
+        cwd: '<%= deploymentDirectory %>/',
         src: ['**']
       }
     ]
