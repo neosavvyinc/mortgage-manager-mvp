@@ -4,7 +4,8 @@ module.exports = {
             transform: [ 'reactify' ]
         },
         files: {
-          'target/js/bundle.js': ['src/main/lib/pdf.js', 'src/main/js/**/*.js']
+            'target/js/bundle.js': ['src/main/js/**/*.js'],
+            'target/js/vendor.js': ['src/main/lib/*.js']
         }
     },
     watch: {
@@ -14,7 +15,7 @@ module.exports = {
             transform: ['reactify']
         },
         files: {
-            'target/js/bundle.js': ['src/main/lib/pdf.js', 'src/main/js/**/*.js']
+            'target/js/bundle.js': ['src/main/js/**/*.js']
         }
     }
 };

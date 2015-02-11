@@ -6,7 +6,8 @@ module.exports = {
             }
         },
         files: {
-            'deployment/bundle.min.js': ['target/js/bundle.js']
+            'deployment/bundle.min.js': ['target/js/bundle.js'],
+            'deployment/vendor.min.js': ['target/js/vendor.js']
         }
     }
 };

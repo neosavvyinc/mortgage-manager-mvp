@@ -46,10 +46,6 @@ module.exports = function (grunt) {
         'compress'
     ]);
 
-    grunt.registerTask('compressAll', [
-      'compress'
-    ]);
-
     grunt.registerTask('fuckYoTest', [
         'verify',
         'clean',
