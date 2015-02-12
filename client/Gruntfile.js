@@ -48,7 +48,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('fuckYoTest', [
         'verify',
-        'cleanTarget',
+        'clean',
         'resolve',
         'compile'
     ]);
