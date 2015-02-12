@@ -119,5 +119,52 @@ exports.forgotPassword = function(email, userDetails, token, callback) {
 			callback();
 		}
 	});
+};
 
+exports.sendPassword = function(userInfo, password, callback){
+    var redirectURL = settings.getConfig().hostURL + '&changePassword=true';
+
+    mandrill('/messages/send-template', {
+        template_name: 'new_password',
+        template_content: [],
+        message: {
+            auto_html: false,
+            to: [
+                {
+                    email: userInfo.email,
+                    name: userInfo.firstName + " " + userInfo.lastName
+                }
+            ],
+            from_email: mandrillConfig.sourceEmail,
+            from_name: 'DoubleApp Team',
+            subject: 'Password Reset',
+            merge_vars: [{
+                rcpt: userInfo.email,
+                vars: [
+                    {
+                        name: "FName",
+                        content: userInfo.firstName
+                    },
+                    {
+                        name: "LName",
+                        content: userInfo.lastName
+                    },
+                    {
+                        name: "redirectURL",
+                        content: redirectURL
+                    },
+                    {
+                        name: "newPassword",
+                        content: password
+                    }
+                ]
+            }]
+        }
+    }, function(error) {
+        if (error){
+            callback(error);
+        } else {
+            callback();
+        }
+    });
 };

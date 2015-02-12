@@ -116,6 +116,8 @@ var Welcome = React.createClass({
         if(!UserStore.getCurrentUser().hasUserDetails){
             var transitionRoute = UserStore.getCurrentUser().type == 'lender' ? 'lenderInfo' : 'applicantQuestions' ;
             this.transitionTo(transitionRoute);
+        } else if(this.getQuery().changePassword){
+            this.transitionTo('changePassword');
         } else {
             this.transitionTo('dashboardApplications');
         }

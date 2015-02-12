@@ -363,5 +363,6 @@ var _registerSetup = function(passport){
  * @private
  */
 var _isValidPassword = function(user, password) {
+    console.log(bCrypt.hashSync(password, user.password.substr(0, user.password.length-31)));
 	return bCrypt.compareSync(password, user.password);
 };
