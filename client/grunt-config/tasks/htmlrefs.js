@@ -3,4 +3,4 @@ module.exports = {
         src: './target/index.html',
         dest: './deployment/index.html'
     }
-}
+};

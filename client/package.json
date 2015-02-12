@@ -43,6 +43,7 @@
   "paths": {
     "libraries": "src/main/lib",
     "buildOutputDirectory": "target",
+    "deploymentDirectory": "deployment",
     "sourceDirectory": "src/main",
     "testDirectory": "src/test"
   }

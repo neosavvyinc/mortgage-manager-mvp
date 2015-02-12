@@ -174,10 +174,17 @@ exports.writeTmpFileSync = function(data, extension, options) {
 	return result;
 };
 
-exports.deleteFileSync = function(path) {
+/**
+ * Deletes a file with the given path
+ * @param path
+ * @param success
+ * @param failure
+ */
+exports.deleteFileSync = function(path, success, failure) {
 	try {
 		fs.unlinkSync(path);
+		success();
 	} catch(error) {
-		console.error('file.delete: attempt to delete \'%s\' failed: %s', path, error);
+		failure(error);
 	}
 };
