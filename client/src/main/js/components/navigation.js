@@ -46,27 +46,12 @@ var Navigation = React.createClass({
 
     getDefaultProps: function(){
         return {
-            navigationItems: [
-                {
-                    tabName: "Action1",
-                    tabLink: {
-                        name:"dashboardApplications",
-                        params: []
-                    }
-                },
-                {
-                    tabName: "Action2",
-                    tabLink: {
-                        name: "routeTester",
-                        params: []
-                    }
-                }
-            ]
+            navigationItems: []
         };
     },
 
     onClickTab: function(destination, params) {
-		if(typeof destination === "function") {
+		if(typeof destination === 'function') {
 			destination();
 		} else {
 		    this.transitionTo(destination, params[0]);
@@ -81,8 +66,7 @@ var Navigation = React.createClass({
             <div className="container">
                 <div className="row gap-bottom">
                     {this.props.navigationItems.map(function(tab) {
-
-	                    if(typeof tab.tabLink.callback === "function") {
+	                    if(typeof tab.tabLink.callback === 'function') {
 		                    return (
 			                    <button className={tabSpacingClass} onClick={tab.tabLink.callback}>
 				                    <span className="plaintext">{tab.tabName}</span>  <i className={tab.icon}></i>
