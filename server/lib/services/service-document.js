@@ -94,21 +94,57 @@ exports.saveDocument = function(doc, success, failure) {
 exports.createDocumentZip = function(appId, success, failure) {
 	var zipArchive = archiver.create('zip'),
 		uploadPath = __dirname.split('lib')[0] + 'uploads/MortgageDocuments.zip',
-		output = fs.createWriteStream(uploadPath);
+		output = fs.createWriteStream(uploadPath),
+		document = new documentModel(),
+		documentArray = [];
 
-	output.on('close', function() {
-		success(uploadPath);
+	async.series([
+		function(done) {
+			document.retrieve({appId: appId}, function(docs) {
+				documentArray = docs;
+				done();
+			}, function(error) {
+				done(new Error(error));
+			});
+		},
+		function(done) {
+			output.on('close', function() {
+				done(uploadPath);
+			});
+
+			zipArchive.on('error', function(err) {
+				done(new Error(err));
+			});
+
+			zipArchive.pipe(output);
+
+			_.each(documentArray, function(doc) {
+				if(doc.url !== undefined) {
+					doc = doc.toObject();
+					zipArchive.file(doc.url, {name: doc.name + '.pdf'});
+				}
+			});
+
+			zipArchive.finalize();
+		}
+	], function(completed) {
+		if(completed instanceof Error) {
+			failure(completed);
+		} else {
+			//Completed will be the upload path
+			success(completed);
+		}
 	});
+};
 
-	zipArchive.on('error', function(err) {
-		failure(err);
-	});
-
-	zipArchive.pipe(output);
-
-	zipArchive.directory(__dirname.split('lib')[0] + 'uploads/' +appId, '/');
-
-	zipArchive.finalize();
+/**
+ * Deletes the zip file after download is complete
+ * @param zipUrl
+ * @param success
+ * @param failure
+ */
+exports.deleteZip = function(zipUrl, success, failure) {
+	commonUtils.deleteFileSync(zipUrl, success, failure);
 };
 
 /**
