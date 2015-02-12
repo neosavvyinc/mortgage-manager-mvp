@@ -23,8 +23,7 @@ exports.convertToPdf = function(imageSourcePath, pdfTargetPath, captureOptions, 
 			_capturePdf(filePath, pdfTargetPath, captureOptions, done, done);
 		},
 		function(done) {
-			utils.deleteFileSync(filePath);
-			done();
+			utils.deleteFileSync(filePath, done, done);
 		}
 	], function(error) {
 		if(error) {
