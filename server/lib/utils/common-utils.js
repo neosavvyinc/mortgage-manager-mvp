@@ -185,7 +185,6 @@ exports.deleteFileSync = function(path, success, failure) {
 		fs.unlinkSync(path);
 		success();
 	} catch(error) {
-		log.error('file.delete: attempt to delete \'%s\' failed: %s', path, error);
 		failure(error);
 	}
 };
