@@ -231,7 +231,6 @@ exports.lenderAppInvite = function(email, token, appId, success, failure){
 		}
 	], function(error){
 		if(error){
-            console.log(error);
 			failure(error);
 		} else {
 			success();
