@@ -7,7 +7,8 @@ var path = require('path'),
 	archiver = require('archiver'),
 	commonUtils = require('../../lib/utils/common-utils'),
 	documentModel = require('../db/models/model-document').Model,
-	applicationModel = require('../db/models/model-application').Model;
+	applicationModel = require('../db/models/model-application').Model,
+	settings = require('../config/app/settings');
 
 /**
  * Service that inserts a document entry when requested by lender into mongo
@@ -46,7 +47,9 @@ exports.saveDocument = function(doc, success, failure) {
 					//After removing the file update upload date. If file does not exists, set the request date.
 					if(docs[0].url !== undefined) {
 						var filePath = path.resolve(docs[0].url);
-						commonUtils.deleteFileSync(filePath);
+						commonUtils.deleteFileSync(filePath, done, function(error) {
+							settings.log.error(error);
+						});
 						_.extend(doc, {
 							uploadDate: currentDate
 						});
