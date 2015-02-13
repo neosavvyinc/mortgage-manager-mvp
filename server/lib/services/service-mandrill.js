@@ -137,7 +137,7 @@ exports.sendPassword = function(userInfo, password, callback){
             ],
             from_email: mandrillConfig.sourceEmail,
             from_name: 'DoubleApp Team',
-            subject: 'Password Reset',
+            subject: 'New Account Password',
             merge_vars: [{
                 rcpt: userInfo.email,
                 vars: [
