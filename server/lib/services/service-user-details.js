@@ -2,10 +2,12 @@
 
 var async = require('async'),
 	_ = require('underscore'),
+    passwordGenerator = require('password-generator'),
 	userDetailsModel = require('../db/models/model-user-details').Model,
 	userModel = require('../db/models/model-user').Model,
 	lenderInvitesModel = require('../db/models/model-lender-invites').Model,
-	applicationLendersModel = require('../db/models/model-application-lenders').Model;
+	applicationLendersModel = require('../db/models/model-application-lenders').Model,
+    mandrillService = require('./service-mandrill');
 
 
 /**
@@ -71,22 +73,29 @@ exports.updateUser = function(userObject, success, failure) {
  * @param failure
  */
 exports.createCoApplicant = function(userId, coapplicant, success, failure) {
-	var createdCoApp;
-
-	async.series([
+	var createdCoApp,
+        newPassword,
+        user = new userModel(),
+        userDetails = new userDetailsModel(),
+        coAppEmail = coapplicant.email;
+    async.series([
 		function(done) {
 			//Create coapplicant credentials in user schema
-			var user = new userModel();
-			// TODO: generate default password and send it to coapplicant email
-			user.insertOrUpdate({email: coapplicant.email, password: 'default', type: coapplicant.type}, {email: coapplicant.email}, function(coapp) {
+            newPassword = generatePassword();
+			user.insertOrUpdate({
+                email: coapplicant.email,
+                password: newPassword,
+                type: coapplicant.type
+            }, {email: coapplicant.email}, function(coapp) {
 				createdCoApp = coapp;
 				done();
 			}, done);
 		},
+        function(done) {
+            mandrillService.sendPassword(coapplicant, newPassword, done);
+        },
 		function(done) {
 			//Create coapplicant details in user details schema
-			var userDetails = new userDetailsModel();
-
 			//Delete details from coapplicant that we don't want to persist in the user details schema
 			delete coapplicant.email;
 			delete coapplicant.password;
@@ -99,12 +108,16 @@ exports.createCoApplicant = function(userId, coapplicant, success, failure) {
 			}, done);
 		},
 		function(done) {
-			var userDetails = new userDetailsModel();
 			//Update the user to point to the coapplicant id
 			userDetails.insertOrUpdate({_id: userId, coUID: createdCoApp._id}, function() {
 				done();
 			}, done);
-		}
+		},
+        function(done){
+            user.insertOrUpdate({hasUserDetails: true}, {email: coAppEmail}, function(coapp){
+                done();
+            }, done);
+        }
 	], function(error) {
 		if(error) {
 			failure(error);
@@ -236,4 +249,8 @@ exports.lenderAppInvite = function(email, token, appId, success, failure){
 			success();
 		}
 	});
+};
+
+var generatePassword = function() {
+    return passwordGenerator(10);
 };

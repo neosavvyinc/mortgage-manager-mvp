@@ -16,6 +16,7 @@ var Constants = require('../constants/constants');
 var Welcome = React.createClass({
 
     mixins: [
+	    Router.State,
         Router.Navigation,
         Reflux.listenTo(UserStore, 'onLogin'),
         Reflux.listenTo(LenderStore, 'onNewLender'),
@@ -27,11 +28,13 @@ var Welcome = React.createClass({
             transition.wait(
                 User.isAuthenticated().then(function (res) {
                     if (res.isAuthenticated) {
-                        if(!UserStore.getCurrentUser().hasUserDetails){
-                            var transitionRoute = UserStore.getCurrentUser().type == 'lender' ? 'lenderInfo' : 'applicantQuestions';
-                            transition.redirect(transitionRoute);
-                        } else {
-                            transition.redirect('dashboardApplications');
+                        if(UserStore.getCurrentUser().email){
+                            if(!UserStore.getCurrentUser().hasUserDetails){
+                                var transitionRoute = UserStore.getCurrentUser().type == 'lender' ? 'lenderInfo' : 'applicantQuestions';
+                                transition.redirect(transitionRoute);
+                            } else {
+                                transition.redirect('dashboardApplications');
+                            }
                         }
                     }
                 })
@@ -47,7 +50,7 @@ var Welcome = React.createClass({
             borrowerErrorMessage: "",
             lenderError: false,
             lenderErrorMessage: ""
-        }
+        };
     },
 
     onSignUpBorrower: function(e){
@@ -116,6 +119,8 @@ var Welcome = React.createClass({
         if(!UserStore.getCurrentUser().hasUserDetails){
             var transitionRoute = UserStore.getCurrentUser().type == 'lender' ? 'lenderInfo' : 'applicantQuestions' ;
             this.transitionTo(transitionRoute);
+        } else if(this.getQuery().changePassword){
+            this.transitionTo('changePassword');
         } else {
             this.transitionTo('dashboardApplications');
         }
@@ -176,7 +181,6 @@ var Welcome = React.createClass({
             </div>
         );
     }
-
 });
 
 

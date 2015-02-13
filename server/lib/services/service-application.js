@@ -41,14 +41,21 @@ exports.getUserApplications = function(uid, success, failure){
             If the user is a lender, search for all the appIDs related to that lender in the ApplicationLender Table
          */
         function(done){
-            if(userType === 'borrower'){
-                application.retrieve({pUID: uid}, function(apps){
-                    applications = apps;
-                    done();
-                }, function(error){
-                    done(error);
-                });
-            } else if (userType === 'lender'){
+            if(userType === 'borrower') {
+	            //Borrower can either be an applicant or coapplicant
+                application.retrieve({pUID: uid}, function(apps) {
+	                if(apps.length > 0) {
+		                applications = apps;
+		                done();
+	                } else {
+		                //For borrower as coapplicant
+		                application.retrieve({coUID: uid}, function(apps) {
+			                applications = apps;
+			                done();
+		                }, done);
+	                }
+                }, done);
+            } else if (userType === 'lender') {
                 applicationLenders.retrieve({lenderId: uid}, function(applicationLenderData){
                     async.each(applicationLenderData, function(appLenderData, callback){
                         application.retrieve({_id: appLenderData.appId}, function(app){

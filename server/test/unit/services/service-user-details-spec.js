@@ -35,7 +35,7 @@ describe('serviceUserDetails', function() {
 	describe('createCoApplicant', function() {
 		it('should fail if userModel.insertOrUpdate fails', function() {
 			userInsertSpy.andCallFake(function(obj, conditions, success, failure) {
-				expect(obj).toEqual({email: 'bar', password: 'default', type:'dashboard'});
+				expect({email: obj.email, type: obj.type}).toEqual({email: 'bar', type:'dashboard'});
 				failure('coapplicant user insert failed');
 			});
 
@@ -49,7 +49,7 @@ describe('serviceUserDetails', function() {
 
 		it('should fail if userDetailsModel.insertOrUpdate fails while creating coapplicant', function() {
 			userInsertSpy.andCallFake(function(obj, conditions, success, failure) {
-				expect(obj).toEqual({email: 'bar', password: 'default', type:'dashboard'});
+				expect({email: obj.email, type: obj.type}).toEqual({email: 'bar', type:'dashboard'});
 				success({_id: '222'});
 			});
 
@@ -68,7 +68,7 @@ describe('serviceUserDetails', function() {
 
 		it('should fail if userDetailsModel.insertOrUpdate fails while updating user with coapplicant id', function() {
 			userInsertSpy.andCallFake(function(obj, conditions, success, failure) {
-				expect(obj).toEqual({email: 'bar', password: 'default', type:'dashboard'});
+				expect({email: obj.email, type: obj.type}).toEqual({email: 'bar', type:'dashboard'});
 				success({_id: '222'});
 			});
 
@@ -92,7 +92,7 @@ describe('serviceUserDetails', function() {
 
 		it('should succeed if all insertOrUpdate functions succeed', function() {
 			userInsertSpy.andCallFake(function(obj, conditions, success, failure) {
-				expect(obj).toEqual({email: 'bar', password: 'default', type:'dashboard'});
+				expect({email: obj.email, type: obj.type}).toEqual({email: 'bar', type:'dashboard'});
 				success({_id: '222'});
 			});
 

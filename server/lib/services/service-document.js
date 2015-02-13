@@ -47,7 +47,9 @@ exports.saveDocument = function(doc, success, failure) {
 					//After removing the file update upload date. If file does not exists, set the request date.
 					if(docs[0].url !== undefined) {
 						var filePath = path.resolve(docs[0].url);
-						commonUtils.deleteFileSync(filePath, done, function(error) {
+						commonUtils.deleteFileSync(filePath, function() {
+							settings.log.info('Successfully deleted old file');
+						}, function(error) {
 							settings.log.error(error);
 						});
 						_.extend(doc, {
@@ -60,10 +62,7 @@ exports.saveDocument = function(doc, success, failure) {
 							amount: 1
 						});
 					}
-					done();
-				}, function(error) {
-					done(error);
-				});
+				}, done);
 			} else {
 				_.extend(doc, {
 					_id: commonUtils.generateId(),
@@ -71,8 +70,8 @@ exports.saveDocument = function(doc, success, failure) {
 					requestDate: currentDate,
 					amount: 1
 				});
-				done();
 			}
+			done();
 		},
 		function(done) {
 			//Store the document in mongo

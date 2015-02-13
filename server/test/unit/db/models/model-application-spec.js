@@ -147,13 +147,17 @@ describe('modelApplication',  function() {
 			});
 
 			updateSpy.andCallFake(function(item, conditions, options, success, failure) {
-				expect(item).toEqual({ appId : [ 'fakeId' ], _id : 'uId' });
+				if(conditions._id === 'uId') {
+					expect(item).toEqual({appId: ['fakeId'], _id: 'uId'});
+				} else {
+					expect(item).toEqual({appId: ['fakeId'], _id: 'couId'});
+				}
 				success();
 			});
 
-			application.insertNewApp({_id: 'uId', appId: []}, {_id: 'couId'}, function() {
+			application.insertNewApp({_id: 'uId', appId: []}, {_id: 'couId', appId: []}, function() {
 				expect(baseModel.prototype.insert.callCount).toBe(1);
-				expect(baseModel.prototype.update.callCount).toBe(1);
+				expect(baseModel.prototype.update.callCount).toBe(2);
 			}, function(error) {
 				expect().toHaveNotExecuted('should not have failed');
 			});
@@ -187,13 +191,17 @@ describe('modelApplication',  function() {
 			});
 
 			updateSpy.andCallFake(function(item, conditions, options, success, failure) {
-				expect(item).toEqual({ appId : [ 'fakeId' ], _id : 'uId' });
+				if(conditions._id === 'uId') {
+					expect(item).toEqual({appId: ['fakeId'], _id: 'uId'});
+				} else {
+					expect(item).toEqual({appId: ['fakeId'], _id: 'couId'});
+				}
 				success();
 			});
 
-			application.insertNewApp({_id: 'uId', appId: []}, {_id: 'couId'}, function() {
+			application.insertNewApp({_id: 'uId', appId: []}, {_id: 'couId', appId: []}, function() {
 				expect(baseModel.prototype.insert.callCount).toBe(1);
-				expect(baseModel.prototype.update.callCount).toBe(1);
+				expect(baseModel.prototype.update.callCount).toBe(2);
 			}, function(error) {
 				expect().toHaveNotExecuted('should not have failed');
 			});
