@@ -28,11 +28,13 @@ var Welcome = React.createClass({
             transition.wait(
                 User.isAuthenticated().then(function (res) {
                     if (res.isAuthenticated) {
-                        if(!UserStore.getCurrentUser().hasUserDetails) {
-                            var transitionRoute = UserStore.getCurrentUser().type == 'lender' ? 'lenderInfo' : 'applicantQuestions';
-                            transition.redirect(transitionRoute);
-                        } else {
-                            transition.redirect('dashboardApplications');
+                        if(UserStore.getCurrentUser().email){
+                            if(!UserStore.getCurrentUser().hasUserDetails){
+                                var transitionRoute = UserStore.getCurrentUser().type == 'lender' ? 'lenderInfo' : 'applicantQuestions';
+                                transition.redirect(transitionRoute);
+                            } else {
+                                transition.redirect('dashboardApplications');
+                            }
                         }
                     }
                 })
@@ -41,7 +43,7 @@ var Welcome = React.createClass({
     },
 
     getInitialState: function(){
-	    return {
+        return {
             borrowerEmpty: false,
             lenderEmpty: false,
             borrowerError: false,
@@ -113,8 +115,8 @@ var Welcome = React.createClass({
         }
     },
 
-    onLogin: function() {
-	    if(!UserStore.getCurrentUser().hasUserDetails) {
+    onLogin: function(){
+        if(!UserStore.getCurrentUser().hasUserDetails){
             var transitionRoute = UserStore.getCurrentUser().type == 'lender' ? 'lenderInfo' : 'applicantQuestions' ;
             this.transitionTo(transitionRoute);
         } else if(this.getQuery().changePassword){
