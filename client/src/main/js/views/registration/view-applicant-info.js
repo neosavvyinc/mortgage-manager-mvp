@@ -127,12 +127,9 @@ var ApplicantInfo = React.createClass({
 
                 User.addCoapplicant(this.state.currentUserId, applicantInfo).then(function(){
                     BorrowerActions.resetBorrower();
-                    debugger;
                     User.generateApplication(this.state.currentUserId).then(function(){
-                        debugger;
                         this.transitionTo('dashboardApplications');
                     }.bind(this), function(error){
-                        debugger;
                         this.setState({
                             applicantInfoError: true,
                             errorText: error.responseJSON.message
