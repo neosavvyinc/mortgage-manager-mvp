@@ -65,7 +65,12 @@ exports.saveDocument = function(doc, success, failure) {
 					done(error);
 				});
 			} else {
-				doc._id = commonUtils.generateId();
+				_.extend(doc, {
+					_id: commonUtils.generateId(),
+					uploadDate: currentDate,
+					requestDate: currentDate,
+					amount: 1
+				});
 				done();
 			}
 		},
