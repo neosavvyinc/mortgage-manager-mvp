@@ -2,7 +2,7 @@
 
 var async = require('async'),
 	_ = require('underscore'),
-    passwordGenerator = require("password-generator"),
+    passwordGenerator = require('password-generator'),
 	userDetailsModel = require('../db/models/model-user-details').Model,
 	userModel = require('../db/models/model-user').Model,
 	lenderInvitesModel = require('../db/models/model-lender-invites').Model,
