@@ -114,8 +114,7 @@ var Welcome = React.createClass({
     },
 
     onLogin: function() {
-	    console.log(UserStore.getCurrentUser());
-        if(!UserStore.getCurrentUser().hasUserDetails) {
+	    if(!UserStore.getCurrentUser().hasUserDetails) {
             var transitionRoute = UserStore.getCurrentUser().type == 'lender' ? 'lenderInfo' : 'applicantQuestions' ;
             this.transitionTo(transitionRoute);
         } else if(this.getQuery().changePassword){

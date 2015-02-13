@@ -24,7 +24,8 @@ applicationModel = ApplicationModel.prototype;
 
 /**
  * Inserts a new application document into mongo.
- * @param item
+ * @param applicantDetails
+ * @param coapplicantDetails
  * @param success
  * @param failure
  */
@@ -34,10 +35,12 @@ applicationModel.insertNewApp = function(applicantDetails,
 										 failure) {
 	var appId = commonUtils.generateId(),
 		currentDate = commonUtils.getCurrentDate(),
+		userDetails = new userDetailsModel(),
+		application = new ApplicationModel(),
 		item = {};
+
 	async.series([
 		function(done) {
-			var application = new ApplicationModel();
 			_.extend(item, {
 				_id: appId,
 				created: currentDate,
@@ -54,13 +57,20 @@ applicationModel.insertNewApp = function(applicantDetails,
 			application.insert(item, done, done);
 		},
 		function(done) {
-			var userDetails = new userDetailsModel();
-			//Update the userDetailsModel with the new appId
+			//Update the applicant details with the new appId
 			applicantDetails.appId.push(appId);
 			if(applicantDetails.toObject !== undefined ) {
 				applicantDetails = applicantDetails.toObject();
 			}
 			userDetails.update(applicantDetails, {_id: applicantDetails._id}, null, done, done);
+		},
+		function(done) {
+			//Update the coApplicant details with the new appId
+			coapplicantDetails.appId.push(appId);
+			if(coapplicantDetails.toObject !== undefined ) {
+				coapplicantDetails = coapplicantDetails.toObject();
+			}
+			userDetails.update(coapplicantDetails, {_id: coapplicantDetails._id}, null, done, done);
 		}
 	], function(error) {
 		if(error !== undefined) {
