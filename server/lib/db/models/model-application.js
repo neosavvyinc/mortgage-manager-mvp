@@ -72,6 +72,8 @@ applicationModel.insertNewApp = function(applicantDetails,
 					coapplicantDetails = coapplicantDetails.toObject();
 				}
 				userDetails.update(coapplicantDetails, {_id: coapplicantDetails._id}, null, done, done);
+			} else {
+				done();
 			}
 		}
 	], function(error) {
