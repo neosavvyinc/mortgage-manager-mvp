@@ -16,6 +16,7 @@ var Constants = require('../constants/constants');
 var Welcome = React.createClass({
 
     mixins: [
+	    Router.State,
         Router.Navigation,
         Reflux.listenTo(UserStore, 'onLogin'),
         Reflux.listenTo(LenderStore, 'onNewLender'),
@@ -27,7 +28,7 @@ var Welcome = React.createClass({
             transition.wait(
                 User.isAuthenticated().then(function (res) {
                     if (res.isAuthenticated) {
-                        if(!UserStore.getCurrentUser().hasUserDetails){
+                        if(!UserStore.getCurrentUser().hasUserDetails) {
                             var transitionRoute = UserStore.getCurrentUser().type == 'lender' ? 'lenderInfo' : 'applicantQuestions';
                             transition.redirect(transitionRoute);
                         } else {
@@ -40,14 +41,14 @@ var Welcome = React.createClass({
     },
 
     getInitialState: function(){
-        return {
+	    return {
             borrowerEmpty: false,
             lenderEmpty: false,
             borrowerError: false,
             borrowerErrorMessage: "",
             lenderError: false,
             lenderErrorMessage: ""
-        }
+        };
     },
 
     onSignUpBorrower: function(e){
@@ -112,8 +113,9 @@ var Welcome = React.createClass({
         }
     },
 
-    onLogin: function(){
-        if(!UserStore.getCurrentUser().hasUserDetails){
+    onLogin: function() {
+	    console.log(UserStore.getCurrentUser());
+        if(!UserStore.getCurrentUser().hasUserDetails) {
             var transitionRoute = UserStore.getCurrentUser().type == 'lender' ? 'lenderInfo' : 'applicantQuestions' ;
             this.transitionTo(transitionRoute);
         } else if(this.getQuery().changePassword){
@@ -178,7 +180,6 @@ var Welcome = React.createClass({
             </div>
         );
     }
-
 });
 
 

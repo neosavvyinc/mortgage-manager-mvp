@@ -41,7 +41,10 @@ userModel.insertOrUpdate = function(item, condition, success, failure) {
 			}, done);
 		},
 		function(done) {
-			item.password  = _createHash(item.password);
+			if(item.password) {
+				item.password = _createHash(item.password);
+			}
+
 			if(_.isEmpty(docs)) {
 
 				_.extend(item, {

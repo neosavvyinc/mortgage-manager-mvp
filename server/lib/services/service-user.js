@@ -180,7 +180,7 @@ exports.updatePassword = function(uid, userDetails, success, failure) {
 			//Get the user from mongo
 			user.retrieve({_id: uid}, function(doc) {
 				userDoc = doc[0].toObject();
-				if(userDetails.oldPassword !== null && _isValidPassword(userDetails.oldPassword, userDoc.password)) {
+				if(userDetails.oldPassword !== null && !_isValidPassword(userDetails.oldPassword, userDoc.password)) {
 					done(new Error('Password entered is incorrect.'));
 				} else {
 					done();
@@ -224,13 +224,13 @@ exports.updatePassword = function(uid, userDetails, success, failure) {
 
 /**
  * Checks if a password is valid
- * @param user
- * @param password
+ * @param oldPassword
+ * @param passwordToCheck
  * @returns {*}
  * @private
  */
-var _isValidPassword = function(oldPassword, newPassword) {
-	return bCrypt.compareSync(oldPassword, newPassword);
+var _isValidPassword = function(oldPassword, passwordToCheck) {
+	return bCrypt.compareSync(oldPassword, passwordToCheck);
 };
 
 

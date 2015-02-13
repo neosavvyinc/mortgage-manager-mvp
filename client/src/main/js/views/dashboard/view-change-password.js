@@ -19,7 +19,9 @@ var ChangePassword = React.createClass({
 		return {
 			passwordError: false,
 			messageText: '',
-			messageType: 'error'
+			messageType: 'error',
+			continueClass: 'block turquoise',
+			loginClass: 'hidden'
 		};
 	},
 
@@ -47,7 +49,9 @@ var ChangePassword = React.createClass({
 				this.setState({
 					passwordError: true,
 					messageText: 'Password successfully updated. Click below to login',
-					messageType: 'success'
+					messageType: 'success',
+					loginClass: 'block turquoise',
+					continueClass: 'hidden'
 				});
 			}.bind(this), function(error) {
 				this.setState({
@@ -64,7 +68,7 @@ var ChangePassword = React.createClass({
 			<div className="container">
                 <div className="row">
                     <div className="one third">
-                        <h1><span className="tooltip" data-tooltip="Back"><i className="fa fa-chevron-left pointer" onClick={this.back}></i></span> Update your password</h1>
+                        <h1><span className="tooltip" data-tooltip="Back"><i className="fa fa-chevron-left pointer" onClick={this.back}></i></span> Change your password</h1>
                     </div>
                 </div>
                 <div className="row divBorder">
@@ -73,7 +77,8 @@ var ChangePassword = React.createClass({
                         <input className="gap-bottom" type="password" ref="newPassword" placeholder="New Password" />
                         <input className="gap-bottom" type="password" ref="confirmPassword" placeholder="Confirm Password"/>
                         <MessageBox displayMessage={this.state.passwordError} message={this.state.messageText} type={this.state.messageType} />
-                        <button className="block turquoise" onClick={this.onCheckPassword}>Continue</button>
+                        <button className={this.state.continueClass} onClick={this.onCheckPassword}>Continue</button>
+	                    <button className={this.state.loginClass} onClick={this.onUpdatedPassword}>Login</button>
                     </div>
                 </div>
 			</div>

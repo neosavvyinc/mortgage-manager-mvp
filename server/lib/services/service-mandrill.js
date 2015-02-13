@@ -122,7 +122,7 @@ exports.forgotPassword = function(email, userDetails, token, callback) {
 };
 
 exports.sendPassword = function(userInfo, password, callback){
-    var redirectURL = settings.getConfig().hostURL + '&changePassword=true';
+    var redirectURL = settings.getConfig().hostURL + '?changePassword=true';
 
     mandrill('/messages/send-template', {
         template_name: 'new_password',
