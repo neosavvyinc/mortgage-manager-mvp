@@ -3,7 +3,7 @@
 var handlebars = require('handlebars'),
 	log4js = require('log4js'),
 	uuid = require('node-uuid'),
-	settings = require('../config/app/settings'),
+	settings = require('../config/settings'),
 	fs = require('fs'),
 	mv = require('mv'),
 	os = require('os'),
@@ -174,17 +174,10 @@ exports.writeTmpFileSync = function(data, extension, options) {
 	return result;
 };
 
-/**
- * Deletes a file with the given path
- * @param path
- * @param success
- * @param failure
- */
-exports.deleteFileSync = function(path, success, failure) {
+exports.deleteFileSync = function(path) {
 	try {
 		fs.unlinkSync(path);
-		success();
 	} catch(error) {
-		failure(error);
+		console.error('file.delete: attempt to delete \'%s\' failed: %s', path, error);
 	}
 };

@@ -141,19 +141,24 @@ var Documents = React.createClass({
                         }]
                     },
 	                icon: 'fa fa-upload'
-                },
-	            {
-		            tabName: 'Download All',
-		            tabLink: {
-			            callback: function() {
-				            //Download a zip of all files
-				            window.open(EndPoints.APPLICATIONS.ONE.DOWNLOAD.URL.replace(':id', this.getParams().appId));
-			            }.bind(this)
-		            },
-		            icon: 'fa fa-download'
-	            }
+                }
             ];
         }
+
+	    if(_.filter(this.state.documents, function(document){
+			    return document.uploadDate;
+		    }).length) {
+		    actions.push( {
+			    tabName: 'Download All',
+			    tabLink: {
+				    callback: function() {
+					    //Download a zip of all files
+					    window.open(EndPoints.APPLICATIONS.ONE.DOWNLOAD.URL.replace(':id', this.getParams().appId));
+				    }.bind(this)
+			    },
+			    icon: 'fa fa-download'
+		    });
+	    }
 
         _.map(this.state.documents, function(document) {
 
