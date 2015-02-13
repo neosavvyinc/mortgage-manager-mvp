@@ -62,6 +62,7 @@ exports.saveDocument = function(doc, success, failure) {
 							amount: 1
 						});
 					}
+					done();
 				}, done);
 			} else {
 				_.extend(doc, {
@@ -70,8 +71,8 @@ exports.saveDocument = function(doc, success, failure) {
 					requestDate: currentDate,
 					amount: 1
 				});
+				done();
 			}
-			done();
 		},
 		function(done) {
 			//Store the document in mongo
