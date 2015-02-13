@@ -118,17 +118,7 @@ var Documents = React.createClass({
                             docType: 'explanation'
                         }]
                     }
-                },
-	            {
-		            tabName: 'Download All',
-		            tabLink: {
-			            callback: function() {
-				            //Download a zip of all files
-				            window.open(EndPoints.APPLICATIONS.ONE.DOWNLOAD.URL.replace(':id', this.getParams().appId));
-			            }.bind(this)
-		            },
-		            icon: 'fa fa-download'
-	            }
+                }
             ];
         } else if(this.state.userType === 'borrower'){
             actions = [
