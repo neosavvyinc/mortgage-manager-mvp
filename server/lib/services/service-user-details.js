@@ -251,6 +251,6 @@ exports.lenderAppInvite = function(email, token, appId, success, failure){
 	});
 };
 
-var generatePassword = function(){
+var generatePassword = function() {
     return passwordGenerator(10);
 };
