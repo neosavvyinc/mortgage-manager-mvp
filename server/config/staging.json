@@ -8,8 +8,9 @@
 		},
 		"appenders": [
 			{
+			  	"absolute": true,
 				"type": "file",
-				"filename": "../mam-nginx/logs/node-staging-server.log",
+				"filename": "/opt/mam-nginx/logs/node-staging-server.log",
 				"category": "staging"
 			}
 		]

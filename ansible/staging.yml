@@ -10,6 +10,7 @@
       serverListenPort: "8090" # used by healthcheck
       nginxProxyToPort: "3000"
       applicationHostname: "mam-staging.neosavvy.com"
+      nodeEnvironment: "staging"
       adminContact: "contact@neosavvy.com"
       mamUID: "root"
       mamGID: "root"

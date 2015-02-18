@@ -29,6 +29,12 @@ var loadConfig = function() {
 		configPath = path.resolve(__dirname, '../config'),
 		configFile = path.join(configPath + '/', env + '.json'),
 		config = fs.readFileSync(configFile, 'utf8');
+
+
+	console.log('Server is loaded with configFile: ' + configFile);
+	console.log('env Variable: ' + env);
+	console.log('NODE ENV Variable: ' + process.env.NODE_ENV);
+
 	settings.setConfig(config);
 };
 
