@@ -4,7 +4,8 @@ var routeHealthcheck = require('../../routes/route-diagnostics'),
 	authRoute = require('../../routes/route-user'),
 	userRoute = require('../../routes/route-user-details'),
 	documentRoute = require('../../routes/route-document'),
-	applicationRoute = require('../../routes/route-application');
+	applicationRoute = require('../../routes/route-application'),
+	paymentRoute = require('../../routes/route-payment');
 
 module.exports = function(router, passport) {
 	//Healthcheck
@@ -105,6 +106,9 @@ module.exports = function(router, passport) {
 	router.route('/applications/:appId/documentEntry')
 		.all(_isAuthenticated)
 		.post(documentRoute.insertDocumentEntry);
+
+	router.route('/payment/:token')
+		.post(paymentRoute.makePayment);
 };
 
 /**

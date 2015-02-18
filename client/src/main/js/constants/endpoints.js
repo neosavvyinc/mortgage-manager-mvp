@@ -72,5 +72,8 @@ module.exports = {
                 URL: '/api/applications/:id/borrowers'
             }
         }
-    }
+    },
+	PAYMENT: {
+		URL: '/api/payment/:token'
+	}
 };

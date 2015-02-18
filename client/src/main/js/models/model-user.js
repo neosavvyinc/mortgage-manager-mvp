@@ -4,7 +4,7 @@ var Q = require('q');
 var _ = require('lodash');
 var $ = require('jquery');
 
-var Endpoints = require("../constants/endpoints");
+var Endpoints = require('../constants/endpoints');
 
 function User () { }
 

@@ -44,7 +44,8 @@
     "mkdirp": "0.5.0",
     "jsonschema": "1.0.0",
     "archiver": "0.14.2",
-    "password-generator": "0.2.3"
+    "password-generator": "0.2.3",
+    "stripe": "3.2.0"
   },
 
   "scripts": {

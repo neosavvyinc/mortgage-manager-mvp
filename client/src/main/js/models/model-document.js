@@ -31,7 +31,6 @@ Document.upload = function (applicationId, document) {
 			}).success(function(response) {
 				resolve(response);
 			}).error(function(error) {
-			console.log(error);
 				reject(error.responseJSON);
 			});
 	});
