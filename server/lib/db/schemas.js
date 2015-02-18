@@ -87,4 +87,12 @@ Schemas.NotificationSchema = new Schema({
 	type: { type: String, required: true }
 });
 
+Schemas.PaymentSchema = new Schema({
+	_id: { type: String, required: true },
+	token: { type: String, required: true },
+	uid: { type: String, required: true },
+	card: { type: Object, required: true },
+	
+});
+
 exports.Schemas = Schemas;
