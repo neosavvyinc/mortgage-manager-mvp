@@ -2,10 +2,12 @@ var React = require('react');
 var Router = require('react-router');
 var Reflux = require('reflux');
 
+var User = require('../../models/model-user');
 var Navigation = require('../../components/navigation');
 var LenderStore = require('../../stores/store-lender');
 var UserStore = require('../../stores/store-user');
 var Login = require('../../components/login');
+var User = require('../../models/model-user');
 
 var newLenderInvite = React.createClass({
 
@@ -13,7 +15,7 @@ var newLenderInvite = React.createClass({
         Router.State,
         Router.Navigation,
         Reflux.listenTo(LenderStore, "onNewLender"),
-        Reflux.listenTo(UserStore, 'onLogin')
+        Reflux.listenTo(UserStore, "onExistingLender")
     ],
 
     onAcceptInvite: function(newLender){
@@ -24,9 +26,11 @@ var newLenderInvite = React.createClass({
         this.transitionTo("newPassword");
     },
 
-    onLogin: function(){
-        if(UserStore.isAuthenticated()) {
+    onExistingLender: function(){
+        if(UserStore.getCurrentUser().hasUserDetails){
             this.transitionTo('dashboardApplications');
+        } else {
+            this.transitionTo("lenderInfo", {}, {appId: this.getQuery().appId});
         }
     },
 

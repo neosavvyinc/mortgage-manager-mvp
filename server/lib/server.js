@@ -14,12 +14,6 @@ var path = require('path'),
 	passport = require('passport/'),
 	server, log;
 
-// Configure middleware
-middleware(app, router, passport);
-
-// Configure routes
-routes(router, passport);
-
 /**
  * Listens on a port
  */
@@ -69,12 +63,20 @@ async.series([
 		done();
 	},
 	function(done) {
-		loginRoute.initPassport(passport);
-		done();
-	},
-	function(done) {
 		db.connect(settings.getConfig().dbURL, done, done);
 	},
+    function(done){
+        loginRoute.initPassport(passport);
+        done();
+    },
+    function(done){
+        middleware(app, router, passport);
+        done();
+    },
+    function(done){
+        routes(router, passport);
+        done();
+    },
 	function(done) {
 		runServer();
 		done();

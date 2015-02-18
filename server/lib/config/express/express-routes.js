@@ -18,6 +18,12 @@ module.exports = function(router, passport) {
 	router.route('/login/token')
 		.post(authRoute.AddAppAndLogin(passport));
 
+    router.route('/logout')
+        .post(authRoute.userLogOut);
+
+    router.route('/is-authenticated')
+        .post(authRoute.isAuthenticated);
+
 	//Create a new user
 	router.route('/register')
 		.post(authRoute.registerUser(passport));
@@ -26,21 +32,24 @@ module.exports = function(router, passport) {
 	router.route('/email-exists')
 		.post(authRoute.emailExists);
 
+	//Forgot password
+	router.route('/forgot-password')
+		.post(authRoute.forgotPassword);
+
 	//Update a user based on a userId
 	router.route('/user/:uid')
 		.all(_isAuthenticated)
 		.get(userRoute.getUserDetails)
 		.post(userRoute.updateUser);
 
+	//Update password
+	router.route('/user/:uid/update-password')
+		.post(authRoute.updatePassword);
+
 	//Add a coapplicant for a particular userId
 	router.route('/user/:uid/coapplicant')
 		.all(_isAuthenticated)
 		.post(userRoute.addCoApplicant);
-	
-	//Get all applications for a particular userId
-	router.route('/user/:uid/applications')
-		.all(_isAuthenticated)
-		.get(applicationRoute.getAllApplications);
 
 	//Create application for a particular userId
 	router.route('/user/:uid/applications')
@@ -52,7 +61,7 @@ module.exports = function(router, passport) {
 	router.route('/applications/:appId/documents')
 		.all(_isAuthenticated)
 		.get(applicationRoute.getApplicationDocuments)
-        .post(documentRoute.insertDocument);
+	        .post(documentRoute.insertDocument);
 
 	router.route('/applications/:appId/lenders')
 		.all(_isAuthenticated)
@@ -63,9 +72,18 @@ module.exports = function(router, passport) {
         .all(_isAuthenticated)
         .post(applicationRoute.reSendLenderInvite);
 
+    router.route('/applications/:appId/lenders/uninvite')
+        .all(_isAuthenticated)
+        .post(applicationRoute.deleteInvite);
+
 	router.route('/applications/:appId/borrowers')
 		.all(_isAuthenticated)
 		.get(applicationRoute.getApplicationBorrowers);
+
+	//Route for handling all documents in an application
+	router.route('/applications/:appId/download')
+		.all(_isAuthenticated)
+		.get(documentRoute.downloadAllDocuments);
 
 	//Route for handling one specific document in an application
 	router.route('/applications/:appId/documents/:docId')
@@ -97,7 +115,7 @@ module.exports = function(router, passport) {
  * @private
  */
 var _isAuthenticated = function(req, res, next){
-	if(req.sessionID){
+	if(req.isAuthenticated()){
 		next();
 	} else {
 		res.status(401).end();

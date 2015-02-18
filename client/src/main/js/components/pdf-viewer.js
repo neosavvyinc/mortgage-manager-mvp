@@ -11,7 +11,10 @@ var Pdf = React.createClass({
 	],
 
 	getInitialState: function() {
-		return {};
+		return {
+			windowHeight: window.innerHeight,
+			windowWidth: window.innerWidth
+		};
 	},
 
 	componentDidMount: function() {
@@ -19,9 +22,13 @@ var Pdf = React.createClass({
 		PDFJS.workerSrc = "js/pdf.worker.js";
 		PDFJS.getDocument(this.props.file).then(function(pdf) {
 			pdf.getPage(self.props.page).then(function(page) {
+				self.props.onLoadCallback(pdf.numPages);
 				self.setState({pdfPage: page, pdf: pdf});
 			});
 		});
+
+		//Adding this listener to render the canvas everytime the window is resized.
+		window.addEventListener('resize', this.handleResize);
 	},
 
 	getDefaultProps: function() {
@@ -41,38 +48,54 @@ var Pdf = React.createClass({
 		}
 	},
 
+	handleResize: function() {
+		this.setState({
+			windowHeight: window.innerHeight,
+			windowWidth: window.innerWidth
+		});
+	},
+
 	close: function() {
 		this.transitionTo('dashboardDocuments', {appId: this.getParams().appId});
 	},
 
 	render: function() {
 		var self = this;
-		if (this.state.pdfPage) setTimeout(function() {
-			var canvas = self.refs.canvas.getDOMNode(),
-				context = canvas.getContext('2d'),
-				scale = 1.0,
-				viewport = self.state.pdfPage.getViewport(scale),
-				renderContext = {};
 
-			if(window.innerHeight){
-				scale = (window.innerHeight-100) / viewport.height;
-				viewport = self.state.pdfPage.getViewport(scale);
-			}
-			canvas.height = viewport.height;
-			canvas.width = viewport.width;
-			renderContext = {
-				canvasContext: context,
-				viewport: viewport
-			};
-			self.state.pdfPage.render(renderContext);
-		});
+		if (self.state.pdfPage) {
+			setTimeout(function() {
+				var canvas = self.refs.canvas.getDOMNode(),
+					context = canvas.getContext('2d'),
+					scale = 1.0,
+					viewport = self.state.pdfPage.getViewport(scale),
+					renderContext = {};
+
+				if(self.state.windowHeight) {
+					scale = (self.state.windowHeight-100) / viewport.height;
+					viewport = self.state.pdfPage.getViewport(scale);
+				}
+
+				canvas.height = viewport.height;
+				canvas.width = viewport.width;
+
+				renderContext = {
+					canvasContext: context,
+					viewport: viewport
+				};
+				self.state.pdfPage.render(renderContext);
+
+			});
+		}
+
 		return this.state.pdfPage ?
-			(<div className="pdfComponent">
-				<div onClick={self.close} title="Close" className="close">X</div>
-				<canvas ref="canvas"></canvas>
+			(<div>
+				<div className="pdfComponent">
+					<div onClick={self.close} title="Close" className="close">X</div>
+					<canvas ref="canvas"></canvas>
+				</div>
 			</div>) :
 			(<div className="loader">
-				<img src="http://www.kingpizza.com.br/imagens/loader.gif"/>
+				<i className="fa fa-spinner fa-pulse"></i>
 			</div>);
 	}
 });

@@ -11,20 +11,34 @@ var LenderStore = require('../stores/store-lender');
 var BorrowerStore = require('../stores/store-borrower');
 var BorrowerActions = require('../actions/action-borrower');
 var LenderActions = require('../actions/action-lender');
+var Constants = require('../constants/constants');
 
 var Welcome = React.createClass({
 
     mixins: [
+	    Router.State,
         Router.Navigation,
         Reflux.listenTo(UserStore, 'onLogin'),
         Reflux.listenTo(LenderStore, 'onNewLender'),
-        Reflux.listenTo(BorrowerStore, 'onNewBorrower')],
+        Reflux.listenTo(BorrowerStore, 'onNewBorrower')
+    ],
 
     statics: {
         willTransitionTo: function (transition){
-            if(UserStore.isAuthenticated()){
-                transition.redirect('dashboardApplications');
-            }
+            transition.wait(
+                User.isAuthenticated().then(function (res) {
+                    if (res.isAuthenticated) {
+                        if(UserStore.getCurrentUser().email){
+                            if(!UserStore.getCurrentUser().hasUserDetails){
+                                var transitionRoute = UserStore.getCurrentUser().type == 'lender' ? 'lenderInfo' : 'applicantQuestions';
+                                transition.redirect(transitionRoute);
+                            } else {
+                                transition.redirect('dashboardApplications');
+                            }
+                        }
+                    }
+                })
+            );
         }
     },
 
@@ -36,51 +50,78 @@ var Welcome = React.createClass({
             borrowerErrorMessage: "",
             lenderError: false,
             lenderErrorMessage: ""
-        }
+        };
     },
 
-    onSignUpBorrower: function(){
+    onSignUpBorrower: function(e){
+        e.preventDefault();
         if(this.refs.borrowerEmail.getDOMNode().value){
-            User.emailExists(this.refs.borrowerEmail.getDOMNode().value).then(
-                function(){
-                    BorrowerActions.newBorrower(this.refs.borrowerEmail.getDOMNode().value);
-                }.bind(this),
-                function(error){
-                    this.setState({
-                        borrowerError: true,
-                        borrowerErrorMessage: error.responseJSON.message,
-                        lenderError: false,
-                        lenderErrorMessage: ""
-                    });
-                }.bind(this)
-            );
+            var emailRegExp = new RegExp(Constants.emailRegExp);
+            if(!emailRegExp.test(this.refs.borrowerEmail.getDOMNode().value)){
+                this.setState({
+                    borrowerError: true,
+                    borrowerErrorMessage: "You have to provide a valid email",
+                    lenderError: false,
+                    lenderErrorMessage: ""
+                });
+            } else {
+                User.emailExists(this.refs.borrowerEmail.getDOMNode().value).then(
+                    function(){
+                        BorrowerActions.newBorrower(this.refs.borrowerEmail.getDOMNode().value);
+                    }.bind(this),
+                    function(error){
+                        this.setState({
+                            borrowerError: true,
+                            borrowerErrorMessage: error.responseJSON.message,
+                            lenderError: false,
+                            lenderErrorMessage: ""
+                        });
+                    }.bind(this)
+                );
+            }
         } else {
             this.setState({borrowerEmpty: true});
         }
     },
 
-    onSignUpLender: function(){
+    onSignUpLender: function(e){
+        e.preventDefault();
         if(this.refs.lenderEmail.getDOMNode().value){
-            User.emailExists(this.refs.lenderEmail.getDOMNode().value).then(
-                function() {
-                    LenderActions.newLender(this.refs.lenderEmail.getDOMNode().value);
-                }.bind(this),
-                function(error){
-                    this.setState({
-                        lenderError: true,
-                        lenderErrorMessage: error.responseJSON.message,
-                        borrowerError: false,
-                        borrowerErrorMessage: ""
-                    });
-                }.bind(this)
-            );
+            var emailRegExp = new RegExp(Constants.emailRegExp);
+            if(!emailRegExp.test(this.refs.lenderEmail.getDOMNode().value)){
+                this.setState({
+                    borrowerError: false,
+                    borrowerErrorMessage: "",
+                    lenderError: true,
+                    lenderErrorMessage: "You have to provide a valid email"
+                });
+            } else {
+                User.emailExists(this.refs.lenderEmail.getDOMNode().value).then(
+                    function () {
+                        LenderActions.newLender(this.refs.lenderEmail.getDOMNode().value);
+                    }.bind(this),
+                    function (error) {
+                        this.setState({
+                            lenderError: true,
+                            lenderErrorMessage: error.responseJSON.message,
+                            borrowerError: false,
+                            borrowerErrorMessage: ""
+                        });
+                    }.bind(this)
+                );
+            }
         } else {
             this.setState({lenderEmpty: true});
         }
     },
 
     onLogin: function(){
-        if(UserStore.isAuthenticated()) {
+        if(!UserStore.getCurrentUser().hasUserDetails){
+            var transitionRoute = UserStore.getCurrentUser().type == 'lender' ? 'lenderInfo' : 'applicantQuestions' ;
+            this.transitionTo(transitionRoute);
+        } else if(this.getQuery().changePassword){
+            this.transitionTo('changePassword');
+        } else {
             this.transitionTo('dashboardApplications');
         }
     },
@@ -140,7 +181,6 @@ var Welcome = React.createClass({
             </div>
         );
     }
-
 });
 
 

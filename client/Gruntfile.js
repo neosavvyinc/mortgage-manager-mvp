@@ -9,8 +9,8 @@ module.exports = function (grunt) {
         'shell:npmInstall'
     ]);
     grunt.registerTask('clean', [
-        'shell:cleanDeployment',
-        'shell:cleanTarget'
+        'shell:cleanTarget',
+	    'shell:cleanDeployment'
     ]);
     grunt.registerTask('resolve', []);
     grunt.registerTask('compile', [
@@ -44,10 +44,6 @@ module.exports = function (grunt) {
         'runTests',
         'deploy',
         'compress'
-    ]);
-
-    grunt.registerTask('compressAll', [
-      'compress'
     ]);
 
     grunt.registerTask('fuckYoTest', [

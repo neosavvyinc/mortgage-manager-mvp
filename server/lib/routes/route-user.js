@@ -6,7 +6,8 @@ var bCrypt = require('bcrypt-nodejs'),
 	settings = require('../config/app/settings'),
 	loginService = require('../services/service-user'),
 	userService = require('../services/service-user'),
-	userDetailsService = require('../services/service-user-details');
+	userDetailsService = require('../services/service-user-details'),
+    validationUtils = require('../utils/validation-utils');
 /**
  * Initializes passport for the application. Creates function to serialize and deserialize
  * users.
@@ -19,7 +20,18 @@ exports.initPassport = function(passport) {
 	});
 
 	passport.deserializeUser(function(id, done) {
-		loginService.findUser({ _id: id }, done);
+		loginService.findUser({ _id: id }, function(err, doc){
+            var user;
+            if(doc && doc[0]){
+                user = doc[0].toObject();
+                if (user.password) {
+                    delete user.password;
+                }
+                done(null, user);
+            } else {
+                done(new Error('Error deserializing user'));
+            }
+        });
 	});
 
 	// Setting up Passport Strategies for Login and SignUp/Registration
@@ -43,13 +55,43 @@ exports.validateLogin = function(passport) {
 					.send({message: info.message});
 				settings.log.error(info.message);
 			} else {
-				delete user.password;
-				res.send(user);
-				settings.log.info('User validated');
+                if (user.password){
+                    delete user.password;
+                }
+                req.logIn(user, function(err){
+                    if(err){
+                        res.status(401)
+                            .send({message: 'User Unauthorized'});
+                        settings.log.error({message: 'User Unauthorized'});
+                    } else {
+                        res.send(user);
+                        settings.log.info('User validated');
+                    }
+                });
 			}
 			res.end();
 		})(req, res, next);
 	};
+};
+
+/**
+ * Close PassportJS session
+ * @param req
+ * @param res
+ */
+exports.userLogOut = function(req, res) {
+    req.logout();
+    res.send({message: 'Success'});
+    res.end();
+};
+
+exports.isAuthenticated = function(req, res){
+    if(req.isAuthenticated()){
+        res.send({isAuthenticated: true});
+    } else {
+        res.send({isAuthenticated: false});
+    }
+    res.end();
 };
 
 /**
@@ -72,16 +114,26 @@ exports.AddAppAndLogin = function(passport){
 							.send({message: info.message});
 						settings.log.error(info.message);
 					} else {
-						delete user.password;
-						res.send(user);
-						settings.log.info('Lender invite login success');
+                        if (user.password){
+                            delete user.password;
+                        }
+                        req.logIn(user, function(err){
+                            if(err){
+                                res.status(401)
+                                    .send({message: 'User Unauthorized'});
+                                settings.log.error({message: 'User Unauthorized'});
+                            } else {
+                                res.send(user);
+                                settings.log.info('User validated');
+                            }
+                        });
 					}
 					res.end();
 				})(req, res, next);
 			}.bind(this), function(error) {
 				if(error) {
-					settings.log.error('User already exists');
-					res.status(400).send({message: 'The user already exists'});
+					settings.log.error(error.message);
+					res.status(400).send(error);
 				}
 				res.end();
 			});
@@ -104,8 +156,20 @@ exports.registerUser = function(passport) {
 				res.status(info.code)
 					.send({message: info.message});
 				settings.log.error(info.message);
-			} else {
-				res.send(user);
+			} else { // GOOD
+                if (user.password) {
+                    delete user.password;
+                }
+                req.logIn(user, function(err){
+                    if(err){
+                        res.status(401)
+                            .send({message: 'User Unauthorized'});
+                        settings.log.error({message: 'User Unauthorized'});
+                    } else {
+                        res.send(user);
+                        settings.log.info('User validated');
+                    }
+                });
 			}
 			res.end();
 		})(req, res, next);
@@ -127,6 +191,56 @@ exports.emailExists = function(req, res){
 		if(error) {
 			settings.log.fatal(error.message);
 			res.status(400).send({message: 'The user already exists'});
+		}
+		res.end();
+	});
+};
+
+/**
+ * Route handler for forgot password
+ * @param req
+ * @param res
+ */
+exports.forgotPassword = function(req, res) {
+	var email = req.body.email;
+
+	userService.forgotPassword(email, function() {
+		res.send({message: 'Success'});
+		settings.log.info('Email sent for password reset successfully. Email: '+email);
+		res.end();
+	}, function(error) {
+		if(error) {
+			settings.log.fatal(error.message);
+			if(error.message === 'User does not exist!') {
+				res.status(400).send({message: error.message});
+			} else {
+				res.status(500).send({message: 'Internal Server Error'});
+			}
+		}
+		res.end();
+	});
+};
+
+/**
+ * Route handler that updates the user password
+ * @param req
+ * @param res
+ */
+exports.updatePassword = function(req, res) {
+	var userdetails = req.body,
+		uid = req.params.uid;
+
+	userService.updatePassword(uid, userdetails, function() {
+		res.send({message: 'Success'}).end();
+		settings.log.info('Password reset successfully');
+	}, function(error) {
+		if(error) {
+			settings.log.fatal(error.message);
+			if(error.message === 'Password entered is incorrect') {
+				res.status(500).send({message: error.message});
+			} else {
+				res.status(500).send({message: 'Internal Server Error'});
+			}
 		}
 		res.end();
 	});
@@ -205,21 +319,26 @@ var _registerSetup = function(passport){
 										loginService.validateInviteToken(userObject, callback, callback);
 									},
 									function(callback){
-										loginService.createUser(userObject, function(err, userDoc) {
-											if(err) {
-												settings.log.error(err);
-												callback({message: 'The user couldn\'t be created'});
-											} else {
-												userRegistered = userDoc;
-												settings.log.info('User successfully registered');
-												callback();
-											}
-										});
+                                        var isValid = validationUtils.validateUser(userObject);
+                                        if(isValid.errors.length){
+                                            callback({message: 'The password didn\'t match the criteria.'});
+                                        } else {
+                                            loginService.createUser(userObject, function(err, userDoc) {
+                                                if(err) {
+                                                    settings.log.error(err);
+                                                    callback({message: 'The user couldn\'t be created'});
+                                                } else {
+                                                    userRegistered = userDoc;
+                                                    settings.log.info('User successfully registered');
+                                                    callback();
+                                                }
+                                            });
+                                        }
 									}
 								], function(error){
 									if(error){
 										settings.log.fatal(error.message);
-										return done(null, false, {code: 500, message: 'Internal server error'});
+										return done(null, false, {code: 500, message: error.message});
 									} else {
 										return done(null, userRegistered);
 									}

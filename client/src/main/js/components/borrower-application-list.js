@@ -41,26 +41,28 @@ var BorrowerApplications = React.createClass({
 
         var applicationsTable = [],
             status,
-            actions = [
-                {
-                    tabName: "Create New Application",
-                    tabLink: {
-                        name: "routeTester",
-                        params: []
-                    }
-                }
-            ];
+            actions = [];
+
+	    var actionStyle = {
+		    width: '12%'
+	    }, statusStyle ={
+		    width: '16%'
+	    }, nameColStyle ={
+		    width: '18%'
+	    }, otherColStyle ={
+		    width: '27%'
+	    };
 
         _.forEach(this.props.applications, function(app){
             switch(app.status){
                 case 1:
-                    status = "New Request";
+                    status = 'New Request';
                     break;
                 case 2:
-                    status = "New Explanation";
+                    status = 'New Explanation';
                     break;
                 default:
-                    status = "None";
+                    status = 'None';
                     break;
             }
 
@@ -69,14 +71,13 @@ var BorrowerApplications = React.createClass({
             app.lastModified = moment(app.lastModified).format('llll');
             applicationsTable.push((
                 <tr>
-                    <th>{app._id}</th>
+	                <th>Mortgage Application</th>
                     <th>{app.created}</th>
                     <th>{app.lastModified}</th>
                     <th>{status}</th>
                     <th>
                         <div className="row">
-                            <button className="btn turquoise one half" onClick={this.onApplicationSelect.bind(null, app)}>View</button>
-                            <button className="btn red one half">Delete</button>
+                            <button className="btn red" onClick={this.onApplicationSelect.bind(null, app)}>View <i className="fa fa-binoculars"></i></button>
                         </div>
                     </th>
                 </tr>
@@ -86,10 +87,15 @@ var BorrowerApplications = React.createClass({
             <div>
                 <Navigation navigationItems={actions}/>
                 <table className="responsive">
+	                <col style={nameColStyle}/>
+	                <col style={otherColStyle}/>
+	                <col style={otherColStyle}/>
+	                <col style={statusStyle}/>
+	                <col style={actionStyle}/>
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Last Created</th>
+                            <th>Name</th>
+                            <th>Created</th>
                             <th>Last Modified</th>
                             <th>Status</th>
                             <th>Action</th>

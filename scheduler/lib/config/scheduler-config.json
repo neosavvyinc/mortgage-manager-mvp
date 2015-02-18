@@ -1,0 +1,20 @@
+{
+  "port": 3003,
+  "hostURL": "http://mam-staging.neosavvy.com",
+  "dbURL": "mongodb://localhost/MAM",
+  "logging": {
+    "levels": {
+      "dev": "info"
+    },
+    "appenders": [
+      {
+        "type": "console",
+        "category": "dev"
+      }
+    ]
+  },
+  "mandrill": {
+    "APIKey": "pfsqI34h5B8YYWoi0OJEjw",
+    "sourceEmail": "doubleapp.ns@gmail.com"
+  }
+}

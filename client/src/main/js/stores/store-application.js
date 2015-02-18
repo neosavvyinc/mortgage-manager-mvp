@@ -21,7 +21,6 @@ var ApplicationStore = Reflux.createStore({
     getCurrentApplication: function(){
         return _application;
     }
-
 });
 
 module.exports = ApplicationStore;

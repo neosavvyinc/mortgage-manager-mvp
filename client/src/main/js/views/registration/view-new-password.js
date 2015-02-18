@@ -1,3 +1,5 @@
+'use strict';
+
 var React = require('react');
 var Router = require('react-router');
 var Reflux = require('reflux');
@@ -33,10 +35,16 @@ var NewPassword = React.createClass({
         }
     },
 
-    onCheckPassword: function(){
+    onCheckPassword: function(e){
+        e.preventDefault();
         var newPassword = this.refs.newPassword.getDOMNode().value,
             confirmPassword = this.refs.confirmPassword.getDOMNode().value;
-        if(newPassword != confirmPassword){
+        if (!newPassword || newPassword === ''){
+            this.setState({
+                passwordError: true,
+                errorText: "Please enter a password"
+            });
+        } else if (newPassword != confirmPassword){
             this.setState({
                 passwordError: true,
                 errorText: "Both passwords need to match"
@@ -50,7 +58,6 @@ var NewPassword = React.createClass({
                 newUser.email = borrowerEmail;
                 newUser.type = "borrower";
             } else if(lenderEmail) {
-                console.log("lender info before endpoint", LenderStore.getLender());
                 newUser.email = lenderEmail;
                 newUser.type = "lender";
                 if(LenderStore.getLender().token){
@@ -69,8 +76,8 @@ var NewPassword = React.createClass({
             }, function(error){
                 this.setState({
                     passwordError: true,
-                    errorText: error.responseJSON.message
-                }, console.log(this.state));
+                    errorText: error.responseJSON.message ? error.responseJSON.message : error.message
+                });
             }.bind(this));
         }
     },
@@ -82,7 +89,11 @@ var NewPassword = React.createClass({
         if(borrowerEmail) {
             this.transitionTo('applicantQuestions');
         } else if(lenderEmail) {
-            this.transitionTo('lenderInfo');
+            if(!LenderStore.getLender().appId){
+                this.transitionTo('lenderInfo');
+            } else {
+                this.transitionTo('lenderInfo',{},{appId:LenderStore.getLender().appId});
+            }
         }
     },
 
@@ -94,6 +105,15 @@ var NewPassword = React.createClass({
                     <div className="one fourth">
                         <input className="gap-bottom" type="password" ref="newPassword" placeholder="New Password" />
                         <input className="gap-bottom" type="password" ref="confirmPassword" placeholder="Confirm Password" />
+                        <div className="info box gap-bottom">
+                            <p>Your password should have at least:</p>
+                            <ul>
+                                <li>Eight characters</li>
+                                <li>One lower case</li>
+                                <li>One upper case</li>
+                                <li>One special character (!@#~$%^&)</li>
+                            </ul>
+                        </div>
                         <MessageBox displayMessage={this.state.passwordError} message={this.state.errorText} type='error' />
                         <button className="block turquoise" onClick={this.onCheckPassword}>Continue</button>
                     </div>

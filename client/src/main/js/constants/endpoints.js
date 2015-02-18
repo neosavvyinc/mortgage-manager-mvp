@@ -8,6 +8,9 @@ module.exports = {
             },
             APPLICATIONS: {
                 URL: '/api/user/:id/applications'
+            },
+            UPDATEPASSWORD: {
+                URL: '/api/user/:id/update-password'
             }
         }
     },
@@ -17,8 +20,17 @@ module.exports = {
             URL: '/api/login/token'
         }
     },
+    LOGOUT: {
+        URL: '/api/logout'
+    },
+    ISAUTHENTICATED: {
+        URL: '/api/is-authenticated'
+    },
     REGISTER: {
         URL: '/api/register'
+    },
+    FORGOTPASSWORD: {
+        URL: '/api/forgot-password'
     },
     EMAIL: {
         URL: '/api/email-exists'
@@ -42,6 +54,7 @@ module.exports = {
                 }
             },
             DOWNLOAD :{
+	            URL: '/api/applications/:id/download',
                 ONE: {
                     URL: '/api/applications/:id/download/:docId'
                 }
@@ -50,6 +63,9 @@ module.exports = {
                 URL: '/api/applications/:id/lenders',
                 REINVITE: {
                     URL: '/api/applications/:id/lenders/resend-invite'
+                },
+                UNINVITE: {
+                    URL: '/api/applications/:id/lenders/uninvite'
                 }
             },
             BORROWERS: {

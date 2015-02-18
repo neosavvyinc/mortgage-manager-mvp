@@ -45,9 +45,16 @@ var ApplicantInfo = React.createClass({
     
     statics: {
         willTransitionTo: function (transition){
-            if(!UserStore.isAuthenticated() || !BorrowerStore.getBorrower()){
+            if(!BorrowerStore.getBorrower()) {
                 transition.redirect('welcome');
             }
+            transition.wait(
+                User.isAuthenticated().then(function (res) {
+                    if (!res.isAuthenticated) {
+                        transition.redirect('welcome');
+                    }
+                })
+            );
         }
     },
 
@@ -68,6 +75,7 @@ var ApplicantInfo = React.createClass({
     },
 
     onSubmitInfo: function(e){
+        e.preventDefault();
 
         var applicantInfo = {
             firstName: this.refs.firstName.getDOMNode().value,
@@ -83,6 +91,7 @@ var ApplicantInfo = React.createClass({
 
         if(validateApplicantInfo(this.state.applicantType, applicantInfo)) {
             if(this.state.applicantType == "Applicant") {
+                applicantInfo.phone = applicantInfo.phone.replace(/\D/g, '');
                 delete applicantInfo.email;
                 applicantInfo.isSelfEmployed = this.state.currentBorrower.isSelfEmployed;
                 applicantInfo.recentlyMarried = this.state.currentBorrower.recentlyMarried;
