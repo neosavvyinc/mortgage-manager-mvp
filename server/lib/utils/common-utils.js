@@ -42,9 +42,14 @@ exports.getLogger = function() {
 	var config = settings.getConfig(),
 		category = exports.dereference(config.logging.appenders[0], 'category', 'dev'),
 		type = exports.dereference(config.logging.appenders[0], 'type', 'console'),
+		isAbsolute = exports.dereference(config.logging.appenders[0], 'absolute', false),
 		filename;
 
-	if(type === 'file') {
+	if( isAbsolute ) {
+		var absoluteLogPath = path.dirname(config.logging.appenders[0].filename);
+		mkdirp.sync(absoluteLogPath);
+	}
+	else if(type === 'file') {
 		var logPath = path.resolve(__dirname.split('lib')[0], '../mam-nginx/logs/');
 		mkdirp.sync(logPath);
 		filename = exports.dereference(config.logging.appenders[0], 'filename', 'prod.log');
