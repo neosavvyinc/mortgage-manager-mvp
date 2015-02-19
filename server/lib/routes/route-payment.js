@@ -8,6 +8,7 @@ exports.makePayment = function(req, res) {
 		card = req.body.card,
 		amount = req.body.amount;
 
+	console.log(amount, card);
 	paymentService.makePayment(token, card, amount, function() {
 		res.send({message: 'Success'}).end();
 		settings.log.info('Payment successful');

@@ -1,3 +1,5 @@
+'use strict';
+
 var React = require('react');
 var Router = require('react-router');
 var Link = Router.Link;
@@ -28,9 +30,9 @@ var Welcome = React.createClass({
             transition.wait(
                 User.isAuthenticated().then(function (res) {
                     if (res.isAuthenticated) {
-                        if(UserStore.getCurrentUser().email){
-                            if(!UserStore.getCurrentUser().hasUserDetails){
-                                var transitionRoute = UserStore.getCurrentUser().type == 'lender' ? 'lenderInfo' : 'applicantQuestions';
+                        if(UserStore.getCurrentUser().email) {
+                            if(!UserStore.getCurrentUser().hasUserDetails) {
+                                var transitionRoute = UserStore.getCurrentUser().type === 'lender' ? 'lenderInfo' : 'applicantQuestions';
                                 transition.redirect(transitionRoute);
                             } else {
                                 transition.redirect('dashboardApplications');
@@ -47,9 +49,9 @@ var Welcome = React.createClass({
             borrowerEmpty: false,
             lenderEmpty: false,
             borrowerError: false,
-            borrowerErrorMessage: "",
+            borrowerErrorMessage: '',
             lenderError: false,
-            lenderErrorMessage: ""
+            lenderErrorMessage: ''
         };
     },
 
@@ -136,8 +138,8 @@ var Welcome = React.createClass({
 
     render: function(){
 
-        var borrowerEmptyClass = this.state.borrowerEmpty ? "error message gap-bottom" : "hidden";
-        var falseEmptyClass = this.state.lenderEmpty ? "error message gap-bottom" : "hidden";
+        var borrowerEmptyClass = this.state.borrowerEmpty ? 'error message gap-bottom' : 'hidden';
+        var falseEmptyClass = this.state.lenderEmpty ? 'error message gap-bottom' : 'hidden';
 
         return (
             <div className="container triple-pad-right triple-pad-left">

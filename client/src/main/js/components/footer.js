@@ -16,7 +16,7 @@ var Footer = React.createClass({
                         <Link to="dashboard" className="one fifth align-center">Legal</Link>
                     </div>
                     <div className="row one centered mobile third">
-                        <div className="align-center">&copy; NeosavvyLabs 2015</div>
+                        <div className="align-center">&copy; 2015 Neosavvy, Inc.</div>
                     </div>
                 </div>
             </div>

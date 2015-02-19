@@ -25,8 +25,10 @@ var ApplicationDetails = require('../views/dashboard/view-application-details');
 var RequestDocument = require('../views/dashboard/view-lender-request-document');
 var ForgotPassword = require('../views/registration/view-forgot-password');
 var ViewProfile = require('../views/dashboard/view-update-profile');
-var PricingOptions = require('../views/payment/view-pricing-options');
-var StripePayment = require('../views/payment/view-stripe-payment');
+var PricingOptions = require('../views/dashboard/payment/view-pricing-options');
+var StripePayment = require('../views/dashboard/payment/view-stripe-payment');
+var TrialExpired = require('../views/dashboard/view-trial-expired');
+var PaymentSuccess = require('../views/dashboard/payment/view-payment-success');
 
 /* Default Root Handler */
 var RootDefault = React.createClass({
@@ -63,7 +65,14 @@ var routes = (
         <Route name="dashboard" handler={Dashboard}>
 	        <Route name="changePassword" path="change-password" handler={ChangePassword}/>
 	        <Route name="viewProfile" path="view-profile" handler={ViewProfile} />
-            <Route name="dashboardApplications" path="applications" handler={Applications} />
+            <Route name="dashboardApplications" path="applications" handler={Applications}>
+	            <Route name="trialExpired" path="trial-expired" handler={Modal}>
+		            <DefaultRoute handler={TrialExpired}/>
+	            </Route>
+	            <Route name="paymentSuccess" path="payment-success" handler={Modal}>
+		            <DefaultRoute handler={PaymentSuccess}/>
+	            </Route>
+            </Route>
             <Route name="dashboardDocuments" path="applications/:appId" handler={ApplicationDetails}>
                 <Route name="uploadNewDocument" path="upload" handler={Modal}>
                     <DefaultRoute handler={Upload} />
@@ -82,11 +91,9 @@ var routes = (
                 </Route>
             </Route>
             <Route name="routeTester" path="testRoute" handler={TestRoute1} />
-        </Route>
-	    <Route name="payment" handler={RootDefault}>
 	        <Route name="pricingOptions" path="pricing-options" handler={PricingOptions}/>
-		    <Route name="stripePayment" path="stripe-payment/:price" handler={StripePayment}/>
-	    </Route>
+	        <Route name="stripePayment" path="stripe-payment/:price" handler={StripePayment}/>
+        </Route>
         <Route name="forgotPassword" path="forgot-password" handler={ForgotPassword} />
     </Route>
 );

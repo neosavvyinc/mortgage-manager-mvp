@@ -34,6 +34,14 @@ var HeaderNav = React.createClass({
 		this.transitionTo('viewProfile');
 	},
 
+	onUpgrade: function() {
+		this.transitionTo('paymentStripe');
+	},
+
+	onViewPayments: function() {
+
+	},
+
 	render: function() {
 		return (
 			<div className = "one whole">
@@ -43,6 +51,8 @@ var HeaderNav = React.createClass({
 							<ul>
 								<li><div onClick={this.onViewProfile}>View Profile</div></li>
 								<li><div onClick={this.onChangePassword}>Change Password</div></li>
+								<li><div onClick={this.onUpgrade}>Upgrade</div></li>
+								<li><div onClick={this.onViewPayments}>View Payments</div></li>
 								<li><div onClick={this.onLogout}>Logout</div></li>
 							</ul>
 						</li>

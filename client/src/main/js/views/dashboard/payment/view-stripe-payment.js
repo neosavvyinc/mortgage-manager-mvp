@@ -3,9 +3,9 @@
 var React = require('react'),
 	Router = require('react-router'),
 	Reflux = require('reflux'),
-	Constants = require('../../constants/constants'),
-	MessageBox = require('../../components/message-box'),
-	ModelPayment = require('../../models/model-payment');
+	Constants = require('../../../constants/constants'),
+	MessageBox = require('../../../components/message-box'),
+	ModelPayment = require('../../../models/model-payment');
 
 var StripePayment = React.createClass({
 	mixins: [
@@ -42,14 +42,13 @@ var StripePayment = React.createClass({
 						messageText: response.error.message
 					});
 				} else {
-					ModelPayment.makePayment(response.id, response.card, this.getParams().price).then(
+					ModelPayment.makePayment(response.id, response.card, this.getParams().price.replace('$', '')).then(
 						function() {
 							this.setState({
-								showMessage: true,
-								spinnerClass: 'hidden',
-								messageType: 'success',
-								messageText: 'Payment successfully processed'
+								showMessage: false,
+								spinnerClass: 'hidden'
 							});
+							this.transitionTo('paymentSuccess');
 						}.bind(this),
 						function(error) {
 							this.setState({
@@ -74,29 +73,27 @@ var StripePayment = React.createClass({
 	render: function() {
 		return (
 			<form ref="paymentForm" className="container gap-top">
-				<h1>Payment Information</h1>
+				<h1>Make Payment</h1>
 				<div className="gap-top divBorder">
 					<h2>Name</h2>
 					<div className="row gap-bottom">
-						<input className="one fourth half-gap-right" type="text" ref="firstName" placeholder="First Name" required />
-						<input className="one fourth half-gap-right" type="text" ref="middleName" placeholder="Middle Name" />
-						<input className="one fourth" type="text" ref="lastName" placeholder="Last Name" required />
+						<input className="two fourths half-gap-right" type="text" ref="firstName" placeholder="Name on card" data-stripe="name" required />
 					</div>
 					<div className="row">
 						<h2 className="one third">Billing Address</h2>
 					</div>
 					<div>
 						<div className="row gap-bottom">
-							<input className="three fourths" type="text" ref="address" placeholder="Address"  required />
+							<input className="three fourths" type="text" ref="address" placeholder="Address" data-stripe="address-line1" required />
 						</div>
 						<div className="row gap-bottom">
-							<input className="one fourth half-gap-right" type="text" ref="city" placeholder="City" required />
-							<select ref="state" className="one fourth half-gap-right">
+							<input className="one fourth half-gap-right" type="text" ref="city" placeholder="City" data-stripe="address-city" required />
+							<select ref="state" className="one fourth half-gap-right" data-stripe="address-state">
 		                        {Constants.usStates.map(function(state) {
 			                        return <option key={state.data} value={state.data}>{state.label}</option>;
 		                        })}
 							</select>
-							<input className="one fourth" type="text" ref="zip" placeholder="Zip Code" required />
+							<input className="one fourth" type="text" ref="zip" placeholder="Zip Code" data-stripe="address-zip" required />
 						</div>
 					</div>
 					<h2>Contact</h2>
@@ -123,7 +120,7 @@ var StripePayment = React.createClass({
 					</div>
 					<div className="row gap-top">
 						<div className="three sixths">
-							<h2 className="gap-left two sixths">Amount: ${this.getParams().price}</h2>
+							<h2 className="gap-left two sixths">Amount: {this.getParams().price}</h2>
 						</div>
 					</div>
 					<div className="row gap-top">

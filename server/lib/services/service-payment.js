@@ -12,6 +12,7 @@ var stripeConfig = require('../config/app/stripe'),
  * @param failure
  */
 exports.makePayment = function(token, card, amount, success, failure) {
+
 	stripe.charges.create({
 		amount: amount * 100,
 		currency: 'usd',
