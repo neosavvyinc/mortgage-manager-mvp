@@ -124,7 +124,7 @@ var UploadDocument = React.createClass({
 	},
 
 	render: function() {
-		return (this.state.loader) ? (<div className="loader"> <img src="http://www.kingpizza.com.br/imagens/loader.gif"/> </div>) :
+		return (this.state.loader) ? (<div className="loader"> <i className="fa fa-spinner fa-pulse"></i> </div>) :
 			(
 				<div>
 					<form className="uploadComponent" encType="multipart/form-data">
