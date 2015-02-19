@@ -1,5 +1,5 @@
 module.exports = {
-    USER: {
+	USER: {
         URL: '/api/user',
         ONE: {
             URL: '/api/user/:id',

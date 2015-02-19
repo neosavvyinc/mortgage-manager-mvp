@@ -29,7 +29,7 @@ var TrialExpired = React.createClass({
 				<div>
 					<form className="uploadComponent">
 						<div onClick={this.close} title="Close" className="close">X</div>
-						<legend><h1>You Trial Period has expired</h1></legend>
+						<legend><h1>Your Trial Period has expired</h1></legend>
 						<div className="row">
 							Please help us to continue to support you and make your mortgage process a lot less painstaking.
 							If you choose to continue on the trial version, you will not be able to use premium features.

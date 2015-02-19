@@ -11,7 +11,7 @@ Schemas.UserSchema = new Schema({
 	password: { type: String, required: true },
 	type: { type: String, required: true },
     hasUserDetails: { type: Boolean, required: true, default: false },
-	isPremiumUser: { type: Boolean, required: true, default: false }
+	pricingPlan: { type: String, required: true, default: 'trial' }
 });
 
 Schemas.PasswordResetSchema = new Schema({
@@ -95,7 +95,7 @@ Schemas.CardSchema = new Schema({
 	card: { type: Object, required: true }
 });
 
-Schema.PaymentSchema = new Schema({
+Schemas.PaymentSchema = new Schema({
 	_id: { type: String, required: true },
 	cardId: { type: String, required: true, ref: 'CardSchema' },
 	amount: { type: String, required: true },

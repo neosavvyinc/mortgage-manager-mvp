@@ -31,15 +31,18 @@ var Dashboard = React.createClass({
     },
 
 	componentDidMount: function() {
-		this.transitionTo('trialExpired');
 		User.getUserDetails(UserStore.getCurrentUserId()).then(function(res) {
 			var createdDate = moment(res.created),
 				currentDate = moment(),
 				duration = moment.duration(currentDate.diff(createdDate));
 
-			if(duration.asDays() > 1) {
-				this.transitionTo('trialExpired');
-			}
+			User.getCurrentUser().then(function(res) {
+				console.log(res.type, res.pricingPlan, duration.asDays());
+				if(res.type === 'borrower' && res.pricingPlan === 'trial' && duration.asDays() > 15) {
+					console.log('trialExpired');
+					this.transitionTo('trialExpired');
+				}
+			}.bind(this));
 		}.bind(this));
 	},
 

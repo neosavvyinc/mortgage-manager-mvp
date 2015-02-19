@@ -12,6 +12,13 @@ module.exports = function(router, passport) {
 	router.route('/healthcheck')
 		.get(routeHealthcheck.healthCheck);
 
+
+	router.route('/user')
+		.all(_isAuthenticated)
+		.get(function(req, res) {
+			res.send(req.user).end();
+		});
+
 	//Validate User Login
 	router.route('/login')
 		.post(authRoute.validateLogin(passport));

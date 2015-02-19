@@ -21,6 +21,16 @@ User.login = function (email, password){
     });
 };
 
+User.getCurrentUser = function() {
+	return Q.promise(function(resolve, reject) {
+		$.get(Endpoints.USER.URL).success(function(response) {
+			resolve(response);
+		}).error(function(error) {
+			reject(error);
+		});
+	});
+};
+
 User.logOut = function () {
     return Q.promise(function(resolve, reject){
         $.post(Endpoints.LOGOUT.URL)
