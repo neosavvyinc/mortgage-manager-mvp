@@ -398,6 +398,15 @@ exports.inviteLender = function(appId, userId, lenderInfo, success, failure){
             }, done);
         },
         function(done){
+            lenderInvites.retrieve({email: lenderInfo.email},function(lenderInviteData){
+                if(lenderInviteData.length){
+                    done({message:'User has already been invited to this application'});
+                } else {
+                    done();
+                }
+            });
+        },
+        function(done){
             mandrillService.sendInvite(lenderInfo, sender, appId, token, done);
         },
         function(done){
