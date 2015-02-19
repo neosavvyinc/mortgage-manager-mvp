@@ -5,7 +5,8 @@ var React = require('react'),
     Reflux = require('reflux'),
     MessageBox = require('../../components/message-box'),
     Application = require('../../models/model-application'),
-    UserStore = require('../../stores/store-user');
+    UserStore = require('../../stores/store-user'),
+    LenderAction = require('../../actions/action-lender');
 
 var validateLenderInfo = function(lenderInfo){
     return (lenderInfo.firstName && lenderInfo.firstName !== '' &&
@@ -32,7 +33,7 @@ var UploadDocument = React.createClass({
         if(e){
             e.preventDefault();
         }
-        this.transitionTo('dashboardDocuments', {appId: this.getParams().appId});
+        this.transitionTo('dashboardDocuments', {appId: this.getParams().appId, tab:1});
     },
 
     onInviteLender: function(e){
@@ -49,6 +50,7 @@ var UploadDocument = React.createClass({
             var appId = this.getParams().appId;
 
             Application.lenderInvite(appId, lenderInfo).then(function(){
+                LenderAction.inviteLender(lenderInfo);
                 this.close();
             }.bind(this), function(error){
                 this.setState({

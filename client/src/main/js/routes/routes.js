@@ -62,7 +62,7 @@ var routes = (
 	        <Route name="changePassword" path="change-password" handler={ChangePassword}/>
 	        <Route name="viewProfile" path="view-profile" handler={ViewProfile} />
             <Route name="dashboardApplications" path="applications" handler={Applications} />
-            <Route name="dashboardDocuments" path="applications/:appId" handler={ApplicationDetails}>
+            <Route name="dashboardDocuments" path="applications/:appId/:tab" handler={ApplicationDetails}>
                 <Route name="uploadNewDocument" path="upload" handler={Modal}>
                     <DefaultRoute handler={Upload} />
                 </Route>

@@ -20,7 +20,7 @@ var ApplicationDetails = React.createClass({
 
     getInitialState: function(){
         return {
-            activeTab: 0,
+            activeTab: parseInt(this.getParams().tab),
             userType: ''
         }
     },
@@ -37,6 +37,7 @@ var ApplicationDetails = React.createClass({
 
     activateTab: function(tabToActivate){
         if(this.state.activeTab != tabToActivate){
+            this.transitionTo('dashboardDocuments', {appId: this.getParams().appId, tab: tabToActivate});
             this.setState({
                 activeTab: tabToActivate
             });
@@ -48,7 +49,6 @@ var ApplicationDetails = React.createClass({
     },
 
     render: function() {
-
         var tabInfo = [{
                 name: "Documents",
                 classToActivate: "documentsTab",
