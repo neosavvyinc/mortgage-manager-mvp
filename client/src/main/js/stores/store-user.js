@@ -1,6 +1,9 @@
-var Reflux = require('reflux');
+'use strict';
 
+var Reflux = require('reflux');
 var UserActions = require('../actions/action-user');
+var User = require ('../models/model-user');
+var moment = require('moment');
 
 var currentUser = {};
 
@@ -32,6 +35,14 @@ var UserStore = Reflux.createStore({
         currentUser = {};
         this.trigger();
     },
+
+	onReceiveCurrentUser: function(user, createdDate) {
+		var currentDate = moment(),
+			duration = moment.duration(currentDate.diff(createdDate));
+		if(user.type === 'borrower' && user.pricingPlan === 'trial' && duration.asDays() > 15) {
+			this.trigger();
+		}
+	},
 
     getCurrentUserId: function(){
         return sessionStorage.getItem("userId");

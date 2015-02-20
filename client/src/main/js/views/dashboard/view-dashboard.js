@@ -7,6 +7,7 @@ var Reflux = require('reflux');
 
 var User = require('../../models/model-user');
 var UserStore = require('../../stores/store-user');
+var UserActions = require('../../actions/action-user');
 var Header = require('../../components/header');
 var Footer = require('../../components/footer');
 var moment = require('moment');
@@ -15,7 +16,8 @@ var Dashboard = React.createClass({
 
     mixins: [
         Router.State,
-	    Router.Navigation
+	    Router.Navigation,
+	    Reflux.listenTo(UserStore, 'onTrialExpired')
     ],
 
     statics: {
@@ -32,18 +34,16 @@ var Dashboard = React.createClass({
 
 	componentDidMount: function() {
 		User.getUserDetails(UserStore.getCurrentUserId()).then(function(res) {
-			var createdDate = moment(res.created),
-				currentDate = moment(),
-				duration = moment.duration(currentDate.diff(createdDate));
+			var createdDate = moment(res.created);
 
-			User.getCurrentUser().then(function(res) {
-				console.log(res.type, res.pricingPlan, duration.asDays());
-				if(res.type === 'borrower' && res.pricingPlan === 'trial' && duration.asDays() > 15) {
-					console.log('trialExpired');
-					this.transitionTo('trialExpired');
-				}
+			User.getCurrentUser().then(function(user) {
+				UserActions.receiveCurrentUser(user, createdDate);
 			}.bind(this));
 		}.bind(this));
+	},
+
+	onTrialExpired: function() {
+		this.transitionTo('trialExpired');
 	},
 
     render: function(){
