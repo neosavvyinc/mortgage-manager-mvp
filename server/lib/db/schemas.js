@@ -99,7 +99,9 @@ Schemas.PaymentSchema = new Schema({
 	_id: { type: String, required: true },
 	cardId: { type: String, required: true, ref: 'CardSchema' },
 	amount: { type: String, required: true },
-	paymentDate: { type: String, required: true }
+	paymentDate: { type: String, required: true },
+	status: { type: String, required: true },
+	declineReason: String
 });
 
 exports.Schemas = Schemas;

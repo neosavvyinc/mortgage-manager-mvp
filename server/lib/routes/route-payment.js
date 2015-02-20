@@ -7,15 +7,21 @@ exports.makePayment = function(req, res) {
 	var token = req.params.token,
 		card = req.body.card,
 		amount = req.body.amount,
+		idempotentToken = req.body.idempotentToken,
 		uid = req.user._id;
 
-	paymentService.makePayment(uid, token, card, amount, function() {
+	paymentService.makePayment(uid, token, card, amount, idempotentToken, function() {
 		res.send({message: 'Success'}).end();
 		settings.log.info('Payment successful');
 	}, function(error) {
 		if(error) {
-			settings.log.fatal(error);
-			res.status(500).send({message: 'Internal Server Error'});
+			if(error.message === 'Already made payment') {
+				settings.log.fatal(error.message);
+				res.status(401).send({message: 'You are already a premium user!'});
+			} else {
+				settings.log.fatal(error);
+				res.status(500).send({message: 'Internal Server Error'});
+			}
 		}
 		res.end();
 	});

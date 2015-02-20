@@ -5,7 +5,8 @@ var React = require('react'),
 	Reflux = require('reflux'),
 	Constants = require('../../../constants/constants'),
 	MessageBox = require('../../../components/message-box'),
-	ModelPayment = require('../../../models/model-payment');
+	ModelPayment = require('../../../models/model-payment'),
+	uuid = require('node-uuid');
 
 var StripePayment = React.createClass({
 	mixins: [
@@ -15,6 +16,7 @@ var StripePayment = React.createClass({
 
 	getInitialState: function(){
 		return {
+			idempotentToken: uuid.v1(),
 			messageText: '',
 			showMessage: false,
 			messageType: 'error',
@@ -42,7 +44,7 @@ var StripePayment = React.createClass({
 						messageText: response.error.message
 					});
 				} else {
-					ModelPayment.makePayment(response.id, response.card, this.getParams().price.replace('$', '')).then(
+					ModelPayment.makePayment(response.id, response.card, this.state.idempotentToken, this.getParams().price.replace('$', '')).then(
 						function() {
 							this.setState({
 								showMessage: false,
