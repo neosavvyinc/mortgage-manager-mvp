@@ -47,13 +47,12 @@ var UploadDocument = React.createClass({
 
         if(validateLenderInfo(lenderInfo)) {
             var appId = this.getParams().appId;
-
             Application.lenderInvite(appId, lenderInfo).then(function(){
                 this.close();
             }.bind(this), function(error){
                 this.setState({
                     inviteError: true,
-                    inviteErrorText: error.responseJSON.message
+                    inviteErrorText: error.responseText
                 });
             }.bind(this));
 
@@ -85,7 +84,8 @@ var UploadDocument = React.createClass({
                     <input type="text" ref="organization" placeholder="Organizations"/>
                 </div>
                 <div className="row padded">
-                    <div className="one fourth skip-two padded submit">
+                    <MessageBox className="one fourth padded" displayMessage={this.state.inviteError} message={this.state.inviteErrorText} type='error' />
+                    <div className="one fourth skip-one padded submit">
                         <button className="red block gap-right gap-bottom" onClick={this.close}>Close</button>
                     </div>
                     <div className="one fourth padded submit">

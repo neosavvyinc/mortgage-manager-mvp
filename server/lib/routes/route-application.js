@@ -190,7 +190,7 @@ exports.inviteLenderToApplication = function(req, res){
     }, function(error) {
         if(error) {
             settings.log.fatal(error.message);
-            res.status(500).send({message: 'There was an error sending the invitation'});
+            res.status(500).send(error.message);
         }
     });
 };
