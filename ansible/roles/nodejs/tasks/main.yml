@@ -28,7 +28,7 @@
     - node.mam
 
 #- name: Kill any running Supervisord scripts
-#  shell: kill -9 $(ps aux | grep '[s]upervisord' | grep 'node.map' | awk '{print $2}')
+#  shell: kill -9 $(ps aux | grep '[s]upervisord' | grep 'node.mam' | awk '{print $2}')
 #  ignore_errors: yes
 #  sudo: True
 #

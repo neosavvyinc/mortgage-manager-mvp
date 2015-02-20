@@ -1,9 +1,11 @@
 'use strict';
 
 var Reflux = require('reflux'),
+    _ = require('lodash'),
     User = require('../models/model-user'),
     LenderActions = require('../actions/action-lender'),
-    _newLender = {};
+    _newLender = {},
+    _lenderList = [];
 
 var LenderStore = Reflux.createStore({
 
@@ -21,6 +23,25 @@ var LenderStore = Reflux.createStore({
 
     onSubmitBasicInfo: function(basicInfo){
         _newLender.basicInfo = basicInfo;
+    },
+
+    onInviteLender: function(newLender){
+        _lenderList.push(newLender);
+        this.trigger();
+    },
+
+    onSetLenderList: function(lenders){
+        _lenderList = lenders;
+        this.trigger();
+    },
+
+    onRemoveLenderInvite: function(lender){
+        _lenderList = _.without(_lenderList, lender);
+        this.trigger();
+    },
+
+    getLenderList: function(){
+        return _lenderList;
     },
 
     getLender: function(){

@@ -6,7 +6,10 @@ var Reflux = require('reflux'),
 LenderActions = Reflux.createActions([
     'newLender',
     'newPassword',
-    'submitBasicInfo'
+    'submitBasicInfo',
+    'inviteLender',
+    'setLenderList',
+    'removeLenderInvite'
 ]);
 
 module.exports = LenderActions;

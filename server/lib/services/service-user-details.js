@@ -29,17 +29,7 @@ exports.updateUser = function(userObject, success, failure) {
                 },
                 function(cb){
                     if(userObject.appId && userObject.appId.length){
-                        async.parallel([
-                            function(callback){
-                                lenderInvites.update({isOpen: false}, {appId: userObject.appId[0]}, null, callback, callback);
-                            }
-                        ], function(error){
-                            if(error){
-                                cb(error);
-                            } else {
-                                cb();
-                            }
-                        });
+                       lenderInvites.update({isOpen: false}, {appId: userObject.appId[0]}, null, cb, cb);
                     } else {
                         cb();
                     }
@@ -142,7 +132,7 @@ exports.findUserWithDetails = function(uid, success, failure){
 	async.series([
 		function(done){
 			userDetails.retrieve({_id: uid}, function(data){
-				if(data[0].toObject !== undefined ) {
+				if(data[0] && data[0].toObject !== undefined ) {
 					userWithDetails = data[0].toObject();
 				}
 				done();
@@ -150,12 +140,14 @@ exports.findUserWithDetails = function(uid, success, failure){
 		},
 		function(done){
 			user.retrieve({_id: uid}, function(data){
-				var userObj = data[0].toObject();
-				if(userObj !== undefined ) {
-					_.extend(userWithDetails, {
-						type: userObj.type,
-						pricingPlan: userObj.pricingPlan
-					});
+				if(data[0] && data[0].toObject !== undefined ) {
+					var userObj = data[0].toObject();
+					if (userObj !== undefined) {
+						_.extend(userWithDetails, {
+							type: userObj.type,
+							pricingPlan: userObj.pricingPlan
+						});
+					}
 				}
 				done();
 			});
@@ -169,6 +161,11 @@ exports.findUserWithDetails = function(uid, success, failure){
 	});
 };
 
+exports.getUserDetails = function(conditions, success, failure){
+    var userDetails = new userDetailsModel();
+
+    userDetails.retrieve(conditions, success, failure);
+};
 
 exports.lenderAppInvite = function(email, token, appId, success, failure){
 

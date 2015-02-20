@@ -11,6 +11,8 @@ var ApplicationStore = require('../../stores/store-application');
 var User = require('../../models/model-user');
 var UserStore = require('../../stores/store-user');
 var Navigation = require('../../components/navigation');
+var LenderStore = require('../../stores/store-lender');
+var LenderActions = require('../../actions/action-lender');
 var moment = require('moment');
 
 var arraysEqual = function(arr1, arr2) {
@@ -30,49 +32,38 @@ var LenderContacts = React.createClass({
     mixins: [
         Router.State,
         Router.Navigation,
-        Reflux.listenTo(ApplicationStore, 'reloadLenders')
+        Reflux.listenTo(LenderStore, "getLenders")
     ],
 
     getInitialState: function(){
         return {
-            lenders: [],
+            lenders: LenderStore.getLenderList(),
             actionError: false,
             actionErrorMessage: '',
 	        disableButtons: false
         };
     },
-
+	
     componentDidMount: function() {
 	    if(this.isMounted()) {
 		    Application.getLenders(this.getParams().appId).then(function (lenders) {
-			    User.getUserDetails(UserStore.getCurrentUserId()).then(function (user) {
-				    var createdDate = moment(user.created),
-					    currentDate = moment(),
-					    duration = moment.duration(currentDate.diff(createdDate)),
-					    state={lenders: lenders};
-
-				    if (user.type === 'borrower' && user.pricingPlan === 'trial' && duration.asDays() > 15) {
-					    state.disableButtons = true;
-				    }
-
-				    this.setState(state);
-
-			    }.bind(this));
+			    LenderActions.setLenderList(lenders);
 		    }.bind(this));
 	    }
     },
 
-    componentDidUpdate: function(prevProps, prevState) {
-	    if (prevState.lenders.length>0 && arraysEqual(prevState.lenders, this.state.lenders)) {
-            this.getLenders();
-        }
-    },
-
     getLenders: function(){
-    },
+	    User.getUserDetails(UserStore.getCurrentUserId()).then(function (user) {
+		    var createdDate = moment(user.created),
+			    currentDate = moment(),
+			    duration = moment.duration(currentDate.diff(createdDate)),
+			    state={lenders: LenderStore.getLenderList()};
 
-    reloadLenders: function(){
-        this.getLenders();
+		    if (user.type === 'borrower' && user.pricingPlan === 'trial' && duration.asDays() > 15) {
+			    state.disableButtons = true;
+		    }
+		    this.setState(state);
+	    }.bind(this));
     },
 
     onReSendInvite: function(lender){
@@ -89,7 +80,7 @@ var LenderContacts = React.createClass({
 
     onDeleteInvite: function(lender){
         Application.deleteInvite(this.getParams().appId, lender).then(function(){
-            this.reloadLenders();
+            LenderActions.removeLenderInvite(lender);
         }.bind(this), function(error){
             this.setState({
                 actionError: true,
@@ -115,7 +106,8 @@ var LenderContacts = React.createClass({
                 tabLink: {
                     name: "inviteLender",
                     params: [{
-                        appId: this.getParams().appId
+                        appId: this.getParams().appId,
+                        tab: 1
                     }],
 	                disabled: lenderInviteDisabled
                 },
@@ -139,7 +131,7 @@ var LenderContacts = React.createClass({
                 mailTo = "mailto:" + lender.email,
                 callTo = "tel:" + lender.phone;
 
-            if(lender.status === 'Pending'){
+            if(lender.status !== 'Accepted'){
                 actionBtns = (
                     <th>
                         <div className="row">
@@ -163,7 +155,7 @@ var LenderContacts = React.createClass({
                     <th>{lender.firstName + " " + lender.lastName}</th>
                     <th>{lender.organization}</th>
                     <th>{lender.email}</th>
-                    <th>{lender.status}</th>
+                    <th>{lender.status || "Pending"}</th>
                 {actionBtns}
                 </tr>
             ));

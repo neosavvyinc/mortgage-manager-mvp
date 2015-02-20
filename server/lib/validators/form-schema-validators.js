@@ -10,6 +10,12 @@ exports.phoneJSONSchema = {
     'pattern': '^(([\+])?[0-9]([[\-]|\.|\ ])?)?[\(]?[0-9]{3}([\)|\.|[\-]|\ ])?[0-9]{3}([\.|[\-]|\ ])?[0-9]{4}$'
 };
 
+exports.zipJSONSchema = {
+    'id': '/Zip',
+    'type': 'string',
+    'pattern': '^[0-9]{5}(\-[0-9]{4})?$'
+};
+
 exports.emailJSONSchema = {
     'id': '/Email',
     'type': 'string',

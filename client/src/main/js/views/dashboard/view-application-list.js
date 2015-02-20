@@ -51,7 +51,7 @@ var Applications = React.createClass({
     },
 
     onApplicationTransition: function(){
-        this.transitionTo('dashboardDocuments', {appId: ApplicationStore.getCurrentApplication()._id});
+        this.transitionTo('dashboardDocuments', {appId: ApplicationStore.getCurrentApplication()._id, tab:0});
     },
 
     render: function(){

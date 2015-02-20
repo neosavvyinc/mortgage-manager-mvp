@@ -119,6 +119,7 @@ var Documents = React.createClass({
                         name: "requestDocument",
                         params: [{
                             appId: this.getParams().appId,
+                            tab: 0,
                             docType: 'standard'
                         }]
                     }
@@ -129,6 +130,7 @@ var Documents = React.createClass({
                         name: 'requestDocument',
                         params: [{
                             appId: this.getParams().appId,
+                            tab: 0,
                             docType: 'explanation'
                         }]
                     }
@@ -141,7 +143,8 @@ var Documents = React.createClass({
                     tabLink: {
                         name: 'uploadNewDocument',
                         params: [{
-                            appId: this.getParams().appId
+                            appId: this.getParams().appId,
+                            tab: 0
                         }],
 	                    disabled: tabsDisabled
                     },
