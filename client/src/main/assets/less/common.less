@@ -27,11 +27,16 @@ a:before {
   border: 1px solid #DDDDDD;
 }
 
+@font-face {
+  font-family: OpenSans-Light;
+  src: url('../fonts/OpenSans-Regular.ttf'); /*URL to font*/
+}
+
 html,
 body {
   height: 100%;
   width: 100%;
-  font-family:Arial,sans-serif;
+  font-family: OpenSans-Light;
 }
 
 /* fix bs3 horizontal scrollbar bug */
@@ -97,7 +102,6 @@ img.grayscale {
 
 .navbar-bold {
   background-color:#f68076;
-  font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
 }
 
 .navbar-bold li a:hover, .navbar-bold li.active {
@@ -111,7 +115,6 @@ img.grayscale {
   color:#fff;
   margin-left:-5px;
   margin-bottom:5px;
-  text-transform:uppercase;
 }
 
 .header .lead {

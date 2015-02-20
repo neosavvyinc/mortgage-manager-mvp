@@ -199,9 +199,7 @@ var Welcome = React.createClass({
                                 </div>
                             </div>
                             <div className="col-sm-4">
-                                <div className="panel panel-default">
-                                    <Login />
-                                </div>
+                                <Login />
                             </div>
                         </div>
                     </div>

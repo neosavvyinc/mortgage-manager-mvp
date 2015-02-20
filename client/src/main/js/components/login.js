@@ -69,7 +69,7 @@ var Login = React.createClass({
 
 	render: function(){
 		return (
-            <div>
+            <div className="panel panel-default">
                 <div className="panel-heading text-center">
                     <h3>Already a User?</h3>
                 </div>
