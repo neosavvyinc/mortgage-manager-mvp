@@ -223,7 +223,7 @@ var Documents = React.createClass({
                 <div className="gap-top">
                     <h2>Documents</h2>
                     <Navigation navigationItems={actions}/>
-                    <table className="responsive">
+                    <table className="table table-striped">
 	                    <col style={otherColStyle}/>
 	                    <col style={otherColStyle}/>
 	                    <col style={otherColStyle}/>

@@ -113,8 +113,8 @@ var LenderContacts = React.createClass({
                 actionBtns = (
                     <th>
                         <div className="row">
-                            <button className="btn turquoise mobile gap-right tooltip" data-tooltip="Remind" onClick={this.onReSendInvite.bind(null, lender)}><i className="fa fa-paper-plane"></i></button>
-                            <button className="btn red mobile tooltip" data-tooltip="Delete" onClick={this.onDeleteInvite.bind(null, lender)}><i className="fa fa-trash-o"></i></button>
+                            <button className="btn turquoise mobile gap-right" data-tooltip="Remind" onClick={this.onReSendInvite.bind(null, lender)}><i className="fa fa-paper-plane"></i></button>
+                            <button className="btn red mobile" data-tooltip="Delete" onClick={this.onDeleteInvite.bind(null, lender)}><i className="fa fa-trash-o"></i></button>
                         </div>
                     </th>
                 )
@@ -122,8 +122,8 @@ var LenderContacts = React.createClass({
                 actionBtns = (
                     <th>
                         <div className="row">
-                            <a href={mailTo}><button className="btn blue mobile gap-right tooltip" data-tooltip="Email"><i className="fa fa-envelope-o"></i></button></a>
-                            <a href={callTo}><button className="btn green mobile tooltip" data-tooltip="Call"><i className="fa fa-phone"></i></button></a>
+                            <a href={mailTo}><button className="btn blue" data-tooltip="Email"><i className="fa fa-envelope-o"></i></button></a>
+                            <a href={callTo}><button className="btn green" data-tooltip="Call"><i className="fa fa-phone"></i></button></a>
                         </div>
                     </th>
                 );
@@ -144,7 +144,7 @@ var LenderContacts = React.createClass({
                 <div className="gap-top">
                     <h2>Lenders</h2>
                     <Navigation navigationItems={actions}/>
-                    <table className="responsive">
+                    <table className="table table-striped">
 	                    <col style={otherColStyle}/>
 	                    <col style={orgColStyle}/>
 	                    <col style={otherColStyle}/>

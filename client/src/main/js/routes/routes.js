@@ -25,6 +25,9 @@ var ApplicationDetails = require('../views/dashboard/view-application-details');
 var RequestDocument = require('../views/dashboard/view-lender-request-document');
 var ForgotPassword = require('../views/registration/view-forgot-password');
 var ViewProfile = require('../views/dashboard/view-update-profile');
+var DocumentsTable = require('../views/dashboard/view-document-list');
+var Lenderstable = require('../views/dashboard/view-lender-list');
+var BorrowersTable = require('../views/dashboard/view-borrower-list');
 
 /* Default Root Handler */
 var RootDefault = React.createClass({
