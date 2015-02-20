@@ -26,3 +26,127 @@ a:before {
   padding: 15px;
   border: 1px solid #DDDDDD;
 }
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  font-family:Arial,sans-serif;
+}
+
+/* fix bs3 horizontal scrollbar bug */
+.row { margin: 0; padding: 0 }
+
+h1 {
+  font-size:50px;
+}
+
+/* make images gray */
+img.grayscale {
+  filter: gray; /* IE6-9 */
+  -webkit-filter: grayscale(100%); /* Chrome 19+, Safari 6+, Safari 6+ iOS */
+}
+
+.icon-bar {
+  background-color:#fff;
+}
+
+.scroll-down a, .scroll-top a {
+  color:#ffffff;
+}
+
+.scroll-down {
+  position:fixed;
+  bottom:20%;
+  right:0%;
+  color:#f9f9f9;
+}
+
+.scroll-top {
+  background-color:#dbdbdb;
+}
+
+.vert {
+  vertical-align: middle;
+  width:100%;
+  padding-top:4%;
+  text-align:center;
+}
+
+.header .btn-lg {
+  font-size:28px;
+  border-color:#eeeeee;
+  padding:15px;
+  background-color:transparent;
+  color:#ffffff;
+}
+
+.header .btn-lg:hover {
+  background-color:#eeeeee;
+  color:#777777;
+}
+
+.navbar a {
+  color:#fff;
+  font-size:14px;
+}
+
+.navbar-bold.affix {
+  background-color:#d46054;
+}
+
+.navbar-bold {
+  background-color:#f68076;
+  font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
+}
+
+.navbar-bold li a:hover, .navbar-bold li.active {
+  background-color:#d46054;
+}
+
+
+.header h1 {
+  font-size:80px;
+  color:#431a6d;
+  color:#fff;
+  margin-left:-5px;
+  margin-bottom:5px;
+  text-transform:uppercase;
+}
+
+.header .lead {
+  color:#d46054;
+  font-size:25px;
+}
+
+.header {
+  height: 80%;
+  padding-bottom: 100px;
+}
+
+/* use alt in navbar and header for different color */
+
+.alt {
+  background-color: #6E28C9;
+}
+
+.alt .lead {
+  color: #3B0496;
+}
+
+.alt.affix {
+  background-color:#4C06AB;
+}
+
+.alt li a:hover, .alt li.active {
+  background-color:#5D17BA;
+}
+
+.blurb {
+  padding: 100px 0;
+  background-color:#fefefe;
+}
+
+.blurb .panel {
+  background-color:transparent;
+}

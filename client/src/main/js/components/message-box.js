@@ -18,23 +18,20 @@ var MessageBox = React.createClass({
 
     render: function(){
 
-        var messageClass = 'message gap-bottom';
+        var messageClass = 'alert';
 
         switch(this.props.type){
             case 'success':
-                messageClass = messageClass + ' success';
+                messageClass = messageClass + ' alert-success';
                 break;
-            case 'question':
-                messageClass = messageClass + ' question';
-                break;
-            case 'alert':
-                messageClass = messageClass + ' alert';
+            case 'info':
+                messageClass = messageClass + ' alert-info';
                 break;
             case 'warning':
-                messageClass = messageClass + ' warning';
+                messageClass = messageClass + ' alert-warning';
                 break;
             default:
-                messageClass = messageClass + ' error';
+                messageClass = messageClass + ' alert-danger';
         }
 
         if(!this.props.displayMessage){
