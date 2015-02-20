@@ -12,13 +12,17 @@ var Header = React.createClass({
 
     render: function() {
         return (
-            <div className="row gap-top padded">
+            <div className="navbar navbar-default">
                 <div className="container">
-                    <div className="one half">
-                        <h3><a href="http://www.neosavvy.com/"> Neosavvy, Inc.</a></h3>
+                    <div className="col-xs-6">
+                        <div className="nav navbar-nav">
+                            <a href="http://www.neosavvy.com/" className="navbar-brand"> Neosavvy, Inc.</a>
+                        </div>
                     </div>
-                    <div className="one half align-right">
-	                    <NavBar/>
+                    <div className="col-xs-6">
+                        <div className="nav navbar-nav pull-right">
+                            <NavBar/>
+                        </div>
                     </div>
                 </div>
             </div>

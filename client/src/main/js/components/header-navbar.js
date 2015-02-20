@@ -36,19 +36,17 @@ var HeaderNav = React.createClass({
 
 	render: function() {
 		return (
-			<div className = "one whole">
-				<nav className="header-nav">
-					<ul>
-						<li><span className="row"><i className="fa fa-gear one third"></i></span>
-							<ul>
-								<li><div onClick={this.onViewProfile}>View Profile</div></li>
-								<li><div onClick={this.onChangePassword}>Change Password</div></li>
-								<li><div onClick={this.onLogout}>Logout</div></li>
-							</ul>
-						</li>
-					</ul>
-				</nav>
-			</div>
+            <nav className="header-nav">
+                <ul>
+                    <li><span className="row"><i className="fa fa-gear one third"></i></span>
+                        <ul>
+                            <li><div onClick={this.onViewProfile}>View Profile</div></li>
+                            <li><div onClick={this.onChangePassword}>Change Password</div></li>
+                            <li><div onClick={this.onLogout}>Logout</div></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
 		);
 	}
 });
