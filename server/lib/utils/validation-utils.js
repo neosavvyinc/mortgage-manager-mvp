@@ -16,6 +16,11 @@ exports.validatePassword = function(password){
     return v.validate(password, ValidationSchemas.passwordJSONSchema);
 };
 
+exports.validateZip = function(zip){
+    var v = new Validator();
+    return v.validate(zip, ValidationSchemas.zipJSONSchema);
+};
+
 exports.validatePhone = function(phone){
     var v = new Validator();
     return v.validate(phone, ValidationSchemas.phoneJSONSchema);

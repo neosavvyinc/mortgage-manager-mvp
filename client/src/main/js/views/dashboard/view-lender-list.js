@@ -8,6 +8,8 @@ var ApplicationActions = require('../../actions/action-application');
 var ApplicationStore = require('../../stores/store-application');
 var UserStore = require('../../stores/store-user');
 var Navigation = require('../../components/navigation');
+var LenderStore = require('../../stores/store-lender');
+var LenderActions = require('../../actions/action-lender');
 
 var arraysEqual = function(arr1, arr2) {
     if(arr1.length !== arr2.length){
@@ -26,12 +28,12 @@ var LenderContacts = React.createClass({
     mixins: [
         Router.State,
         Router.Navigation,
-        Reflux.listenTo(ApplicationStore, "reloadLenders")
+        Reflux.listenTo(LenderStore, "getLenders")
     ],
 
     getInitialState: function(){
         return {
-            lenders: [],
+            lenders: LenderStore.getLenderList(),
             actionError: false,
             actionErrorMessage: ''
         };
@@ -39,26 +41,16 @@ var LenderContacts = React.createClass({
 
     componentDidMount: function(){
        if(this.isMounted()){
-           this.getLenders();
+           Application.getLenders(this.getParams().appId).then(function(lenders) {
+               LenderActions.setLenderList(lenders);
+           });
        }
     },
 
-    componentDidUpdate: function(prevProps, prevState) {
-	    if (prevState.lenders.length>0 && arraysEqual(prevState.lenders, this.state.lenders)) {
-            this.getLenders();
-        }
-    },
-
     getLenders: function(){
-        Application.getLenders(this.getParams().appId).then(function(lenders){
-            this.setState({
-                lenders: lenders
-            });
-        }.bind(this));
-    },
-
-    reloadLenders: function(){
-        this.getLenders();
+        this.setState({
+            lenders: LenderStore.getLenderList()
+        });
     },
 
     onReSendInvite: function(lender){
@@ -75,7 +67,7 @@ var LenderContacts = React.createClass({
 
     onDeleteInvite: function(lender){
         Application.deleteInvite(this.getParams().appId, lender).then(function(){
-            this.reloadLenders();
+            LenderActions.removeLenderInvite(lender);
         }.bind(this), function(error){
             this.setState({
                 actionError: true,
@@ -93,7 +85,8 @@ var LenderContacts = React.createClass({
                 tabLink: {
                     name: "inviteLender",
                     params: [{
-                        appId: this.getParams().appId
+                        appId: this.getParams().appId,
+                        tab: 1
                     }]
                 },
 	            icon: 'fa fa-user-plus'
@@ -116,7 +109,7 @@ var LenderContacts = React.createClass({
                 mailTo = "mailto:" + lender.email,
                 callTo = "tel:" + lender.phone;
 
-            if(lender.status === 'Pending'){
+            if(lender.status !== 'Accepted'){
                 actionBtns = (
                     <th>
                         <div className="row">
@@ -140,7 +133,7 @@ var LenderContacts = React.createClass({
                     <th>{lender.firstName + " " + lender.lastName}</th>
                     <th>{lender.organization}</th>
                     <th>{lender.email}</th>
-                    <th>{lender.status}</th>
+                    <th>{lender.status || "Pending"}</th>
                 {actionBtns}
                 </tr>
             ));
