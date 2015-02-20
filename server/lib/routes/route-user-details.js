@@ -23,6 +23,9 @@ exports.updateUser = function(req, res) {
         if(validationUtils.validatePhone(userObject.phone).errors.length){
             res.status(400).send({message: 'You have to provide a valid phone'});
             res.end();
+        }  else if(validationUtils.validateZip(userObject.zip).errors.length){
+            res.status(400).send({message: 'You have to provide a valid zip code'});
+            res.end();
         } else {
             async.series([
                 function(done){

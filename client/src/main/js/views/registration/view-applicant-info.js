@@ -102,7 +102,9 @@ var ApplicantInfo = React.createClass({
                     if(this.state.currentBorrower.hasCoapplicant){
                         BorrowerActions.submitBasicInfo(applicantInfo);
                         this.setState({
-                            applicantType: "Co-Applicant"
+                            applicantType: "Co-Applicant",
+                            applicantInfoError: false,
+                            errorText: ""
                         });
                         resetApplicantInfo(this);
                     } else {

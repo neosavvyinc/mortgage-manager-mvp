@@ -54,7 +54,7 @@ var UploadDocument = React.createClass({
         if(e) {
             e.preventDefault();
         }
-		this.transitionTo('dashboardDocuments', {appId: this.getParams().appId});
+		this.transitionTo('dashboardDocuments', {appId: this.getParams().appId, tab:0});
 	},
 
 	updateDocName: function() {
