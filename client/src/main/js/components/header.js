@@ -1,7 +1,7 @@
 var React = require('react');
 var Router = require('react-router');
 var Reflux = require('reflux');
-var NavBar = require('./header-navbar');
+var Settings = require('./header-settings');
 
 var Header = React.createClass({
 
@@ -18,7 +18,7 @@ var Header = React.createClass({
                         <h3><a href="http://www.neosavvy.com/"> Neosavvy, Inc.</a></h3>
                     </div>
                     <div className="one half align-right">
-	                    <NavBar/>
+	                    <Settings/>
                     </div>
                 </div>
             </div>

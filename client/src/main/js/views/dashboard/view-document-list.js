@@ -35,19 +35,27 @@ var Documents = React.createClass({
     getInitialState: function(){
         return {
             documents: [],
-            userType: ''
+            userType: '',
+	        disableButtons: false
         };
     },
 
     componentDidMount: function(){
         this.getDocuments();
+		User.getUserDetails(UserStore.getCurrentUserId()).then(function(user) {
+			var createdDate = moment(user.created),
+				currentDate = moment(),
+				duration = moment.duration(currentDate.diff(createdDate)),
+				state = {
+					userType: user.type
+				};
 
-        User.getUserDetails(UserStore.getCurrentUserId()).then(function(user){
-            this.setState(
-                {
-                    userType: user.type
-                }
-            );
+			if(user.type === 'borrower' && user.pricingPlan === 'trial' && duration.asDays() > 15) {
+				state.disableButtons = true;
+			}
+
+			this.setState(state);
+
         }.bind(this));
     },
 
@@ -97,6 +105,12 @@ var Documents = React.createClass({
 	        width: '21%'
 	    };
 
+	    var tabsDisabled = false;
+
+	    if(this.state.disableButtons) {
+			tabsDisabled = true;
+	    }
+
         if(this.state.userType === 'lender'){
             actions = [
                 {
@@ -131,7 +145,8 @@ var Documents = React.createClass({
                         params: [{
                             appId: this.getParams().appId,
                             tab: 0
-                        }]
+                        }],
+	                    disabled: tabsDisabled
                     },
 	                icon: 'fa fa-upload'
                 }
@@ -147,7 +162,8 @@ var Documents = React.createClass({
 				    callback: function() {
 					    //Download a zip of all files
 					    window.open(EndPoints.APPLICATIONS.ONE.DOWNLOAD.URL.replace(':id', this.getParams().appId));
-				    }.bind(this)
+				    }.bind(this),
+				    disabled: tabsDisabled
 			    },
 			    icon: 'fa fa-download'
 		    });
@@ -160,20 +176,35 @@ var Documents = React.createClass({
                 style: 'disabled hidden'
             }, uploadButton = {
                 style: 'btn blue block gap-right five sixths',
-	            text: 'Upload '
+	            text: 'Upload ',
+	            disabled: false
             }, downloadButton = {
 	            disabled: true,
 	            style: 'disabled hidden'
             };
             
             if(document.uploadDate !== undefined) {
-                viewButton.disabled = false;
-                viewButton.style =  'btn red gap-right gap-bottom tooltip';
-                uploadButton.style = 'btn blue gap-right gap-bottom tooltip';
-	            uploadButton.text = '';
-	            downloadButton.disabled = false;
-	            downloadButton.style =  'btn green tooltip';
+	            if(this.state.disableButtons) {
+		            viewButton.disabled = true;
+		            downloadButton.disabled = true;
+		            uploadButton.disabled = true;
+		            viewButton.style =  'btn disabled tooltip';
+		            downloadButton.style =  'btn disabled tooltip';
+		            uploadButton.style =  'btn disabled tooltip';
+	            } else {
+		            viewButton.disabled = false;
+		            viewButton.style =  'btn red gap-right gap-bottom tooltip';
+		            uploadButton.style = 'btn blue gap-right gap-bottom tooltip';
+		            uploadButton.text = '';
+		            downloadButton.disabled = false;
+		            downloadButton.style =  'btn green tooltip';
+	            }
             }
+
+	        if(this.state.disableButtons) {
+		        uploadButton.disabled = true;
+		        uploadButton.style =  'btn block gap-right five sixths disabled tooltip';
+	        }
 
             // e.g. Wednesday, January 21, 2015 3:21 PM
             document.requestDate = moment(document.requestDate).format('llll');
@@ -206,7 +237,7 @@ var Documents = React.createClass({
 					        <button className={viewButton.style} disabled={viewButton.disabled} onClick={this.onDocumentView.bind(this, document)} data-tooltip="View">
 						        <i className="fa fa-binoculars"></i>
 					        </button>
-					        <button className={uploadButton.style} onClick={this.onDocumentUpload.bind(this, document)} data-tooltip="Upload">{uploadButton.text}
+					        <button className={uploadButton.style} disabled={uploadButton.disabled} onClick={this.onDocumentUpload.bind(this, document)} data-tooltip="Upload">{uploadButton.text}
 						        <i className="fa fa-upload"></i>
 					        </button>
 					        <button className={downloadButton.style} disabled={downloadButton.disabled} onClick={this.onDocumentDownload.bind(this, document)} data-tooltip="Download">

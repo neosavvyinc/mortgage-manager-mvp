@@ -4,7 +4,7 @@ var Q = require('q');
 var _ = require('lodash');
 var $ = require('jquery');
 
-var Endpoints = require("../constants/endpoints");
+var Endpoints = require('../constants/endpoints');
 
 function User () { }
 
@@ -19,6 +19,16 @@ User.login = function (email, password){
             reject(error);
         });
     });
+};
+
+User.getCurrentUser = function() {
+	return Q.promise(function(resolve, reject) {
+		$.get(Endpoints.USER.URL).success(function(response) {
+			resolve(response);
+		}).error(function(error) {
+			reject(error);
+		});
+	});
 };
 
 User.logOut = function () {

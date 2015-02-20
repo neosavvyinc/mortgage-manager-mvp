@@ -66,21 +66,25 @@ var Navigation = React.createClass({
             <div className="container">
                 <div className="row gap-bottom">
                     {this.props.navigationItems.map(function(tab) {
+	                    if(tab.tabLink.disabled){
+		                    tabSpacingClass = tabSpacingClass + ' disabled';
+	                    }
+
 	                    if(typeof tab.tabLink.callback === 'function') {
 		                    return (
-			                    <button className={tabSpacingClass} onClick={tab.tabLink.callback}>
+			                    <button className={tabSpacingClass} disabled={tab.tabLink.disabled} onClick={tab.tabLink.callback}>
 				                    <span className="plaintext">{tab.tabName}</span>  <i className={tab.icon}></i>
 			                    </button>
 		                    );
 	                    } else if(this.isActive(tab.tabLink.name)){
                             return (
-                                <button className={activeTabClass} onClick={this.onClickTab.bind(this, tab.tabLink.name, tab.tabLink.params)}>
+                                <button className={activeTabClass} disabled={tab.tabLink.disabled} onClick={this.onClickTab.bind(this, tab.tabLink.name, tab.tabLink.params)}>
                                     <span className="plaintext">{tab.tabName}</span>
                                 </button>
                             );
                         } else {
                             return (
-                                <button className={tabSpacingClass} onClick={this.onClickTab.bind(this, tab.tabLink.name, tab.tabLink.params)}>
+                                <button className={tabSpacingClass} disabled={tab.tabLink.disabled} onClick={this.onClickTab.bind(this, tab.tabLink.name, tab.tabLink.params)}>
                                     <span className="plaintext">{tab.tabName}</span>  <i className={tab.icon}></i>
                                 </button>
                             );

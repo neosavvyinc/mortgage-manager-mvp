@@ -4,12 +4,20 @@ var routeHealthcheck = require('../../routes/route-diagnostics'),
 	authRoute = require('../../routes/route-user'),
 	userRoute = require('../../routes/route-user-details'),
 	documentRoute = require('../../routes/route-document'),
-	applicationRoute = require('../../routes/route-application');
+	applicationRoute = require('../../routes/route-application'),
+	paymentRoute = require('../../routes/route-payment');
 
 module.exports = function(router, passport) {
 	//Healthcheck
 	router.route('/healthcheck')
 		.get(routeHealthcheck.healthCheck);
+
+
+	router.route('/user')
+		.all(_isAuthenticated)
+		.get(function(req, res) {
+			res.send(req.user).end();
+		});
 
 	//Validate User Login
 	router.route('/login')
@@ -105,6 +113,9 @@ module.exports = function(router, passport) {
 	router.route('/applications/:appId/documentEntry')
 		.all(_isAuthenticated)
 		.post(documentRoute.insertDocumentEntry);
+
+	router.route('/payment/:token')
+		.post(paymentRoute.makePayment);
 };
 
 /**
