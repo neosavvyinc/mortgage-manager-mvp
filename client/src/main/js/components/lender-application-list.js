@@ -51,7 +51,7 @@ var LenderApplications = React.createClass({
                         <th>{app.lastModified || "None"}</th>
                         <th>
                             <div className="row">
-	                            <button className="btn red" onClick={this.onApplicationSelect.bind(null, app)}>View <i className="fa fa-binoculars"></i></button>
+	                            <button className="btn btn-primary btn-xs" onClick={this.onApplicationSelect.bind(null, app)}>View <i className="fa fa-binoculars"></i></button>
                             </div>
                         </th>
                     </tr>
@@ -61,25 +61,27 @@ var LenderApplications = React.createClass({
         return (
             <div>
                 <Navigation navigationItems={actions}/>
-                <table className="responsive">
-	                <col style={otherColStyle}/>
-	                <col style={otherColStyle}/>
-	                <col style={otherColStyle}/>
-	                <col style={actionStyle}/>
-                    <thead>
-                        <tr>
-                            <th>Primary Applicant</th>
-                            <th>Co-Applicant</th>
-                            <th>Last Updated</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {applicationsTable.map(function(application) {
-                        return (application);
-                    })}
-                    </tbody>
-                </table>
+                <div className="table-responsive">
+                    <table className="table table-striped">
+                        <col style={otherColStyle}/>
+                        <col style={otherColStyle}/>
+                        <col style={otherColStyle}/>
+                        <col style={actionStyle}/>
+                        <thead>
+                            <tr>
+                                <th>Primary Applicant</th>
+                                <th>Co-Applicant</th>
+                                <th>Last Updated</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {applicationsTable.map(function(application) {
+                            return (application);
+                        })}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         );
     },
