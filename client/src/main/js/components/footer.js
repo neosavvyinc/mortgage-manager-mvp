@@ -6,20 +6,30 @@ var Footer = React.createClass({
 
     render: function(){
         return (
-            <div className="row">
-                <div className="container triple-pad-bottom triple-pad-top">
-                    <div className="row one centered mobile half double-gap-bottom">
-                        <Link to="dashboard" className="one fifth align-center">About</Link>
-                        <Link to="dashboard" className="one fifth align-center">Help</Link>
-                        <Link to="dashboard" className="one fifth align-center">Jobs</Link>
-                        <Link to="dashboard" className="one fifth align-center">Press</Link>
-                        <Link to="dashboard" className="one fifth align-center">Legal</Link>
-                    </div>
-                    <div className="row one centered mobile third">
-                        <div className="align-center">&copy; Neosavvy, Inc. 2015</div>
-                    </div>
+            <footer className="footer">
+                <div className="container">
+                    <ul className="list-inline">
+                        <li>
+                            <Link to="welcome" className="col-md-2 col-sm-4 col-xs-12 col-md-offset-1 col-sm-offset-2">About</Link>
+                        </li>
+                        <li>
+                            <Link to="welcome" className="col-md-2 col-sm-4 col-xs-12">Help</Link>
+                        </li>
+                        <li>
+                            <Link to="welcome" className="col-md-2 col-sm-4 col-xs-12 col-md-offset-0 col-sm-offset-2">Jobs</Link>
+                        </li>
+                        <li>
+                            <Link to="welcome" className="col-md-2 col-sm-4 col-xs-12">Press</Link>
+                        </li>
+                        <li>
+                            <Link to="welcome" className="col-md-2 col-sm-4 col-xs-12 col-md-offset-0 col-sm-offset-4">Legal</Link>
+                        </li>
+                        <li className="pull-right">
+                            <div className="center-block col-xs-12 text-center">&copy; Neosavvy, Inc. 2015</div>
+                        </li>
+                    </ul>
                 </div>
-            </div>
+            </footer>
         );
     }
 
