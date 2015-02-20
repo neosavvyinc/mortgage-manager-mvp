@@ -66,19 +66,18 @@ var routes = (
 	        <Route name="trialExpired" path="trial-expired" handler={Modal}>
 		        <DefaultRoute handler={TrialExpired}/>
 	        </Route>
+	        <Route name="paymentSuccess" path="payment-success" handler={Modal}>
+		        <DefaultRoute handler={PaymentSuccess}/>
+	        </Route>
 	        <Route name="changePassword" path="change-password" handler={ChangePassword}/>
 	        <Route name="viewProfile" path="view-profile" handler={ViewProfile} />
-            <Route name="dashboardApplications" path="applications" handler={Applications}>
-	            <Route name="paymentSuccess" path="payment-success" handler={Modal}>
-		            <DefaultRoute handler={PaymentSuccess}/>
-	            </Route>
-            </Route>
-            <Route name="dashboardDocuments" path="applications/:appId" handler={ApplicationDetails}>
+            <Route name="dashboardApplications" path="applications" handler={Applications} />
+            <Route name="dashboardDocuments" path="applications/:appId/:tab" handler={ApplicationDetails}>
                 <Route name="uploadNewDocument" path="upload" handler={Modal}>
                     <DefaultRoute handler={Upload} />
                 </Route>
                 <Route name="uploadExistingDocument" path="document/:documentId/upload" handler={Modal}>
-                    <DefaultRoute handler={Upload}    />
+                    <DefaultRoute handler={Upload} />
                 </Route>
                 <Route name="viewDocument" path="document/:documentId/" handler={Modal}>
                     <DefaultRoute handler={viewPdf} />
