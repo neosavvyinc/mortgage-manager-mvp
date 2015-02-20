@@ -1,6 +1,7 @@
 'use strict';
 
 var _ = require('underscore'),
+    async = require('async'),
 	userDetailsService = require('../services/service-user-details'),
 	settings = require('../config/app/settings'),
     validationUtils = require('../utils/validation-utils');
@@ -23,14 +24,27 @@ exports.updateUser = function(req, res) {
             res.status(400).send({message: 'You have to provide a valid phone'});
             res.end();
         } else {
-            userDetailsService.updateUser(userObject, function() {
-                settings.log.info('Successfully updated user. User Id ' + uid);
-                res.send({message: 'Success'});
-                res.end();
-            }, function(error) {
-                if(error) {
+            async.series([
+                function(done){
+                    userDetailsService.getUserDetails({phone:  userObject.phone}, function(userDetailsData){
+                        if(userDetailsData[0] && userDetailsData[0].phone === userObject.phone){
+                            done({message: 'This phone number is already in use'});
+                        } else {
+                            done();
+                        }
+                    }, function(){
+                        done({message: 'Internal Server Error'});
+                    });
+                },
+                function(done){
+                    userDetailsService.updateUser(userObject, done, done);
+                }
+            ],function(error){
+                if(error){
                     settings.log.fatal(error.message);
-                    res.status(500).send({message: 'Internal Server Error'});
+                    res.status(500).send(error);
+                } else {
+                    res.send({message: 'Success'});
                 }
                 res.end();
             });
@@ -72,14 +86,28 @@ exports.addCoApplicant = function(req, res) {
 		uid = req.params.uid;
 
     if( uid === req.user._id){
-        userDetailsService.createCoApplicant(uid, coapplicant, function() {
-            settings.log.info('Successfully added co-applicant for user with uid ' + uid);
-            res.send({message: 'Success'});
-            res.end();
-        }, function(error) {
-            if(error) {
+        async.series([
+            function(done){
+                userDetailsService.getUserDetails({phone:  coapplicant.phone}, function(userDetailsData){
+                    if(userDetailsData[0] && userDetailsData[0].phone === coapplicant.phone){
+                        done({message: 'This phone number is already in use'});
+                    } else {
+                        done();
+                    }
+                }, function(){
+                    done({message: 'Internal Server Error'});
+                });
+            },
+            function(done){
+                userDetailsService.createCoApplicant(uid, coapplicant, done, done);
+            }
+        ],function(error){
+            if(error){
                 settings.log.fatal(error.message);
                 res.status(500).send({message: 'Internal Server Error'});
+            } else {
+                settings.log.info('Successfully added co-applicant for user with uid ' + uid);
+                res.send({message: 'Success'});
             }
             res.end();
         });
