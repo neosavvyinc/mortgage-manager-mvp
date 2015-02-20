@@ -63,12 +63,12 @@ var routes = (
             <Route name="newLender" path="new-lender" handler={newLenderInvite} />
         </Route>
         <Route name="dashboard" handler={Dashboard}>
+	        <Route name="trialExpired" path="trial-expired" handler={Modal}>
+		        <DefaultRoute handler={TrialExpired}/>
+	        </Route>
 	        <Route name="changePassword" path="change-password" handler={ChangePassword}/>
 	        <Route name="viewProfile" path="view-profile" handler={ViewProfile} />
             <Route name="dashboardApplications" path="applications" handler={Applications}>
-	            <Route name="trialExpired" path="trial-expired" handler={Modal}>
-		            <DefaultRoute handler={TrialExpired}/>
-	            </Route>
 	            <Route name="paymentSuccess" path="payment-success" handler={Modal}>
 		            <DefaultRoute handler={PaymentSuccess}/>
 	            </Route>
@@ -78,7 +78,7 @@ var routes = (
                     <DefaultRoute handler={Upload} />
                 </Route>
                 <Route name="uploadExistingDocument" path="document/:documentId/upload" handler={Modal}>
-                    <DefaultRoute handler={Upload} />
+                    <DefaultRoute handler={Upload}    />
                 </Route>
                 <Route name="viewDocument" path="document/:documentId/" handler={Modal}>
                     <DefaultRoute handler={viewPdf} />

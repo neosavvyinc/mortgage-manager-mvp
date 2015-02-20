@@ -2,8 +2,7 @@
 
 var React = require('react'),
 	Router = require('react-router'),
-	Reflux = require('reflux'),
-	Location = Router.HistoryLocation;
+	Reflux = require('reflux');
 
 var TrialExpired = React.createClass({
 

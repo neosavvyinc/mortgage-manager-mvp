@@ -16,6 +16,21 @@ var HeaderNav = React.createClass({
 		Reflux.listenTo(UserStore, 'onLogoutTransition')
 	],
 
+	getInitialState: function() {
+		return {
+			isTrial: false
+		};
+	},
+
+	componentDidMount: function() {
+		User.getUserDetails(UserStore.getCurrentUserId()).then(function (user) {
+
+			if (user.type === 'borrower' && user.pricingPlan === 'trial') {
+				this.setState({isTrial: true});
+			}
+		}.bind(this));
+	},
+
 	onLogout: function(){
 		User.logOut().then(function() {
 			UserActions.logout();
@@ -35,7 +50,7 @@ var HeaderNav = React.createClass({
 	},
 
 	onUpgrade: function() {
-		this.transitionTo('paymentStripe');
+		this.transitionTo('pricingOptions');
 	},
 
 	onViewPayments: function() {
@@ -43,6 +58,17 @@ var HeaderNav = React.createClass({
 	},
 
 	render: function() {
+		var upgradeClass,
+			viewPaymentsClass;
+
+		if(this.state.isTrial) {
+			upgradeClass = '';
+			viewPaymentsClass = 'hidden disabled';
+		} else {
+			upgradeClass = 'hidden disabled';
+			viewPaymentsClass = '';
+		}
+
 		return (
 			<div className = "one whole">
 				<nav className="header-nav">
@@ -51,8 +77,8 @@ var HeaderNav = React.createClass({
 							<ul>
 								<li><div onClick={this.onViewProfile}>View Profile</div></li>
 								<li><div onClick={this.onChangePassword}>Change Password</div></li>
-								<li><div onClick={this.onUpgrade}>Upgrade</div></li>
-								<li><div onClick={this.onViewPayments}>View Payments</div></li>
+								<li><div onClick={this.onUpgrade} className={upgradeClass}>Upgrade</div></li>
+								<li><div onClick={this.onViewPayments} className={viewPaymentsClass}>View Payments</div></li>
 								<li><div onClick={this.onLogout}>Logout</div></li>
 							</ul>
 						</li>

@@ -36,14 +36,6 @@ var UserStore = Reflux.createStore({
         this.trigger();
     },
 
-	onReceiveCurrentUser: function(user, createdDate) {
-		var currentDate = moment(),
-			duration = moment.duration(currentDate.diff(createdDate));
-		if(user.type === 'borrower' && user.pricingPlan === 'trial' && duration.asDays() > 15) {
-			this.trigger();
-		}
-	},
-
     getCurrentUserId: function(){
         return sessionStorage.getItem("userId");
     },

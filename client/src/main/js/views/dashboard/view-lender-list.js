@@ -1,3 +1,5 @@
+'use strict';
+
 var React = require('react');
 var Router = require('react-router');
 var Reflux = require('reflux');
@@ -6,8 +8,10 @@ var _ = require('lodash');
 var Application = require('../../models/model-application');
 var ApplicationActions = require('../../actions/action-application');
 var ApplicationStore = require('../../stores/store-application');
+var User = require('../../models/model-user');
 var UserStore = require('../../stores/store-user');
 var Navigation = require('../../components/navigation');
+var moment = require('moment');
 
 var arraysEqual = function(arr1, arr2) {
     if(arr1.length !== arr2.length){
@@ -26,21 +30,36 @@ var LenderContacts = React.createClass({
     mixins: [
         Router.State,
         Router.Navigation,
-        Reflux.listenTo(ApplicationStore, "reloadLenders")
+        Reflux.listenTo(ApplicationStore, 'reloadLenders')
     ],
 
     getInitialState: function(){
         return {
             lenders: [],
             actionError: false,
-            actionErrorMessage: ''
+            actionErrorMessage: '',
+	        disableButtons: false
         };
     },
 
-    componentDidMount: function(){
-       if(this.isMounted()){
-           this.getLenders();
-       }
+    componentDidMount: function() {
+	    if(this.isMounted()) {
+		    Application.getLenders(this.getParams().appId).then(function (lenders) {
+			    User.getUserDetails(UserStore.getCurrentUserId()).then(function (user) {
+				    var createdDate = moment(user.created),
+					    currentDate = moment(),
+					    duration = moment.duration(currentDate.diff(createdDate)),
+					    state={lenders: lenders};
+
+				    if (user.type === 'borrower' && user.pricingPlan === 'trial' && duration.asDays() > 15) {
+					    state.disableButtons = true;
+				    }
+
+				    this.setState(state);
+
+			    }.bind(this));
+		    }.bind(this));
+	    }
     },
 
     componentDidUpdate: function(prevProps, prevState) {
@@ -50,11 +69,6 @@ var LenderContacts = React.createClass({
     },
 
     getLenders: function(){
-        Application.getLenders(this.getParams().appId).then(function(lenders){
-            this.setState({
-                lenders: lenders
-            });
-        }.bind(this));
     },
 
     reloadLenders: function(){
@@ -85,7 +99,15 @@ var LenderContacts = React.createClass({
     },
 
     render: function(){
-        var lendersTable = [];
+        var lendersTable = [],
+	        remindButton = {
+		    disabled: false
+	    }, lenderInviteDisabled = false;
+
+	    if(this.state.disableButtons) {
+		    lenderInviteDisabled = true;
+		    remindButton.disabled = true;
+	    }
 
         var actions = [
             {
@@ -94,7 +116,8 @@ var LenderContacts = React.createClass({
                     name: "inviteLender",
                     params: [{
                         appId: this.getParams().appId
-                    }]
+                    }],
+	                disabled: lenderInviteDisabled
                 },
 	            icon: 'fa fa-user-plus'
             }
@@ -120,7 +143,7 @@ var LenderContacts = React.createClass({
                 actionBtns = (
                     <th>
                         <div className="row">
-                            <button className="btn turquoise mobile gap-right tooltip" data-tooltip="Remind" onClick={this.onReSendInvite.bind(null, lender)}><i className="fa fa-paper-plane"></i></button>
+                            <button className="btn turquoise mobile gap-right tooltip" disabled={remindButton.disabled} data-tooltip="Remind" onClick={this.onReSendInvite.bind(null, lender)}><i className="fa fa-paper-plane"></i></button>
                             <button className="btn red mobile tooltip" data-tooltip="Delete" onClick={this.onDeleteInvite.bind(null, lender)}><i className="fa fa-trash-o"></i></button>
                         </div>
                     </th>

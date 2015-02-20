@@ -150,9 +150,11 @@ exports.findUserWithDetails = function(uid, success, failure){
 		},
 		function(done){
 			user.retrieve({_id: uid}, function(data){
-				if(data[0].toObject !== undefined ) {
+				var userObj = data[0].toObject();
+				if(userObj !== undefined ) {
 					_.extend(userWithDetails, {
-						type: data[0].toObject().type
+						type: userObj.type,
+						pricingPlan: userObj.pricingPlan
 					});
 				}
 				done();
