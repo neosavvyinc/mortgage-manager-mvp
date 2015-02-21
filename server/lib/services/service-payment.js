@@ -80,7 +80,7 @@ exports.makePayment = function(uid, token, card, amount, idempotentToken, succes
 		function(done) {
 			//Save payment details even if there is a charge error and then send charge error back to route.
 			//We may need the details of declined transactions by Stripe in our database.
-			var payment = {
+			var paymentDetails = {
 					_id: paymentId,
 					cardId: cardId,
 					amount: amount,
@@ -89,13 +89,13 @@ exports.makePayment = function(uid, token, card, amount, idempotentToken, succes
 				};
 
 			if(chargeError) {
-				payment.status = 'declined';
-				payment.declineReason = chargeError.type + ' ' + chargeError.code;
+				paymentDetails.status = 'declined';
+				paymentDetails.declineReason = chargeError.type + ' ' + chargeError.code;
 			}
 
-			payment.insert(payment, function() {
+			payment.insert(paymentDetails, function() {
 				if(chargeError) {
-					done(new Error(_getChargeErrorMessage(chargeError)));
+					done(_getChargeErrorMessage(chargeError));
 				} else {
 					done();
 				}
@@ -133,7 +133,7 @@ exports.makePayment = function(uid, token, card, amount, idempotentToken, succes
 /**
  * Helper to return a useful message when a payment is declined.
  * @param chargeError
- * @returns {String}
+ * @returns {Object}
  * @private
  */
 var _getChargeErrorMessage = function(chargeError) {
@@ -197,6 +197,12 @@ var _getChargeErrorMessage = function(chargeError) {
 				message = 'An error occurred while processing the card';
 				break;
 		}
+	} else {
+		message = chargeError.message;
 	}
-	return message;
+
+	return {
+		message: message,
+		code: chargeError.type
+	};
 };

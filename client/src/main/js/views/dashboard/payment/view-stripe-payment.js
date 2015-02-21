@@ -21,7 +21,8 @@ var StripePayment = React.createClass({
 			showMessage: false,
 			messageType: 'error',
 			submitButtonClass: 'one third turquoise button',
-			spinnerClass: 'hidden'
+			spinnerClass: 'hidden',
+			disablePayment: false
 		};
 	},
 
@@ -31,7 +32,8 @@ var StripePayment = React.createClass({
 		this.setState({
 			submitButtonClass: 'one third button disabled',
 			spinnerClass: '',
-			showMessage: false
+			showMessage: false,
+			disablePayment: true
 		});
 
 		if(Stripe.card.validateCardNumber(this.refs.cardNumber.getDOMNode().value)) {
@@ -126,7 +128,7 @@ var StripePayment = React.createClass({
 						</div>
 					</div>
 					<div className="row gap-top">
-						<button className={this.state.submitButtonClass} onClick={this.onMakePayment}>Make Payment</button>
+						<button className={this.state.submitButtonClass} disabled={this.state.disablePayment} onClick={this.onMakePayment}>Make Payment</button>
 						<h1 className={this.state.spinnerClass}>&nbsp;<i className="fa fa-spinner fa-pulse"></i></h1>
 					</div>
 					<div className="row gap-top">
