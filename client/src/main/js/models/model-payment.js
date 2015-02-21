@@ -25,4 +25,15 @@ PaymentModel.makePayment = function(token, card, idempotentToken, amount) {
 	});
 };
 
+PaymentModel.getPublishableKey = function() {
+	return Q.promise(function(resolve, reject) {
+		$.get(Endpoints.STRIPE.URL)
+		.success(function(response){
+			resolve(response);
+		}).error(function(error){
+			reject(error.responseJSON);
+		});
+	});
+};
+
 module.exports = PaymentModel;

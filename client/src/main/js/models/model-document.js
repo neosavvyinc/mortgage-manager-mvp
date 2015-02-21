@@ -15,9 +15,9 @@ Document.upload = function (applicationId, document) {
 	formData.append('details', JSON.stringify(document));
 
 	if(document._id !== undefined) {
-		url = Endpoints.APPLICATIONS.ONE.DOCUMENTS.URL.replace(':id', applicationId);
+		url = Endpoints.APPLICATIONS.ONE.FILE.ONE.URL.replace(':id', applicationId).replace(':docId', 'new');
 	} else {
-		url = Endpoints.APPLICATIONS.ONE.DOCUMENTS.ONE.URL.replace(':id', applicationId).replace(':docId', document._id);
+		url = Endpoints.APPLICATIONS.ONE.FILE.ONE.URL.replace(':id', applicationId).replace(':docId', document._id);
 	}
 
 	return Q.promise(function(resolve, reject) {

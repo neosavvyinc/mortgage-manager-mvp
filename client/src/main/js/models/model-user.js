@@ -169,8 +169,7 @@ User.forgotPassword = function(email) {
 };
 
 User.updatePassword = function(uid, oldPassword, newPassword, token) {
-	console.log(uid);
-    return Q.promise(function(resolve, reject) {
+	return Q.promise(function(resolve, reject) {
         $.post(Endpoints.USER.ONE.UPDATEPASSWORD.URL.replace(':id', uid), {
 	        oldPassword: oldPassword,
             password: newPassword,
@@ -181,6 +180,17 @@ User.updatePassword = function(uid, oldPassword, newPassword, token) {
             reject(error);
         });
     });
+};
+
+User.checkTrialExpired = function(uid) {
+	return Q.promise(function(resolve, reject) {
+		$.get(Endpoints.USER.ONE.TRIALEXPIRED.URL.replace(':id', uid))
+		.success(function(response) {
+			resolve(response);
+		}).error(function(error) {
+			reject(error.responseJSON);
+		});
+	});
 };
 
 module.exports = User;

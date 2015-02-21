@@ -26,6 +26,22 @@ var StripePayment = React.createClass({
 		};
 	},
 
+	componentDidMount: function() {
+		ModelPayment.getPublishableKey().then(
+			function(key) {
+				Stripe.setPublishableKey(key);
+			},
+			function(error) {
+				this.setState({
+					showMessage: true,
+					spinnerClass: 'hidden',
+					messageType: 'error',
+					messageText: error.message
+				});
+			}
+		);
+	},
+
 	onMakePayment: function(ev) {
 		ev.preventDefault();
 
@@ -43,7 +59,8 @@ var StripePayment = React.createClass({
 						submitButtonClass: 'one third button turquoise',
 						spinnerClass: 'hidden',
 						showMessage: true,
-						messageText: response.error.message
+						messageText: response.error.message,
+						disablePayment: false
 					});
 				} else {
 					ModelPayment.makePayment(response.id, response.card, this.state.idempotentToken, this.getParams().price.replace('$', '')).then(
@@ -69,7 +86,8 @@ var StripePayment = React.createClass({
 				submitButtonClass: 'one third button turquoise',
 				spinnerClass: 'hidden',
 				showMessage: true,
-				messageText: 'Invalid Credit card number'
+				messageText: 'Invalid Credit card number',
+				disablePayment: false
 			});
 		}
 	},
