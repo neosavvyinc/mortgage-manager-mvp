@@ -3,6 +3,24 @@
 var settings = require('../config/app/settings'),
 	paymentService = require('../services/service-payment');
 
+/**
+ * Route handler for getting the publishable key
+ * @param req
+ * @param res
+ */
+exports.getPublishableKey = function(req, res) {
+	var config = settings.getConfig(),
+		publishableKey = config.stripe.publishableKey;
+
+	res.send(publishableKey);
+	settings.log.info('Sending publishable key to client');
+};
+
+/**
+ * Route handler for incoming payments
+ * @param req
+ * @param res
+ */
 exports.makePayment = function(req, res) {
 	var token = req.params.token,
 		card = req.body.card,
@@ -18,10 +36,7 @@ exports.makePayment = function(req, res) {
 			if(error.message === 'Already made payment') {
 				settings.log.fatal(error.message);
 				res.status(401).send({message: 'You are already a premium user!'});
-			} else if(error.code === 'StripeCardError') {
-				settings.log.fatal(error.message);
-				res.status(405).send(error.message);
-			} else if (error.code === 'card_error') {
+			} else if(error.code === 'StripeCardError' || error.code === 'card_error') {
 				settings.log.fatal(error.message);
 				res.status(405).send(error.message);
 			} else if (error.code === 'api_error') {

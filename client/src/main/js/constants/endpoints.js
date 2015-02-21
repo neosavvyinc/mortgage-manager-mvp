@@ -11,7 +11,10 @@ module.exports = {
             },
             UPDATEPASSWORD: {
                 URL: '/api/user/:id/update-password'
-            }
+            },
+	        TRIALEXPIRED: {
+		        URL: '/api/user/:id/checkTrialExpired'
+	        }
         }
     },
     LOGIN: {
@@ -75,5 +78,8 @@ module.exports = {
     },
 	PAYMENT: {
 		URL: '/api/payment/:token'
+	},
+	STRIPE: {
+		URL: '/api/payment/publishableKey'
 	}
 };

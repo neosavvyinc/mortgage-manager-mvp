@@ -221,6 +221,20 @@ exports.forgotPassword = function(req, res) {
 	});
 };
 
+exports.checkTrialExpired = function(req, res) {
+	userService.checkTrialExpired(req.user._id, function() {
+		res.send('Has premium access');
+		settings.log.info('User has premium access');
+	}, function(error) {
+		if(error.message === 'Trial Expired') {
+			res.status(405).send({message: error.message});
+		} else {
+			res.status(500).send({message: 'Internal Server Error'});
+		}
+		settings.log.error(error.message);
+	});
+};
+
 /**
  * Route handler that updates the user password
  * @param req

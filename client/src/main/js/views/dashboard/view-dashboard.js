@@ -25,7 +25,6 @@ var Dashboard = React.createClass({
 	        transition.wait(
 		        User.isAuthenticated().then(function (res) {
 			        if (!res.isAuthenticated) {
-				        console.log('Here not authenticated');
 				        transition.redirect('welcome');
 			        }
 		        })
@@ -34,15 +33,13 @@ var Dashboard = React.createClass({
     },
 
 	componentDidMount: function() {
-		User.getUserDetails(UserStore.getCurrentUserId()).then(function(user) {
-			var createdDate = moment(user.created),
-				currentDate = moment(),
-				duration = moment.duration(currentDate.diff(createdDate));
-
-			if(user.type === 'borrower' && user.pricingPlan === 'trial' && duration.asDays() > 15) {
-				this.transitionTo('trialExpired');
-			}
-		}.bind(this));
+		User.checkTrialExpired(UserStore.getCurrentUserId()).then(
+			function() {},
+			function(error) {
+				if(error.message === 'Trial Expired') {
+					this.transitionTo('trialExpired');
+				}
+			}.bind(this));
 	},
 
     render: function(){

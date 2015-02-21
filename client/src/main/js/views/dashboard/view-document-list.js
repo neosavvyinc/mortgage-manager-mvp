@@ -70,7 +70,7 @@ var Documents = React.createClass({
     },
 
     onDocumentUpload: function(document) {
-        this.transitionTo('uploadExistingDocument', {appId: this.getParams().appId, documentId: document._id});
+        this.transitionTo('uploadExistingDocument', {appId: this.getParams().appId, tab: 0, documentId: document._id});
     },
 
 	onDocumentDownload: function(document) {
@@ -81,7 +81,7 @@ var Documents = React.createClass({
     onDocumentView: function(document) {
         var appId = this.getParams().appId,
             docId = document._id;
-        this.transitionTo('viewDocument', {appId: appId, documentId: docId});
+        this.transitionTo('viewDocument', {appId: appId, tab: 0, documentId: docId});
     },
 
     getDocuments: function() {
@@ -184,27 +184,28 @@ var Documents = React.createClass({
             };
             
             if(document.uploadDate !== undefined) {
+	            uploadButton.text = '';
 	            if(this.state.disableButtons) {
 		            viewButton.disabled = true;
 		            downloadButton.disabled = true;
 		            uploadButton.disabled = true;
-		            viewButton.style =  'btn disabled tooltip';
-		            downloadButton.style =  'btn disabled tooltip';
-		            uploadButton.style =  'btn disabled tooltip';
+		            viewButton.style =  'btn red disabled gap-right tooltip';
+		            downloadButton.style =  'btn green disabled gap-right tooltip';
+		            uploadButton.style =  'btn disabled blue gap-right tooltip';
 	            } else {
 		            viewButton.disabled = false;
 		            viewButton.style =  'btn red gap-right gap-bottom tooltip';
 		            uploadButton.style = 'btn blue gap-right gap-bottom tooltip';
-		            uploadButton.text = '';
 		            downloadButton.disabled = false;
 		            downloadButton.style =  'btn green tooltip';
 	            }
+            } else {
+	            uploadButton.style =  'btn blue block gap-right five sixths tooltip';
+	            if(this.state.disableButtons) {
+		            uploadButton.style += ' disabled';
+		            uploadButton.disabled = true;
+	            }
             }
-
-	        if(this.state.disableButtons) {
-		        uploadButton.disabled = true;
-		        uploadButton.style =  'btn block gap-right five sixths disabled tooltip';
-	        }
 
             // e.g. Wednesday, January 21, 2015 3:21 PM
             document.requestDate = moment(document.requestDate).format('llll');

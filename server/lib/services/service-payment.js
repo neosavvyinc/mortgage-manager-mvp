@@ -6,9 +6,8 @@ var async = require('async'),
 	cardModel = require('../db/models/model-card').Model,
 	userModel = require('../db/models/model-user').Model,
 	userDetailsModel = require('../db/models/model-user-details').Model,
-	stripeConfig = require('../config/app/stripe'),
-	stripe = require('stripe')(stripeConfig.testSecretKey),
-	settings = require('../config/app/settings');
+	settings = require('../config/app/settings'),
+	stripe = require('stripe');
 
 /**
  * Makes a payment to stripe using the stripe Node API
@@ -59,7 +58,9 @@ exports.makePayment = function(uid, token, card, amount, idempotentToken, succes
 		},
 		function(done) {
 			/*jshint camelcase: false */
-			stripe.charges.create({
+			var stripeInstance = stripe(settings.getConfig().stripe.secretKey);
+
+			stripeInstance.charges.create({
 				amount: amount * 100,
 				currency: 'usd',
 				source: token,
@@ -190,7 +191,7 @@ var _getChargeErrorMessage = function(chargeError) {
 				message = 'An error occurred while processing the card';
 				break;
 
-			// Yet to fully understand what this error means. I'm assuming for now that it could arise from
+			// Yet to fully understand when this error may occur. I'm assuming for now that it could arise from
 			// erroneous code.
 			case 'missing':
 				settings.log.fatal('Card missing on the customer');

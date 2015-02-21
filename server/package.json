@@ -45,7 +45,8 @@
     "jsonschema": "1.0.0",
     "archiver": "0.14.2",
     "password-generator": "0.2.3",
-    "stripe": "3.3.0"
+    "stripe": "3.3.0",
+    "moment": "2.9.0"
   },
 
   "scripts": {

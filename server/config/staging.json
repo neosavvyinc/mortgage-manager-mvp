@@ -14,5 +14,9 @@
 				"category": "staging"
 			}
 		]
+	},
+	"stripe": {
+		"secretKey": "sk_live_F2XSDxwTReNHaiwtIza06Y6H",
+		"publishableKey": "pk_live_EHitJyOtZu3exkfrzN4zZE4U"
 	}
 }
