@@ -50,21 +50,23 @@ var BorrowerContacts = React.createClass({
                 <div className="gap-top">
                     <h2>Lenders</h2>
                     <Navigation navigationItems={actions}/>
-                    <table className="responsive">
-                        <thead>
-                            <tr>
-                                <th>Applicant's Name</th>
-                                <th>Address</th>
-                                <th>Email</th>
-                                <th>Phone</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                    {borrowersTable.map(function(borrower) {
-                        return (borrower);
-                    })}
-                        </tbody>
-                    </table>
+                    <div className="table-responsive">
+                        <table className="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Applicant's Name</th>
+                                    <th>Address</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                        {borrowersTable.map(function(borrower) {
+                            return (borrower);
+                        })}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         );

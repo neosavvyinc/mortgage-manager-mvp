@@ -159,7 +159,7 @@ var Documents = React.createClass({
                 disabled: true,
                 style: 'disabled hidden'
             }, uploadButton = {
-                style: 'btn blue block gap-right five sixths',
+                style: 'btn btn-sm btn-success',
 	            text: 'Upload '
             }, downloadButton = {
 	            disabled: true,
@@ -168,11 +168,11 @@ var Documents = React.createClass({
             
             if(document.uploadDate !== undefined) {
                 viewButton.disabled = false;
-                viewButton.style =  'btn red gap-right gap-bottom tooltip';
-                uploadButton.style = 'btn blue gap-right gap-bottom tooltip';
+                viewButton.style =  'btn btn-sm btn-primary';
+                uploadButton.style = 'btn btn-sm btn-success';
 	            uploadButton.text = '';
 	            downloadButton.disabled = false;
-	            downloadButton.style =  'btn green tooltip';
+	            downloadButton.style =  'btn btn-sm btn-info';
             }
 
             // e.g. Wednesday, January 21, 2015 3:21 PM
@@ -186,12 +186,18 @@ var Documents = React.createClass({
 				        <th>{document.description}</th>
 				        <th>{document.requestDate}</th>
 				        <th>
-					        <button className={viewButton.style} disabled={viewButton.disabled} onClick={this.onDocumentView.bind(this, document)} data-tooltip="View">
-						        <i className="fa fa-binoculars"></i>
-					        </button>
-					        <button className={downloadButton.style} disabled={downloadButton.disabled} onClick={this.onDocumentDownload.bind(this, document)} data-tooltip="Download">
-						        <i className="fa fa-download"></i>
-					        </button>
+                            <ul className="list-inline">
+                                <li className={viewButton.disabled ? "" : "btn-group"}>
+                                    <button className={viewButton.style} disabled={viewButton.disabled} onClick={this.onDocumentView.bind(this, document)} data-toggle="tooltip" data-placement="bottom" title="View">
+                                        <i className="fa fa-binoculars"></i>
+                                    </button>
+                                </li>
+                                <li className={downloadButton.disabled ? "" : "btn-group"}>
+                                    <button className={downloadButton.style} disabled={downloadButton.disabled} onClick={this.onDocumentDownload.bind(this, document)} data-toggle="tooltip" data-placement="bottom" title="Download">
+                                        <i className="fa fa-download"></i>
+                                    </button>
+                                </li>
+                            </ul>
 				        </th>
 			        </tr>
 		        ));
@@ -203,15 +209,23 @@ var Documents = React.createClass({
 				        <th>{document.description}</th>
 				        <th>{document.requestDate}</th>
 				        <th>
-					        <button className={viewButton.style} disabled={viewButton.disabled} onClick={this.onDocumentView.bind(this, document)} data-tooltip="View">
-						        <i className="fa fa-binoculars"></i>
-					        </button>
-					        <button className={uploadButton.style} onClick={this.onDocumentUpload.bind(this, document)} data-tooltip="Upload">{uploadButton.text}
-						        <i className="fa fa-upload"></i>
-					        </button>
-					        <button className={downloadButton.style} disabled={downloadButton.disabled} onClick={this.onDocumentDownload.bind(this, document)} data-tooltip="Download">
-						        <i className="fa fa-download"></i>
-					        </button>
+                            <ul className="row">
+                                <li className={viewButton.disabled ? "hidden" : "btn-group col-md-4 col-sm-6"}>
+                                    <button className={viewButton.style} disabled={viewButton.disabled} onClick={this.onDocumentView.bind(this, document)} data-toggle="tooltip" data-placement="bottom" title="View">
+                                        <i className="fa fa-binoculars"></i>
+                                    </button>
+                                </li>
+                                <li className="btn-group col-md-4 col-sm-6">
+                                    <button className={uploadButton.style} onClick={this.onDocumentUpload.bind(this, document)} title="Upload">{uploadButton.text}
+                                        <i className="fa fa-upload"></i>
+                                    </button>
+                                </li>
+                                <li className={downloadButton.disabled ? "hidden" : "btn-group col-md-4 col-sm-6"}>
+                                    <button className={downloadButton.style} disabled={downloadButton.disabled} onClick={this.onDocumentDownload.bind(this, document)} data-toggle="tooltip" data-placement="bottom" title="Download">
+                                        <i className="fa fa-download"></i>
+                                    </button>
+                                </li>
+                            </ul>
 				        </th>
 			        </tr>
 		        ));
@@ -219,16 +233,16 @@ var Documents = React.createClass({
         }, this);
 
         return (
-            <div className="container">
-                <div className="gap-top">
-                    <h2>Documents</h2>
-                    <Navigation navigationItems={actions}/>
+            <div>
+                <h2>Documents</h2>
+                <Navigation navigationItems={actions}/>
+                <div className="table-responsive">
                     <table className="table table-striped">
-	                    <col style={otherColStyle}/>
-	                    <col style={otherColStyle}/>
-	                    <col style={otherColStyle}/>
-	                    <col style={otherColStyle}/>
-	                    <col style={actionStyle}/>
+                        <col style={otherColStyle}/>
+                        <col style={otherColStyle}/>
+                        <col style={otherColStyle}/>
+                        <col style={otherColStyle}/>
+                        <col style={actionStyle}/>
                         <thead>
                             <tr>
                                 <th>Document Name</th>

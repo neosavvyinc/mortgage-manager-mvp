@@ -4,30 +4,30 @@ var Link = Router.Link;
 var _ = require('lodash');
 
 var calculateTabSpacing = function(tabNavLength){
-    return "one sixth";
+    return "";
     switch (tabNavLength){
         case 2:
-            return "one half";
+            return "col-xs-6";
         case 3:
-            return "one third";
+            return "col-xs-4";
         case 4:
-            return "one fourth";
+            return "col-xs-3";
         case 5:
-            return "one fifth";
+            return "col-xs-2";
         case 6:
-            return "one sixth";
+            return "col-xs-2";
         case 7:
-            return "one seventh";
+            return "col-xs-1";
         case 8:
-            return "one eight";
+            return "col-xs-1";
         case 9:
-            return "one ninth";
+            return "col-xs-1";
         case 10:
-            return "one tenth";
+            return "col-xs-1";
         case 11:
-            return "one eleventh";
+            return "col-xs-1";
         case 12:
-            return "one twelfth";
+            return "col-xs-1";
         default:
             return "";
     }
@@ -59,35 +59,39 @@ var Navigation = React.createClass({
     },
 
     render: function() {
-        var tabSpacingClass = calculateTabSpacing(this.props.navigationItems.length) + ' blue gap-right';
+        var tabSpacingClass = 'btn btn-md btn-primary';
 
-        var activeTabClass = tabSpacingClass + " turquoise";
+        var activeTabClass = tabSpacingClass + " btn-info";
         return (
-            <div className="container">
-                <div className="row gap-bottom">
-                    {this.props.navigationItems.map(function(tab) {
-	                    if(typeof tab.tabLink.callback === 'function') {
-		                    return (
-			                    <button className={tabSpacingClass} onClick={tab.tabLink.callback}>
-				                    <span className="plaintext">{tab.tabName}</span>  <i className={tab.icon}></i>
-			                    </button>
-		                    );
-	                    } else if(this.isActive(tab.tabLink.name)){
-                            return (
+            <ul className="list-inline">
+                {this.props.navigationItems.map(function(tab) {
+                    if(typeof tab.tabLink.callback === 'function') {
+                        return (
+                            <li className="btn-group">
+                                <button className={tabSpacingClass} onClick={tab.tabLink.callback}>
+                                    <span className="plaintext">{tab.tabName}</span>  <i className={tab.icon}></i>
+                                </button>
+                            </li>
+                        );
+                    } else if(this.isActive(tab.tabLink.name)){
+                        return (
+                            <li className="btn-group">
                                 <button className={activeTabClass} onClick={this.onClickTab.bind(this, tab.tabLink.name, tab.tabLink.params)}>
                                     <span className="plaintext">{tab.tabName}</span>
                                 </button>
-                            );
-                        } else {
-                            return (
+                            </li>
+                        );
+                    } else {
+                        return (
+                            <li className="btn-group">
                                 <button className={tabSpacingClass} onClick={this.onClickTab.bind(this, tab.tabLink.name, tab.tabLink.params)}>
                                     <span className="plaintext">{tab.tabName}</span>  <i className={tab.icon}></i>
                                 </button>
-                            );
-                        }
-                    }.bind(this))}
-                </div>
-            </div>
+                            </li>
+                        );
+                    }
+                }.bind(this))}
+            </ul>
         );
     }
 

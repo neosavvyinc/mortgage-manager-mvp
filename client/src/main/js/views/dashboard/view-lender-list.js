@@ -113,8 +113,14 @@ var LenderContacts = React.createClass({
                 actionBtns = (
                     <th>
                         <div className="row">
-                            <button className="btn turquoise mobile gap-right" data-tooltip="Remind" onClick={this.onReSendInvite.bind(null, lender)}><i className="fa fa-paper-plane"></i></button>
-                            <button className="btn red mobile" data-tooltip="Delete" onClick={this.onDeleteInvite.bind(null, lender)}><i className="fa fa-trash-o"></i></button>
+                            <ul className="list-inline">
+                                <li className="btn-group">
+                                    <button className="btn btn-sm btn-info" data-tooltip="Remind" onClick={this.onReSendInvite.bind(null, lender)}><i className="fa fa-paper-plane"></i></button>
+                                </li>
+                                <li className="btn-group">
+                                    <button className="btn btn-sm btn-danger" data-tooltip="Delete" onClick={this.onDeleteInvite.bind(null, lender)}><i className="fa fa-trash-o"></i></button>
+                                </li>
+                            </ul>
                         </div>
                     </th>
                 )
@@ -122,8 +128,14 @@ var LenderContacts = React.createClass({
                 actionBtns = (
                     <th>
                         <div className="row">
-                            <a href={mailTo}><button className="btn blue" data-tooltip="Email"><i className="fa fa-envelope-o"></i></button></a>
-                            <a href={callTo}><button className="btn green" data-tooltip="Call"><i className="fa fa-phone"></i></button></a>
+                            <ul className="list-inline">
+                                <li className="btn-group">
+                                    <a href={mailTo}><button className="btn btn-sm btn-primary" data-tooltip="Email"><i className="fa fa-envelope-o"></i></button></a>
+                                </li>
+                                <li className="btn-group">
+                                    <a href={callTo}><button className="btn btn-sm btn-success" data-tooltip="Call"><i className="fa fa-phone"></i></button></a>
+                                </li>
+                            </ul>
                         </div>
                     </th>
                 );
@@ -140,31 +152,33 @@ var LenderContacts = React.createClass({
         }, this);
 
         return (
-            <div className="container">
+            <div className="">
                 <div className="gap-top">
                     <h2>Lenders</h2>
                     <Navigation navigationItems={actions}/>
-                    <table className="table table-striped">
-	                    <col style={otherColStyle}/>
-	                    <col style={orgColStyle}/>
-	                    <col style={otherColStyle}/>
-	                    <col style={statusColStyle}/>
-	                    <col style={actionStyle}/>
-	                    <thead>
-                            <tr>
-                                <th>Lender Name</th>
-                                <th>Organization</th>
-                                <th>Contact</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                    {lendersTable.map(function(lender) {
-                        return (lender);
-                    })}
-                        </tbody>
-                    </table>
+                    <div className="table-responsive">
+                        <table className="table table-striped">
+                            <col style={otherColStyle}/>
+                            <col style={orgColStyle}/>
+                            <col style={otherColStyle}/>
+                            <col style={statusColStyle}/>
+                            <col style={actionStyle}/>
+                            <thead>
+                                <tr>
+                                    <th>Lender Name</th>
+                                    <th>Organization</th>
+                                    <th>Contact</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                        {lendersTable.map(function(lender) {
+                            return (lender);
+                        })}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         );
