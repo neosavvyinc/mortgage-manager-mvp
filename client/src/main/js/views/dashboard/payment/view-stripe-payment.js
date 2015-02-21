@@ -5,7 +5,8 @@ var React = require('react'),
 	Reflux = require('reflux'),
 	Constants = require('../../../constants/constants'),
 	MessageBox = require('../../../components/message-box'),
-	ModelPayment = require('../../../models/model-payment');
+	ModelPayment = require('../../../models/model-payment'),
+	uuid = require('node-uuid');
 
 var StripePayment = React.createClass({
 	mixins: [
@@ -15,11 +16,13 @@ var StripePayment = React.createClass({
 
 	getInitialState: function(){
 		return {
+			idempotentToken: uuid.v1(),
 			messageText: '',
 			showMessage: false,
 			messageType: 'error',
 			submitButtonClass: 'one third turquoise button',
-			spinnerClass: 'hidden'
+			spinnerClass: 'hidden',
+			disablePayment: false
 		};
 	},
 
@@ -29,7 +32,8 @@ var StripePayment = React.createClass({
 		this.setState({
 			submitButtonClass: 'one third button disabled',
 			spinnerClass: '',
-			showMessage: false
+			showMessage: false,
+			disablePayment: true
 		});
 
 		if(Stripe.card.validateCardNumber(this.refs.cardNumber.getDOMNode().value)) {
@@ -42,7 +46,7 @@ var StripePayment = React.createClass({
 						messageText: response.error.message
 					});
 				} else {
-					ModelPayment.makePayment(response.id, response.card, this.getParams().price.replace('$', '')).then(
+					ModelPayment.makePayment(response.id, response.card, this.state.idempotentToken, this.getParams().price.replace('$', '')).then(
 						function() {
 							this.setState({
 								showMessage: false,
@@ -124,7 +128,7 @@ var StripePayment = React.createClass({
 						</div>
 					</div>
 					<div className="row gap-top">
-						<button className={this.state.submitButtonClass} onClick={this.onMakePayment}>Make Payment</button>
+						<button className={this.state.submitButtonClass} disabled={this.state.disablePayment} onClick={this.onMakePayment}>Make Payment</button>
 						<h1 className={this.state.spinnerClass}>&nbsp;<i className="fa fa-spinner fa-pulse"></i></h1>
 					</div>
 					<div className="row gap-top">

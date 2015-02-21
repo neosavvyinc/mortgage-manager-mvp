@@ -11,11 +11,12 @@ PaymentModel.createToken = function(form, responseHandler) {
 	Stripe.card.createToken(form, responseHandler);
 };
 
-PaymentModel.makePayment = function(token, card, amount) {
+PaymentModel.makePayment = function(token, card, idempotentToken, amount) {
 	return Q.promise(function(resolve, reject){
 		$.post(Endpoints.PAYMENT.URL.replace(':token', token), {
 			card: card,
-			amount: amount
+			amount: amount,
+			idempotentToken: idempotentToken
 		}).success(function(response){
 			resolve(response);
 		}).error(function(error){
