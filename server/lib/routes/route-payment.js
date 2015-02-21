@@ -15,9 +15,6 @@ exports.makePayment = function(req, res) {
 		settings.log.info('Payment successful');
 	}, function(error) {
 		if(error) {
-			console.log(error);
-			console.log(error.message);
-			console.log(error.code);
 			if(error.message === 'Already made payment') {
 				settings.log.fatal(error.message);
 				res.status(401).send({message: 'You are already a premium user!'});
