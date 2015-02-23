@@ -24,7 +24,7 @@ var RequestDocument = React.createClass({
 	getInitialState: function() {
 		return {
 			inputPlaceHolder: 'Document Name',
-			typeClass: 'two fourths padded',
+			typeClass: 'col-sm-6 col-xs-12 gap-bottom',
 			textAreaPlaceHolder: 'Description of document',
 			success: false,
 			error: false
@@ -64,7 +64,6 @@ var RequestDocument = React.createClass({
 					this.close();
 				}.bind(this),
 				function(error) {
-					console.log(error);
 					this.setState({
 						success: false,
 						error: true,
@@ -83,45 +82,43 @@ var RequestDocument = React.createClass({
 
 	render: function() {
 		return (
-			<div>
-				<form className="uploadComponent" encType="multipart/form-data">
-					<div onClick={this.close} title="Close" className="close">X</div>
-					<legend><h1> Request Document</h1></legend>
-					<div className="row">
-						<div className="two fourths padded">
-							<input ref="docName" type="text" placeholder={this.state.inputPlaceHolder}/>
-						</div>
-						<div className={this.state.typeClass}>
-							<span className="select-wrap">
-								<select ref="docType">
-									<option value="Tax Document">Tax Document</option>
-									<option value="Income Document">Income Document</option>
-									<option value="Identity Document">Identity Document</option>
-								</select>
-							</span>
-						</div>
-					</div>
-					<div className="row">
-						<div className="padded">
-							<textarea ref="description" placeholder={this.state.textAreaPlaceHolder}></textarea>
-						</div>
-					</div>
-					<div className="row">
-						<div className="one fourth skip-two padded submit">
-							<button className="red block gap-right gap-bottom" onClick={this.close}>Close</button>
-						</div>
-						<div className="one fourth padded submit">
-							<button className="green block gap-right gap-bottom" onClick={this.onRequestDocument}>Request</button>
-						</div>
-					</div>
-					<div className="row">
-						<div className="two fourths skip-one">
-							<MessageBox displayMessage={this.state.success} message={this.state.message} type='success' />
-							<MessageBox displayMessage={this.state.error} message={this.state.message} type='error' />
-						</div>
-					</div>
-				</form>
-			</div>
+            <form encType="multipart/form-data">
+                <div className="modal-header">
+                    <button type="button" className="close" onClick={this.close}><span aria-hidden="true">&times;</span></button>
+                    <h3 className="modal-title">Request Document</h3>
+                </div>
+                <div className="modal-body">
+
+                    <div className="row double-gap-top">
+                        <div className="col-sm-6 col-xs-12 gap-bottom">
+                            <input className="form-control" ref="docName" type="text" placeholder={this.state.inputPlaceHolder}/>
+                        </div>
+
+                        <div className={this.state.typeClass}>
+                            <select className="form-control" ref="docType">
+                                <option value="Tax Document">Tax Document</option>
+                                <option value="Income Document">Income Document</option>
+                                <option value="Identity Document">Identity Document</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div className="row double-gap-top double-gap-bottom">
+                        <div className="col-xs-12">
+                            <textarea className="form-control" rows="10" ref="description" placeholder={this.state.textAreaPlaceHolder}></textarea>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-xs-12">
+                            <MessageBox displayMessage={this.state.success} message={this.state.uploadMessage} type='success' />
+                            <MessageBox displayMessage={this.state.error} message={this.state.uploadMessage} type='error' />
+                        </div>
+                    </div>
+                </div>
+                <div className="modal-footer">
+                    <button type="button" className="btn btn-default" onClick={this.close}>Close</button>
+                    <button type="button" className="btn btn-primary" onClick={this.onRequestDocument}>Request</button>
+                </div>
+            </form>
 		);
 	}
 });
