@@ -198,7 +198,7 @@ var Documents = React.createClass({
                     downloadButton.style = 'btn btn-sm btn-info';
                 }
             } else {
-                uploadButton.style =  'btn btn-sm btn-info';
+                uploadButton.style =  'btn btn-sm btn-success';
                 if(this.state.disableButtons) {
                     uploadButton.style += ' disabled';
                     uploadButton.disabled = true;

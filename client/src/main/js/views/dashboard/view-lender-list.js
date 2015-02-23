@@ -7,6 +7,7 @@ var Application = require('../../models/model-application');
 var ApplicationActions = require('../../actions/action-application');
 var ApplicationStore = require('../../stores/store-application');
 var UserStore = require('../../stores/store-user');
+var User = require('../../models/model-user');
 var Navigation = require('../../components/navigation');
 var LenderStore = require('../../stores/store-lender');
 var LenderActions = require('../../actions/action-lender');

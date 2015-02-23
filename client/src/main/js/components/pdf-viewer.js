@@ -90,7 +90,7 @@ var Pdf = React.createClass({
 		return this.state.pdfPage ?
 			(<div>
 				<div className="pdfComponent">
-					<div onClick={self.close} title="Close" className="close">X</div>
+                    <button type="button" className="close" onClick={self.close}><span aria-hidden="true">&times;</span></button>
 					<canvas ref="canvas"></canvas>
 				</div>
 			</div>) :

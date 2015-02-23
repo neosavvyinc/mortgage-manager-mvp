@@ -25,6 +25,10 @@ var ApplicationDetails = require('../views/dashboard/view-application-details');
 var RequestDocument = require('../views/dashboard/view-lender-request-document');
 var ForgotPassword = require('../views/registration/view-forgot-password');
 var ViewProfile = require('../views/dashboard/view-update-profile');
+var PricingOptions = require('../views/dashboard/payment/view-pricing-options');
+var StripePayment = require('../views/dashboard/payment/view-stripe-payment');
+var TrialExpired = require('../views/dashboard/view-trial-expired');
+var PaymentSuccess = require('../views/dashboard/payment/view-payment-success');
 
 /* Default Root Handler */
 var RootDefault = React.createClass({
