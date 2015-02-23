@@ -46,8 +46,13 @@ var Dashboard = React.createClass({
         return (
             <div>
                 <Header />
-                <RouterHandler />
-                <Footer />
+                <div className="wrapper">
+                    <RouterHandler />
+                    <div className="push" />
+                </div>
+                <div className="footer">
+                    <Footer />
+                </div>
             </div>
         )
     }
