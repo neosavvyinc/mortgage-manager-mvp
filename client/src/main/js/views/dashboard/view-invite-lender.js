@@ -68,33 +68,39 @@ var UploadDocument = React.createClass({
 
     render: function() {
         return (
-            <form className="uploadComponent">
-                <legend><h1 className="gap-top">Invite your Lenders</h1></legend>
-                <div onClick={this.close} title="Close" className="close">X</div>
-                <div className="row">
-                    <div className="one half padded">
-                        <input type="text" ref="firstName" placeholder="First Name"/>
-                    </div>
-                    <div className="padded one half">
-                        <input type="text" ref="lastName" placeholder="Last Name"/>
+            <div className="modal" style={{display: 'block'}}>
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        <form>
+                            <legend><h1 className="gap-top">Invite your Lenders</h1></legend>
+                            <div onClick={this.close} title="Close" className="close">X</div>
+                            <div className="row">
+                                <div className="one half padded">
+                                    <input type="text" ref="firstName" placeholder="First Name"/>
+                                </div>
+                                <div className="padded one half">
+                                    <input type="text" ref="lastName" placeholder="Last Name"/>
+                                </div>
+                            </div>
+                            <div className="row padded">
+                                <input type="email" ref="email" placeholder="Email Address"/>
+                            </div>
+                            <div className="row padded one half">
+                                <input type="text" ref="organization" placeholder="Organizations"/>
+                            </div>
+                            <div className="row padded">
+                                <MessageBox className="one fourth padded" displayMessage={this.state.inviteError} message={this.state.inviteErrorText} type='error' />
+                                <div className="one fourth skip-one padded submit">
+                                    <button className="red block gap-right gap-bottom" onClick={this.close}>Close</button>
+                                </div>
+                                <div className="one fourth padded submit">
+                                    <button className="green block gap-right gap-bottom" onClick={this.onInviteLender}>Send</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
-                <div className="row padded">
-                    <input type="email" ref="email" placeholder="Email Address"/>
-                </div>
-                <div className="row padded one half">
-                    <input type="text" ref="organization" placeholder="Organizations"/>
-                </div>
-                <div className="row padded">
-                    <MessageBox className="one fourth padded" displayMessage={this.state.inviteError} message={this.state.inviteErrorText} type='error' />
-                    <div className="one fourth skip-one padded submit">
-                        <button className="red block gap-right gap-bottom" onClick={this.close}>Close</button>
-                    </div>
-                    <div className="one fourth padded submit">
-                        <button className="green block gap-right gap-bottom" onClick={this.onInviteLender}>Send</button>
-                    </div>
-                </div>
-            </form>
+            </div>
         );
     }
 });
