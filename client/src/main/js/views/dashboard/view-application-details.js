@@ -77,10 +77,11 @@ var ApplicationDetails = React.createClass({
                                 return (tab);
                             })}
                         </TabbedArea>
-                        <RouterHandler/>
                     </div>
                 </div>
+                <RouterHandler/>
             </div>
+
         );
     }
 });
