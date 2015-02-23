@@ -74,23 +74,19 @@ var Login = React.createClass({
                     <h3>Already a User?</h3>
                 </div>
                 <div className="panel-body text-center">
-                <form>
-                    <div className="form-group">
-                        <input className="form-control" ref="userEmail" type="email" placeholder="Email Address" />
-                    </div>
-                    <div className="form-group">
-                        <input className="form-control" ref="userPassword" type="password" placeholder="Password" />
-                    </div>
-                    <div className="form-group">
+                    <form>
+                        <div className="form-group">
+                            <input className="form-control" ref="userEmail" type="email" placeholder="Email Address" />
+                        </div>
+                        <div className="form-group">
+                            <input className="form-control" ref="userPassword" type="password" placeholder="Password" />
+                        </div>
                         <MessageBox displayMessage={this.state.loginError} message={this.state.loginErrorText} type='error'/>
-                    </div>
-                    <div className="form-group">
-                        <button className="btn btn-default col-xs-12" onClick={this.onLogin}>
+                        <button className="btn btn-default col-xs-12 gap-bottom" onClick={this.onLogin}>
                             Login
                         </button>
-                        <Link to="forgotPassword" className="align-left">Forgot Password?</Link>
-                    </div>
-                </form>
+                    </form>
+                    <Link to="forgotPassword" className="text-center">Forgot Password?</Link>
                 </div>
             </div>
 		)

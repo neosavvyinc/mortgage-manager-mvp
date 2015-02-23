@@ -17,7 +17,8 @@ var UpdatePassword = React.createClass({
 
 	getInitialState: function() {
 		return {
-			token: this.getQuery().token,
+            //token: this.getQuery().token,
+            token: "1234",
 			passwordError: false,
 			messageText: '',
 			messageType: 'error',
@@ -60,26 +61,43 @@ var UpdatePassword = React.createClass({
 
 	render: function() {
 		return this.state.updatedPassword ? (
-			<div className="container">
-				<div className="gap-top">
-					<div className="one fourth">
-						<MessageBox displayMessage={this.state.passwordError} message={this.state.messageText} type={this.state.messageType} />
-						<button className="block turquoise" onClick={this.onUpdatedPassword}>Login</button>
-					</div>
+            <div className="bg-color fill">
+                <div className="container container-color fill">
+                    <div className="row">
+                        <div className="one fourth">
+                            <MessageBox displayMessage={this.state.passwordError} message={this.state.messageText} type={this.state.messageType} />
+                            <button className="btn btn-lg btn-primary col-xs-12" onClick={this.onUpdatedPassword}>Login</button>
+                        </div>
+                    </div>
 				</div>
 			</div>
 		) : (
-			<div className="container">
-				<div className="gap-top">
-					<h1>Please enter your new password</h1>
-					<div className="one fourth">
-						<input className="gap-bottom" type="password" ref="newPassword" placeholder="New Password" />
-						<input className="gap-bottom" type="password" ref="confirmPassword" placeholder="Confirm Password"/>
-						<MessageBox displayMessage={this.state.passwordError} message={this.state.messageText} type={this.state.messageType} />
-						<button className="block turquoise" onClick={this.onCheckPassword}>Continue</button>
-					</div>
-				</div>
-			</div>
+            <div className="bg-color fill">
+                <div className="container container-color fill">
+                    <div className="row">
+                        <h1 className="col-xs-12 bordered-bottom">Please enter your new Password</h1>
+                    </div>
+                    <div className="row double-gap-top">
+                        <div className="col-xs-12 col-sm-6 col-md-4 col-sm-offset-3 col-md-offset-4">
+                            <div className="panel panel-default">
+                                <div className="panel-body">
+                                    <div className="form-group">
+                                        <label>New Password</label>
+                                        <input className="form-control" type="password" ref="newPassword" placeholder="New Password" />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Confirm New Password</label>
+                                        <input className="form-control" type="password" ref="confirmPassword" placeholder="Confirm Password"/>
+                                    </div>
+
+                                    <MessageBox displayMessage={this.state.passwordError} message={this.state.messageText} type={this.state.messageType} />
+                                    <button className="btn btn-lg btn-primary col-xs-12" onClick={this.onCheckPassword}>Continue</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 		);
 	}
 });
