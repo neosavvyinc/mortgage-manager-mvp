@@ -186,8 +186,8 @@ var Documents = React.createClass({
                     viewButton.disabled = true;
                     downloadButton.disabled = true;
                     uploadButton.disabled = true;
-                    viewButton.style =  'btn btn-small btn-primary disabled ';
-                    downloadButton.style =  'btn btn-small btn-success disabled';
+                    viewButton.style =  'btn btn-sm btn-primary disabled ';
+                    downloadButton.style =  'btn btn-sm btn-success disabled';
                     uploadButton.style =  'btn btn-sm btn-info disabled';
                 } else {
                     viewButton.disabled = false;
@@ -240,18 +240,18 @@ var Documents = React.createClass({
 				        <th>{document.requestDate}</th>
 				        <th>
                             <ul className="row">
-                                <li className={viewButton.disabled ? "hidden" : "btn-group half-gap-right half-gap-bottom"}>
-                                    <button className={viewButton.style} disabled={viewButton.disabled} onClick={this.onDocumentView.bind(this, document)} data-toggle="tooltip" data-placement="bottom" title="View">
+                                <li className={viewButton.style == "disabled hidden" ? "hidden" : "btn-group"}>
+                                    <button className={viewButton.style + (viewButton.disabled ? " disabled half-gap-right half-gap-bottom" : " btn-group half-gap-right half-gap-bottom")} disabled={viewButton.disabled} onClick={this.onDocumentView.bind(this, document)} data-toggle="tooltip" data-placement="bottom" title="View">
                                         <i className="fa fa-binoculars"></i>
                                     </button>
                                 </li>
-                                <li className="btn-group half-gap-right half-gap-bottom">
-                                    <button className={uploadButton.style} disabled={uploadButton.disabled} onClick={this.onDocumentUpload.bind(this, document)} title="Upload">{uploadButton.text}
+                                <li className="btn-group">
+                                    <button className={uploadButton.style + " half-gap-right half-gap-bottom"} disabled={uploadButton.disabled} onClick={this.onDocumentUpload.bind(this, document)} title="Upload">{uploadButton.text}
                                         <i className="fa fa-upload"></i>
                                     </button>
                                 </li>
-                                <li className={downloadButton.disabled ? "hidden" : "btn-group half-gap-bottom"}>
-                                    <button className={downloadButton.style} disabled={downloadButton.disabled} onClick={this.onDocumentDownload.bind(this, document)} data-toggle="tooltip" data-placement="bottom" title="Download">
+                                <li className={downloadButton.style == "disabled-hidden" ? "hidden" : "btn-group"}>
+                                    <button className={downloadButton.style + (downloadButton.disabled ? " disabled half-gap-bottom" : " btn-group half-gap-bottom")} disabled={downloadButton.disabled} onClick={this.onDocumentDownload.bind(this, document)} data-toggle="tooltip" data-placement="bottom" title="Download">
                                         <i className="fa fa-download"></i>
                                     </button>
                                 </li>
