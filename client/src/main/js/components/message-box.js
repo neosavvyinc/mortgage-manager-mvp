@@ -6,19 +6,21 @@ var MessageBox = React.createClass({
         return {
             displayMessage: false,
             message: '',
-            type: 'error'
+            type: 'error',
+            gridPos: ''
         }
     },
 
     propTypes: {
         displayMessage: React.PropTypes.bool,
         message: React.PropTypes.string,
-        type: React.PropTypes.string
+        type: React.PropTypes.string,
+        gridPos: React.PropTypes.string
     },
 
     render: function(){
 
-        var messageClass = 'alert';
+        var messageClass = this.props.gridPos + ' alert';
 
         switch(this.props.type){
             case 'success':

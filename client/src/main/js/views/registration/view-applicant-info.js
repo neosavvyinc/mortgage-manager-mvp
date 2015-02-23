@@ -161,66 +161,106 @@ var ApplicantInfo = React.createClass({
 
     render: function(){
 
-        var showCoapplicantFieldClass = this.state.applicantType == "Co-Applicant" ? "two thirds" : "hidden";
-        var showEmailClass = this.state.applicantType == "Co-Applicant" ? "one third" : "hidden";
+        var showCoapplicantFieldClass = this.state.applicantType == "Co-Applicant" ? "col-xs-4" : "hidden";
+        var showEmailClass = this.state.applicantType == "Co-Applicant" ? "form-control" : "hidden";
 
         var borrowerBasicInfo = this.state.currentBorrower.basicInfo;
 
         var applicantAddress = this.state.shareAddress ?  (
             <div>
                 <div className="row gap-bottom">
-                    <input className="three fourths" type="text" ref="address" placeholder="address" value={borrowerBasicInfo.address} required />
+                    <div className="col-md-9 col-xs-12">
+                        <input className="form-control" type="text" ref="address" placeholder="address" value={borrowerBasicInfo.address} required />
+                    </div>
                 </div>
                 <div className="row gap-bottom">
-                    <input className="one fourth half-gap-right" type="text" ref="city" placeholder="City" value={borrowerBasicInfo.city} required />
-                    <select ref="state" className="one fourth half-gap-right" value={borrowerBasicInfo.state}>
-                        <option value={borrowerBasicInfo.state}>{borrowerBasicInfo.state}</option>
-                    </select>
-                    <input className="one fourth" type="text" ref="zip" placeholder="Zip Code" value={borrowerBasicInfo.zip} required />
+                    <div className="col-md-3 col-sm-4 col-xs-12 gap-bottom">
+                        <input className="form-control" type="text" ref="city" placeholder="City" value={borrowerBasicInfo.city} required />
+                    </div>
+                    <div className="col-md-3 col-sm-4 col-xs-12 gap-bottom">
+                        <select ref="state" className="form-control" value={borrowerBasicInfo.state}>
+                            <option value={borrowerBasicInfo.state}>{borrowerBasicInfo.state}</option>
+                        </select>
+                    </div>
+                    <div className="col-md-3 col-sm-4 col-xs-12 gap-bottom">
+                        <input className="form-control" type="text" ref="zip" placeholder="Zip Code" value={borrowerBasicInfo.zip} required />
+                    </div>
                 </div>
             </div>
         ) : (
             <div>
                 <div className="row gap-bottom">
-                    <input className="three fourths" type="text" ref="address" placeholder="address"  required />
+                    <div className=" col-md-9 col-xs-12">
+                        <input className="form-control" type="text" ref="address" placeholder="address"  required />
+                    </div>
                 </div>
                 <div className="row gap-bottom">
-                    <input className="one fourth half-gap-right" type="text" ref="city" placeholder="City" required />
-                    <select ref="state" className="one fourth half-gap-right">
-                        {Constants.usStates.map(function(state) {
-                            return <option key={state.data} value={state.data}>{state.label}</option>;
-                        })}
-                    </select>
-                    <input className="one fourth" type="text" ref="zip" placeholder="Zip Code" required />
+                    <div className="col-md-3 col-sm-4 col-xs-12 gap-bottom">
+                        <input className="form-control" type="text" ref="city" placeholder="City" required />
+                    </div>
+                    <div className="col-md-3 col-sm-4 col-xs-12 gap-bottom">
+                        <select ref="state" className="form-control">
+                            {Constants.usStates.map(function(state) {
+                                return <option key={state.data} value={state.data}>{state.label}</option>;
+                            })}
+                        </select>
+                    </div>
+                    <div className="col-md-3 col-sm-4 col-xs-12 gap-bottom">
+                        <input className="form-control" type="text" ref="zip" placeholder="Zip Code" required />
+                    </div>
                 </div>
             </div>
         );
 
         return (
-            <div className="container">
-                <div className="gap-top">
-                    <h2>{this.state.applicantType}'s Name</h2>
-                    <div className="row gap-bottom">
-                        <input className="one fourth half-gap-right" type="text" ref="firstName" placeholder="First Name" required />
-                        <input className="one fourth half-gap-right" type="text" ref="middleName" placeholder="Middle Name" required />
-                        <input className="one fourth" type="text" ref="lastName" placeholder="Last Name" required />
-                    </div>
+            <div className="bg-color fill">
+                <div className="container container-color fill">
                     <div className="row">
-                        <h2 className="one third">{this.state.applicantType}'s Address</h2>
-                        <div className={showCoapplicantFieldClass}>
-                            <p className="one third">Shares address with main applicant:</p>
-                            <input type="checkbox" ref="sameAddress" onChange={this.populateAddress}/>
+                        <h2 className="col-xs-12 bordered-bottom double-gap-bottom">{this.state.applicantType}'s Name</h2>
+                        <form className="row">
+                            <div className="col-md-3 col-sm-4 col-xs-12 gap-bottom">
+                                <input className="form-control" type="text" ref="firstName" placeholder="First Name" required />
+                            </div>
+                            <div className="col-md-3 col-sm-4 col-xs-12 gap-bottom">
+                                <input className="form-control" type="text" ref="middleName" placeholder="Middle Name" required />
+                            </div>
+                            <div className="col-md-3 col-sm-4 col-xs-12 gap-bottom">
+                                <input className="form-control" type="text" ref="lastName" placeholder="Last Name" required />
+                            </div>
+                        </form>
+                        <div className="row">
+                            <h2 className="col-xs-8 bordered-bottom double-gap-bottom">{this.state.applicantType}'s Address</h2>
+                            <div className={showCoapplicantFieldClass}>
+                                <div className="row">
+                                    <p className="col-xs-8">Shares address with main applicant:</p>
+                                    <div className="col-xs-4">
+                                        <input className="form-control" type="checkbox" ref="sameAddress" onChange={this.populateAddress}/>
+                                    </div>
+                                </div>
+                            </div>
+                    {applicantAddress}
                         </div>
                     </div>
-                {applicantAddress}
-                    <h2>{this.state.applicantType}'s Contact Information</h2>
-                    <div className="row gap-bottom">
-                        <input className="one third half-gap-right" type="text" ref="phone" placeholder="Mobile Phone" required />
-                        <input className={showEmailClass} type="email" ref="email" placeholder="Email" required />
+                    <div className="row double-gap-bottom">
+                        <h2 className="col-xs-12 bordered-bottom">{this.state.applicantType}'s Contact Information</h2>
+                        <form class="row">
+                            <div className="col-md-3 col-sm-4 col-xs-12 gap-bottom">
+                                <input className="form-control" type="text" ref="phone" placeholder="Mobile Phone" required />
+                            </div>
+                            <div className="col-md-3 col-sm-4 col-xs-12 gap-bottom">
+                                <input className={showEmailClass} type="email" ref="email" placeholder="Email" required />
+                            </div>
+                        </form>
                     </div>
-                    <MessageBox displayMessage={this.state.applicantInfoError} message={this.state.errorText} type='error' />
                     <div className="row">
-                        <button className="one third turquoise button" onClick={this.onSubmitInfo}>Continue</button>
+                        <div className="col-xs-12">
+                            <div className="row">
+                                <MessageBox gridPos="col-sm-6 col-xs-12" displayMessage={this.state.applicantInfoError} message={this.state.errorText} type='error' />
+                            </div>
+                            <div className="row">
+                                <button className="btn btn-md btn-primary col-sm-6 col-xs-12" onClick={this.onSubmitInfo}>Continue</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
