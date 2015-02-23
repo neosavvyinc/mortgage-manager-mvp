@@ -69,9 +69,15 @@ var Applications = React.createClass({
 
         return (
             <div className="container">
-                <div className="gap-top">
-                    <h1>Applications</h1>
-                    {userApplications}
+                <div className="row double-gap-bottom">
+                    <div className="row">
+                        <h1 className="bordered-bottom col-xs-12 ">Applications</h1>
+                    </div>
+                    <div className="row">
+                        <div className="col-xs-12">
+                            {userApplications}
+                        </div>
+                    </div>
                 </div>
             </div>
         );

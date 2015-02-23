@@ -89,7 +89,6 @@ var UpdatePassword = React.createClass({
                                         <label>Confirm New Password</label>
                                         <input className="form-control" type="password" ref="confirmPassword" placeholder="Confirm Password"/>
                                     </div>
-
                                     <MessageBox displayMessage={this.state.passwordError} message={this.state.messageText} type={this.state.messageType} />
                                     <button className="btn btn-lg btn-primary col-xs-12" onClick={this.onCheckPassword}>Continue</button>
                                 </div>

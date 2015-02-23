@@ -105,7 +105,7 @@ var NewPassword = React.createClass({
                         <h1 className="col-xs-12 bordered-bottom">We need you to give us a password so you can log in later</h1>
                     </div>
                     <div className="row double-gap-top">
-                        <div className="col-xs-12 col-sm-6 col-md-4 col-sm-offset-3">
+                        <div className="col-xs-12 col-sm-6 col-md-4 col-sm-offset-3 col-md-offset-4">
                             <div className="panel panel-default">
                                 <div className="panel-body">
                                     <div className="form-group">

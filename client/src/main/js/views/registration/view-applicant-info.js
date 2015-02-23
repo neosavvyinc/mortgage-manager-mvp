@@ -190,7 +190,7 @@ var ApplicantInfo = React.createClass({
         ) : (
             <div>
                 <div className="row gap-bottom">
-                    <div className=" col-md-9 col-xs-12">
+                    <div className="col-md-9 col-xs-12">
                         <input className="form-control" type="text" ref="address" placeholder="address"  required />
                     </div>
                 </div>

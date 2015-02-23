@@ -67,15 +67,19 @@ var ApplicationDetails = React.createClass({
 
         return (
             <div className="container">
-                <div className="row">
-                    <h2><i className="fa fa-chevron-left pointer" onClick={this.onViewApplications}></i> Application Dashboard</h2>
+                <div className="row double-gap-bottom">
+                    <h1 className="bordered-bottom col-xs-12"><i className="fa fa-chevron-left pointer" onClick={this.onViewApplications}></i> Application Dashboard</h1>
                 </div>
-                <TabbedArea defaultActiveKey={0}>
-                    {tabs.map(function(tab) {
-                        return (tab);
-                    })}
-                </TabbedArea>
-                <RouterHandler/>
+                <div className="row">
+                    <div className="bordered-bottom col-xs-12">
+                        <TabbedArea defaultActiveKey={0}>
+                            {tabs.map(function(tab) {
+                                return (tab);
+                            })}
+                        </TabbedArea>
+                        <RouterHandler/>
+                    </div>
+                </div>
             </div>
         );
     }
