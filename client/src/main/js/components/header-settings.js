@@ -76,7 +76,6 @@ var HeaderNav = React.createClass({
                         <ul>
                             <li><div onClick={this.onViewProfile}>View Profile</div></li>
                             <li><div onClick={this.onChangePassword}>Change Password</div></li>
-                            <li><div onClick={this.onLogout}>Logout</div></li>
                             <li><div onClick={this.onUpgrade} className={upgradeClass}>Upgrade</div></li>
                             <li><div onClick={this.onViewPayments} className={viewPaymentsClass}>View Payments</div></li>
                             <li><div onClick={this.onLogout}>Logout</div></li>
