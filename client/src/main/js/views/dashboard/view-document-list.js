@@ -210,17 +210,17 @@ var Documents = React.createClass({
 				        <th>{document.requestDate}</th>
 				        <th>
                             <ul className="row">
-                                <li className={viewButton.disabled ? "hidden" : "btn-group col-md-4 col-sm-6"}>
+                                <li className={viewButton.disabled ? "hidden" : "btn-group half-gap-right half-gap-bottom"}>
                                     <button className={viewButton.style} disabled={viewButton.disabled} onClick={this.onDocumentView.bind(this, document)} data-toggle="tooltip" data-placement="bottom" title="View">
                                         <i className="fa fa-binoculars"></i>
                                     </button>
                                 </li>
-                                <li className="btn-group col-md-4 col-sm-6">
+                                <li className="btn-group half-gap-right half-gap-bottom">
                                     <button className={uploadButton.style} onClick={this.onDocumentUpload.bind(this, document)} title="Upload">{uploadButton.text}
                                         <i className="fa fa-upload"></i>
                                     </button>
                                 </li>
-                                <li className={downloadButton.disabled ? "hidden" : "btn-group col-md-4 col-sm-6"}>
+                                <li className={downloadButton.disabled ? "hidden" : "btn-group half-gap-bottom"}>
                                     <button className={downloadButton.style} disabled={downloadButton.disabled} onClick={this.onDocumentDownload.bind(this, document)} data-toggle="tooltip" data-placement="bottom" title="Download">
                                         <i className="fa fa-download"></i>
                                     </button>
