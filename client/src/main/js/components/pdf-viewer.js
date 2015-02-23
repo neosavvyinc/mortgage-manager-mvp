@@ -56,7 +56,7 @@ var Pdf = React.createClass({
 	},
 
 	close: function() {
-		this.transitionTo('dashboardDocuments', {appId: this.getParams().appId, tab:0});
+		this.transitionTo('dashboardDocuments', {appId: this.getParams().appId});
 	},
 
 	render: function() {

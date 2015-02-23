@@ -85,8 +85,7 @@ var LenderContacts = React.createClass({
                 tabLink: {
                     name: "inviteLender",
                     params: [{
-                        appId: this.getParams().appId,
-                        tab: 1
+                        appId: this.getParams().appId
                     }]
                 },
 	            icon: 'fa fa-user-plus'

@@ -33,7 +33,7 @@ var UploadDocument = React.createClass({
         if(e){
             e.preventDefault();
         }
-        this.transitionTo('dashboardDocuments', {appId: this.getParams().appId, tab:1});
+        this.transitionTo('dashboardDocuments', {appId: this.getParams().appId});
     },
 
     onInviteLender: function(e){

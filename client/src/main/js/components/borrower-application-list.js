@@ -34,7 +34,7 @@ var BorrowerApplications = React.createClass({
     },
 
     onApplicationTransition: function(){
-        this.transitionTo('dashboardDocuments', {appId: ApplicationStore.getCurrentApplication()._id, tab:0});
+        this.transitionTo('dashboardDocuments', {appId: ApplicationStore.getCurrentApplication()._id});
     },
 
     render: function(){
