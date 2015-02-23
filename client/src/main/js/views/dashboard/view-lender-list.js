@@ -35,22 +35,31 @@ var LenderContacts = React.createClass({
         return {
             lenders: LenderStore.getLenderList(),
             actionError: false,
-            actionErrorMessage: ''
+            actionErrorMessage: '',
+	        disableButtons: false
         };
     },
-
-    componentDidMount: function(){
-       if(this.isMounted()){
-           Application.getLenders(this.getParams().appId).then(function(lenders) {
-               LenderActions.setLenderList(lenders);
-           });
-       }
+	
+    componentDidMount: function() {
+	    if(this.isMounted()) {
+		    Application.getLenders(this.getParams().appId).then(function (lenders) {
+			    LenderActions.setLenderList(lenders);
+		    }.bind(this));
+	    }
     },
 
     getLenders: function(){
-        this.setState({
-            lenders: LenderStore.getLenderList()
-        });
+	    User.getUserDetails(UserStore.getCurrentUserId()).then(function (user) {
+		    var createdDate = moment(user.created),
+			    currentDate = moment(),
+			    duration = moment.duration(currentDate.diff(createdDate)),
+			    state={lenders: LenderStore.getLenderList()};
+
+		    if (user.type === 'borrower' && user.pricingPlan === 'trial' && duration.asDays() > 15) {
+			    state.disableButtons = true;
+		    }
+		    this.setState(state);
+	    }.bind(this));
     },
 
     onReSendInvite: function(lender){
@@ -77,7 +86,15 @@ var LenderContacts = React.createClass({
     },
 
     render: function(){
-        var lendersTable = [];
+        var lendersTable = [],
+	        remindButton = {
+		    disabled: false
+	    }, lenderInviteDisabled = false;
+
+	    if(this.state.disableButtons) {
+		    lenderInviteDisabled = true;
+		    remindButton.disabled = true;
+	    }
 
         var actions = [
             {
@@ -86,7 +103,8 @@ var LenderContacts = React.createClass({
                     name: "inviteLender",
                     params: [{
                         appId: this.getParams().appId
-                    }]
+                    }],
+	                disabled: lenderInviteDisabled
                 },
 	            icon: 'fa fa-user-plus'
             }
@@ -114,7 +132,7 @@ var LenderContacts = React.createClass({
                         <div className="row">
                             <ul className="list-inline">
                                 <li className="btn-group">
-                                    <button className="btn btn-sm btn-info" data-tooltip="Remind" onClick={this.onReSendInvite.bind(null, lender)}><i className="fa fa-paper-plane"></i></button>
+                                    <button className="btn btn-sm btn-info" disabled={remindButton.disabled} data-tooltip="Remind" onClick={this.onReSendInvite.bind(null, lender)}><i className="fa fa-paper-plane"></i></button>
                                 </li>
                                 <li className="btn-group">
                                     <button className="btn btn-sm btn-danger" data-tooltip="Delete" onClick={this.onDeleteInvite.bind(null, lender)}><i className="fa fa-trash-o"></i></button>
@@ -151,33 +169,31 @@ var LenderContacts = React.createClass({
         }, this);
 
         return (
-            <div className="">
-                <div className="gap-top">
-                    <h2>Lenders</h2>
-                    <Navigation navigationItems={actions}/>
-                    <div className="table-responsive">
-                        <table className="table table-striped">
-                            <col style={otherColStyle}/>
-                            <col style={orgColStyle}/>
-                            <col style={otherColStyle}/>
-                            <col style={statusColStyle}/>
-                            <col style={actionStyle}/>
-                            <thead>
-                                <tr>
-                                    <th>Lender Name</th>
-                                    <th>Organization</th>
-                                    <th>Contact</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                        {lendersTable.map(function(lender) {
-                            return (lender);
-                        })}
-                            </tbody>
-                        </table>
-                    </div>
+            <div className="gap-top">
+                <h2>Lenders</h2>
+                <Navigation navigationItems={actions}/>
+                <div className="table-responsive">
+                    <table className="table table-striped">
+                        <col style={otherColStyle}/>
+                        <col style={orgColStyle}/>
+                        <col style={otherColStyle}/>
+                        <col style={statusColStyle}/>
+                        <col style={actionStyle}/>
+                        <thead>
+                            <tr>
+                                <th>Lender Name</th>
+                                <th>Organization</th>
+                                <th>Contact</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                    {lendersTable.map(function(lender) {
+                        return (lender);
+                    })}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         );

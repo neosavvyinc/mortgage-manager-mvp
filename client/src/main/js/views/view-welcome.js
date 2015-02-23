@@ -28,9 +28,9 @@ var Welcome = React.createClass({
             transition.wait(
                 User.isAuthenticated().then(function (res) {
                     if (res.isAuthenticated) {
-                        if(UserStore.getCurrentUser().email){
-                            if(!UserStore.getCurrentUser().hasUserDetails){
-                                var transitionRoute = UserStore.getCurrentUser().type == 'lender' ? 'lenderInfo' : 'applicantQuestions';
+                        if(UserStore.getCurrentUser().email) {
+                            if(!UserStore.getCurrentUser().hasUserDetails) {
+                                var transitionRoute = UserStore.getCurrentUser().type === 'lender' ? 'lenderInfo' : 'applicantQuestions';
                                 transition.redirect(transitionRoute);
                             } else {
                                 transition.redirect('dashboardApplications');
@@ -47,9 +47,9 @@ var Welcome = React.createClass({
             borrowerEmpty: false,
             lenderEmpty: false,
             borrowerError: false,
-            borrowerErrorMessage: "",
+            borrowerErrorMessage: '',
             lenderError: false,
-            lenderErrorMessage: ""
+            lenderErrorMessage: ''
         };
     },
 

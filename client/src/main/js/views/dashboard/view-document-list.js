@@ -35,19 +35,27 @@ var Documents = React.createClass({
     getInitialState: function(){
         return {
             documents: [],
-            userType: ''
+            userType: '',
+	        disableButtons: false
         };
     },
 
     componentDidMount: function(){
         this.getDocuments();
+		User.getUserDetails(UserStore.getCurrentUserId()).then(function(user) {
+			var createdDate = moment(user.created),
+				currentDate = moment(),
+				duration = moment.duration(currentDate.diff(createdDate)),
+				state = {
+					userType: user.type
+				};
 
-        User.getUserDetails(UserStore.getCurrentUserId()).then(function(user){
-            this.setState(
-                {
-                    userType: user.type
-                }
-            );
+			if(user.type === 'borrower' && user.pricingPlan === 'trial' && duration.asDays() > 15) {
+				state.disableButtons = true;
+			}
+
+			this.setState(state);
+
         }.bind(this));
     },
 
@@ -97,6 +105,12 @@ var Documents = React.createClass({
 	        width: '21%'
 	    };
 
+	    var tabsDisabled = false;
+
+	    if(this.state.disableButtons) {
+			tabsDisabled = true;
+	    }
+
         if(this.state.userType === 'lender'){
             actions = [
                 {
@@ -128,7 +142,8 @@ var Documents = React.createClass({
                         name: 'uploadNewDocument',
                         params: [{
                             appId: this.getParams().appId
-                        }]
+                        }],
+	                    disabled: tabsDisabled
                     },
 	                icon: 'fa fa-upload'
                 }
@@ -144,7 +159,8 @@ var Documents = React.createClass({
 				    callback: function() {
 					    //Download a zip of all files
 					    window.open(EndPoints.APPLICATIONS.ONE.DOWNLOAD.URL.replace(':id', this.getParams().appId));
-				    }.bind(this)
+				    }.bind(this),
+				    disabled: tabsDisabled
 			    },
 			    icon: 'fa fa-download'
 		    });
@@ -157,19 +173,36 @@ var Documents = React.createClass({
                 style: 'disabled hidden'
             }, uploadButton = {
                 style: 'btn btn-sm btn-success',
-	            text: 'Upload '
+	            text: 'Upload ',
+                disabled: false
             }, downloadButton = {
 	            disabled: true,
 	            style: 'disabled hidden'
             };
             
             if(document.uploadDate !== undefined) {
-                viewButton.disabled = false;
-                viewButton.style =  'btn btn-sm btn-primary';
-                uploadButton.style = 'btn btn-sm btn-success';
-	            uploadButton.text = '';
-	            downloadButton.disabled = false;
-	            downloadButton.style =  'btn btn-sm btn-info';
+                uploadButton.text = '';
+                if(this.state.disableButtons) {
+                    viewButton.disabled = true;
+                    downloadButton.disabled = true;
+                    uploadButton.disabled = true;
+                    viewButton.style =  'btn btn-small btn-primary disabled ';
+                    downloadButton.style =  'btn btn-small btn-success disabled';
+                    uploadButton.style =  'btn btn-sm btn-info disabled';
+                } else {
+                    viewButton.disabled = false;
+                    viewButton.style = 'btn btn-sm btn-primary';
+                    uploadButton.style = 'btn btn-sm btn-success';
+                    uploadButton.text = '';
+                    downloadButton.disabled = false;
+                    downloadButton.style = 'btn btn-sm btn-info';
+                }
+            } else {
+                uploadButton.style =  'btn btn-sm btn-info';
+                if(this.state.disableButtons) {
+                    uploadButton.style += ' disabled';
+                    uploadButton.disabled = true;
+                }
             }
 
             // e.g. Wednesday, January 21, 2015 3:21 PM
@@ -213,7 +246,7 @@ var Documents = React.createClass({
                                     </button>
                                 </li>
                                 <li className="btn-group half-gap-right half-gap-bottom">
-                                    <button className={uploadButton.style} onClick={this.onDocumentUpload.bind(this, document)} title="Upload">{uploadButton.text}
+                                    <button className={uploadButton.style} disabled={uploadButton.disabled} onClick={this.onDocumentUpload.bind(this, document)} title="Upload">{uploadButton.text}
                                         <i className="fa fa-upload"></i>
                                     </button>
                                 </li>

@@ -1,5 +1,5 @@
 module.exports = {
-    USER: {
+	USER: {
         URL: '/api/user',
         ONE: {
             URL: '/api/user/:id',
@@ -11,7 +11,10 @@ module.exports = {
             },
             UPDATEPASSWORD: {
                 URL: '/api/user/:id/update-password'
-            }
+            },
+	        TRIALEXPIRED: {
+		        URL: '/api/user/:id/checkTrialExpired'
+	        }
         }
     },
     LOGIN: {
@@ -72,5 +75,11 @@ module.exports = {
                 URL: '/api/applications/:id/borrowers'
             }
         }
-    }
+    },
+	PAYMENT: {
+		URL: '/api/payment/:token'
+	},
+	STRIPE: {
+		URL: '/api/payment/publishableKey'
+	}
 };

@@ -1,5 +1,6 @@
 var React = require('react');
 var Router = require('react-router');
+var RouterHandler = require('react-router').RouteHandler;
 var Reflux = require('reflux');
 var _ = require('lodash');
 var moment = require('moment');
@@ -79,6 +80,7 @@ var Applications = React.createClass({
                         </div>
                     </div>
                 </div>
+	            <RouterHandler/>
             </div>
         );
     }

@@ -1,7 +1,7 @@
 var React = require('react');
 var Router = require('react-router');
 var Reflux = require('reflux');
-var NavBar = require('./header-navbar');
+var Settings = require('./header-settings');
 
 var Header = React.createClass({
 
@@ -21,7 +21,7 @@ var Header = React.createClass({
                     </div>
                     <div className="col-xs-6">
                         <div className="nav navbar-nav pull-right">
-                            <NavBar/>
+                            <Settings/>
                         </div>
                     </div>
                 </div>

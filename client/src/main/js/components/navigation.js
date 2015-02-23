@@ -65,10 +65,14 @@ var Navigation = React.createClass({
         return (
             <ul className="list-inline">
                 {this.props.navigationItems.map(function(tab) {
+                    if(tab.tabLink.disabled){
+                        tabSpacingClass = tabSpacingClass + ' disabled';
+                    }
+                    
                     if(typeof tab.tabLink.callback === 'function') {
                         return (
                             <li className="btn-group">
-                                <button className={tabSpacingClass} onClick={tab.tabLink.callback}>
+                                <button className={tabSpacingClass} disabled={tab.tabLink.disabled} onClick={tab.tabLink.callback}>
                                     <span className="plaintext">{tab.tabName}</span>  <i className={tab.icon}></i>
                                 </button>
                             </li>
@@ -76,7 +80,7 @@ var Navigation = React.createClass({
                     } else if(this.isActive(tab.tabLink.name)){
                         return (
                             <li className="btn-group">
-                                <button className={activeTabClass} onClick={this.onClickTab.bind(this, tab.tabLink.name, tab.tabLink.params)}>
+                                <button className={activeTabClass} disabled={tab.tabLink.disabled} onClick={this.onClickTab.bind(this, tab.tabLink.name, tab.tabLink.params)}>
                                     <span className="plaintext">{tab.tabName}</span>
                                 </button>
                             </li>
@@ -84,7 +88,7 @@ var Navigation = React.createClass({
                     } else {
                         return (
                             <li className="btn-group">
-                                <button className={tabSpacingClass} onClick={this.onClickTab.bind(this, tab.tabLink.name, tab.tabLink.params)}>
+                                <button className={tabSpacingClass} disabled={tab.tabLink.disabled} onClick={this.onClickTab.bind(this, tab.tabLink.name, tab.tabLink.params)}>
                                     <span className="plaintext">{tab.tabName}</span>  <i className={tab.icon}></i>
                                 </button>
                             </li>

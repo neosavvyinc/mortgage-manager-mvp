@@ -1,6 +1,9 @@
-var Reflux = require('reflux');
+'use strict';
 
+var Reflux = require('reflux');
 var UserActions = require('../actions/action-user');
+var User = require ('../models/model-user');
+var moment = require('moment');
 
 var currentUser = {};
 

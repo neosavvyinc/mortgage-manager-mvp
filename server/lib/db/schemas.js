@@ -10,7 +10,8 @@ Schemas.UserSchema = new Schema({
 	email: { type: String, required: true, unique: true },
 	password: { type: String, required: true },
 	type: { type: String, required: true },
-    hasUserDetails: { type: Boolean, required: true, default: false }
+    hasUserDetails: { type: Boolean, required: true, default: false },
+	pricingPlan: { type: String, required: true, default: 'trial' }
 });
 
 Schemas.PasswordResetSchema = new Schema({
@@ -85,6 +86,22 @@ Schemas.NotificationSchema = new Schema({
 	_id: { type: String, required: true },
 	docId: { type: String, required: true },
 	type: { type: String, required: true }
+});
+
+Schemas.CardSchema = new Schema({
+	_id: { type: String, required: true },
+	token: { type: String, required: true },
+	uid: { type: String, required: true },
+	card: { type: Object, required: true }
+});
+
+Schemas.PaymentSchema = new Schema({
+	_id: { type: String, required: true },
+	cardId: { type: String, required: true, ref: 'CardSchema' },
+	amount: { type: String, required: true },
+	paymentDate: { type: String, required: true },
+	status: { type: String, required: true },
+	declineReason: String
 });
 
 exports.Schemas = Schemas;

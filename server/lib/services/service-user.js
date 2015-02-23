@@ -8,6 +8,7 @@ var lenderInvitesModel = require('../db/models/model-lender-invites').Model;
 var commonUtils = require('../utils/common-utils');
 var mandrillService = require('./service-mandrill');
 var bCrypt = require('bcrypt-nodejs');
+var moment = require('moment/');
 
 /**
  * Function that gets the user document based on conditions specified.
@@ -53,6 +54,52 @@ exports.emailExists = function(email, success, failure){
 		function() {
 			success();
 		});
+};
+
+/**
+ * Check if the user can access all premium features. He could
+ * still be on the 15 day trial and the function will succeed
+ * @param userId
+ * @param success
+ * @param failure
+ */
+exports.checkTrialExpired = function(userId, success, failure) {
+	var user = new userModel(),
+		userDetails = new userDetailsModel(),
+		userObject = {};
+
+	async.series([
+		function(done) {
+			user.retrieve({_id: userId}, function(doc) {
+				userObject = doc[0].toObject();
+				done();
+			}, done);
+		},
+		function(done) {
+			if(userObject.type === 'lender' || userObject.pricingPlan === 'premium') {
+				done();
+			} else {
+				userDetails.retrieve({_id: userId}, function(doc) {
+					var  userDetailsObject = doc[0].toObject(),
+						created = moment(userDetailsObject.created),
+						currentDate = moment(),
+						duration = moment.duration(currentDate.diff(created));
+
+					if(duration.asDays() > 15) {
+						done(new Error('Trial Expired'));
+					} else {
+						done();
+					}
+				}, done);
+			}
+		}
+	], function(error) {
+		if(error) {
+			failure(error);
+		} else {
+			success();
+		}
+	});
 };
 
 /**

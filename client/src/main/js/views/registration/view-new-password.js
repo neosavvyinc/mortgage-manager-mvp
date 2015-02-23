@@ -31,8 +31,8 @@ var NewPassword = React.createClass({
     getInitialState: function(){
         return {
             passwordError: false,
-            errorText: ""
-        }
+            errorText: ''
+        };
     },
 
     onCheckPassword: function(e){
@@ -42,12 +42,12 @@ var NewPassword = React.createClass({
         if (!newPassword || newPassword === ''){
             this.setState({
                 passwordError: true,
-                errorText: "Please enter a password"
+                errorText: 'Please enter a password'
             });
-        } else if (newPassword != confirmPassword){
+        } else if (newPassword !== confirmPassword){
             this.setState({
                 passwordError: true,
-                errorText: "Both passwords need to match"
+                errorText: 'Both passwords need to match'
             });
         } else {
             var newUser = {},
@@ -56,10 +56,10 @@ var NewPassword = React.createClass({
 
             if(borrowerEmail) {
                 newUser.email = borrowerEmail;
-                newUser.type = "borrower";
+                newUser.type = 'borrower';
             } else if(lenderEmail) {
                 newUser.email = lenderEmail;
-                newUser.type = "lender";
+                newUser.type = 'lender';
                 if(LenderStore.getLender().token){
                     newUser.token = LenderStore.getLender().token;
                 }
@@ -67,7 +67,7 @@ var NewPassword = React.createClass({
             newUser.password = newPassword;
 
             User.register(newUser).then(function(user){
-                if(newUser.type === "borrower") {
+                if(newUser.type === 'borrower') {
                     BorrowerActions.newPassword(newPassword);
                 } else {
                     LenderActions.newPassword(newPassword);
