@@ -88,12 +88,10 @@ var RequestDocument = React.createClass({
                     <h3 className="modal-title">Request Document</h3>
                 </div>
                 <div className="modal-body">
-
                     <div className="row double-gap-top">
                         <div className="col-sm-6 col-xs-12 gap-bottom">
                             <input className="form-control" ref="docName" type="text" placeholder={this.state.inputPlaceHolder}/>
                         </div>
-
                         <div className={this.state.typeClass}>
                             <select className="form-control" ref="docType">
                                 <option value="Tax Document">Tax Document</option>
