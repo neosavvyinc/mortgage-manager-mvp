@@ -5,9 +5,9 @@ var Router = require('react-router');
 var Reflux = require('reflux');
 var Location = Router.HistoryLocation;
 
-var User = require('../../models/model-user');
-var MessageBox = require('../../components/message-box');
-var UserStore = require('../../stores/store-user');
+var User = require('../../../models/model-user');
+var MessageBox = require('../../../components/message-box');
+var UserStore = require('../../../stores/store-user');
 
 var ChangePassword = React.createClass({
 	mixins: [

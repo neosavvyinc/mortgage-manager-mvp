@@ -6,13 +6,13 @@ var Reflux = require('reflux');
 var RouterHandler = Router.RouteHandler;
 var _ = require('lodash');
 var moment = require('moment');
-var User = require('../../models/model-user');
-var UserStore = require('../../stores/store-user');
-var Application = require('../../models/model-application');
-var MessageBox = require('../../components/message-box');
-var Navigation = require('../../components/navigation');
-var LendersTable = require('./view-lender-list');
-var EndPoints = require('../../constants/endpoints');
+var User = require('../../../models/model-user');
+var UserStore = require('../../../stores/store-user');
+var Application = require('../../../models/model-application');
+var MessageBox = require('../../../components/message-box');
+var Navigation = require('../../../components/navigation');
+var LendersTable = require('../borrower/view-lender-list');
+var EndPoints = require('../../../constants/endpoints');
 
 var arraysEqual = function(arr1, arr2) {
     if(arr1.length !== arr2.length)

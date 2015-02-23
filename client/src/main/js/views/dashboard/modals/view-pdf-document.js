@@ -1,10 +1,10 @@
 'use strict';
 
-var PDF = require('../../components/pdf-viewer'),
+var PDF = require('../../../components/pdf-viewer'),
 	React = require('react'),
 	Router = require('react-router'),
-	Application = require('../../models/model-application'),
-	EndPoints = require('../../constants/endpoints');
+	Application = require('../../../models/model-application'),
+	EndPoints = require('../../../constants/endpoints');
 
 var ViewPdf = React.createClass({
 

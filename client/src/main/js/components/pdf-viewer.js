@@ -49,10 +49,12 @@ var Pdf = React.createClass({
 	},
 
 	handleResize: function() {
-		this.setState({
-			windowHeight: window.innerHeight,
-			windowWidth: window.innerWidth
-		});
+		if(this.isMounted()) {
+			this.setState({
+				windowHeight: window.innerHeight,
+				windowWidth: window.innerWidth
+			});
+		}
 	},
 
 	close: function() {

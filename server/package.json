@@ -46,7 +46,8 @@
     "archiver": "0.14.2",
     "password-generator": "0.2.3",
     "stripe": "3.3.0",
-    "moment": "2.9.0"
+    "moment": "2.9.0",
+    "s3-policy": "0.2.0"
   },
 
   "scripts": {

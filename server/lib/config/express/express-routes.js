@@ -104,7 +104,7 @@ module.exports = function(router, passport) {
 		.all(_isAuthenticated)
 		.get(applicationRoute.getApplicationDocument);
 
-	//Route for getting one file to view in the modal
+	//Route for one file to view/upload
 	router.route('/applications/:appId/file/:docId')
 		.all(_isAuthenticated)
 		.all(_checkTrialExpired)
@@ -147,6 +147,7 @@ var _isAuthenticated = function(req, res, next){
 var _checkTrialExpired = function(req, res, next) {
 	userService.checkTrialExpired(req.user._id, function() {
 		//Success callback if trail has not expired.
+		//Allow express to handle the next request.
 		next();
 	}, function(error) {
 		if(error.message === 'Trial Expired') {

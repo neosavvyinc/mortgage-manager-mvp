@@ -12,6 +12,8 @@ Document.upload = function (applicationId, document) {
 		url;
 	formData.append('file', document.file);
 	delete document.file;
+
+	console.log(JSON.stringify(document));
 	formData.append('details', JSON.stringify(document));
 
 	if(document._id !== undefined) {

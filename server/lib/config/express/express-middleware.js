@@ -21,7 +21,7 @@ module.exports = function(app, router, passport) {
 		},
 		onFileUploadStart: function (file) {
 			var extension = file.extension;
-			if (extension!=='pdf' && extension!=='jpg' && extension!=='jpeg' && extension!=='png') {
+			if (settings.getConfig().s3.s3Toggle || (extension!=='pdf' && extension!=='jpg' && extension!=='jpeg' && extension!=='png')) {
 				return false;
 			}
 		}

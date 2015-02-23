@@ -5,14 +5,14 @@ var Router = require('react-router');
 var Reflux = require('reflux');
 var _ = require('lodash');
 
-var Application = require('../../models/model-application');
-var ApplicationActions = require('../../actions/action-application');
-var ApplicationStore = require('../../stores/store-application');
-var User = require('../../models/model-user');
-var UserStore = require('../../stores/store-user');
-var Navigation = require('../../components/navigation');
-var LenderStore = require('../../stores/store-lender');
-var LenderActions = require('../../actions/action-lender');
+var Application = require('../../../models/model-application');
+var ApplicationActions = require('../../../actions/action-application');
+var ApplicationStore = require('../../../stores/store-application');
+var User = require('../../../models/model-user');
+var UserStore = require('../../../stores/store-user');
+var Navigation = require('../../../components/navigation');
+var LenderStore = require('../../../stores/store-lender');
+var LenderActions = require('../../../actions/action-lender');
 var moment = require('moment');
 
 var arraysEqual = function(arr1, arr2) {

@@ -19,59 +19,51 @@ exports.insertDocument = function(req, res) {
 		file = req.files.file,
 		appId = req.params.appId;
 
-	//If file does not exist, multer has filtered it for wrong extension.
+	//If file does not exist, either s3 is being used or
+	// multer has filtered it for wrong extension.
+
 	if(file === undefined) {
-		settings.log.fatal('Unsupported media type');
-		res.status(415).send({message: 'Unsupported Media type'});
+		if(settings.getConfig().s3.s3Toggle) {
+			settings.log.fatal('S3 is being used');
+			res.status(415).send({message: 'S3 is still under implementation'});
+		} else {
+			settings.log.fatal('Unsupported media type');
+			res.status(415).send({message: 'Unsupported Media type'});
+		}
 	} else {
-		var uploadPath = file.path,
+		var originalFilePath = file.path,
 			extension = file.extension,
-			updatedUploadPath,
-			splitPath,
-			destPath;
+			convertedPdfPath,
+			originalDest;
 
 		async.series([
 			function(done) {
+				//Convert if the file is not pdf
 				if(extension !== 'pdf') {
-					var dimensions = sizeOf(uploadPath),
-						captureOptions = {
-							width: dimensions.width,
-							height: dimensions.height,
-							delay: 200
-						},
-						pathArr = uploadPath.split('.'),
+					var	pathArr = originalFilePath.split('.'),
 						targetPath = pathArr[0] + '.pdf';
 
-					//Convert to pdf
-					phantom.convertToPdf(uploadPath, targetPath, captureOptions, function () {
-						updatedUploadPath = targetPath;
-						done();
-					}, function (error) {
-						done(new Error('Could not convert to pdf ' + error));
-					});
+					_convertToPdf(originalFilePath, targetPath, done, done);
+					convertedPdfPath = targetPath;
 				} else {
-					settings.log.info('Successfully converted pdf. Updated path is '+updatedUploadPath);
 					done();
 				}
 			},
 			function(done) {
-				var updatedUploadSplit,
-					updatedDest;
+				//Move uploaded files and save url to original as well as converted
+				var convertedDest;
 
-				if(updatedUploadPath !== undefined) {
-					updatedUploadSplit = updatedUploadPath.split('uploads');
-					updatedDest = updatedUploadSplit[0] + 'uploads/' + appId + '/' + updatedUploadSplit[1];
-					commonUtils.moveFiles(path.resolve(updatedUploadPath), path.resolve(updatedDest));
+				//Move the original file (Can be both images and pdf)
+				originalDest = _moveFile(appId, originalFilePath);
+
+				//If convertedPdfPath exists, it means the file was converted to pdf
+				if(convertedPdfPath !== undefined) {
+					convertedDest = _moveFile(appId, convertedPdfPath);
+					documentObject.originalUrl = originalDest;
 				}
 
-				splitPath = uploadPath.split('uploads');
-				destPath = splitPath[0] + 'uploads/' + appId + '/' + splitPath[1];
-
-				//Move the uploaded files before calling the service
-				commonUtils.moveFiles(path.resolve(uploadPath), path.resolve(destPath));
-
 				_.extend(documentObject, {
-					url: (updatedDest === undefined) ? destPath : updatedDest,
+					url: (convertedDest === undefined) ? originalDest : convertedDest,
 					appId: appId
 				});
 
@@ -84,7 +76,7 @@ exports.insertDocument = function(req, res) {
 			}
 		], function(error) {
 			if(error) {
-				settings.log.fatal(error.message);
+				settings.log.fatal(error.message || error);
 				res.status(500).send({message: 'Internal Server Error'});
 			} else {
 				res.send({message: 'Success'});
@@ -141,5 +133,44 @@ exports.downloadAllDocuments = function(req, res) {
 	}, function(error) {
 		settings.log.fatal(error);
 		res.status(500).send({message: 'Internal Server Error'});
+	});
+};
+
+/**
+ * Helper function to move file to uploads/appId/
+ * @param appId
+ * @param source
+ * @private
+ */
+var _moveFile = function(appId, source) {
+	var split = source.split('uploads'),
+		destination = split[0] + 'uploads/' + appId + '/' + split[1];
+
+	commonUtils.moveFiles(path.resolve(source), path.resolve(destination));
+
+	return destination;
+};
+
+/**
+ * Helper function that converts images to pdf
+ * @param sourcePath
+ * @param targetPath
+ * @param success
+ * @param failure
+ * @private
+ */
+var _convertToPdf = function(sourcePath, targetPath, success, failure) {
+	var dimensions = sizeOf(sourcePath),
+		captureOptions = {
+			width: dimensions.width,
+			height: dimensions.height,
+			delay: 200
+		};
+
+	//Convert to pdf
+	phantom.convertToPdf(sourcePath, targetPath, captureOptions, function () {
+		success();
+	}, function (error) {
+		failure(new Error('Could not convert to pdf ' + error));
 	});
 };
