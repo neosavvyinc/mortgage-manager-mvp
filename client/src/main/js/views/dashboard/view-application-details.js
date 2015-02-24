@@ -9,6 +9,8 @@ var TabbedArea = require('react-bootstrap').TabbedArea;
 var User = require('../../models/model-user');
 var UserStore = require('../../stores/store-user');
 var Navigation = require('../../components/navigation');
+var TabActions = require('../../actions/action-tabs');
+var TabStore = require('../../stores/store-tab');
 var LendersTable = require('./view-lender-list');
 var BorrowersTable = require('./view-borrower-list');
 var DocumentsTable = require('./view-document-list');
@@ -17,13 +19,21 @@ var ApplicationDetails = React.createClass({
 
     mixins: [
         Router.State,
-        Router.Navigation
+        Router.Navigation,
+        Reflux.listenTo(TabStore, "onTabChange")
     ],
 
     getInitialState: function(){
         return {
-            userType: ''
+            userType: '',
+            activeTabName: 'documents'
         }
+    },
+
+    componentWillMount: function(){
+        this.setState({
+            activeTabName: this.getParams().tabName
+        });
     },
 
     componentDidMount: function(){
@@ -40,29 +50,53 @@ var ApplicationDetails = React.createClass({
         this.transitionTo('dashboardApplications');
     },
 
+    onTransitionTab: function(tabToTransition){
+        if(tabToTransition !== this.state.activeTabName){
+            TabActions.switchPanel(tabToTransition);
+        }
+    },
+
+    onTabChange: function(){
+        this.setState({
+            activeTabName: TabStore.getNextTabName()
+        });
+        this.transitionTo('dashboardAppDetails', {appId: this.getParams().appId, tabName: TabStore.getNextTabName()});
+
+    },
+
     render: function() {
         var tabInfo = [{
                 name: "Documents",
-                component: ( <DocumentsTable /> )
+                component: (this.state.activeTabName == 'documents' ? ( <DocumentsTable /> ) : ( <div></div> ))
             }],
-            tabs = [];
+            tabs = [],
+            tabPanels = [],
+            activeTabIndex;
+
 
         if(this.state.userType == 'lender'){
             tabInfo.push({
                 name: 'Borrowers',
-                component: ( <BorrowersTable />)
+                component: (this.state.activeTabName == 'borrowers' ? ( <BorrowersTable /> ) : ( <div></div> ))
             });
         } else if(this.state.userType == 'borrower'){
             tabInfo.push({
                 name: 'Lenders',
-                component: ( <LendersTable />)
+                component: (this.state.activeTabName == 'lenders' ? ( <LendersTable /> ) : ( <div></div> ))
             });
         }
 
+        activeTabIndex = _.findIndex(tabInfo, function(tab) {
+            return tab.name.toLowerCase() == this.state.activeTabName;
+        }.bind(this));
+
         for(var i = 0; i < tabInfo.length; i++){
             tabs.push((
-                <TabPane eventKey={i} tab={tabInfo[i].name}>{tabInfo[i].component}</TabPane>
+                <li className={activeTabIndex == i ? "active" : ""} onClick={this.onTransitionTab.bind(null, tabInfo[i].name.toLowerCase())}>
+                    <a>{tabInfo[i].name}</a>
+                </li>
             ));
+            tabPanels.push(tabInfo[i].component);
         }
 
         return (
@@ -72,11 +106,14 @@ var ApplicationDetails = React.createClass({
                 </div>
                 <div className="row">
                     <div className="bordered-bottom col-xs-12">
-                        <TabbedArea defaultActiveKey={0}>
-                            {tabs.map(function(tab) {
-                                return (tab);
-                            })}
-                        </TabbedArea>
+                        <div className="nav nav-tabs">
+                        {tabs.map(function(tab){
+                            return tab;
+                        })}
+                        </div>
+                        {tabPanels.map(function(tab){
+                            return tab;
+                        })}
                     </div>
                 </div>
                 <RouterHandler/>
@@ -85,5 +122,17 @@ var ApplicationDetails = React.createClass({
         );
     }
 });
+
+/**
+ * <div className="bordered-bottom col-xs-12">
+ <TabbedArea defaultActiveKey={0}>
+ {tabs.map(function(tab) {
+     return (tab);
+ })}
+ </TabbedArea>
+ </div>
+ *
+ *
+ */
 
 module.exports = ApplicationDetails;

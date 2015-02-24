@@ -78,16 +78,16 @@ var ApplicantQuestions = React.createClass({
 
     render: function(){
 
-        var coapplicantYes = this.state.hasCoapplicant ? "btn btn-md btn-primary col-sm-6 col-xs-12" : "btn btn-md btn-default col-sm-6 col-xs-12";
-        var coapplicantNo = this.state.hasCoapplicant ? "btn btn-md btn-default col-sm-6 col-xs-12" : "btn btn-md btn-primary col-sm-6 col-xs-12";
-        var selfEmployedYes = this.state.isSelfEmployed ? "btn btn-md btn-primary col-sm-6 col-xs-12" : "btn btn-md btn-default col-sm-6 col-xs-12";
-        var selfEMployedNo = this.state.isSelfEmployed ? "btn btn-md btn-default col-sm-6 col-xs-12" : "btn btn-md btn-primary col-sm-6 col-xs-12";
-        var recentlyMarriedYes = this.state.recentlyMarried ? "btn btn-md btn-primary col-sm-6 col-xs-12" : "btn btn-md btn-default col-sm-6 col-xs-12";
-        var recentlyMarriedNo = this.state.recentlyMarried ? "btn btn-md btn-default col-sm-6 col-xs-12" : "btn btn-md btn-primary col-sm-6 col-xs-12";
-        var rentingYes = this.state.renting ? "btn btn-md btn-primary col-sm-6 col-xs-12" : "btn btn-md btn-default col-sm-6 col-xs-12";
-        var rentingNo = this.state.renting ? "btn btn-md btn-default col-sm-6 col-xs-12" : "btn btn-md btn-primary col-sm-6 col-xs-12";
-        var financialAssetsYes = this.state.hasFinancialAssets ? "btn btn-md btn-primary col-sm-6 col-xs-12" : "btn btn-md btn-default col-sm-6 col-xs-12";
-        var financialAssetsNo = this.state.hasFinancialAssets ? "btn btn-md btn-default col-sm-6 col-xs-12" : "btn btn-md btn-primary col-sm-6 col-xs-12";
+        var coapplicantYes = this.state.hasCoapplicant ? "btn btn-md btn-info col-sm-6 col-xs-12" : "btn btn-md btn-default col-sm-6 col-xs-12";
+        var coapplicantNo = this.state.hasCoapplicant ? "btn btn-md btn-default col-sm-6 col-xs-12" : "btn btn-md btn-info col-sm-6 col-xs-12";
+        var selfEmployedYes = this.state.isSelfEmployed ? "btn btn-md btn-info col-sm-6 col-xs-12" : "btn btn-md btn-default col-sm-6 col-xs-12";
+        var selfEMployedNo = this.state.isSelfEmployed ? "btn btn-md btn-default col-sm-6 col-xs-12" : "btn btn-md btn-info col-sm-6 col-xs-12";
+        var recentlyMarriedYes = this.state.recentlyMarried ? "btn btn-md btn-info col-sm-6 col-xs-12" : "btn btn-md btn-default col-sm-6 col-xs-12";
+        var recentlyMarriedNo = this.state.recentlyMarried ? "btn btn-md btn-default col-sm-6 col-xs-12" : "btn btn-md btn-info col-sm-6 col-xs-12";
+        var rentingYes = this.state.renting ? "btn btn-md btn-info col-sm-6 col-xs-12" : "btn btn-md btn-default col-sm-6 col-xs-12";
+        var rentingNo = this.state.renting ? "btn btn-md btn-default col-sm-6 col-xs-12" : "btn btn-md btn-info col-sm-6 col-xs-12";
+        var financialAssetsYes = this.state.hasFinancialAssets ? "btn btn-md btn-info col-sm-6 col-xs-12" : "btn btn-md btn-default col-sm-6 col-xs-12";
+        var financialAssetsNo = this.state.hasFinancialAssets ? "btn btn-md btn-default col-sm-6 col-xs-12" : "btn btn-md btn-info col-sm-6 col-xs-12";
 
         return (
             <div className="bg-color fill">

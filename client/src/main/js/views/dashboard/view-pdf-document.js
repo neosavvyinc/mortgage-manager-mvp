@@ -43,7 +43,7 @@ var ViewPdf = React.createClass({
 	},
 
     close: function(){
-        this.transitionTo('dashboardDocuments', {appId: this.getParams().appId, tab: 0});
+        this.transitionTo('dashboardAppDetails', {appId: this.getParams().appId, tabName: 'documents'});
     },
 
 	nextPage: function(ev) {

@@ -119,6 +119,7 @@ var Documents = React.createClass({
                         name: "requestDocument",
                         params: [{
                             appId: this.getParams().appId,
+                            tabName: 'documents',
                             docType: 'standard'
                         }]
                     }
@@ -129,6 +130,7 @@ var Documents = React.createClass({
                         name: 'requestDocument',
                         params: [{
                             appId: this.getParams().appId,
+                            tabName: 'documents',
                             docType: 'explanation'
                         }]
                     }
@@ -141,7 +143,8 @@ var Documents = React.createClass({
                     tabLink: {
                         name: 'uploadNewDocument',
                         params: [{
-                            appId: this.getParams().appId
+                            appId: this.getParams().appId,
+                            tabName: 'documents'
                         }],
 	                    disabled: tabsDisabled
                     },
@@ -160,7 +163,8 @@ var Documents = React.createClass({
 					    //Download a zip of all files
 					    window.open(EndPoints.APPLICATIONS.ONE.DOWNLOAD.URL.replace(':id', this.getParams().appId));
 				    }.bind(this),
-				    disabled: tabsDisabled
+				    disabled: tabsDisabled,
+                    tabName: 'documents'
 			    },
 			    icon: 'fa fa-download'
 		    });

@@ -103,7 +103,8 @@ var LenderContacts = React.createClass({
                 tabLink: {
                     name: "inviteLender",
                     params: [{
-                        appId: this.getParams().appId
+                        appId: this.getParams().appId,
+                        tabName: 'lenders'
                     }],
 	                disabled: lenderInviteDisabled
                 },
