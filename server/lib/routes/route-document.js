@@ -7,85 +7,35 @@ var path = require('path'),
 	phantom = require('../phantomjs/phantom'),
 	commonUtils = require('../utils/common-utils'),
 	settings = require('../config/app/settings'),
-	documentService = require('../services/service-document');
+	documentService = require('../services/service-document'),
+	s3Service = require('../services/service-s3');
 
 /**
  * Route handler for new documents
- * @param req
- * @param res
+ * @param s3Client
  */
-exports.insertDocument = function(req, res) {
-	var documentObject = JSON.parse(req.body.details),
-		file = req.files.file,
-		appId = req.params.appId;
+exports.insertDocument = function(s3Client) {
+	return function(req, res) {
+		var documentObject = JSON.parse(req.body.details),
+			file = req.files.file,
+			appId = req.params.appId;
 
-	//If file does not exist, either s3 is being used or
-	// multer has filtered it for wrong extension.
-
-	if(file === undefined) {
-		if(settings.getConfig().s3.s3Toggle) {
-			settings.log.fatal('S3 is being used');
-			res.status(415).send({message: 'S3 is still under implementation'});
-		} else {
-			settings.log.fatal('Unsupported media type');
+		//If file does not exist multer has filtered it for wrong extension.
+		if(file === undefined) {
+			settings.log.fatal('Unsupported Media type');
 			res.status(415).send({message: 'Unsupported Media type'});
-		}
-	} else {
-		var originalFilePath = file.path,
-			extension = file.extension,
-			convertedPdfPath,
-			originalDest;
-
-		async.series([
-			function(done) {
-				//Convert if the file is not pdf
-				if(extension !== 'pdf') {
-					var	pathArr = originalFilePath.split('.'),
-						targetPath = pathArr[0] + '.pdf';
-
-					_convertToPdf(originalFilePath, targetPath, done, done);
-					convertedPdfPath = targetPath;
-				} else {
-					done();
-				}
-			},
-			function(done) {
-				//Move uploaded files and save url to original as well as converted
-				var convertedDest;
-
-				//Move the original file (Can be both images and pdf)
-				originalDest = _moveFile(appId, originalFilePath);
-
-				//If convertedPdfPath exists, it means the file was converted to pdf
-				if(convertedPdfPath !== undefined) {
-					convertedDest = _moveFile(appId, convertedPdfPath);
-					documentObject.originalUrl = originalDest;
-				}
-
-				_.extend(documentObject, {
-					url: (convertedDest === undefined) ? originalDest : convertedDest,
-					appId: appId
-				});
-
-				//Call the document service to save Document
-				documentService.saveDocument(documentObject, function() {
-					done();
-				}, function(error) {
-					done(error);
-				});
-			}
-		], function(error) {
-			if(error) {
-				settings.log.fatal(error.message || error);
-				res.status(500).send({message: 'Internal Server Error'});
-			} else {
-				res.send({message: 'Success'});
+		} else {
+			_handleUpload(s3Client, documentObject, appId, file, function() {
+				res.send({message: 'Success'}).end();
 				settings.log.info('Successfully uploaded document ' + file.name + '. AppId: '+appId);
-			}
-			res.end();
-		});
-	}
+			}, function(error) {
+				settings.log.fatal(error.message || error);
+				res.status(500).send({message: 'Internal Server Error'}).end();
+			});
+		}
+	};
 };
+
 
 /**
  * Insert an entry for one document in mongo
@@ -137,18 +87,124 @@ exports.downloadAllDocuments = function(req, res) {
 };
 
 /**
- * Helper function to move file to uploads/appId/
+ * Handle uploads to S3
  * @param appId
- * @param source
+ * @param success
+ * @param failure
  * @private
  */
-var _moveFile = function(appId, source) {
-	var split = source.split('uploads'),
-		destination = split[0] + 'uploads/' + appId + '/' + split[1];
+var _handleS3Upload = function(appId, success, failure) {
+	if(settings.getConfig().s3.s3Toggle) {
+		//Generate S3 policies
+		var signature =	s3Service.generatePolicies(appId);
+		success(signature);
+	} else {
+		failure(new Error());
+	}
+};
 
-	commonUtils.moveFiles(path.resolve(source), path.resolve(destination));
+/**
+ * Handles uploads for both node and s3
+ * @param s3Client
+ * @param documentObject
+ * @param appId
+ * @param file
+ * @param success
+ * @param failure
+ * @private
+ */
+var _handleUpload = function(s3Client, documentObject, appId, file, success, failure) {
+	var originalFilePath = file.path,
+		extension = file.extension,
+		convertedPdfPath,
+		originalDest,
+		convertedDest,
+		s3Toggle = settings.getConfig().s3.s3Toggle;
 
-	return destination;
+	async.series([
+		function(done) {
+			//Convert if the file is not pdf
+			if(extension !== 'pdf') {
+				var	pathArr = originalFilePath.split('.'),
+					targetPath = pathArr[0] + '.pdf';
+
+				_convertToPdf(originalFilePath, targetPath, done, done);
+				convertedPdfPath = targetPath;
+			} else {
+				done();
+			}
+		},
+		function(done) {
+			//Move the original file (Can be both images and pdf)
+			originalDest = _moveFile(appId, originalFilePath);
+
+			//If convertedPdfPath exists, it means the file was converted to pdf
+			if(convertedPdfPath !== undefined) {
+				convertedDest = _moveFile(appId, convertedPdfPath);
+				documentObject.originalUrl = originalDest;
+
+				if(s3Toggle) {
+					documentObject.originalUrl = originalFilePath.split('uploads/')[1];
+				}
+			}
+
+			if(s3Toggle) {
+				var url = (convertedPdfPath === undefined) ? originalFilePath : convertedPdfPath;
+				_.extend(documentObject, {
+					url: url.split('uploads/')[1],
+					appId: appId
+				});
+			} else {
+				_.extend(documentObject, {
+					url: (convertedDest === undefined) ? originalDest : convertedDest,
+					appId: appId
+				});
+			}
+
+			//Call the document service to save Document
+			documentService.saveDocument(documentObject, function() {
+				done();
+			}, function(error) {
+				done(error);
+			});
+		},
+		function(done) {
+			//Post to S3
+			if(s3Toggle) {
+				var fileArr = [originalDest];
+
+				if(convertedPdfPath!== undefined) {
+					fileArr.push(convertedDest);
+				}
+				//Post the original file to S3
+				_postToS3(s3Client, fileArr, appId, done, done);
+			} else {
+				done();
+			}
+		},
+		function(done) {
+			//Delete files from node after uploading to s3.
+			if(s3Toggle) {
+				if (convertedPdfPath !== undefined) {
+					commonUtils.deleteFileSync(convertedDest, function() {
+						settings.log.info('Deleting file from node. Path: '+convertedDest);
+					}, done);
+				}
+				commonUtils.deleteFileSync(originalDest, function() {
+					settings.log.info('Deleting file from node. Path: '+originalDest);
+				}, done);
+				done();
+			} else {
+				done();
+			}
+		}
+	], function(error) {
+		if(error) {
+			failure(error);
+		} else {
+			success();
+		}
+	});
 };
 
 /**
@@ -172,5 +228,45 @@ var _convertToPdf = function(sourcePath, targetPath, success, failure) {
 		success();
 	}, function (error) {
 		failure(new Error('Could not convert to pdf ' + error));
+	});
+};
+
+/**
+ * Helper function to move file to uploads/appId/
+ * @param appId
+ * @param source
+ * @private
+ */
+var _moveFile = function(appId, source) {
+	var split = source.split('uploads'),
+		destination = split[0] + 'uploads/' + appId + split[1];
+
+	commonUtils.moveFiles(path.resolve(source), path.resolve(destination));
+	return destination;
+};
+
+/**
+ * Post to S3
+ * @param s3Client
+ * @param pathArr
+ * @param appId
+ * @param success
+ * @param failure
+ * @private
+ */
+var _postToS3 = function(s3Client, pathArr, appId, success, failure) {
+	async.each(pathArr, function(path, done) {
+		s3Service.postFile(s3Client, path, appId, path.split('uploads/')[1], function () {
+			settings.log.info('Successful upload to S3 from path: ', path);
+			done();
+		}, function (error) {
+			done(error);
+		});
+	}, function(error) {
+		if(error) {
+			failure(error);
+		} else {
+			success();
+		}
 	});
 };

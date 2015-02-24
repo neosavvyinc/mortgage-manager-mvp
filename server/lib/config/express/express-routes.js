@@ -9,7 +9,7 @@ var routeHealthcheck = require('../../routes/route-diagnostics'),
 	userService = require('../../services/service-user'),
 	settings = require('../app/settings');
 
-module.exports = function(router, passport) {
+module.exports = function(router, passport, s3Client) {
 	//Healthcheck
 	router.route('/healthcheck')
 		.get(routeHealthcheck.healthCheck);
@@ -108,7 +108,7 @@ module.exports = function(router, passport) {
 	router.route('/applications/:appId/file/:docId')
 		.all(_isAuthenticated)
 		.all(_checkTrialExpired)
-		.post(documentRoute.insertDocument)
+		.post(documentRoute.insertDocument(s3Client))
 		.get(applicationRoute.getFile);
 
 	//Route for downloading file
@@ -144,6 +144,13 @@ var _isAuthenticated = function(req, res, next){
 	}
 };
 
+/**
+ * Check if user has access to premium features
+ * @param req
+ * @param res
+ * @param next
+ * @private
+ */
 var _checkTrialExpired = function(req, res, next) {
 	userService.checkTrialExpired(req.user._id, function() {
 		//Success callback if trail has not expired.

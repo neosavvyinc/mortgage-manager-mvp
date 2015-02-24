@@ -143,7 +143,7 @@ exports.getUserApplications = function(uid, success, failure){
     });
 };
 
-exports.createApplication = function(uid, callback) {
+exports.createApplication = function(uid, success, failure) {
 
     var userDetails = new userDetailsModel();
     var application = new applicationModel();
@@ -160,7 +160,7 @@ exports.createApplication = function(uid, callback) {
                 applicantDetails = bDetails[0];
                 done();
             }, function(error){
-                callback(error);
+                done(error);
             });
         },
         function(done){
@@ -188,21 +188,21 @@ exports.createApplication = function(uid, callback) {
         }
     ], function(error){
             if(error !== undefined){
-                callback(error);
+                failure(error);
             } else {
-                callback(null, null);
+                success(applicationId);
             }
         }
     );
 };
 
-exports.insertDocuments = function(documents, callback){
+exports.insertDocuments = function(documents, success, failure){
     var application = new applicationModel();
 
-    if(!documents[0] || documents[0].appId){
-        callback(new Error('The document array was empty'));
+    if(documents.length < 1){
+        failure(new Error('The document array was empty'));
     }
-    application.update({documents: _.pluck(documents, '_id')}, {_id: documents[0].appId}, callback, callback);
+    application.update({documents: _.pluck(documents, '_id')}, {_id: documents[0].appId}, success, failure);
 };
 
 exports.getDocuments = function(appId, docId, success, failure){

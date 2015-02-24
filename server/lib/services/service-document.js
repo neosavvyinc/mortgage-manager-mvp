@@ -47,11 +47,13 @@ exports.saveDocument = function(doc, success, failure) {
 					//After removing the file update upload date. If file does not exists, set the request date.
 					if(docs[0].url !== undefined) {
 						var filePath = path.resolve(docs[0].url);
-						commonUtils.deleteFileSync(filePath, function() {
-							settings.log.info('Successfully deleted old file');
-						}, function(error) {
-							settings.log.error(error);
-						});
+						if(!settings.getConfig().s3.s3Toggle) {
+							commonUtils.deleteFileSync(filePath, function () {
+								settings.log.info('Successfully deleted old file');
+							}, function (error) {
+								settings.log.error(error);
+							});
+						}
 						_.extend(doc, {
 							uploadDate: currentDate
 						});

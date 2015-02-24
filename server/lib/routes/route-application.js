@@ -1,6 +1,8 @@
 'use strict';
 
-var applicationService = require('../services/service-application'),
+var async = require('async'),
+	applicationService = require('../services/service-application'),
+	s3Service = require('../services/service-s3'),
     settings = require('../config/app/settings');
 
 exports.getAllApplications = function(req, res){
@@ -25,20 +27,38 @@ exports.getAllApplications = function(req, res){
 
 };
 
+/**
+ * Route handler to create an application for a user.
+ * @param req
+ * @param res
+ */
 exports.createApplication = function(req, res){
-    var uid = req.params.uid;
+    var uid = req.params.uid,
+	    applicationId;
 
-    if( uid === req.user._id){
-        applicationService.createApplication(uid, function(){
-            res.send({message: 'success'});
-            res.end();
-            settings.log.info('Create applications success');
-        }, function(error){
-            if(error){
-                settings.log.fatal(error.message);
-                res.status(500).send({message: 'Internal Server Error'});
-            }
-        });
+    if( uid === req.user._id) {
+	    async.series([
+			function(done) {
+				applicationService.createApplication(uid, function(appId){
+					applicationId = appId;
+					done();
+				}, function(error){
+					done(error);
+				});
+			},
+		    function(done) {
+			    s3Service.createBucket(applicationId, done, done);
+		    }
+	    ], function(error) {
+		    if(error){
+			    settings.log.fatal(error);
+			    res.status(500).send({message: 'Internal Server Error'});
+		    } else {
+			    res.send({message: 'success'}).end();
+			    settings.log.info('Create applications success');
+		    }
+	    });
+
     } else {
         res.status(500).send({message: 'Internal Server Error'});
         res.end();
