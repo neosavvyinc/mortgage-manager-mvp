@@ -141,10 +141,6 @@ var Welcome = React.createClass({
         this.transitionTo('newPassword');
     },
 
-    onChoosePlan: function(){
-        this.transitionTo('findPlan');
-    },
-
     render: function(){
         return (
             <div>
@@ -154,7 +150,7 @@ var Welcome = React.createClass({
                         <h1>Neosavvy, Inc.</h1>
                         <p className="lead">The mortgage application process is totally broken. We plan to make it a much smoother experience.</p>
                         <div>&nbsp;</div>
-                        <div className="btn btn-default btn-lg" onClick={this.onChoosePlan}>Find Your Plan</div>
+                        <Link className="btn btn-default btn-lg" to='pricing'>Find Your Plan</Link>
                     </div>
                 </div>
                 <div className="blurb bright">

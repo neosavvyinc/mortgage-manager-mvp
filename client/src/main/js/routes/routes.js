@@ -30,7 +30,6 @@ var ApplicationDetails = require('../views/dashboard/view-application-details');
 var RequestDocument = require('../views/dashboard/view-lender-request-document');
 var ForgotPassword = require('../views/registration/view-forgot-password');
 var ViewProfile = require('../views/dashboard/view-update-profile');
-var FindPlan = require('../views/registration/view-find-plan');
 var PricingOptions = require('../views/dashboard/payment/view-pricing-options');
 var StripePayment = require('../views/dashboard/payment/view-stripe-payment');
 var TrialExpired = require('../views/dashboard/view-trial-expired');
@@ -67,7 +66,6 @@ var routes = (
             <Route name="lenderInfo" path="lender-info" handler={LenderInfo} />
             <Route name="applicantInfo" path="applicant-info" handler={ApplicantInfo} />
             <Route name="newLender" path="new-lender" handler={newLenderInvite} />
-            <Route name="findPlan" path="find-plan" handler={FindPlan}/>
         </Route>
         <Route name="dashboard" handler={Dashboard}>
 	        <Route name="trialExpired" path="trial-expired" handler={Modal}>

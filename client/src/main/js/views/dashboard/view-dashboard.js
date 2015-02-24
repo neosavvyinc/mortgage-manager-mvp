@@ -44,16 +44,20 @@ var Dashboard = React.createClass({
 
     render: function(){
         return (
-            <div>
-                <Header />
-                <div className="wrapper">
-                    <RouterHandler />
+            <span>
+                <div className="dashboard-fill" style={{backgroundColor:'white'}}>
+                    <div className="header">
+                        <Header />
+                    </div>
+                    <div className="dashboard-body">
+                        <RouterHandler />
+                    </div>
                     <div className="push" />
                 </div>
                 <div className="footer">
                     <Footer />
                 </div>
-            </div>
+            </span>
         )
     }
 });

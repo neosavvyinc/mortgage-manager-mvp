@@ -9,22 +9,22 @@ var Footer = React.createClass({
             <footer>
                 <div className="container">
                     <ul className="list-inline">
-                        <li>
-                            <Link to="welcome" className="col-md-2 col-sm-4 col-xs-12 col-md-offset-1 col-sm-offset-2">About</Link>
+                        <li className="pointer">
+                            <Link to="pricing" className="col-md-2 col-sm-4 col-xs-12 col-md-offset-1 col-sm-offset-2">Pricing</Link>
                         </li>
-                        <li>
-                            <Link to="welcome" className="col-md-2 col-sm-4 col-xs-12">Help</Link>
+                        <li className="pointer">
+                            <Link to="faq" className="col-md-2 col-sm-4 col-xs-12">FAQ</Link>
                         </li>
-                        <li>
-                            <Link to="welcome" className="col-md-2 col-sm-4 col-xs-12 col-md-offset-0 col-sm-offset-2">Jobs</Link>
+                        <li className="pointer">
+                            <Link to="team" className="col-md-2 col-sm-4 col-xs-12 col-md-offset-0 col-sm-offset-2">Team</Link>
                         </li>
-                        <li>
-                            <Link to="welcome" className="col-md-2 col-sm-4 col-xs-12">Press</Link>
+                        <li className="pointer">
+                            <Link to="legal" className="col-md-2 col-sm-4 col-xs-12">Legal</Link>
                         </li>
-                        <li>
-                            <Link to="welcome" className="col-md-2 col-sm-4 col-xs-12 col-md-offset-0 col-sm-offset-4">Legal</Link>
+                        <li className="pointer">
+                            <Link to="contact" className="col-md-2 col-sm-4 col-xs-12 col-md-offset-0 col-sm-offset-4">Contact</Link>
                         </li>
-                        <li className="pull-right">
+                        <li className="pull-right pointer">
                             <div className="center-block col-xs-12 text-center">&copy; Neosavvy, Inc. 2015</div>
                         </li>
                     </ul>
