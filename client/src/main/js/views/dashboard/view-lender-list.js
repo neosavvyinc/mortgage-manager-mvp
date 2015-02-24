@@ -1,6 +1,7 @@
 var React = require('react');
 var Router = require('react-router');
 var Reflux = require('reflux');
+var moment = require('moment');
 var _ = require('lodash');
 
 var Application = require('../../models/model-application');
@@ -51,10 +52,10 @@ var LenderContacts = React.createClass({
 
     getLenders: function(){
 	    User.getUserDetails(UserStore.getCurrentUserId()).then(function (user) {
-		    var createdDate = moment(user.created),
-			    currentDate = moment(),
-			    duration = moment.duration(currentDate.diff(createdDate)),
-			    state={lenders: LenderStore.getLenderList()};
+		    var createdDate = moment(user.created);
+            var currentDate = moment();
+            var duration = moment.duration(currentDate.diff(user.created));
+            var state = {lenders: LenderStore.getLenderList()};
 
 		    if (user.type === 'borrower' && user.pricingPlan === 'trial' && duration.asDays() > 15) {
 			    state.disableButtons = true;
