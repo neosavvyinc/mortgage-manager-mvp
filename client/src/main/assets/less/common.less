@@ -1,13 +1,12 @@
 @import "variables.less";
 
 html{
-    position: relative;
-    width: 100%;
-    min-height: 100%;
+    height: 100%;
+    overflow-y: scroll;
 }
 
 body {
-    margin-bottom: 60px;
+    height: 100%;
     font-family: OpenSans-Regular;
 }
 
@@ -43,7 +42,13 @@ a:before {
 
 .fill {
     min-height: 100%;
-    height: 100%;
+    height: auto;
+    margin-bottom: -60px;
+    background-color: @primary-lightest-blue;
+}
+.push {
+    clear: both;
+    height: 60px;
 }
 
 .pointer {

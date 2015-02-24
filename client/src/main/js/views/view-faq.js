@@ -1,15 +1,17 @@
 var React = require('react');
 
-var HeaderLogout = require('../components/header-logout');
+var HeaderLogout = require('../components/header-logout'),
+    Footer = require('../components/footer');
+
 
 var FAQ = React.createClass({
     render: function(){
         return (
-            <div>
-                <div className="header">
-                    <HeaderLogout />
-                </div>
-                <div className="content-body">
+            <span>
+                <div className="fill">
+                    <div className="header">
+                        <HeaderLogout />
+                    </div>
                     <div className="content-body container">
                         <div className="panel panel-default bg-white">
                             <div className="panel-body no-pad-bottom">
@@ -30,9 +32,13 @@ var FAQ = React.createClass({
                                 </div>
                             </div>
                         </div>
+                        <div className="push" />
                     </div>
                 </div>
-            </div>
+                <div className="footer">
+                    <Footer />
+                </div>
+            </span>
         );
     }
 });

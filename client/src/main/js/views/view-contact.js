@@ -5,7 +5,8 @@ var GoogleMapsMixin = GoogleMaps.GoogleMapsMixin,
     GoogleMapMarker = GoogleMaps.Marker,
     GoogleMap       = GoogleMaps.Map;
 
-var HeaderLogout = require('../components/header-logout');
+var HeaderLogout = require('../components/header-logout'),
+    Footer = require('../components/footer');
 
 var Contact = React.createClass({
 
@@ -33,38 +34,45 @@ var Contact = React.createClass({
         ];
 
         return (
-            <div>
-                <div className="header">
-                    <HeaderLogout />
-                </div>
-                <div className="content-body">
-                    <div className="content-body container">
-                        <div className="panel panel-default bg-white">
-                            <div className="panel-body no-pad-bottom">
-                                <h2 className="bordered-bottom col-xs-12">Contact Us</h2>
-                            </div>
-                            <div className="row triple-gap-bottom">
-                                <div className="col-sm-4 text-right hidden-xs contact-info">
-                                    <p>Corporate Headquarters</p>
-                                    <p>349 5th Avenue, Suite 412</p>
-                                    <p>New York, NY, 10016</p>
+            <span>
+                <div className="fill">
+                    <div className="header">
+                        <HeaderLogout />
+                    </div>
+                    <div className="content-body">
+                        <div className="container">
+                            <div className="panel panel-default bg-white">
+                                <div className="panel-body no-pad-bottom">
+                                    <h2 className="bordered-bottom col-xs-12">Contact Us</h2>
                                 </div>
-                                <div className="col-xs-12 hidden-sm hidden-md hidden-lg triple-gap-top triple-gap-bottom text-center">
-                                    <p>Corporate Headquarters</p>
-                                    <p>349 5th Avenue, Suite 412</p>
-                                    <p>New York, NY, 10016</p>
-                                </div>
-                                <div className="col-sm-8 col-xs-12" style={{height: "500px"}}>
-                                    <div style={{height: "100%"}}>
-                                        <GoogleMap googleMapsApi={google.maps} style={{height: '100%', width: '100%'}} zoom={14} center={location} />
-                                        {markers}
+                                <div className="row triple-gap-bottom">
+                                    <div className="col-sm-4 text-right hidden-xs contact-info">
+                                        <p>Corporate Headquarters</p>
+                                        <p>349 5th Avenue, Suite 412</p>
+                                        <p>New York, NY, 10016</p>
+                                    </div>
+                                    <div className="col-xs-12 hidden-sm hidden-md hidden-lg triple-gap-top triple-gap-bottom text-center">
+                                        <p>Corporate Headquarters</p>
+                                        <p>349 5th Avenue, Suite 412</p>
+                                        <p>New York, NY, 10016</p>
+                                    </div>
+                                    <div className="col-sm-8 col-xs-12" style={{height: "500px"}}>
+                                        <div style={{height: "100%"}}>
+                                            <GoogleMap googleMapsApi={google.maps} style={{height: '100%', width: '100%'}} zoom={14} center={location} />
+                                            {markers}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div className="push" />
+
                 </div>
-            </div>
+                <div className="footer">
+                    <Footer />
+                </div>
+            </span>
         );
     }
 });
