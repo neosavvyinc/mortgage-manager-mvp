@@ -99,35 +99,33 @@ var NewPassword = React.createClass({
 
     render: function() {
         return (
-            <div className="bg-color fill">
-                <div className="container container-color fill">
-                    <div className="row">
-                        <h1 className="col-xs-12 bordered-bottom">We need you to give us a password so you can log in later</h1>
-                    </div>
-                    <div className="row double-gap-top">
-                        <div className="col-xs-12 col-sm-6 col-md-4 col-sm-offset-3 col-md-offset-4">
-                            <div className="panel panel-default">
-                                <div className="panel-body">
-                                    <div className="form-group">
-                                        <label>Password</label>
-                                        <input className="form-control" type="password" ref="newPassword" placeholder="New Password" />
-                                    </div>
-                                    <div className="form-group">
-                                        <label for="exampleInputEmail1">Confirm your password</label>
-                                        <input className="form-control" type="password" ref="confirmPassword" placeholder="Confirm Password" />
-                                    </div>
-                                    <div className="alert alert-info">
-                                        <p>Your password should have at least:</p>
-                                        <ul>
-                                            <li>Eight characters</li>
-                                            <li>One lower case</li>
-                                            <li>One upper case</li>
-                                            <li>One special character (!@#~$%^&)</li>
-                                        </ul>
-                                    </div>
-                                    <MessageBox displayMessage={this.state.passwordError} message={this.state.errorText} type='error' />
-                                    <button className="btn btn-lg btn-primary col-xs-12" onClick={this.onCheckPassword}>Continue</button>
+            <div className="container">
+                <div className="row">
+                    <h1 className="col-xs-12 bordered-bottom">We need you to give us a password so you can log in later</h1>
+                </div>
+                <div className="row double-gap-top">
+                    <div className="col-xs-12 col-sm-6 col-md-4 col-sm-offset-3 col-md-offset-4">
+                        <div className="panel panel-default">
+                            <div className="panel-body">
+                                <div className="form-group">
+                                    <label>Password</label>
+                                    <input className="form-control" type="password" ref="newPassword" placeholder="New Password" />
                                 </div>
+                                <div className="form-group">
+                                    <label for="exampleInputEmail1">Confirm your password</label>
+                                    <input className="form-control" type="password" ref="confirmPassword" placeholder="Confirm Password" />
+                                </div>
+                                <div className="alert alert-info">
+                                    <p>Your password should have at least:</p>
+                                    <ul>
+                                        <li>Eight characters</li>
+                                        <li>One lower case</li>
+                                        <li>One upper case</li>
+                                        <li>One special character (!@#~$%^&)</li>
+                                    </ul>
+                                </div>
+                                <MessageBox displayMessage={this.state.passwordError} message={this.state.errorText} type='error' />
+                                <button className="btn btn-lg btn-primary col-xs-12" onClick={this.onCheckPassword}>Continue</button>
                             </div>
                         </div>
                     </div>

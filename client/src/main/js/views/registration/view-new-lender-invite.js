@@ -44,8 +44,7 @@ var newLenderInvite = React.createClass({
             appId: this.getQuery().appId
         };
         return (
-            <div className="bg-color fill">
-                <div className="container container-color fill">
+                <div className="container">
                     <div className="row triple-gap-bottom">
                         <h1 className="col-xs-12 bordered-bottom">Welcome to Neosavvy, Inc.</h1>
                     </div>
@@ -60,14 +59,13 @@ var newLenderInvite = React.createClass({
                                 </div>
                                 <div className="row panel-body text-center">
                                     <div className="col-sm-10 col-sm-offset-1 col-xs-12">
-                                        <button className="btn btn-lg btn-primary triple-gap-top triple-gap-bottom" onClick={this.onAcceptInvite.bind(null, newLender)}>Sign Up</button>
+                                        <button className="btn btn-lg btn-dark-blue triple-gap-top triple-gap-bottom" onClick={this.onAcceptInvite.bind(null, newLender)}>Sign Up</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
         );
     }
 });

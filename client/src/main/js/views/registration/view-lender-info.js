@@ -164,28 +164,26 @@ var LenderInfo = React.createClass({
         );
 
         return (
-            <div className="bg-color fill">
-                <div className="container container-color fill">
-                    <div className="row">
-                        <h2 className="col-xs-12 bordered-bottom double-gap-bottom">{this.state.applicantType}'s Name</h2>
-                        {lenderName}
-                    </div>
-                    <div className="row">
-                        <h2 className="col-xs-12 bordered-bottom double-gap-bottom">{this.state.applicantType}'s Address</h2>
-                            {lenderAddress}
-                    </div>
-                    <div className="row">
-                        <h2 className="col-xs-12 bordered-bottom double-gap-bottom">{this.state.applicantType}'s Contact Information</h2>
-                        {lenderContact}
-                    </div>
-                    <div className="row">
-                        <div className="col-xs-12">
-                            <div className="row">
-                                <MessageBox gridPos="col-sm-6 col-xs-12" displayMessage={this.state.applicantInfoError} message={this.state.errorText} type='error' />
-                            </div>
-                            <div className="row">
-                                <button className="btn btn-md btn-primary col-sm-6 col-xs-12" onClick={this.onSubmitInfo}>Continue</button>
-                            </div>
+            <div className="container container-color fill">
+                <div className="row">
+                    <h2 className="col-xs-12 bordered-bottom double-gap-bottom">{this.state.applicantType}'s Name</h2>
+                    {lenderName}
+                </div>
+                <div className="row">
+                    <h2 className="col-xs-12 bordered-bottom double-gap-bottom">{this.state.applicantType}'s Address</h2>
+                        {lenderAddress}
+                </div>
+                <div className="row">
+                    <h2 className="col-xs-12 bordered-bottom double-gap-bottom">{this.state.applicantType}'s Contact Information</h2>
+                    {lenderContact}
+                </div>
+                <div className="row">
+                    <div className="col-xs-12">
+                        <div className="row">
+                            <MessageBox gridPos="col-sm-6 col-xs-12" displayMessage={this.state.applicantInfoError} message={this.state.errorText} type='error' />
+                        </div>
+                        <div className="row">
+                            <button className="btn btn-md btn-dark-blue col-sm-6 col-xs-12" onClick={this.onSubmitInfo}>Continue</button>
                         </div>
                     </div>
                 </div>

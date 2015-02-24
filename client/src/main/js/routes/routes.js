@@ -14,6 +14,7 @@ var Pricing = require('../views/view-pricing');
 var Team = require('../views/view-team');
 var Dashboard = require('../views/dashboard/view-dashboard');
 var Modal = require('../components/modal');
+var Register = require('../views/registration/view-register');
 var NewPassword = require('../views/registration/view-new-password');
 var UpdatePassword = require('../views/registration/view-update-password');
 var ChangePassword = require('../views/dashboard/view-change-password');
@@ -59,7 +60,7 @@ var TestRoute1 = React.createClass({
 var routes = (
     <Route handler={RootDefault}>
         <DefaultRoute name="welcome" handler={Welcome} />
-        <Route name="register" handler={RootDefault}>
+        <Route name="register" handler={Register}>
             <Route name="newPassword" path="new-password" handler={NewPassword}/>
             <Route name="updatePassword" path="update-password" handler={UpdatePassword}/>
             <Route name="applicantQuestions" path="applicant-questions" handler={ApplicantQuestions} />

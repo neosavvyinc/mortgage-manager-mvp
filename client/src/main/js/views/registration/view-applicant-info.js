@@ -213,53 +213,51 @@ var ApplicantInfo = React.createClass({
         );
 
         return (
-            <div className="bg-color fill">
-                <div className="container container-color fill">
+            <div className="container">
+                <div className="row">
+                    <h2 className="col-xs-12 bordered-bottom double-gap-bottom">{this.state.applicantType}'s Name</h2>
+                    <form className="row">
+                        <div className="col-md-3 col-sm-4 col-xs-12 gap-bottom">
+                            <input className="form-control" type="text" ref="firstName" placeholder="First Name" required />
+                        </div>
+                        <div className="col-md-3 col-sm-4 col-xs-12 gap-bottom">
+                            <input className="form-control" type="text" ref="middleName" placeholder="Middle Name" required />
+                        </div>
+                        <div className="col-md-3 col-sm-4 col-xs-12 gap-bottom">
+                            <input className="form-control" type="text" ref="lastName" placeholder="Last Name" required />
+                        </div>
+                    </form>
                     <div className="row">
-                        <h2 className="col-xs-12 bordered-bottom double-gap-bottom">{this.state.applicantType}'s Name</h2>
-                        <form className="row">
-                            <div className="col-md-3 col-sm-4 col-xs-12 gap-bottom">
-                                <input className="form-control" type="text" ref="firstName" placeholder="First Name" required />
-                            </div>
-                            <div className="col-md-3 col-sm-4 col-xs-12 gap-bottom">
-                                <input className="form-control" type="text" ref="middleName" placeholder="Middle Name" required />
-                            </div>
-                            <div className="col-md-3 col-sm-4 col-xs-12 gap-bottom">
-                                <input className="form-control" type="text" ref="lastName" placeholder="Last Name" required />
-                            </div>
-                        </form>
-                        <div className="row">
-                            <h2 className="col-xs-8 bordered-bottom double-gap-bottom">{this.state.applicantType}'s Address</h2>
-                            <div className={showCoapplicantFieldClass}>
-                                <div className="row">
-                                    <p className="col-xs-8">Shares address with main applicant:</p>
-                                    <div className="col-xs-4">
-                                        <input className="form-control" type="checkbox" ref="sameAddress" onChange={this.populateAddress}/>
-                                    </div>
+                        <h2 className="col-xs-8 bordered-bottom double-gap-bottom">{this.state.applicantType}'s Address</h2>
+                        <div className={showCoapplicantFieldClass}>
+                            <div className="row">
+                                <p className="col-xs-8">Shares address with main applicant:</p>
+                                <div className="col-xs-4">
+                                    <input className="form-control" type="checkbox" ref="sameAddress" onChange={this.populateAddress}/>
                                 </div>
                             </div>
-                    {applicantAddress}
                         </div>
+                {applicantAddress}
                     </div>
-                    <div className="row double-gap-bottom">
-                        <h2 className="col-xs-12 bordered-bottom">{this.state.applicantType}'s Contact Information</h2>
-                        <form class="row">
-                            <div className="col-md-3 col-sm-4 col-xs-12 gap-bottom">
-                                <input className="form-control" type="text" ref="phone" placeholder="Mobile Phone" required />
-                            </div>
-                            <div className="col-md-3 col-sm-4 col-xs-12 gap-bottom">
-                                <input className={showEmailClass} type="email" ref="email" placeholder="Email" required />
-                            </div>
-                        </form>
-                    </div>
-                    <div className="row">
-                        <div className="col-xs-12">
-                            <div className="row">
-                                <MessageBox gridPos="col-sm-6 col-xs-12" displayMessage={this.state.applicantInfoError} message={this.state.errorText} type='error' />
-                            </div>
-                            <div className="row">
-                                <button className="btn btn-md btn-primary col-sm-6 col-xs-12" onClick={this.onSubmitInfo}>Continue</button>
-                            </div>
+                </div>
+                <div className="row double-gap-bottom">
+                    <h2 className="col-xs-12 bordered-bottom">{this.state.applicantType}'s Contact Information</h2>
+                    <form class="row">
+                        <div className="col-md-3 col-sm-4 col-xs-12 gap-bottom">
+                            <input className="form-control" type="text" ref="phone" placeholder="Mobile Phone" required />
+                        </div>
+                        <div className="col-md-3 col-sm-4 col-xs-12 gap-bottom">
+                            <input className={showEmailClass} type="email" ref="email" placeholder="Email" required />
+                        </div>
+                    </form>
+                </div>
+                <div className="row">
+                    <div className="col-xs-12">
+                        <div className="row">
+                            <MessageBox gridPos="col-sm-6 col-xs-12" displayMessage={this.state.applicantInfoError} message={this.state.errorText} type='error' />
+                        </div>
+                        <div className="row">
+                            <button className="btn btn-md btn-dark-blue col-sm-6 col-xs-12" onClick={this.onSubmitInfo}>Continue</button>
                         </div>
                     </div>
                 </div>

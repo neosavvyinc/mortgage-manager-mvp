@@ -43,8 +43,7 @@ var ForgotPassword = React.createClass({
 
 	render: function() {
 		return (
-            <div className="bg-color fill">
-                <div className="container container-color fill">
+                <div className="container">
                     <div className="row">
                         <h1 className="col-xs-12 bordered-bottom">Enter your email. We will send you a link to reset your password.</h1>
                     </div>
@@ -57,13 +56,12 @@ var ForgotPassword = React.createClass({
                                         <input className="form-control" type="text" ref="email" placeholder="Enter your email" />
                                     </div>
                                     <MessageBox displayMessage={this.state.display} message={this.state.displayText} type={this.state.type} />
-                                    <button className="btn btn-lg btn-primary col-xs-12" onClick={this.onValidateEmail} disabled={this.state.disabled}>Continue</button>
+                                    <button className="btn btn-lg btn-dark-blue col-xs-12" onClick={this.onValidateEmail} disabled={this.state.disabled}>Continue</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 		)
 	}
 });
