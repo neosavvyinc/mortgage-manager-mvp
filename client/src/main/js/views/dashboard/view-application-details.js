@@ -121,16 +121,4 @@ var ApplicationDetails = React.createClass({
     }
 });
 
-/**
- * <div className="bordered-bottom col-xs-12">
- <TabbedArea defaultActiveKey={0}>
- {tabs.map(function(tab) {
-     return (tab);
- })}
- </TabbedArea>
- </div>
- *
- *
- */
-
 module.exports = ApplicationDetails;
