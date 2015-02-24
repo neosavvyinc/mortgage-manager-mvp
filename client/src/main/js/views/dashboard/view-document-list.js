@@ -66,11 +66,11 @@ var Documents = React.createClass({
     },
 
     onNewDocumentUpload: function() {
-        this.transitionTo('uploadNewDocument', {appId: this.getParams().appId});
+        this.transitionTo('uploadNewDocument', {appId: this.getParams().appId, tabName: 'documents'});
     },
 
     onDocumentUpload: function(document) {
-        this.transitionTo('uploadExistingDocument', {appId: this.getParams().appId, documentId: document._id});
+        this.transitionTo('uploadExistingDocument', {appId: this.getParams().appId, documentId: document._id, tabName: 'documents'});
     },
 
 	onDocumentDownload: function(document) {
@@ -81,7 +81,7 @@ var Documents = React.createClass({
     onDocumentView: function(document) {
         var appId = this.getParams().appId,
             docId = document._id;
-        this.transitionTo('viewDocument', {appId: appId, documentId: docId});
+        this.transitionTo('viewDocument', {appId: appId, documentId: docId, tabName: 'documents'});
     },
 
     getDocuments: function() {

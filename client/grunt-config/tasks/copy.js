@@ -61,6 +61,14 @@ module.exports = {
 		        ],
 		        dest: 'deployment/'
 	        },
+            {
+                expand:true,
+                cwd:'<%= buildOutputDirectoryPath %>/',
+                src: [
+                    'assets/bootstrap/**/*'
+                ],
+                dest: 'deployment/'
+            },
 	        {
 		        expand:true,
 		        cwd:'<%= buildOutputDirectoryPath %>/',

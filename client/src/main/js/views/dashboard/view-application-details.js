@@ -90,7 +90,7 @@ var ApplicationDetails = React.createClass({
 
         for(var i = 0; i < tabInfo.length; i++){
             tabs.push((
-                <li className={activeTabIndex == i ? "active" : ""} onClick={this.onTransitionTab.bind(null, tabInfo[i].name.toLowerCase())}>
+                <li className={activeTabIndex == i ? "active pointer" : " pointer"} onClick={this.onTransitionTab.bind(null, tabInfo[i].name.toLowerCase())}>
                     <a>{tabInfo[i].name}</a>
                 </li>
             ));
