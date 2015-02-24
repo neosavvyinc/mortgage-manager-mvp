@@ -1,7 +1,4 @@
-@font-face {
-    font-family: OpenSans-Light;
-    src: url('../fonts/OpenSans-Regular.ttf'); /*URL to font*/
-}
+@import "variables.less";
 
 html{
     position: relative;
@@ -11,7 +8,7 @@ html{
 
 body {
     margin-bottom: 60px;
-    font-family: OpenSans-Light;
+    font-family: OpenSans-Regular;
 }
 
 textarea, input, select, option {
@@ -53,15 +50,11 @@ a:before {
     cursor: pointer;
 }
 
-.divBorder {
-    align-content: center;
-    height: 40%;
-    padding: 15px;
-    border: 1px solid #DDDDDD;
-}
-
-/* fix bs3 horizontal scrollbar bug */
 .row { margin: 0; padding: 0 }
+
+.header-welcome .navbar{
+    background-color: @primary-dark-blue;
+}
 
 header h1 {
     font-size:50px;
@@ -77,29 +70,14 @@ img.grayscale {
     background-color:#fff;
 }
 
-.scroll-down a, .scroll-top a {
-    color:#ffffff;
-}
-
-.scroll-down {
-    position:fixed;
-    bottom:20%;
-    right:0%;
-    color:#f9f9f9;
-}
-
-.scroll-top {
-    background-color:#dbdbdb;
-}
-
 .vert {
     vertical-align: middle;
-    width:100%;
-    padding-top:4%;
-    text-align:center;
+    width: 100%;
+    padding-top: 100px;
+    text-align: center;
 }
 
-.header .btn-lg {
+.header-welcome .btn-lg {
     font-size:28px;
     border-color:#eeeeee;
     padding:15px;
@@ -107,58 +85,48 @@ img.grayscale {
     color:#ffffff;
 }
 
-.header .btn-lg:hover {
-    background-color:#eeeeee;
-    color:#777777;
+.header-welcome .btn-lg:hover {
+    background-color: white;
+    color: @primary-dark-blue;
 }
 
-.navbar-bold.affix {
-    background-color:#d46054;
-}
-
-.navbar-bold {
-    background-color:#f68076;
-}
-
-.navbar-bold li a:hover, .navbar-bold li.active {
-    background-color:#d46054;
-}
-
-
-.header h1 {
+.header-welcome h1 {
     font-size:80px;
-    color:#431a6d;
     color:#fff;
     margin-left:-5px;
     margin-bottom:5px;
 }
 
-.header .lead {
-    color:#d46054;
-    font-size:25px;
-}
-
-.header {
+.header-welcome {
     height: 80%;
     padding-bottom: 100px;
 }
 
-/* use alt in navbar and header for different color */
+.header-welcome-welcome {
+    height: 80%;
+    margin-bottom: 100px;
+}
+
+/* use alt in navbar and header-welcome for different color */
 
 .alt {
-    background-color: #6E28C9;
+    background-color: @primary-light-blue;
 }
 
 .alt .lead {
-    color: #3B0496;
+    color: @primary-dark-blue;
 }
 
 .alt.affix {
-    background-color:#4C06AB;
+    background-color: @primary-blue;
 }
 
 .alt li a:hover, .alt li.active {
-    background-color:#5D17BA;
+    background-color: @primary-blue;
+}
+
+.navbar div, .navbar li a{
+    color: white;
 }
 
 .blurb {

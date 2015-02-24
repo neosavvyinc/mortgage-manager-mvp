@@ -1,23 +1,12 @@
-.user-section{
-    min-height: 195px;
+@import "variables.less";
+
+.header .navbar{
+    background-color: @primary-dark-blue;
 }
 
-.onboarding-title{
-    margin-bottom: 40px;
-}
-
-.wrapper {
-    position: relative;
-    height: 100%;
-}
-
-.footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    padding-top: 20px;
-    height: 60px;
-    background-color: #f5f5f5;
+.header .navbar li a:hover{
+    background-color: @primary-blue;
+    color: white;
 }
 
 .cog-icon{
@@ -28,4 +17,38 @@
 
 .cog-icon:hover{
     color: black;
+}
+
+.content-body {
+    padding-top: 50px;
+    overflow-y: hidden;
+    height: 9999px;
+    background-color: @primary-lightest-blue;
+}
+
+.content-body {
+    padding-top: 50px;
+    height: 9999px;
+}
+
+.user-section{
+    min-height: 195px;
+}
+
+.wrapper {
+    position: relative;
+    height: 100%;
+}
+
+.contact-info {
+    margin-top: 200px;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding-top: 20px;
+    height: 60px;
+    background-color: #f5f5f5;
 }

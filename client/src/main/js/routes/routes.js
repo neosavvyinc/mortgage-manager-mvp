@@ -7,6 +7,11 @@ var DefaultRoute = Router.DefaultRoute;
 
 /* Pages */
 var Welcome = require('../views/view-welcome');
+var Contact = require('../views/view-contact');
+var FAQ = require('../views/view-faq');
+var Legal = require('../views/view-legal');
+var Pricing = require('../views/view-pricing');
+var Team = require('../views/view-team');
 var Dashboard = require('../views/dashboard/view-dashboard');
 var Modal = require('../components/modal');
 var NewPassword = require('../views/registration/view-new-password');
@@ -96,6 +101,11 @@ var routes = (
 	        <Route name="stripePayment" path="stripe-payment/:price" handler={StripePayment}/>
         </Route>
         <Route name="forgotPassword" path="forgot-password" handler={ForgotPassword} />
+        <Route name="pricing" handler={Pricing} />
+        <Route name="faq" handler={FAQ} />
+        <Route name="team" handler={Team} />
+        <Route name="legal" handler={Legal} />
+        <Route name="contact" handler={Contact} />
     </Route>
 );
 
