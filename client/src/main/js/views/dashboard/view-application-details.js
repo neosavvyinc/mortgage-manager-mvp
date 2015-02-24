@@ -3,8 +3,6 @@ var Router = require('react-router');
 var Reflux = require('reflux');
 var RouterHandler = Router.RouteHandler;
 var _ = require('lodash');
-var TabPane = require('react-bootstrap').TabPane;
-var TabbedArea = require('react-bootstrap').TabbedArea;
 
 var User = require('../../models/model-user');
 var UserStore = require('../../stores/store-user');
