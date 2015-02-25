@@ -59,9 +59,9 @@ var Navigation = React.createClass({
     },
 
     render: function() {
-        var tabSpacingClass = 'btn btn-md btn-primary';
+        var tabSpacingClass = 'btn btn-md btn-dark-blue';
 
-        var activeTabClass = tabSpacingClass + " btn-info";
+        var activeTabClass = tabSpacingClass + " btn-light-blue";
         return (
             <ul className="list-inline">
                 {this.props.navigationItems.map(function(tab) {
