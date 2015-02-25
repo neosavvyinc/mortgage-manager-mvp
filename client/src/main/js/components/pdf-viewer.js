@@ -18,15 +18,6 @@ var Pdf = React.createClass({
 	},
 
 	componentDidMount: function() {
-		var self = this;
-		PDFJS.workerSrc = "js/pdf.worker.js";
-		PDFJS.getDocument(this.props.file).then(function(pdf) {
-			pdf.getPage(self.props.page).then(function(page) {
-				self.props.onLoadCallback(pdf.numPages);
-				self.setState({pdfPage: page, pdf: pdf});
-			});
-		});
-
 		//Adding this listener to render the canvas everytime the window is resized.
 		window.addEventListener('resize', this.handleResize);
 	},
@@ -37,24 +28,31 @@ var Pdf = React.createClass({
 
 	componentWillReceiveProps: function(newProps) {
 		var self = this;
-		if (newProps.page !== self.props.page) {
-			self.state.pdf.getPage(newProps.page).then(function(page) {
-				self.setState({pdfPage: page, pageId: newProps.page});
-			});
+		PDFJS.workerSrc = 'js/pdf.worker.js';
 
-			this.setState({
-				pdfPage: null
+		if(!self.props.loaded && newProps.file) {
+			PDFJS.getDocument(newProps.file).then(function (pdf) {
+				self.setState({pdf: pdf, newPage: newProps.page});
+				self.props.onLoadCallback(pdf.numPages);
 			});
+		} else {
+			if(self.props.loaded) {
+				console.log(newProps.page);
+				self.state.pdf.getPage(newProps.page).then(function (page) {
+					self.setState({pdfPage: page, newPage: newProps.page});
+				});
+
+				self.setState({pdfPage: null});
+			}
 		}
+
 	},
 
 	handleResize: function() {
-		if(this.isMounted()) {
-			this.setState({
-				windowHeight: window.innerHeight,
-				windowWidth: window.innerWidth
-			});
-		}
+		this.setState({
+			windowHeight: window.innerHeight,
+			windowWidth: window.innerWidth
+		});
 	},
 
 	close: function() {

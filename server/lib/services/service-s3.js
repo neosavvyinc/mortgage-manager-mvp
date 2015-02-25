@@ -1,40 +1,62 @@
 'use strict';
 
-var fs = require('fs'),
-	async = require('async'),
+var async = require('async'),
 	_ = require('underscore'),
-	mkdirp = require('mkdirp'),
-	policy = require('s3-policy'),
 	AWS = require('aws-sdk'),
 	settings = require('../config/app/settings'),
-	applicationService = require('./service-application');
+	applicationService = require('./service-application'),
+	documentModel = require('../db/models/model-document').Model;
 
 /**
- * Generates policy signatures for download and view
+ * Generates signed urls for download and view
  * @param appId
- * @returns {Object}
+ * @param docId
+ * @param success
+ * @param failure
  */
-exports.generatePolicies = function(appId) {
-	var s3Config = settings.getConfig().s3;
+exports.generateSignedUrl = function(appId, docId, success, failure) {
+	var s3 = new AWS.S3(),
+		document = new documentModel(),
+		params = {
+			Bucket: appId
+		};
 
-	return policy({
-		secret: s3Config.secretAccessKey,
-		length: 5000000,
-		bucket: appId,
-		key: s3Config.accessKeyId,
-		expires: new Date(Date.now() + 60000),
-		acl: 'private'
+	async.series([
+		function(done) {
+			document.retrieve({_id: docId}, function(docs) {
+				if(docs.length > 0) {
+					params.Key = docs[0].url;
+					done();
+				} else {
+					done(new Error('Document does not exist'));
+				}
+			}, done);
+		},
+		function(done) {
+			s3.getSignedUrl('getObject', params, function(err, url) {
+				if(err) {
+					settings.log.warn(err);
+				} else {
+					done(url);
+				}
+			});
+		}
+	], function(completed) {
+		if(completed instanceof Error) {
+			failure(completed);
+		} else {
+			success(completed);
+		}
 	});
 };
 
-exports.postFile = function(s3Client, uploadPath, appId, docId, success, failure){
-	console.log('Document Id" '+docId);
-
+exports.postFile = function(s3Client, name, uploadPath, appId, docId, success, failure){
 	var uploader = s3Client.uploadFile({
 		localFile: uploadPath,
 		s3Params: {
 			Bucket: appId,
-			Key: docId
+			Key: docId,
+			ContentDisposition: 'attachment; filename='+ name
 		}
 	});
 
@@ -92,9 +114,57 @@ exports.createBucket = function(appId, success, failure){
 		}
 	});
 
-	s3Connection.createBucket(function(err) {
-		if(err){
-			failure(new Error('There was a problem creating the application bucket'));
+	var corsParams = {
+		Bucket: appId,
+		CORSConfiguration: {
+			CORSRules: [
+				{
+					AllowedHeaders: [
+						'*'
+					],
+					AllowedMethods: [
+						'GET',
+						'PUT',
+						'POST'
+					],
+					AllowedOrigins: [
+						'*'
+					],
+					ExposeHeaders: [
+						'Accept-Ranges',
+						'Content-Encoding',
+						'Content-Length',
+						'Content-Range'
+					],
+					MaxAgeSeconds: 300
+				}
+			]
+		}
+	};
+
+	async.series([
+		function(done) {
+			s3Connection.createBucket(function(err) {
+				if(err){
+					done(new Error('There was a problem creating the application bucket'));
+				} else {
+					done();
+				}
+			});
+		},
+		function(done) {
+			s3Connection.putBucketCors(corsParams, function(err, data) {
+				if(err) {
+					done(err+'\n'+err.stack);
+				} else {
+					settings.log.info(data);
+					done();
+				}
+			});
+		}
+	], function(error) {
+		if(error) {
+			failure(error);
 		} else {
 			success();
 		}

@@ -87,23 +87,6 @@ exports.downloadAllDocuments = function(req, res) {
 };
 
 /**
- * Handle uploads to S3
- * @param appId
- * @param success
- * @param failure
- * @private
- */
-var _handleS3Upload = function(appId, success, failure) {
-	if(settings.getConfig().s3.s3Toggle) {
-		//Generate S3 policies
-		var signature =	s3Service.generatePolicies(appId);
-		success(signature);
-	} else {
-		failure(new Error());
-	}
-};
-
-/**
  * Handles uploads for both node and s3
  * @param s3Client
  * @param documentObject
@@ -141,15 +124,16 @@ var _handleUpload = function(s3Client, documentObject, appId, file, success, fai
 			//If convertedPdfPath exists, it means the file was converted to pdf
 			if(convertedPdfPath !== undefined) {
 				convertedDest = _moveFile(appId, convertedPdfPath);
-				documentObject.originalUrl = originalDest;
 
 				if(s3Toggle) {
-					documentObject.originalUrl = originalFilePath.split('uploads/')[1];
+					documentObject.originalUrl = originalDest.split('uploads/')[1];
+				} else {
+					documentObject.originalUrl = originalDest;
 				}
 			}
 
 			if(s3Toggle) {
-				var url = (convertedPdfPath === undefined) ? originalFilePath : convertedPdfPath;
+				var url = (convertedPdfPath === undefined) ? originalDest : convertedDest;
 				_.extend(documentObject, {
 					url: url.split('uploads/')[1],
 					appId: appId
@@ -177,7 +161,7 @@ var _handleUpload = function(s3Client, documentObject, appId, file, success, fai
 					fileArr.push(convertedDest);
 				}
 				//Post the original file to S3
-				_postToS3(s3Client, fileArr, appId, done, done);
+				_postToS3(s3Client, fileArr, documentObject.name+'.pdf', appId, done, done);
 			} else {
 				done();
 			}
@@ -249,14 +233,15 @@ var _moveFile = function(appId, source) {
  * Post to S3
  * @param s3Client
  * @param pathArr
+ * @param name
  * @param appId
  * @param success
  * @param failure
  * @private
  */
-var _postToS3 = function(s3Client, pathArr, appId, success, failure) {
+var _postToS3 = function(s3Client, pathArr, name, appId, success, failure) {
 	async.each(pathArr, function(path, done) {
-		s3Service.postFile(s3Client, path, appId, path.split('uploads/')[1], function () {
+		s3Service.postFile(s3Client, name, path, appId, path.split('uploads/')[1], function () {
 			settings.log.info('Successful upload to S3 from path: ', path);
 			done();
 		}, function (error) {

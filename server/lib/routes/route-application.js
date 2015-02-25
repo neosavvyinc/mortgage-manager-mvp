@@ -117,20 +117,29 @@ exports.getFile = function(req, res){
 
     applicationService.getDocuments(appId, docId, function(documents) {
         var url = documents[0].url;
-
-        res.sendFile(url, null, function(err) {
-            if(err) {
-                if (err.code === 'ECONNABORT' && res.statusCode === 304) {
-                    // No problem, 304 means client cache hit, so no data sent.
-                    settings.log.warn('304 cache hit for ' + url);
-                    return;
-                }
-                res.status(err.status).end();
-            } else {
-                res.status(200).end();
-                settings.log.info('Successfully sending pdf with docId: '+ docId);
-            }
-        });
+	    if(settings.getConfig().s3.s3Toggle) {
+		    _generateSignedUrl(appId, docId, function(url) {
+			    settings.log.info('Sending signed url for viewing file ' +url);
+			    res.send(url);
+		    }, function(error) {
+			    settings.log.fatal(error);
+			    res.status(500).send({message: 'Internal Server Error'});
+		    });
+	    } else {
+		    res.sendFile(url, null, function (err) {
+			    if (err) {
+				    if (err.code === 'ECONNABORT' && res.statusCode === 304) {
+					    // No problem, 304 means client cache hit, so no data sent.
+					    settings.log.warn('304 cache hit for ' + url);
+					    return;
+				    }
+				    res.status(err.status).end();
+			    } else {
+				    res.status(200).end();
+				    settings.log.info('Successfully sending pdf with docId: ' + docId);
+			    }
+		    });
+	    }
     }, function(error){
         if(error) {
             settings.log.fatal(error.message);
@@ -145,29 +154,44 @@ exports.getFile = function(req, res){
  * @param res
  */
 exports.downloadFile = function(req, res){
-    var appId = req.params.appId,
-        docId = req.params.docId;
+	var appId = req.params.appId,
+		docId = req.params.docId;
 
-    applicationService.getDocuments(appId, docId, function(documents) {
-        var url = documents[0].url;
+	applicationService.getDocuments(appId, docId, function(documents) {
+		var url = documents[0].url;
 
-        res.download(url, documents[0].name+'.pdf', function(error) {
-            if(error) {
-                settings.log.fatal(error);
-                res.status(500).send({message: 'Internal Server Error'});
-            } else {
-                res.status(200).end();
-                settings.log.info('Successfully downloading pdf with docId: '+ docId);
-            }
-        });
-    }, function(error){
-        if(error){
-            settings.log.fatal(error.message);
-            res.status(500).send({message: 'Internal Server Error'});
-        }
-    });
+		if(settings.getConfig().s3.s3Toggle) {
+			_generateSignedUrl(appId, docId, function(url) {
+				settings.log.info('Sending signed url for downloading file '+url);
+				res.redirect(url);
+			}, function(error) {
+				settings.log.fatal(error);
+				res.status(500).send({message: 'Internal Server Error'});
+			});
+		} else {
+			res.download(url, documents[0].name + '.pdf', function (error) {
+				if (error) {
+					settings.log.fatal(error);
+					res.status(500).send({message: 'Internal Server Error'});
+				} else {
+					res.status(200).end();
+					settings.log.info('Successfully downloading pdf with docId: ' + docId);
+				}
+			});
+		}
+	}, function(error){
+		if(error){
+			settings.log.fatal(error.message);
+			res.status(500).send({message: 'Internal Server Error'});
+		}
+	});
 };
 
+/**
+ * Route handler to get all lenders for an application
+ * @param req
+ * @param res
+ */
 exports.getApplicationLenders = function(req, res){
     var appId = req.params.appId;
 
@@ -183,6 +207,11 @@ exports.getApplicationLenders = function(req, res){
     });
 };
 
+/**
+ * Route handler to get all borrowers for an application
+ * @param req
+ * @param res
+ */
 exports.getApplicationBorrowers = function(req, res){
     var appId = req.params.appId;
 
@@ -198,6 +227,11 @@ exports.getApplicationBorrowers = function(req, res){
     });
 };
 
+/**
+ * Route handler to invite a lender
+ * @param req
+ * @param res
+ */
 exports.inviteLenderToApplication = function(req, res){
     var appId = req.params.appId,
         lenderInfo = req.body,
@@ -215,6 +249,11 @@ exports.inviteLenderToApplication = function(req, res){
     });
 };
 
+/**
+ * Route handler to remind a lender of an invitation
+ * @param req
+ * @param res
+ */
 exports.reSendLenderInvite = function(req, res){
     var inviteInfo = req.body,
         appId = req.params.appId;
@@ -233,6 +272,11 @@ exports.reSendLenderInvite = function(req, res){
     });
 };
 
+/**
+ * Route handler to delete a lender invite
+ * @param req
+ * @param res
+ */
 exports.deleteInvite = function(req, res){
     var inviteInfo = req.body,
         appId = req.params.appId;
@@ -250,4 +294,16 @@ exports.deleteInvite = function(req, res){
         }
     });
 
+};
+
+/**
+ * Generate signed policy for S3 downloads
+ * @param appId
+ * @param docId
+ * @param success
+ * @param failure
+ * @private
+ */
+var _generateSignedUrl = function(appId, docId, success, failure) {
+	s3Service.generateSignedUrl(appId, docId, success, failure);
 };

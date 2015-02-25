@@ -16,9 +16,15 @@ module.exports = function(router, passport, s3Client) {
 
 	router.route('/user')
 		.all(_isAuthenticated)
-		
 		.get(function(req, res) {
 			res.send(req.user).end();
+		});
+
+	router.route('/checkEnabledS3')
+		.get(function(req, res) {
+			if(req.user._id) {
+				res.send({s3Enabled: settings.getConfig().s3.s3Toggle}).end();
+			}
 		});
 
 	//Validate User Login

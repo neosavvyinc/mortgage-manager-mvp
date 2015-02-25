@@ -17,6 +17,9 @@ module.exports = {
 	        }
         }
     },
+	CHECKENABLEDS3: {
+		URL: '/api/checkEnabledS3'
+	},
     LOGIN: {
         URL: '/api/login',
         WITHTOKEN: {

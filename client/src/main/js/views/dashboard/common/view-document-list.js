@@ -11,8 +11,7 @@ var UserStore = require('../../../stores/store-user');
 var Application = require('../../../models/model-application');
 var MessageBox = require('../../../components/message-box');
 var Navigation = require('../../../components/navigation');
-var LendersTable = require('../borrower/view-lender-list');
-var EndPoints = require('../../../constants/endpoints');
+var Endpoints = require('../../../constants/endpoints');
 
 var arraysEqual = function(arr1, arr2) {
     if(arr1.length !== arr2.length)
@@ -74,8 +73,7 @@ var Documents = React.createClass({
     },
 
 	onDocumentDownload: function(document) {
-		//Will download file
-		window.open(EndPoints.APPLICATIONS.ONE.DOWNLOAD.ONE.URL.replace(':id', this.getParams().appId).replace(':docId',document._id));
+		window.open(Endpoints.APPLICATIONS.ONE.DOWNLOAD.ONE.URL.replace(':id', this.getParams().appId).replace(':docId', document._id));
 	},
 
     onDocumentView: function(document) {
