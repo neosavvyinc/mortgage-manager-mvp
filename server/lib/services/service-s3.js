@@ -57,8 +57,9 @@ exports.postFile = function(s3Client, name, uploadPath, appId, docId, success, f
 		s3Params: {
 			Bucket: appId,
 			Key: docId,
-			ContentDisposition: 'attachment; filename='+ name
-		}
+			ContentDisposition: 'attachment; filename='+ name,
+            ServerSideEncryption: 'AES256'
+        }
 	});
 
 	uploader.on('error', function(err) {
