@@ -59,6 +59,7 @@ Schemas.DocumentSchema = new Schema({
 	description: String,
 	amount: {type: Number, required: true },
 	url: { type: String, unique: true },
+	originalUrl: String,
 	requesterId: { type: String, ref: 'UserSchema' },
 	requestDate: Date,
 	uploadDate: Date,

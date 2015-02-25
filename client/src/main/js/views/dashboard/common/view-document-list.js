@@ -6,13 +6,12 @@ var Reflux = require('reflux');
 var RouterHandler = Router.RouteHandler;
 var _ = require('lodash');
 var moment = require('moment');
-var User = require('../../models/model-user');
-var UserStore = require('../../stores/store-user');
-var Application = require('../../models/model-application');
-var MessageBox = require('../../components/message-box');
-var Navigation = require('../../components/navigation');
-var LendersTable = require('./view-lender-list');
-var EndPoints = require('../../constants/endpoints');
+var User = require('../../../models/model-user');
+var UserStore = require('../../../stores/store-user');
+var Application = require('../../../models/model-application');
+var MessageBox = require('../../../components/message-box');
+var Navigation = require('../../../components/navigation');
+var Endpoints = require('../../../constants/endpoints');
 
 var arraysEqual = function(arr1, arr2) {
     if(arr1.length !== arr2.length)
@@ -74,8 +73,7 @@ var Documents = React.createClass({
     },
 
 	onDocumentDownload: function(document) {
-		//Will download file
-		window.open(EndPoints.APPLICATIONS.ONE.DOWNLOAD.ONE.URL.replace(':id', this.getParams().appId).replace(':docId',document._id));
+		window.open(Endpoints.APPLICATIONS.ONE.DOWNLOAD.ONE.URL.replace(':id', this.getParams().appId).replace(':docId', document._id));
 	},
 
     onDocumentView: function(document) {
@@ -161,7 +159,7 @@ var Documents = React.createClass({
 			    tabLink: {
 				    callback: function() {
 					    //Download a zip of all files
-					    window.open(EndPoints.APPLICATIONS.ONE.DOWNLOAD.URL.replace(':id', this.getParams().appId));
+					    window.open(Endpoints.APPLICATIONS.ONE.DOWNLOAD.URL.replace(':id', this.getParams().appId));
 				    }.bind(this),
 				    disabled: tabsDisabled,
                     tabName: 'documents'

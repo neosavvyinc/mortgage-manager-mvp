@@ -3,11 +3,11 @@
 var React = require('react'),
 	Router = require('react-router'),
 	Reflux = require('reflux'),
-	Constants = require('../../constants/constants'),
-	MessageBox = require('../../components/message-box'),
-	User = require('../../models/model-user'),
-	BorrowerActions = require('../../actions/action-borrower'),
-	UserStore = require('../../stores/store-user'),
+	Constants = require('../../../constants/constants'),
+	MessageBox = require('../../../components/message-box'),
+	User = require('../../../models/model-user'),
+	BorrowerActions = require('../../../actions/action-borrower'),
+	UserStore = require('../../../stores/store-user'),
 	Location = Router.HistoryLocation;
 
 var validateApplicantInfo = function(applicantInfo){

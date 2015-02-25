@@ -18,5 +18,18 @@
 	"stripe": {
 		"secretKey": "sk_live_F2XSDxwTReNHaiwtIza06Y6H",
 		"publishableKey": "pk_live_EHitJyOtZu3exkfrzN4zZE4U"
-	}
+	},
+    "s3": {
+        "s3Toggle": true,
+        "maxAsyncS3": 20,
+        "s3RetryCount": 3,
+        "s3RetryDelay": 1000,
+        "multipartUploadThreshold": 20971520,
+        "multipartUploadSize": 15728640,
+        "s3Options": {
+            "accessKeyId": "AKIAICVVLN2NA74JZ3FQ",
+            "secretAccessKey": "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",
+            "sslEnabled": true
+        }
+    }
 }
