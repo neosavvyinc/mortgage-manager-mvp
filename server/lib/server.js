@@ -12,7 +12,10 @@ var path = require('path'),
 	routes = require('./config/express/express-routes'),
 	loginRoute = require('./routes/route-user'),
 	passport = require('passport/'),
-	server, log;
+	s3 = require('s3'),
+	s3Client,
+	server,
+	log;
 
 /**
  * Listens on a port
@@ -59,16 +62,22 @@ async.series([
 	function(done) {
 		db.connect(settings.getConfig().dbURL, done, done);
 	},
-    function(done){
+    function(done) {
         loginRoute.initPassport(passport);
         done();
     },
-    function(done){
+	function(done){
+		process.env.AWS_ACCESS_KEY_ID=settings.getConfig().s3.s3Options.accessKeyId;
+		process.env.AWS_SECRET_ACCESS_KEY=settings.getConfig().s3.s3Options.secretAccessKey;
+		s3Client = s3.createClient(settings.getConfig().s3);
+		done();
+	},
+    function(done) {
         middleware(app, router, passport);
         done();
     },
-    function(done){
-        routes(router, passport);
+    function(done) {
+        routes(router, passport, s3Client);
         done();
     },
 	function(done) {

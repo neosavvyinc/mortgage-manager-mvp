@@ -9,16 +9,22 @@ var routeHealthcheck = require('../../routes/route-diagnostics'),
 	userService = require('../../services/service-user'),
 	settings = require('../app/settings');
 
-module.exports = function(router, passport) {
+module.exports = function(router, passport, s3Client) {
 	//Healthcheck
 	router.route('/healthcheck')
 		.get(routeHealthcheck.healthCheck);
 
 	router.route('/user')
 		.all(_isAuthenticated)
-		
 		.get(function(req, res) {
 			res.send(req.user).end();
+		});
+
+	router.route('/checkEnabledS3')
+		.get(function(req, res) {
+			if(req.user._id) {
+				res.send({s3Enabled: settings.getConfig().s3.s3Toggle}).end();
+			}
 		});
 
 	//Validate User Login
@@ -97,18 +103,18 @@ module.exports = function(router, passport) {
 	router.route('/applications/:appId/download')
 		.all(_isAuthenticated)
 		.all(_checkTrialExpired)
-		.get(documentRoute.downloadAllDocuments);
+		.get(documentRoute.downloadAllDocuments(s3Client));
 
 	//Route for handling one specific document in an application
 	router.route('/applications/:appId/documents/:docId')
 		.all(_isAuthenticated)
 		.get(applicationRoute.getApplicationDocument);
 
-	//Route for getting one file to view in the modal
+	//Route for one file to view/upload
 	router.route('/applications/:appId/file/:docId')
 		.all(_isAuthenticated)
 		.all(_checkTrialExpired)
-		.post(documentRoute.insertDocument)
+		.post(documentRoute.insertDocument(s3Client))
 		.get(applicationRoute.getFile);
 
 	//Route for downloading file
@@ -144,9 +150,17 @@ var _isAuthenticated = function(req, res, next){
 	}
 };
 
+/**
+ * Check if user has access to premium features
+ * @param req
+ * @param res
+ * @param next
+ * @private
+ */
 var _checkTrialExpired = function(req, res, next) {
 	userService.checkTrialExpired(req.user._id, function() {
 		//Success callback if trail has not expired.
+		//Allow express to handle the next request.
 		next();
 	}, function(error) {
 		if(error.message === 'Trial Expired') {

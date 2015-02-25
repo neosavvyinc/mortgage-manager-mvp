@@ -3,10 +3,10 @@
 var React = require('react'),
     Router = require('react-router'),
     Reflux = require('reflux'),
-    MessageBox = require('../../components/message-box'),
-    Application = require('../../models/model-application'),
-    UserStore = require('../../stores/store-user'),
-    LenderAction = require('../../actions/action-lender');
+    MessageBox = require('../../../../components/message-box'),
+    Application = require('../../../../models/model-application'),
+    UserStore = require('../../../../stores/store-user'),
+    LenderAction = require('../../../../actions/action-lender');
 
 var validateLenderInfo = function(lenderInfo){
     return (lenderInfo.firstName && lenderInfo.firstName !== '' &&

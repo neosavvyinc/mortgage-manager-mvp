@@ -4,11 +4,11 @@ var React = require('react'),
 	Router = require('react-router'),
 	Reflux = require('reflux'),
 	Location = Router.HistoryLocation,
-	DocumentActions = require('../../actions/action-document'),
-	DocumentStore = require('../../stores/store-document'),
-	Document = require('../../models/model-document'),
-	Application = require('../../models/model-application'),
-	MessageBox = require('../../components/message-box');
+	DocumentActions = require('../../../../actions/action-document'),
+	DocumentStore = require('../../../../stores/store-document'),
+	Document = require('../../../../models/model-document'),
+	Application = require('../../../../models/model-application'),
+	MessageBox = require('../../../../components/message-box');
 
 //Validate Document Info
 var validateDocumentInfo = function(document) {

@@ -3,8 +3,8 @@ var Router = require('react-router');
 var Reflux = require('reflux');
 var _ = require('lodash');
 
-var Application = require('../../models/model-application');
-var Navigation = require('../../components/navigation');
+var Application = require('../../../models/model-application');
+var Navigation = require('../../../components/navigation');
 
 var BorrowerContacts = React.createClass({
 

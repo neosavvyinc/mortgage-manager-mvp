@@ -1,10 +1,12 @@
 'use strict';
 
-var PDF = require('../../components/pdf-viewer'),
+var PDF = require('../../../components/pdf-viewer'),
 	React = require('react'),
 	Router = require('react-router'),
-	Application = require('../../models/model-application'),
-	EndPoints = require('../../constants/endpoints');
+	Application = require('../../../models/model-application'),
+	User = require('../../../models/model-user'),
+	Document = require('../../../models/model-document'),
+	EndPoints = require('../../../constants/endpoints');
 
 var ViewPdf = React.createClass({
 
@@ -13,18 +15,46 @@ var ViewPdf = React.createClass({
         Router.Navigation
 	],
 
-	getInitialState: function() {
+	getInitialState: function () {
 		return {
-			file: EndPoints.APPLICATIONS.ONE.FILE.ONE.URL.replace(':id', this.getParams().appId).replace(':docId', this.getParams().documentId),
 			page: 1,
 			prevClass: 'hidden',
-			nextClass: 'hidden'
+			nextClass: 'hidden',
+			loaded: false
 		};
+	},
+
+	componentWillMount: function() {
+		User.checkS3Enabled().then(
+			function(response) {
+				if(response.s3Enabled) {
+					Document.getS3Url(this.getParams().appId, this.getParams().documentId).then(
+						function(response) {
+							this.setState({
+								file: response,
+								page: 1,
+								prevClass: 'hidden',
+								nextClass: 'hidden'
+							});
+						}.bind(this)
+					);
+				} else {
+					this.setState({
+						file: EndPoints.APPLICATIONS.ONE.FILE.ONE.URL.replace(':id', this.getParams().appId).replace(':docId', this.getParams().documentId),
+						page: 1,
+						prevClass: 'hidden',
+						nextClass: 'hidden'
+					});
+				}
+			}.bind(this)
+		);
 	},
 
 	onPdfLoad: function(numPages) {
 		if(numPages > 1) {
-			this.setState({numPages: numPages, nextClass: 'fa fa-chevron-right pointer pdfNext'});
+			this.setState({numPages: numPages, nextClass: 'fa fa-chevron-right pointer pdfNext', loaded: true});
+		} else {
+			this.setState({loaded: true});
 		}
 	},
 
@@ -76,7 +106,7 @@ var ViewPdf = React.createClass({
                 </div>
 				<div className="row">
 					<div className>
-					    <PDF file={this.state.file} page={this.state.page} onLoadCallback={this.onPdfLoad}/>
+					    <PDF file={this.state.file} page={this.state.page} onLoadCallback={this.onPdfLoad} loaded={this.state.loaded}/>
 					</div>
 					<div> <i className={this.state.prevClass} onClick={this.prevPage}></i> </div>
 					<div> <i className={this.state.nextClass} onClick={this.nextPage}></i> </div>

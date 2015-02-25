@@ -4,13 +4,13 @@ var Reflux = require('reflux');
 var RouterHandler = Router.RouteHandler;
 var _ = require('lodash');
 
-var User = require('../../models/model-user');
-var UserStore = require('../../stores/store-user');
-var Navigation = require('../../components/navigation');
-var TabActions = require('../../actions/action-tabs');
-var TabStore = require('../../stores/store-tab');
-var LendersTable = require('./view-lender-list');
-var BorrowersTable = require('./view-borrower-list');
+var User = require('../../../models/model-user');
+var UserStore = require('../../../stores/store-user');
+var Navigation = require('../../../components/navigation');
+var TabActions = require('../../../actions/action-tabs');
+var TabStore = require('../../../stores/store-tab');
+var LendersTable = require('./../borrower/view-lender-list');
+var BorrowersTable = require('./../lender/view-borrower-list');
 var DocumentsTable = require('./view-document-list');
 
 var ApplicationDetails = React.createClass({
@@ -70,8 +70,7 @@ var ApplicationDetails = React.createClass({
             tabs = [],
             tabPanels = [],
             activeTabIndex;
-
-
+        
         if(this.state.userType == 'lender'){
             tabInfo.push({
                 name: 'Borrowers',
@@ -116,7 +115,6 @@ var ApplicationDetails = React.createClass({
                 </div>
                 <RouterHandler/>
             </div>
-
         );
     }
 });

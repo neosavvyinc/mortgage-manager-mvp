@@ -3,9 +3,9 @@
 var React = require('react'),
 	Router = require('react-router'),
 	Reflux = require('reflux'),
-	modelDocument = require('../../models/model-document'),
-	MessageBox = require('../../components/message-box'),
-	UserStore = require('../../stores/store-user');
+	modelDocument = require('../../../../models/model-document'),
+	MessageBox = require('../../../../components/message-box'),
+	UserStore = require('../../../../stores/store-user');
 
 var validateInfo = function(document) {
 	return (document.name && document.name !== '' &&

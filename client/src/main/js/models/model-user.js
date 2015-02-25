@@ -193,4 +193,15 @@ User.checkTrialExpired = function(uid) {
 	});
 };
 
+User.checkS3Enabled = function() {
+	return Q.promise(function(resolve, reject) {
+		$.get(Endpoints.CHECKENABLEDS3.URL)
+			.success(function(response) {
+				resolve(response);
+			}).error(function(error) {
+				reject(error.responseJSON);
+			});
+	});
+};
+
 module.exports = User;
