@@ -147,7 +147,8 @@ var Welcome = React.createClass({
                 <div className="header-welcome alt vert">
                     <HeaderLogout />
                     <div className="container">
-                        <h1>Neosavvy, Inc.</h1>
+                        <h1 className="hidden-xs">ShuttleDoc</h1>
+                        <h2 className="hidden-sm hidden-md hidden-lg">ShuttleDoc</h2>
                         <p className="lead">The mortgage application process is totally broken. We plan to make it a much smoother experience.</p>
                         <div>&nbsp;</div>
                         <Link className="btn btn-default btn-lg" to='pricing'>Find Your Plan</Link>

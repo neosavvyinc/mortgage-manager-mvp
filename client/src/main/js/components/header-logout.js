@@ -10,14 +10,30 @@ var HeaderLogout = React.createClass({
         Router.Navigation
     ],
 
+    getInitialState: function(){
+        return {
+            displayMenu: false
+        };
+    },
+
+    onToggleMenu: function(){
+        this.setState({
+            displayMenu: !this.state.displayMenu
+        })
+    },
+
     render: function() {
         return (
             <div className="navbar navbar-fixed-top navbar-logout">
                 <div className="container">
                     <div className="navbar-header page-scroll">
+                        <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false" onClick={this.onToggleMenu}>
+                            <span className="sr-only">Toggle navigation</span>
+                            <i className="fa fa-bars fa-lg"></i>
+                        </button>
                         <Link className="navbar-brand page-scroll pointer" to='welcome'>ShuttleDoc</Link>
                     </div>
-                    <div className="collapse navbar-collapse navbar-ex1-collapse">
+                    <div className={"collapse navbar-collapse " + (this.state.displayMenu ? "in" : "")}>
                         <ul className="nav navbar-nav">
                             <li className="pointer">
                                 <Link to='pricing'>Pricing</Link>

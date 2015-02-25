@@ -43,6 +43,10 @@ a:before {
     height: auto;
     margin-bottom: -60px;
     background-color: @primary-lightest-blue;
+
+    @media (max-width: 768px) {
+        margin-bottom: -210px;
+    }
 }
 
 .dashboard-fill{
@@ -50,11 +54,19 @@ a:before {
     height: auto;
     margin-bottom: -60px;
     background-color: white;
+
+    @media (max-width: 768px){
+        margin-bottom: -210px;
+    }
 }
 
 .push {
     clear: both;
     height: 60px;
+
+    @media (max-width: 768px){
+        height: 210px;
+    }
 }
 
 .pointer {
@@ -103,6 +115,13 @@ img.grayscale {
 
 .header-welcome h1 {
     font-size:80px;
+    color:#fff;
+    margin-left:-5px;
+    margin-bottom:5px;
+}
+
+.header-welcome h2 {
+    font-size:65px;
     color:#fff;
     margin-left:-5px;
     margin-bottom:5px;
@@ -157,7 +176,7 @@ img.grayscale {
     font-size: 25px;
 }
 
-.background-close{
+.background-close {
     position: absolute;
     height: 100%;
     width: 100%;
