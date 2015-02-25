@@ -53,6 +53,8 @@ var ViewPdf = React.createClass({
 	onPdfLoad: function(numPages) {
 		if(numPages > 1) {
 			this.setState({numPages: numPages, nextClass: 'fa fa-chevron-right pointer pdfNext', loaded: true});
+		} else {
+			this.setState({loaded: true});
 		}
 	},
 

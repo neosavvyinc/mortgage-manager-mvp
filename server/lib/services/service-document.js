@@ -85,7 +85,7 @@ exports.saveDocument = function(s3Client, appId, doc, success, failure) {
 
 							//Delete the old files from s3
 							serviceS3.deleteFiles(s3Client, appId, deleteDocsIds, function() {
-								settings.log.info('Deleted files from s3. ', deleteDocsIds);
+								settings.log.info('Deleted old files from s3. ', deleteDocsIds);
 							}, function(error) {
 								settings.log.error(error);
 							});

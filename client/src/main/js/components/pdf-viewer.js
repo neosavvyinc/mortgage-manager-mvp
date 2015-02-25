@@ -37,7 +37,6 @@ var Pdf = React.createClass({
 			});
 		} else {
 			if(self.props.loaded) {
-				console.log(newProps.page);
 				self.state.pdf.getPage(newProps.page).then(function (page) {
 					self.setState({pdfPage: page, newPage: newProps.page});
 				});
