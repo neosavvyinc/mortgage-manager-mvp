@@ -26,7 +26,8 @@
     "multipartUploadSize": 15728640,
     "s3Options": {
       "accessKeyId": "AKIAICVVLN2NA74JZ3FQ",
-      "secretAccessKey": "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"
+      "secretAccessKey": "akme2ne24o46t1GL5djOUcv+H7+0o94tBny/cseB",
+      "sslEnabled": true
     }
   }
 }

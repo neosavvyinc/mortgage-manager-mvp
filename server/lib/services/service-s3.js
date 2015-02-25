@@ -20,7 +20,8 @@ exports.generateSignedUrl = function(appId, docId, success, failure) {
 	var s3 = new AWS.S3(),
 		document = new documentModel(),
 		params = {
-			Bucket: appId
+			Bucket: appId,
+            Expires: 300
 		};
 
 	async.series([
@@ -53,11 +54,70 @@ exports.generateSignedUrl = function(appId, docId, success, failure) {
 };
 
 /**
- * Creates S3 buckets
- * @param appId
- * @param success
- * @param failure
- */
+* Get a file from S3
+* @param s3Client
+* @param name
+* @param docId
+* @param success
+* @param failure
+*/
+exports.postFile = function(s3Client, name, uploadPath, appId, docId, success, failure){
+	var uploader = s3Client.uploadFile({
+		localFile: uploadPath,
+		s3Params: {
+			Bucket: appId,
+			Key: docId,
+			ContentDisposition: 'attachment; filename='+ name
+		}
+	});
+
+	uploader.on('error', function(err) {
+		settings.log.fatal(err);
+		failure(new Error('Unable to upload', err.stack));
+	});
+
+	uploader.on('end', function(data) {
+		if(data){
+			success();
+		} else{
+			failure(new Error('Unable to upload file'));
+		}
+	});
+};
+
+var deleteS3Files = function(s3Client, appId, docIds, success, failure){
+	var deleteDocs = [];
+
+	_.each(docIds, function(docId){
+		deleteDocs.push({
+			Key: docId
+		});
+	});
+
+	var deleter = s3Client.deleteObjects({
+		Bucket: appId,
+		Delete: {
+			Objects: deleteDocs
+		}
+	});
+
+	deleter.on('error', function(err) {
+		failure(new Error('Unable to delete', err.stack));
+	});
+
+	deleter.on('end', function(data) {
+		if(data){
+			success();
+		} else{
+			failure(new Error('Unable to upload file'));
+		}
+	});
+};
+
+exports.deleteFiles = function(s3Client, appId, docIds, success, failure){
+	deleteS3Files(s3Client, appId, docIds, success, failure);
+};
+
 exports.createBucket = function(appId, success, failure){
 	var s3Connection = new AWS.S3({
 		params: {
