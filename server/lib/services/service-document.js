@@ -8,6 +8,7 @@ var path = require('path'),
 	commonUtils = require('../../lib/utils/common-utils'),
 	documentModel = require('../db/models/model-document').Model,
 	applicationModel = require('../db/models/model-application').Model,
+	serviceS3 = require('../services/service-s3'),
 	settings = require('../config/app/settings');
 
 /**
@@ -47,11 +48,13 @@ exports.getOneDocument = function(docId, success, failure){
 
 /**
  * Service that handles storing a document in mongo for a particular application
+ * @param s3Client
+ * @param appId
  * @param doc
  * @param success
  * @param failure
  */
-exports.saveDocument = function(doc, success, failure) {
+exports.saveDocument = function(s3Client, appId, doc, success, failure) {
 	var currentDate = new Date(),
 		docId = doc._id;
 
@@ -64,10 +67,26 @@ exports.saveDocument = function(doc, success, failure) {
 					//After removing the file update upload date. If file does not exists, set the request date.
 					if(docs[0].url !== undefined) {
 						var filePath = path.resolve(docs[0].url);
+
 						if(!settings.getConfig().s3.s3Toggle) {
 							commonUtils.deleteFileSync(filePath, function () {
 								settings.log.info('Successfully deleted old file');
 							}, function (error) {
+								settings.log.error(error);
+							});
+						} else {
+							var url = docs[0].url,
+								deleteDocsIds = [url.split('/')[1]],
+								original = docs[0].originalUrl;
+
+							if(original) {
+								deleteDocsIds.push(original.split('/')[1]);
+							}
+
+							//Delete the old files from s3
+							serviceS3.deleteFiles(s3Client, appId, deleteDocsIds, function() {
+								settings.log.info('Deleted files from s3. ', deleteDocsIds);
+							}, function(error) {
 								settings.log.error(error);
 							});
 						}
@@ -148,7 +167,11 @@ exports.createDocumentZip = function(appId, success, failure) {
 			_.each(documentArray, function(doc) {
 				if(doc.url !== undefined) {
 					doc = doc.toObject();
-					zipArchive.file(doc.url, {name: doc.name + '.pdf'});
+					if(settings.getConfig().s3.s3Toggle) {
+						zipArchive.file(path.resolve('uploads/' + doc.url), {name: doc.name + '.pdf'});
+					} else {
+						zipArchive.file(doc.url, {name: doc.name + '.pdf'});
+					}
 				}
 			});
 

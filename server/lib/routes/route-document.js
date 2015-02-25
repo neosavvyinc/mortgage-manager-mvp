@@ -92,6 +92,7 @@ exports.downloadAllDocuments = function(s3Client) {
 							if (docData.url) {
 								downloadDocs.push({
 									name: docData.name,
+									url: docData.url,
 									id: docId
 								});
 							}
@@ -114,8 +115,7 @@ exports.downloadAllDocuments = function(s3Client) {
 						mkdirp(downloadPath);
 					}
 					async.each(downloadDocs, function (document, done) {
-						var documentPath = downloadPath + document.id + '.pdf';
-						s3Service.getFile(s3Client, appId, document.id, documentPath, done, done);
+						s3Service.getFile(s3Client, appId, document.url.split('/')[1], done, done);
 					}, function (error) {
 						if (error) {
 							done(error);
@@ -141,7 +141,7 @@ exports.downloadAllDocuments = function(s3Client) {
 							});
 						}
 					});
-				});
+				}, done);
 			}
 		], function(error) {
 			if(error) {
@@ -215,7 +215,7 @@ var _handleUpload = function(s3Client, documentObject, appId, file, success, fai
 			}
 
 			//Call the document service to save Document
-			documentService.saveDocument(documentObject, function() {
+			documentService.saveDocument(s3Client, appId, documentObject, function() {
 				done();
 			}, function(error) {
 				done(error);
@@ -310,7 +310,7 @@ var _moveFile = function(appId, source) {
  */
 var _postToS3 = function(s3Client, pathArr, name, appId, success, failure) {
 	async.each(pathArr, function(path, done) {
-		s3Service.postFile(s3Client, name, path, appId, path.split('uploads/')[1], function () {
+		s3Service.postFile(s3Client, name, path, appId, path.split('uploads/')[1].split('/')[1], function () {
 			settings.log.info('Successful upload to S3 from path: ', path);
 			done();
 		}, function (error) {
