@@ -47,7 +47,11 @@ exports.createApplication = function(req, res){
 				});
 			},
 		    function(done) {
-			    s3Service.createBucket(applicationId, done, done);
+			    if(settings.getConfig().s3.s3Toggle) {
+				    s3Service.createBucket(applicationId, done, done);
+			    } else {
+				    done();
+			    }
 		    }
 	    ], function(error) {
 		    if(error){
