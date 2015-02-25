@@ -125,7 +125,7 @@ var NewPassword = React.createClass({
                                     </ul>
                                 </div>
                                 <MessageBox displayMessage={this.state.passwordError} message={this.state.errorText} type='error' />
-                                <button className="btn btn-lg btn-primary col-xs-12" onClick={this.onCheckPassword}>Continue</button>
+                                <button className="btn btn-lg btn-dark-blue col-xs-12" onClick={this.onCheckPassword}>Continue</button>
                             </div>
                         </div>
                     </div>

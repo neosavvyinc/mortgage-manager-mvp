@@ -173,7 +173,7 @@ var ApplicantInfo = React.createClass({
                             <MessageBox gridPos="col-sm-6 col-xs-12" displayMessage={this.state.showMessage} message={this.state.messageText} type={this.state.messageType} />
                         </div>
                         <div className="row">
-                            <button className="btn btn-md btn-primary col-sm-6 col-xs-12" onClick={this.onSubmitInfo}>Continue</button>
+                            <button className="btn btn-md btn-dark-blue col-sm-6 col-xs-12" onClick={this.onSubmitInfo}>Continue</button>
                         </div>
                     </div>
 
