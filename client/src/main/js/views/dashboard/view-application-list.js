@@ -51,7 +51,7 @@ var Applications = React.createClass({
     },
 
     onApplicationTransition: function(){
-        this.transitionTo('dashboardDocuments', {appId: ApplicationStore.getCurrentApplication()._id, tab:0});
+        this.transitionTo('dashboardAppDetails', {appId: ApplicationStore.getCurrentApplication()._id, tabName: 'documents'});
     },
 
     render: function(){
@@ -70,9 +70,15 @@ var Applications = React.createClass({
 
         return (
             <div className="container">
-                <div className="gap-top">
-                    <h1>Applications</h1>
-                    {userApplications}
+                <div className="row double-gap-bottom">
+                    <div className="row">
+                        <h1 className="bordered-bottom col-xs-12 ">Applications</h1>
+                    </div>
+                    <div className="row">
+                        <div className="col-xs-12">
+                            {userApplications}
+                        </div>
+                    </div>
                 </div>
 	            <RouterHandler/>
             </div>

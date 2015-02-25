@@ -1,19 +1,17 @@
-'use strict';
-
 var React = require('react');
 var Router = require('react-router');
 var Reflux = require('reflux');
+var moment = require('moment');
 var _ = require('lodash');
 
 var Application = require('../../models/model-application');
 var ApplicationActions = require('../../actions/action-application');
 var ApplicationStore = require('../../stores/store-application');
-var User = require('../../models/model-user');
 var UserStore = require('../../stores/store-user');
+var User = require('../../models/model-user');
 var Navigation = require('../../components/navigation');
 var LenderStore = require('../../stores/store-lender');
 var LenderActions = require('../../actions/action-lender');
-var moment = require('moment');
 
 var arraysEqual = function(arr1, arr2) {
     if(arr1.length !== arr2.length){
@@ -54,10 +52,10 @@ var LenderContacts = React.createClass({
 
     getLenders: function(){
 	    User.getUserDetails(UserStore.getCurrentUserId()).then(function (user) {
-		    var createdDate = moment(user.created),
-			    currentDate = moment(),
-			    duration = moment.duration(currentDate.diff(createdDate)),
-			    state={lenders: LenderStore.getLenderList()};
+		    var createdDate = moment(user.created);
+            var currentDate = moment();
+            var duration = moment.duration(currentDate.diff(user.created));
+            var state = {lenders: LenderStore.getLenderList()};
 
 		    if (user.type === 'borrower' && user.pricingPlan === 'trial' && duration.asDays() > 15) {
 			    state.disableButtons = true;
@@ -107,7 +105,7 @@ var LenderContacts = React.createClass({
                     name: "inviteLender",
                     params: [{
                         appId: this.getParams().appId,
-                        tab: 1
+                        tabName: 'lenders'
                     }],
 	                disabled: lenderInviteDisabled
                 },
@@ -135,8 +133,14 @@ var LenderContacts = React.createClass({
                 actionBtns = (
                     <th>
                         <div className="row">
-                            <button className="btn turquoise mobile gap-right tooltip" disabled={remindButton.disabled} data-tooltip="Remind" onClick={this.onReSendInvite.bind(null, lender)}><i className="fa fa-paper-plane"></i></button>
-                            <button className="btn red mobile tooltip" data-tooltip="Delete" onClick={this.onDeleteInvite.bind(null, lender)}><i className="fa fa-trash-o"></i></button>
+                            <ul className="list-inline">
+                                <li className="btn-group">
+                                    <button className="btn btn-sm btn-info" disabled={remindButton.disabled} data-tooltip="Remind" onClick={this.onReSendInvite.bind(null, lender)}><i className="fa fa-paper-plane"></i></button>
+                                </li>
+                                <li className="btn-group">
+                                    <button className="btn btn-sm btn-danger" data-tooltip="Delete" onClick={this.onDeleteInvite.bind(null, lender)}><i className="fa fa-trash-o"></i></button>
+                                </li>
+                            </ul>
                         </div>
                     </th>
                 )
@@ -144,8 +148,14 @@ var LenderContacts = React.createClass({
                 actionBtns = (
                     <th>
                         <div className="row">
-                            <a href={mailTo}><button className="btn blue mobile gap-right tooltip" data-tooltip="Email"><i className="fa fa-envelope-o"></i></button></a>
-                            <a href={callTo}><button className="btn green mobile tooltip" data-tooltip="Call"><i className="fa fa-phone"></i></button></a>
+                            <ul className="list-inline">
+                                <li className="btn-group">
+                                    <a href={mailTo}><button className="btn btn-sm btn-primary" data-tooltip="Email"><i className="fa fa-envelope-o"></i></button></a>
+                                </li>
+                                <li className="btn-group">
+                                    <a href={callTo}><button className="btn btn-sm btn-success" data-tooltip="Call"><i className="fa fa-phone"></i></button></a>
+                                </li>
+                            </ul>
                         </div>
                     </th>
                 );
@@ -162,17 +172,17 @@ var LenderContacts = React.createClass({
         }, this);
 
         return (
-            <div className="container">
-                <div className="gap-top">
-                    <h2>Lenders</h2>
-                    <Navigation navigationItems={actions}/>
-                    <table className="responsive">
-	                    <col style={otherColStyle}/>
-	                    <col style={orgColStyle}/>
-	                    <col style={otherColStyle}/>
-	                    <col style={statusColStyle}/>
-	                    <col style={actionStyle}/>
-	                    <thead>
+            <div className="gap-top">
+                <h2>Lenders</h2>
+                <Navigation navigationItems={actions}/>
+                <div className="table-responsive">
+                    <table className="table table-striped">
+                        <col style={otherColStyle}/>
+                        <col style={orgColStyle}/>
+                        <col style={otherColStyle}/>
+                        <col style={statusColStyle}/>
+                        <col style={actionStyle}/>
+                        <thead>
                             <tr>
                                 <th>Lender Name</th>
                                 <th>Organization</th>

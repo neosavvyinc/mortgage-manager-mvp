@@ -1,3 +1,78 @@
+@import "variables.less";
+
+.header .navbar{
+    background-color: @primary-dark-blue;
+}
+
+.header .navbar li a:hover{
+    background-color: @primary-blue;
+    color: white;
+}
+
+.navbar-brand, .navbar-brand:hover{
+    color: white;
+}
+
+.cog-icon{
+    padding-top: 12px;
+    font-size: 25px;
+    color: white;
+    cursor: pointer;
+}
+
+.cog-icon:hover{
+    color: white;
+}
+
+.content-body {
+    padding-top: 100px;
+    min-height: 100%;
+    height: auto;
+    background-color: @primary-lightest-blue;
+}
+
+.dashboard-body {
+    padding-top: 100px;
+    min-height: 100%;
+    height: auto;
+}
+
+.register-body {
+    padding-top: 75px;
+    min-height: 100%;
+    height: auto;
+}
+
 .user-section{
     min-height: 195px;
+}
+
+.wrapper {
+    position: relative;
+    height: 100%;
+}
+
+.contact-info {
+    margin-top: 200px;
+}
+
+.footer{
+    clear: both;
+    width: 100%;
+    padding-top: 20px;
+    height: 60px;
+    background-color: @primary-lightest-blue;
+    color: @primary-dark-blue;
+
+    @media (max-width: 768px){
+        height: 210px;
+    }
+}
+
+.footer li a{
+    color: @primary-dark-blue;
+}
+
+footer .blue a {
+    color: @primary-dark-blue;
 }

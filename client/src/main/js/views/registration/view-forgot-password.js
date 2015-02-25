@@ -43,16 +43,25 @@ var ForgotPassword = React.createClass({
 
 	render: function() {
 		return (
-			<div className="container">
-				<div className="gap-top">
-					<h1>Enter your email. We will send you a link to reset your password.</h1>
-					<div className="one fourth">
-						<input className="gap-bottom" type="text" ref="email" placeholder="Enter your email" />
-						<MessageBox displayMessage={this.state.display} message={this.state.displayText} type={this.state.type} />
-						<button className="block turquoise" onClick={this.onValidateEmail} disabled={this.state.disabled}>Continue</button>
-					</div>
-				</div>
-			</div>
+                <div className="container">
+                    <div className="row">
+                        <h1 className="col-xs-12 bordered-bottom">Enter your email. We will send you a link to reset your password.</h1>
+                    </div>
+                    <div className="row double-gap-top">
+                        <div className="col-xs-12 col-sm-6 col-md-4 col-sm-offset-3 col-md-offset-4">
+                            <div className="panel panel-default">
+                                <div className="panel-body">
+                                    <div className="form-group form-group-lg">
+                                        <label className="label-lg">Email</label>
+                                        <input className="form-control" type="text" ref="email" placeholder="Enter your email" />
+                                    </div>
+                                    <MessageBox displayMessage={this.state.display} message={this.state.displayText} type={this.state.type} />
+                                    <button className="btn btn-lg btn-dark-blue col-xs-12" onClick={this.onValidateEmail} disabled={this.state.disabled}>Continue</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 		)
 	}
 });

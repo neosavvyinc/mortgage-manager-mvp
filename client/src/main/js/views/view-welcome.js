@@ -1,11 +1,10 @@
-'use strict';
-
 var React = require('react');
 var Router = require('react-router');
 var Link = Router.Link;
 var Reflux = require('reflux');
 
 var Login = require('../components/login');
+var HeaderLogout = require('../components/header-logout');
 var MessageBox = require('../components/message-box');
 var User = require('../models/model-user');
 var UserStore = require('../stores/store-user');
@@ -82,7 +81,10 @@ var Welcome = React.createClass({
                 );
             }
         } else {
-            this.setState({borrowerEmpty: true});
+            this.setState({
+                borrowerError: true,
+                borrowerErrorMessage: "You need to provide a valid email"
+            });
         }
     },
 
@@ -113,7 +115,10 @@ var Welcome = React.createClass({
                 );
             }
         } else {
-            this.setState({lenderEmpty: true});
+            this.setState({
+                lenderError: true,
+                lenderErrorMessage: "You need to provide a valid email"
+            });
         }
     },
 
@@ -137,46 +142,68 @@ var Welcome = React.createClass({
     },
 
     render: function(){
-
-        var borrowerEmptyClass = this.state.borrowerEmpty ? 'error message gap-bottom' : 'hidden';
-        var falseEmptyClass = this.state.lenderEmpty ? 'error message gap-bottom' : 'hidden';
-
         return (
-            <div className="container triple-pad-right triple-pad-left">
-                <div className="row align-center">
-                    <img className="triple-gap-top triple-gap-bottom" src="./assets/images/banner.png" alt="banner" />
+            <div>
+                <div className="header-welcome alt vert">
+                    <HeaderLogout />
+                    <div className="container">
+                        <h1 className="hidden-xs">ShuttleDoc</h1>
+                        <h2 className="hidden-sm hidden-md hidden-lg">ShuttleDoc</h2>
+                        <p className="lead">The mortgage application process is totally broken. We plan to make it a much smoother experience.</p>
+                        <div>&nbsp;</div>
+                        <Link className="btn btn-default btn-lg" to='pricing'>Find Your Plan</Link>
+                    </div>
                 </div>
-                <div className="row">
-                    <div className="one third padded">
-                        <div className="user-section">
-                            <h4>Are you a Borrower?</h4>
-                            <form>
-                                <input className="double-gap-bottom" ref="borrowerEmail" type="email" placeholder="Email Address" />
-                                <div className={borrowerEmptyClass}>You need to provide a valid email</div>
-                                <MessageBox displayMessage={this.state.borrowerError} message={this.state.borrowerErrorMessage} type='error' />
-                                <button className="block turquoise" onClick={this.onSignUpBorrower}>
-                                    Signup as Borrower
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-
-                    <div className="one third padded">
-                        <div className="user-section">
-                            <h4>Are you a Lender?</h4>
-                            <form>
-                                <input className="double-gap-bottom" ref="lenderEmail" type="email" placeholder="Email Address" />
-                                <div className={falseEmptyClass}>You need to provide a valid email</div>
-                                <MessageBox displayMessage={this.state.lenderError} message={this.state.lenderErrorMessage} type='error' />
-                                <button className="block turquoise" onClick={this.onSignUpLender}>
-                                    Signup as Lender
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                    <div className="one third padded">
-                        <div className="user-section">
-                            <Login />
+                <div className="blurb bright">
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-sm-4">
+                                <div className="panel panel-default">
+                                    <div className="panel-heading text-center">
+                                        <h3>Are you a borrower?</h3>
+                                    </div>
+                                    <div className="panel-body text-center">
+                                        <form>
+                                            <div className="form-group">
+                                                <input className="form-control" ref="borrowerEmail" type="email" placeholder="Email Address" />
+                                            </div>
+                                            <div className="form-group">
+                                                <MessageBox displayMessage={this.state.borrowerError} message={this.state.borrowerErrorMessage} type='error' />
+                                            </div>
+                                            <div className="form-group">
+                                                <button className="btn btn-default col-xs-12" onClick={this.onSignUpBorrower}>
+                                                    Signup as Borrower
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-sm-4">
+                                <div className="panel panel-default">
+                                    <div className="panel-heading text-center">
+                                        <h3>Are you a Lender?</h3>
+                                    </div>
+                                    <div className="panel-body text-center">
+                                        <form>
+                                            <div className="form-group">
+                                                <input className="form-control" ref="lenderEmail" type="email" placeholder="Email Address" />
+                                            </div>
+                                            <div className="form-group">
+                                                <MessageBox displayMessage={this.state.lenderError} message={this.state.lenderErrorMessage} type='error' />
+                                            </div>
+                                            <div className="form-group">
+                                                <button className="btn btn-default col-xs-12" onClick={this.onSignUpLender}>
+                                                    Signup as Lender
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-sm-4">
+                                <Login />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -184,5 +211,6 @@ var Welcome = React.createClass({
         );
     }
 });
+
 
 module.exports = Welcome;

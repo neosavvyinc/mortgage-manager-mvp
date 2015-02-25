@@ -13,11 +13,13 @@ module.exports = {
             },
             {
                 expand:true,
-                cwd:'<%= sourceDirectoryPath %>/assets/lib/groundworkcss',
+                cwd:'node_modules/bootstrap/dist',
                 src:[
-                    '*'
+                    'css/bootstrap.min.css',
+                    'js/bootstrap.min.js',
+                    'fonts/*'
                 ],
-                dest: '<%= buildOutputDirectoryPath %>/assets/css/'
+                dest: '<%= buildOutputDirectoryPath %>/assets/bootstrap'
             },
             {
                 expand: true,
@@ -59,6 +61,14 @@ module.exports = {
 		        ],
 		        dest: 'deployment/'
 	        },
+            {
+                expand:true,
+                cwd:'<%= buildOutputDirectoryPath %>/',
+                src: [
+                    'assets/bootstrap/**/*'
+                ],
+                dest: 'deployment/'
+            },
 	        {
 		        expand:true,
 		        cwd:'<%= buildOutputDirectoryPath %>/',

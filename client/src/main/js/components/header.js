@@ -12,13 +12,15 @@ var Header = React.createClass({
 
     render: function() {
         return (
-            <div className="row gap-top padded">
+            <div className="navbar navbar-fixed-top">
                 <div className="container">
-                    <div className="one half">
-                        <h3><a href="http://www.neosavvy.com/"> Neosavvy, Inc.</a></h3>
+                    <div className="navbar-header page-scroll col-xs-6">
+                        <div className="navbar-brand page-scroll pointer">ShuttleDoc</div>
                     </div>
-                    <div className="one half align-right">
-	                    <Settings/>
+                    <div className="col-xs-6">
+                        <div className="nav navbar-nav pull-right">
+                            <Settings/>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -28,3 +30,20 @@ var Header = React.createClass({
 });
 
 module.exports = Header;
+
+/**
+ <div className="navbar navbar-default">
+ <div className="container">
+ <div className="col-xs-6">
+ <div className="nav navbar-nav">
+ <a href="http://www.neosavvy.com/" className="navbar-brand"> Neosavvy, Inc.</a>
+ </div>
+ </div>
+ <div className="col-xs-6">
+ <div className="nav navbar-nav pull-right">
+ <Settings/>
+ </div>
+ </div>
+ </div>
+ </div>
+ **/
