@@ -138,10 +138,10 @@ var LenderContacts = React.createClass({
                         <div className="row">
                             <ul className="list-inline">
                                 <li className="btn-group">
-                                    <button className="btn btn-sm btn-info" disabled={remindButton.disabled} data-tooltip="Remind" onClick={this.onReSendInvite.bind(null, lender)}><i className="fa fa-paper-plane"></i></button>
+                                    <button className="btn btn-sm btn-light-blue" disabled={remindButton.disabled} data-tooltip="Remind" onClick={this.onReSendInvite.bind(null, lender)}><i className="fa fa-paper-plane"></i></button>
                                 </li>
                                 <li className="btn-group">
-                                    <button className="btn btn-sm btn-danger" data-tooltip="Delete" onClick={this.onDeleteInvite.bind(null, lender)}><i className="fa fa-trash-o"></i></button>
+                                    <button className="btn btn-sm btn-dark-red" data-tooltip="Delete" onClick={this.onDeleteInvite.bind(null, lender)}><i className="fa fa-trash-o"></i></button>
                                 </li>
                             </ul>
                         </div>
@@ -153,10 +153,10 @@ var LenderContacts = React.createClass({
                         <div className="row">
                             <ul className="list-inline">
                                 <li className="btn-group">
-                                    <a href={mailTo}><button className="btn btn-sm btn-primary" data-tooltip="Email"><i className="fa fa-envelope-o"></i></button></a>
+                                    <a href={mailTo}><button className="btn btn-sm btn-dark-blue" data-tooltip="Email"><i className="fa fa-envelope-o"></i></button></a>
                                 </li>
                                 <li className="btn-group">
-                                    <a href={callTo}><button className="btn btn-sm btn-success" data-tooltip="Call"><i className="fa fa-phone"></i></button></a>
+                                    <a href={callTo}><button className="btn btn-sm btn-dark-green" data-tooltip="Call"><i className="fa fa-phone"></i></button></a>
                                 </li>
                             </ul>
                         </div>

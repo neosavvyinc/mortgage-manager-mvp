@@ -157,10 +157,10 @@ var Welcome = React.createClass({
                 <div className="blurb bright">
                     <div className="container">
                         <div className="row">
-                            <div className="col-sm-4">
+                            <div className="col-md-4 col-md-offset-1 col-sm-5 col-sm-offset-1 col-xs-12">
                                 <div className="panel panel-default">
                                     <div className="panel-heading text-center">
-                                        <h3>Are you a borrower?</h3>
+                                        <h3>Register</h3>
                                     </div>
                                     <div className="panel-body text-center">
                                         <form>
@@ -179,7 +179,7 @@ var Welcome = React.createClass({
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-sm-4">
+                            <div className="col-sm-4 hidden">
                                 <div className="panel panel-default">
                                     <div className="panel-heading text-center">
                                         <h3>Are you a Lender?</h3>
@@ -201,7 +201,7 @@ var Welcome = React.createClass({
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-sm-4">
+                            <div className="col-md-4 col-md-offset-2 col-sm-5 col-xs-12">
                                 <Login />
                             </div>
                         </div>

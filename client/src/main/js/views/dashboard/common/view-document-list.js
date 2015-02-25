@@ -174,7 +174,7 @@ var Documents = React.createClass({
                 disabled: true,
                 style: 'disabled hidden'
             }, uploadButton = {
-                style: 'btn btn-sm btn-success',
+                style: 'btn btn-sm btn-dark-green',
 	            text: 'Upload ',
                 disabled: false
             }, downloadButton = {
@@ -188,19 +188,19 @@ var Documents = React.createClass({
                     viewButton.disabled = true;
                     downloadButton.disabled = true;
                     uploadButton.disabled = true;
-                    viewButton.style =  'btn btn-sm btn-primary disabled ';
-                    downloadButton.style =  'btn btn-sm btn-success disabled';
-                    uploadButton.style =  'btn btn-sm btn-info disabled';
+                    viewButton.style =  'btn btn-sm btn-dark-blue disabled ';
+                    downloadButton.style =  'btn btn-sm btn-dark-green disabled';
+                    uploadButton.style =  'btn btn-sm btn-light-blue disabled';
                 } else {
                     viewButton.disabled = false;
-                    viewButton.style = 'btn btn-sm btn-primary';
-                    uploadButton.style = 'btn btn-sm btn-success';
+                    viewButton.style = 'btn btn-sm btn-dark-blue';
+                    uploadButton.style = 'btn btn-sm btn-dark-green';
                     uploadButton.text = '';
                     downloadButton.disabled = false;
-                    downloadButton.style = 'btn btn-sm btn-info';
+                    downloadButton.style = 'btn btn-sm btn-light-blue';
                 }
             } else {
-                uploadButton.style =  'btn btn-sm btn-success';
+                uploadButton.style =  'btn btn-sm btn-dark-green';
                 if(this.state.disableButtons) {
                     uploadButton.style += ' disabled';
                     uploadButton.disabled = true;
