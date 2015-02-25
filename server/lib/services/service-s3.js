@@ -18,7 +18,8 @@ exports.generateSignedUrl = function(appId, docId, success, failure) {
 	var s3 = new AWS.S3(),
 		document = new documentModel(),
 		params = {
-			Bucket: appId
+			Bucket: appId,
+            Expires: 300
 		};
 
 	async.series([
