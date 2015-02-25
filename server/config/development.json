@@ -18,7 +18,7 @@
     "publishableKey": "pk_test_U8nPZC9Czk76tfjCs6o5CMH9"
   },
   "s3": {
-	"s3Toggle": true,
+	"s3Toggle": false,
     "maxAsyncS3": 20,
     "s3RetryCount": 3,
     "s3RetryDelay": 1000,
