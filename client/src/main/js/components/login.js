@@ -69,18 +69,28 @@ var Login = React.createClass({
 
 	render: function(){
 		return (
-			<form>
-				<h4>Already a User?</h4>
-				<input className="gap-bottom" ref="userEmail" type="email" placeholder="Email Address" />
-				<input className="gap-bottom" ref="userPassword" type="password" placeholder="Password" />
-				<MessageBox displayMessage={this.state.loginError} message={this.state.loginErrorText} type='error'/>
-				<button className="block turquoise" onClick={this.onLogin}>
-					Login
-				</button>
-				<Link to="forgotPassword">Forgot Password?</Link>
-			</form>
+            <div className="panel panel-default">
+                <div className="panel-heading text-center">
+                    <h3>Already a User?</h3>
+                </div>
+                <div className="panel-body text-center">
+                    <form>
+                        <div className="form-group">
+                            <input className="form-control" ref="userEmail" type="email" placeholder="Email Address" />
+                        </div>
+                        <div className="form-group">
+                            <input className="form-control" ref="userPassword" type="password" placeholder="Password" />
+                        </div>
+                        <MessageBox displayMessage={this.state.loginError} message={this.state.loginErrorText} type='error'/>
+                        <button className="btn btn-default col-xs-12 gap-bottom" onClick={this.onLogin}>
+                            Login
+                        </button>
+                    </form>
+                    <Link to="forgotPassword" className="text-center">Forgot Password?</Link>
+                </div>
+            </div>
 		)
-	},
+	}
 });
 
 module.exports = Login;

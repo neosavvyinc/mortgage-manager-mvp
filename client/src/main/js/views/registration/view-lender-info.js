@@ -49,85 +49,6 @@ var LenderInfo = React.createClass({
 		}
 	},
 
-	render: function() {
-
-		var lenderInfo = LenderStore.getLender();
-
-		var lenderName = (
-			<div className="row gap-bottom">
-				{(lenderInfo.basicInfo && lenderInfo.basicInfo.firstName) ? (
-					<input className="one fourth half-gap-right"
-						type="text"
-						ref="firstName"
-						placeholder="First Name"
-						value={lenderInfo.basicInfo.firstName} />
-				) : (
-					<input className="one fourth half-gap-right" type="text" ref="firstName" placeholder="First Name" required />
-				)}
-				<input className="one fourth half-gap-right" type="text" ref="middleName" placeholder="Middle Name" required />
-				{(lenderInfo.basicInfo && lenderInfo.basicInfo.lastName) ? (
-					<input className="one fourth"
-						type="text"
-						ref="lastName"
-						placeholder="Last Name"
-						value={lenderInfo.basicInfo.lastName} />
-				) : (
-					<input className="one fourth" type="text" ref="lastName" placeholder="Last Name" required />
-				)}
-			</div>
-		);
-
-		var lenderAddress = (
-			<div>
-				<div className="row gap-bottom">
-					<input className="three fourths" type="text" ref="address" placeholder="address"  required />
-				</div>
-				<div className="row gap-bottom">
-					<input className="one fourth half-gap-right" type="text" ref="city" placeholder="City" required />
-					<select ref="state" className="one fourth half-gap-right">
-                        {Constants.usStates.map(function(state) {
-	                        return <option key={state.data} value={state.data}>{state.label}</option>;
-                        })}
-					</select>
-					<input className="one fourth" type="text" ref="zip" placeholder="Zip Code" required />
-				</div>
-			</div>
-		);
-
-		var lenderContact = (
-			<div className="row gap-bottom">
-				{(lenderInfo.basicInfo && lenderInfo.basicInfo.organization) ? (
-					<input className="one third half-gap-right"
-						type="text"
-						ref="organization"
-						placeholder="Organization"
-						value={lenderInfo.basicInfo.organization} />
-				) : (
-					<input className="one third half-gap-right" type="text" ref="organization" placeholder="Organization" required />
-				)}
-				<input className="one third half-gap-right" type="text" ref="phone" placeholder="Mobile Phone" required />
-			</div>
-		);
-
-		return (
-			<div className="container">
-				<div className="gap-top">
-					<h2>{this.state.applicantType}'s Name</h2>
-				{lenderName}
-					<div className="row">
-						<h2 className="one third">{this.state.applicantType}'s Address</h2>
-					</div>
-                {lenderAddress}
-					<h2>{this.state.applicantType}'s Contact Information</h2>
-				{lenderContact}
-					<MessageBox displayMessage={this.state.applicantInfoError} message={this.state.errorText} type='error' />
-					<div className="row">
-						<button className="one third turquoise button" onClick={this.onSubmitInfo}>Continue</button>
-					</div>
-				</div>
-			</div>
-		);
-	},
 	onSubmitInfo: function(e){
 
         e.preventDefault();
@@ -162,7 +83,113 @@ var LenderInfo = React.createClass({
 				errorText: "All the fields are required."
 			});
 		}
-	}
+	},
+
+    render: function() {
+
+        var lenderInfo = LenderStore.getLender();
+
+        var lenderName = (
+            <form className="row">
+                <div className="col-md-3 col-sm-4 col-xs-12 gap-bottom">
+                    {(lenderInfo.basicInfo && lenderInfo.basicInfo.firstName) ? (
+                        <input className="form-control"
+                            type="text"
+                            ref="firstName"
+                            placeholder="First Name"
+                            value={lenderInfo.basicInfo.firstName} />
+                    ) : (
+                        <input className="form-control" type="text" ref="firstName" placeholder="First Name" required />
+                    )}
+                </div>
+                <div className="col-md-3 col-sm-4 col-xs-12 gap-bottom">
+                    <input className="form-control" type="text" ref="middleName" placeholder="Middle Name" required />
+                </div>
+                <div className="col-md-3 col-sm-4 col-xs-12 gap-bottom">
+                    {(lenderInfo.basicInfo && lenderInfo.basicInfo.lastName) ? (
+                        <input className="form-control"
+                            type="text"
+                            ref="lastName"
+                            placeholder="Last Name"
+                            value={lenderInfo.basicInfo.lastName} />
+                    ) : (
+                        <input className="form-control" type="text" ref="lastName" placeholder="Last Name" required />
+                    )}
+                </div>
+            </form>
+        );
+
+        var lenderAddress = (
+            <form className="row">
+                <div className="row gap-bottom">
+                    <div className="col-md-9 col-xs-12">
+                        <input className="form-control" type="text" ref="address" placeholder="address"  required />
+                    </div>
+                </div>
+                <div className="row gap-bottom">
+                    <div className="col-md-3 col-sm-4 col-xs-12 gap-bottom">
+                        <input className="form-control" type="text" ref="city" placeholder="City" required />
+                    </div>
+                    <div className="col-md-3 col-sm-4 col-xs-12 gap-bottom">
+                        <select ref="state" className="form-control">
+                            {Constants.usStates.map(function(state) {
+                                return <option key={state.data} value={state.data}>{state.label}</option>;
+                            })}
+                        </select>
+                    </div>
+                    <div className="col-md-3 col-sm-4 col-xs-12 gap-bottom">
+                        <input className="form-control" type="text" ref="zip" placeholder="Zip Code" required />
+                    </div>
+                </div>
+            </form>
+        );
+
+        var lenderContact = (
+            <form className="row gap-bottom">
+                <div className="col-md-3 col-sm-4 col-xs-12 gap-bottom">
+                    {(lenderInfo.basicInfo && lenderInfo.basicInfo.organization) ? (
+                        <input className="form-control"
+                            type="text"
+                            ref="organization"
+                            placeholder="Organization"
+                            value={lenderInfo.basicInfo.organization} />
+                    ) : (
+                        <input className="form-control" type="text" ref="organization" placeholder="Organization" required />
+                    )}
+                </div>
+                <div className="col-md-3 col-sm-4 col-xs-12 gap-bottom">
+                    <input className="form-control" type="text" ref="phone" placeholder="Mobile Phone" required />
+                </div>
+            </form>
+        );
+
+        return (
+            <div className="container container-color fill">
+                <div className="row">
+                    <h2 className="col-xs-12 bordered-bottom double-gap-bottom">{this.state.applicantType}'s Name</h2>
+                    {lenderName}
+                </div>
+                <div className="row">
+                    <h2 className="col-xs-12 bordered-bottom double-gap-bottom">{this.state.applicantType}'s Address</h2>
+                        {lenderAddress}
+                </div>
+                <div className="row">
+                    <h2 className="col-xs-12 bordered-bottom double-gap-bottom">{this.state.applicantType}'s Contact Information</h2>
+                    {lenderContact}
+                </div>
+                <div className="row">
+                    <div className="col-xs-12">
+                        <div className="row">
+                            <MessageBox gridPos="col-sm-6 col-xs-12" displayMessage={this.state.applicantInfoError} message={this.state.errorText} type='error' />
+                        </div>
+                        <div className="row">
+                            <button className="btn btn-md btn-dark-blue col-sm-6 col-xs-12" onClick={this.onSubmitInfo}>Continue</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 });
 
 module.exports = LenderInfo;

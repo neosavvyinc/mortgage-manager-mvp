@@ -18,13 +18,13 @@ var HeaderNav = React.createClass({
 
 	getInitialState: function() {
 		return {
-			isTrial: false
+			isTrial: false,
+            displayDropdown: false
 		};
 	},
 
 	componentDidMount: function() {
 		User.getUserDetails(UserStore.getCurrentUserId()).then(function (user) {
-
 			if (user.type === 'borrower' && user.pricingPlan === 'trial') {
 				this.setState({isTrial: true});
 			}
@@ -38,24 +38,38 @@ var HeaderNav = React.createClass({
 	},
 
 	onLogoutTransition: function() {
+        this.resetToggle();
 		this.transitionTo('welcome');
 	},
 
 	onChangePassword: function() {
+        this.resetToggle();
 		this.transitionTo('changePassword');
 	},
 
 	onViewProfile: function() {
+        this.resetToggle();
 		this.transitionTo('viewProfile');
 	},
 
 	onUpgrade: function() {
-		this.transitionTo('pricingOptions');
+        this.resetToggle();
+        this.transitionTo('pricingOptions');
 	},
 
 	onViewPayments: function() {
 
 	},
+
+    resetToggle: function() {
+        this.setState({displayDropdown: false});
+    },
+
+    onToggleDropdown: function(){
+        this.setState({
+            displayDropdown: !this.state.displayDropdown
+        });
+    },
 
 	render: function() {
 		var upgradeClass,
@@ -70,21 +84,18 @@ var HeaderNav = React.createClass({
 		}
 
 		return (
-			<div className = "one whole">
-				<nav className="header-nav">
-					<ul>
-						<li><span className="row"><i className="fa fa-gear one third"></i></span>
-							<ul>
-								<li><div onClick={this.onViewProfile}>View Profile</div></li>
-								<li><div onClick={this.onChangePassword}>Change Password</div></li>
-								<li><div onClick={this.onUpgrade} className={upgradeClass}>Upgrade</div></li>
-								<li><div onClick={this.onViewPayments} className={viewPaymentsClass}>View Payments</div></li>
-								<li><div onClick={this.onLogout}>Logout</div></li>
-							</ul>
-						</li>
-					</ul>
-				</nav>
-			</div>
+            <div className="btn-group">
+                <div className="dropdown-toggle" data-toggle="dropdown" aria-expanded="false" onClick={this.onToggleDropdown}>
+                    <i className="fa fa-gear cog-icon"></i>
+                </div>
+                <ul className="dropdown-menu pull-right" role="menu" id="dropdown" style={{display: (this.state.displayDropdown ? 'block' : 'none')}}>
+                    <li role="presentation" className="pointer"><a onClick={this.onViewProfile}>View Profile</a></li>
+                    <li role="presentation" className="pointer"><a onClick={this.onChangePassword}>Change Password</a></li>
+                    <li role="presentation" className="pointer"><a onClick={this.onUpgrade} className={upgradeClass}>Upgrade</a></li>
+                    <li role="presentation" className="pointer"><a onClick={this.onViewPayments} className={viewPaymentsClass}>View Payments</a></li>
+                    <li role="presentation" className="pointer"><a onClick={this.onLogout}>Logout</a></li>
+                </ul>
+            </div>
 		);
 	}
 });

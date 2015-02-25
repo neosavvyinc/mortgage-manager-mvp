@@ -1,8 +1,8 @@
-.tooltip{
+.tooltip-tag{
   position:relative;
 }
 
-.tooltip::before {
+.tooltip-tag::before {
   content: attr(data-tooltip) ;
   font-size: 12px;
   position: absolute;
@@ -18,12 +18,12 @@
   opacity: 0;
 }
 
-.tooltip:hover::before {
+.tooltip-tag:hover::before {
   opacity: 1;
   top: 28px;
 }
 
-.tooltip:hover::after {
+.tooltip-tag:hover::after {
   content: "";
   opacity: 1;
   width: 0;

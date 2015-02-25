@@ -9,6 +9,7 @@ var User = require('../../models/model-user');
 var UserStore = require('../../stores/store-user');
 
 var Header = require('../../components/header');
+var HeaderLogout = require('../../components/header-logout');
 var Footer = require('../../components/footer');
 
 var moment = require('moment');
@@ -17,39 +18,33 @@ var Dashboard = React.createClass({
 
     mixins: [
         Router.State,
-	    Router.Navigation
+        Router.Navigation
     ],
 
-    statics: {
-        willTransitionTo: function (transition){
-	        transition.wait(
-		        User.isAuthenticated().then(function (res) {
-			        if (!res.isAuthenticated) {
-				        transition.redirect('welcome');
-			        }
-		        })
-	        );
-        }
+    getInitialState: function(){
+        return {
+            isAuthenticated: false
+        };
     },
 
-	componentDidMount: function() {
-		User.checkTrialExpired(UserStore.getCurrentUserId()).then(
-			function() {},
-			function(error) {
-				if(error.message === 'Trial Expired') {
-					this.transitionTo('trialExpired');
-				}
-			}.bind(this));
-	},
+    componentDidMount: function() {
+        User.isAuthenticated(UserStore.getCurrentUserId()).then(
+            function() {
+                this.setState({
+                    isAuthenticated: true
+                });
+            }.bind(this));
+    },
 
     render: function(){
+        var header = this.state.isAuthenticated ? (<Header />) : (<HeaderLogout />);
         return (
             <span>
                 <div className="dashboard-fill" style={{backgroundColor:'white'}}>
                     <div className="header">
-                        <Header />
+                    {header}
                     </div>
-                    <div className="dashboard-body">
+                    <div className="register-body">
                         <RouterHandler />
                     </div>
                     <div className="push" />

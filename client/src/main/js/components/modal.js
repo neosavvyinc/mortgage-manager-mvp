@@ -9,9 +9,7 @@ var Modal = React.createClass({
 	render: function() {
 		return (
 			<div className="modalDialog">
-				<div className="row">
-					<RouterHandler/>
-				</div>
+                <RouterHandler/>
 			</div>
 		);
 	}

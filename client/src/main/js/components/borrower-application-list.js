@@ -34,7 +34,7 @@ var BorrowerApplications = React.createClass({
     },
 
     onApplicationTransition: function(){
-        this.transitionTo('dashboardDocuments', {appId: ApplicationStore.getCurrentApplication()._id, tab:0});
+        this.transitionTo('dashboardAppDetails', {appId: ApplicationStore.getCurrentApplication()._id, tabName:'documents'});
     },
 
     render: function(){
@@ -77,7 +77,7 @@ var BorrowerApplications = React.createClass({
                     <th>{status}</th>
                     <th>
                         <div className="row">
-                            <button className="btn red" onClick={this.onApplicationSelect.bind(null, app)}>View <i className="fa fa-binoculars"></i></button>
+                            <button className="btn btn-primary btn-xs" onClick={this.onApplicationSelect.bind(null, app)}>View <i className="fa fa-binoculars"></i></button>
                         </div>
                     </th>
                 </tr>
@@ -86,27 +86,29 @@ var BorrowerApplications = React.createClass({
         return (
             <div>
                 <Navigation navigationItems={actions}/>
-                <table className="responsive">
-	                <col style={nameColStyle}/>
-	                <col style={otherColStyle}/>
-	                <col style={otherColStyle}/>
-	                <col style={statusStyle}/>
-	                <col style={actionStyle}/>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Created</th>
-                            <th>Last Modified</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {applicationsTable.map(function(application) {
-                        return (application);
-                    })}
-                    </tbody>
-                </table>
+                <div className="table-responsive">
+                    <table className="table table-striped">
+                        <col style={nameColStyle}/>
+                        <col style={otherColStyle}/>
+                        <col style={otherColStyle}/>
+                        <col style={statusStyle}/>
+                        <col style={actionStyle}/>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Created</th>
+                                <th>Last Modified</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {applicationsTable.map(function(application) {
+                            return (application);
+                        })}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         );
     }

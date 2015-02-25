@@ -1,28 +1,184 @@
+@import "variables.less";
+
+html{
+    height: 100%;
+    overflow-y: scroll;
+}
+
+body {
+    height: 100%;
+    font-family: OpenSans-Regular;
+}
+
 textarea, input, select, option {
-  font-size: 100%;
-  font-family: FontAwesome;
+    font-size: 100%;
 }
+
 a:after{content:none !important;}
+
 a:not(.noicon)[href^="mailto:"]:before{
-  content: "";
+    content: "";
 }
+
 a:not(.noicon)[href^="tel:"]:before{
-  content: "";
+    content: "";
 }
+
 a:before {
-  padding-right: 0;
+    padding-right: 0;
 }
+
 .plaintext{
-  color: white;
+    color: white;
+}
+
+.bg-color{}
+
+.container-color{
+    background-color: white;
+}
+
+.fill {
+    min-height: 100%;
+    height: auto;
+    margin-bottom: -60px;
+    background-color: @primary-lightest-blue;
+
+    @media (max-width: 768px) {
+        margin-bottom: -210px;
+    }
+}
+
+.dashboard-fill{
+    min-height: 100%;
+    height: auto;
+    margin-bottom: -60px;
+    background-color: white;
+
+    @media (max-width: 768px){
+        margin-bottom: -210px;
+    }
+}
+
+.push {
+    clear: both;
+    height: 60px;
+
+    @media (max-width: 768px){
+        height: 210px;
+    }
 }
 
 .pointer {
-  cursor: pointer;
+    cursor: pointer;
 }
 
-.divBorder {
-  align-content: center;
-  height: 40%;
-  padding: 15px;
-  border: 1px solid #DDDDDD;
+.row { margin: 0; padding: 0 }
+
+.header-welcome .navbar{
+    background-color: @primary-dark-blue;
+}
+
+header h1 {
+    font-size:50px;
+}
+
+/* make images gray */
+img.grayscale {
+    filter: gray; /* IE6-9 */
+    -webkit-filter: grayscale(100%); /* Chrome 19+, Safari 6+, Safari 6+ iOS */
+}
+
+.icon-bar {
+    background-color:#fff;
+}
+
+.vert {
+    vertical-align: middle;
+    width: 100%;
+    padding-top: 100px;
+    text-align: center;
+}
+
+.header-welcome .btn-lg {
+    font-size:28px;
+    border-color:#eeeeee;
+    padding:15px;
+    background-color:transparent;
+    color:#ffffff;
+}
+
+.header-welcome .btn-lg:hover {
+    background-color: white;
+    color: @primary-dark-blue;
+}
+
+.header-welcome h1 {
+    font-size:80px;
+    color:#fff;
+    margin-left:-5px;
+    margin-bottom:5px;
+}
+
+.header-welcome h2 {
+    font-size:65px;
+    color:#fff;
+    margin-left:-5px;
+    margin-bottom:5px;
+}
+
+.header-welcome {
+    height: 80%;
+    padding-bottom: 100px;
+}
+
+.header-welcome-welcome {
+    height: 80%;
+    margin-bottom: 100px;
+}
+
+/* use alt in navbar and header-welcome for different color */
+
+.alt {
+    background-color: @primary-light-blue;
+}
+
+.alt .lead {
+    color: @primary-dark-blue;
+}
+
+.alt.affix {
+    background-color: @primary-blue;
+}
+
+.alt li a:hover, .alt li.active {
+    background-color: @primary-blue;
+}
+
+.navbar div, .navbar-logout li a{
+    color: white;
+}
+
+.blurb {
+    padding: 100px 0;
+    background-color:#fefefe;
+}
+
+.blurb .panel {
+    background-color:transparent;
+}
+
+.label-lg{
+    font-size: 18px;
+}
+
+.icon-lg{
+    font-size: 25px;
+}
+
+.background-close {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: -99;
 }

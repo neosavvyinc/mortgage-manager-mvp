@@ -44,17 +44,28 @@ var newLenderInvite = React.createClass({
             appId: this.getQuery().appId
         };
         return (
-            <div className="row triple-gap-top">
                 <div className="container">
-                    <div className="one centered mobile third">
-                        <Login loginType="new-invite" userData={newLender} />
-                        <div className="row double-gap-top">
-                            <p className="two thirds">Register if you don't have an account yet</p>
-                            <button className="btn blue one third half-gap-top" onClick={this.onAcceptInvite.bind(null, newLender)}>Sign Up</button>
+                    <div className="row triple-gap-bottom">
+                        <h1 className="col-xs-12 bordered-bottom">Welcome to Neosavvy, Inc.</h1>
+                    </div>
+                    <div className="row">
+                        <div className="col-sm-5 col-sm-offset-1">
+                            <Login loginType="new-invite" userData={newLender} />
+                        </div>
+                        <div className="col-sm-5">
+                            <div className="panel panel-default">
+                                <div className="panel-heading text-center">
+                                    <h3>Register</h3>
+                                </div>
+                                <div className="row panel-body text-center">
+                                    <div className="col-sm-10 col-sm-offset-1 col-xs-12">
+                                        <button className="btn btn-lg btn-dark-blue triple-gap-top triple-gap-bottom" onClick={this.onAcceptInvite.bind(null, newLender)}>Sign Up</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
         );
     }
 });

@@ -24,7 +24,7 @@ var _createTestWrapper = function(path) {
 			getCurrentPathname: func,
 			getCurrentParams: func,
 			getCurrentQuery: func,
-			isActive: func,
+			isActive: func
 		},
 
 		getChildContext: function () {
@@ -77,7 +77,7 @@ describe('Login', function () {
 		loginForm = TestUtils.renderIntoDocument(<LoginWrapper />);
 		button = TestUtils.findRenderedDOMComponentWithTag(loginForm, 'button');
 		inputFields = TestUtils.scryRenderedDOMComponentsWithTag(loginForm, 'input');
-		messageBox = TestUtils.scryRenderedDOMComponentsWithClass(loginForm, 'error');
+		messageBox = TestUtils.scryRenderedDOMComponentsWithClass(loginForm, 'alert');
 		email = inputFields[0];
 		password = inputFields[1];
 	});
@@ -98,7 +98,6 @@ describe('Login', function () {
 		password.getDOMNode().value = '*****';
 
 		TestUtils.Simulate.click(button);
-		expect(messageBox[0].props.className).toBe('message gap-bottom error');
 		expect(messageBox[0].props.children).toBe('You must enter both username and password.');
 	});
 
@@ -107,7 +106,6 @@ describe('Login', function () {
 		password.getDOMNode().value = '';
 
 		TestUtils.Simulate.click(button);
-		expect(messageBox[0].props.className).toBe('message gap-bottom error');
 		expect(messageBox[0].props.children).toBe('You must enter both username and password.');
 	});
 
@@ -116,7 +114,6 @@ describe('Login', function () {
 		password.getDOMNode().value = '';
 
 		TestUtils.Simulate.click(button);
-		expect(messageBox[0].props.className).toBe('message gap-bottom error');
 		expect(messageBox[0].props.children).toBe('You must enter both username and password.');
 	});
 

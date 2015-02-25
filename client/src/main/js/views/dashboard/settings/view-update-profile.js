@@ -115,47 +115,71 @@ var ApplicantInfo = React.createClass({
 
 	render: function() {
 		return (
-			<div className="container">
-				<h1><span className="tooltip" data-tooltip="Back"><i className="fa fa-chevron-left pointer" onClick={this.back}></i></span> Edit Profile</h1>
-				<div className="gap-top divBorder">
-					<h2>Name</h2>
-					<div className="row gap-bottom">
-						<input className="one fourth half-gap-right" type="text" ref="firstName" placeholder="First Name" required />
-						<input className="one fourth half-gap-right" type="text" ref="middleName" placeholder="Middle Name" required />
-						<input className="one fourth" type="text" ref="lastName" placeholder="Last Name" required />
-					</div>
-					<div className="row">
-						<h2 className="one third">Address</h2>
-					</div>
-					<div>
-						<div className="row gap-bottom">
-							<input className="three fourths" type="text" ref="address" placeholder="address"  required />
-						</div>
-						<div className="row gap-bottom">
-							<input className="one fourth half-gap-right" type="text" ref="city" placeholder="City" required />
-							<select ref="state" className="one fourth half-gap-right">
-                        {Constants.usStates.map(function(state) {
-	                        return <option key={state.data} value={state.data}>{state.label}</option>;
-                        })}
-							</select>
-							<input className="one fourth" type="text" ref="zip" placeholder="Zip Code" required />
-						</div>
-					</div>
-					<h2>Contact Information</h2>
-					<div className="row gap-bottom">
-						<input className="one third half-gap-right" type="text" ref="phone" placeholder="Mobile Phone" required />
-						<input className="one third" type="email" ref="email" placeholder="Email" required />
-					</div>
-					<div className="row">
-						<button className="one third turquoise button" onClick={this.onSubmitInfo}>Continue</button>
-					</div>
-					<div className="row gap-top">
-						<div className="one third">
-							<MessageBox displayMessage={this.state.showMessage} message={this.state.messageText} type={this.state.messageType} />
-						</div>
-					</div>
-				</div>
-			</div>
+            <div className="container">
+                <h1 className="bordered-bottom gap-bottom"><i className="fa fa-chevron-left pointer" onClick={this.back}></i> Edit Profile</h1>
+                <div className="row">
+                    <h3 className="col-xs-12">Name</h3>
+                    <form className="row">
+                        <div className="col-md-3 col-sm-4 col-xs-12 gap-bottom">
+                            <input className="form-control" type="text" ref="firstName" placeholder="First Name" required />
+                        </div>
+                        <div className="col-md-3 col-sm-4 col-xs-12 gap-bottom">
+                            <input className="form-control" type="text" ref="middleName" placeholder="Middle Name" required />
+                        </div>
+                        <div className="col-md-3 col-sm-4 col-xs-12 gap-bottom">
+                            <input className="form-control" type="text" ref="lastName" placeholder="Last Name" required />
+                        </div>
+                    </form>
+                </div>
+                <div className="row">
+                    <h3 className="col-xs-12">Address</h3>
+                    <form className="row">
+                        <div className="row gap-bottom">
+                            <div className="col-md-9 col-xs-12">
+                                <input className="form-control" type="text" ref="address" placeholder="address"  required />
+                            </div>
+                        </div>
+                        <div className="row gap-bottom">
+                            <div className="col-md-3 col-sm-4 col-xs-12 gap-bottom">
+                                <input className="form-control" type="text" ref="city" placeholder="City" required />
+                            </div>
+                            <div className="col-md-3 col-sm-4 col-xs-12 gap-bottom">
+                                <select ref="state" className="form-control">
+                                    {Constants.usStates.map(function(state) {
+                                        return <option key={state.data} value={state.data}>{state.label}</option>;
+                                    })}
+                                </select>
+                            </div>
+                            <div className="col-md-3 col-sm-4 col-xs-12 gap-bottom">
+                                <input className="form-control" type="text" ref="zip" placeholder="Zip Code" required />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div className="row double-gap-bottom">
+                    <h3 className="col-xs-12">Contact Information</h3>
+                    <form className="row">
+                        <div className="col-md-3 col-sm-4 col-xs-12 gap-bottom">
+                            <input className="form-control" type="text" ref="phone" placeholder="Mobile Phone" required />
+                        </div>
+                        <div className="col-md-3 col-sm-4 col-xs-12 gap-bottom">
+                            <input className="form-control" type="email" ref="email" placeholder="Email" required />
+                        </div>
+                    </form>
+                </div>
+                <div className="row">
+                    <div className="col-xs-12">
+                        <div className="row">
+                            <MessageBox gridPos="col-sm-6 col-xs-12" displayMessage={this.state.showMessage} message={this.state.messageText} type={this.state.messageType} />
+                        </div>
+                        <div className="row">
+                            <button className="btn btn-md btn-primary col-sm-6 col-xs-12" onClick={this.onSubmitInfo}>Continue</button>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
 		)
 	}
 
