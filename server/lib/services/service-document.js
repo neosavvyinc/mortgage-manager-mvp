@@ -168,7 +168,7 @@ exports.createDocumentZip = function(appId, success, failure) {
 				if(doc.url !== undefined) {
 					doc = doc.toObject();
 					if(settings.getConfig().s3.s3Toggle) {
-						zipArchive.file(path.resolve('uploads/' + doc.url), {name: doc.name + '.pdf'});
+						zipArchive.file(path.resolve(__dirname.split('lib')[0], 'uploads/', doc.url), {name: doc.name + '.pdf'});
 					} else {
 						zipArchive.file(doc.url, {name: doc.name + '.pdf'});
 					}
