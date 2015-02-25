@@ -8,26 +8,44 @@ var Footer = React.createClass({
         return (
             <footer>
                 <div className="container">
-                    <ul className="list-inline">
-                        <li>
-                            <Link to="welcome" className="col-md-2 col-sm-4 col-xs-12 col-md-offset-1 col-sm-offset-2">About</Link>
+                    <ul className="list-inline hidden-xs">
+                        <li className="pointer">
+                            <Link to="pricing" className="col-md-2 col-sm-4 col-md-offset-0 col-sm-offset-2">Pricing</Link>
                         </li>
-                        <li>
-                            <Link to="welcome" className="col-md-2 col-sm-4 col-xs-12">Help</Link>
+                        <li className="pointer">
+                            <Link to="faq" className="col-md-2 col-sm-4 col-md-offset-0 col-sm-offset-2">FAQ</Link>
                         </li>
-                        <li>
-                            <Link to="welcome" className="col-md-2 col-sm-4 col-xs-12 col-md-offset-0 col-sm-offset-2">Jobs</Link>
+                        <li className="pointer">
+                            <Link to="team" className="col-md-2 col-sm-4 col-md-offset-0 col-sm-offset-2">Team</Link>
                         </li>
-                        <li>
-                            <Link to="welcome" className="col-md-2 col-sm-4 col-xs-12">Press</Link>
+                        <li className="pointer">
+                            <Link to="legal" className="col-md-2 col-sm-4 col-md-offset-0 col-sm-offset-2">Legal</Link>
                         </li>
-                        <li>
-                            <Link to="welcome" className="col-md-2 col-sm-4 col-xs-12 col-md-offset-0 col-sm-offset-4">Legal</Link>
+                        <li className="pointer">
+                            <Link to="contact" className="col-md-2 col-sm-4 col-md-offset-0 col-sm-offset-4">Contact</Link>
                         </li>
                         <li className="pull-right">
-                            <div className="center-block col-xs-12 text-center">&copy; Neosavvy, Inc. 2015</div>
+                            <div className="center-block text-center">&copy; Neosavvy, Inc. 2015</div>
                         </li>
                     </ul>
+                    <div className="row hidden-sm hidden-md hidden-lg">
+                        <div className="blue gap-bottom col-xs-12 text-center pointer">
+                            <Link to="pricing">Pricing</Link>
+                        </div>
+                        <div className="blue gap-bottom col-xs-12 text-center pointer">
+                            <Link to="faq">FAQ</Link>
+                        </div>
+                        <div className="blue gap-bottom col-xs-12 text-center pointer">
+                            <Link to="team">Team</Link>
+                        </div>
+                        <div className="blue gap-bottom col-xs-12 text-center pointer">
+                            <Link to="legal">Legal</Link>
+                        </div>
+                        <div className="blue gap-bottom col-xs-12 text-center pointer">
+                            <Link to="contact">Contact</Link>
+                        </div>
+                        <div className="white center-block gap-top gap-bottom col-xs-12 text-center">&copy; Neosavvy, Inc. 2015</div>
+                    </div>
                 </div>
             </footer>
         );

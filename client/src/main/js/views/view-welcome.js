@@ -4,6 +4,7 @@ var Link = Router.Link;
 var Reflux = require('reflux');
 
 var Login = require('../components/login');
+var HeaderLogout = require('../components/header-logout');
 var MessageBox = require('../components/message-box');
 var User = require('../models/model-user');
 var UserStore = require('../stores/store-user');
@@ -140,19 +141,17 @@ var Welcome = React.createClass({
         this.transitionTo('newPassword');
     },
 
-    onChoosePlan: function(){
-        this.transitionTo('findPlan');
-    },
-
     render: function(){
         return (
             <div>
-                <div className="header alt vert">
+                <div className="header-welcome alt vert">
+                    <HeaderLogout />
                     <div className="container">
-                        <h1>Neosavvy, Inc.</h1>
+                        <h1 className="hidden-xs">ShuttleDoc</h1>
+                        <h2 className="hidden-sm hidden-md hidden-lg">ShuttleDoc</h2>
                         <p className="lead">The mortgage application process is totally broken. We plan to make it a much smoother experience.</p>
                         <div>&nbsp;</div>
-                        <div className="btn btn-default btn-lg" onClick={this.onChoosePlan}>Find Your Plan</div>
+                        <Link className="btn btn-default btn-lg" to='pricing'>Find Your Plan</Link>
                     </div>
                 </div>
                 <div className="blurb bright">
@@ -209,7 +208,6 @@ var Welcome = React.createClass({
                     </div>
                 </div>
             </div>
-
         );
     }
 });

@@ -32,7 +32,6 @@ var LenderStore = Reflux.createStore({
 
     onSetLenderList: function(lenders){
         _lenderList = lenders;
-        debugger;
         this.trigger();
     },
 
@@ -42,7 +41,6 @@ var LenderStore = Reflux.createStore({
     },
 
     getLenderList: function(){
-        debugger;
         return _lenderList;
     },
 

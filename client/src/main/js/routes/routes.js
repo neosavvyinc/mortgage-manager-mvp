@@ -7,8 +7,14 @@ var DefaultRoute = Router.DefaultRoute;
 
 /* Pages */
 var Welcome = require('../views/view-welcome');
+var Contact = require('../views/view-contact');
+var FAQ = require('../views/view-faq');
+var Legal = require('../views/view-legal');
+var Pricing = require('../views/view-pricing');
+var Team = require('../views/view-team');
 var Dashboard = require('../views/dashboard/view-dashboard');
 var Modal = require('../components/modal');
+var Register = require('../views/registration/view-register');
 var NewPassword = require('../views/registration/view-new-password');
 var UpdatePassword = require('../views/registration/view-update-password');
 var ChangePassword = require('../views/dashboard/view-change-password');
@@ -25,7 +31,6 @@ var ApplicationDetails = require('../views/dashboard/view-application-details');
 var RequestDocument = require('../views/dashboard/view-lender-request-document');
 var ForgotPassword = require('../views/registration/view-forgot-password');
 var ViewProfile = require('../views/dashboard/view-update-profile');
-var FindPlan = require('../views/registration/view-find-plan');
 var PricingOptions = require('../views/dashboard/payment/view-pricing-options');
 var StripePayment = require('../views/dashboard/payment/view-stripe-payment');
 var TrialExpired = require('../views/dashboard/view-trial-expired');
@@ -55,14 +60,13 @@ var TestRoute1 = React.createClass({
 var routes = (
     <Route handler={RootDefault}>
         <DefaultRoute name="welcome" handler={Welcome} />
-        <Route name="register" handler={RootDefault}>
+        <Route name="register" handler={Register}>
             <Route name="newPassword" path="new-password" handler={NewPassword}/>
             <Route name="updatePassword" path="update-password" handler={UpdatePassword}/>
             <Route name="applicantQuestions" path="applicant-questions" handler={ApplicantQuestions} />
             <Route name="lenderInfo" path="lender-info" handler={LenderInfo} />
             <Route name="applicantInfo" path="applicant-info" handler={ApplicantInfo} />
             <Route name="newLender" path="new-lender" handler={newLenderInvite} />
-            <Route name="findPlan" path="find-plan" handler={FindPlan}/>
         </Route>
         <Route name="dashboard" handler={Dashboard}>
 	        <Route name="trialExpired" path="trial-expired" handler={Modal}>
@@ -96,6 +100,11 @@ var routes = (
 	        <Route name="stripePayment" path="stripe-payment/:price" handler={StripePayment}/>
         </Route>
         <Route name="forgotPassword" path="forgot-password" handler={ForgotPassword} />
+        <Route name="pricing" handler={Pricing} />
+        <Route name="faq" handler={FAQ} />
+        <Route name="team" handler={Team} />
+        <Route name="legal" handler={Legal} />
+        <Route name="contact" handler={Contact} />
     </Route>
 );
 

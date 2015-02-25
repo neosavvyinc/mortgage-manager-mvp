@@ -86,7 +86,7 @@ var HeaderNav = React.createClass({
 		return (
             <div className="btn-group">
                 <div className="dropdown-toggle" data-toggle="dropdown" aria-expanded="false" onClick={this.onToggleDropdown}>
-                    <i className="fa fa-gear pad-top cog-icon"></i>
+                    <i className="fa fa-gear cog-icon"></i>
                 </div>
                 <ul className="dropdown-menu pull-right" role="menu" id="dropdown" style={{display: (this.state.displayDropdown ? 'block' : 'none')}}>
                     <li role="presentation" className="pointer"><a onClick={this.onViewProfile}>View Profile</a></li>

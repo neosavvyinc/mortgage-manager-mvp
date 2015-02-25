@@ -1,4 +1,25 @@
+@import "variables.less";
+
+@font-face {
+    font-family: OpenSans-Bold;
+    src: url('../fonts/OpenSans-Bold.ttf');
+}
+
+@font-face {
+    font-family: OpenSans-Light;
+    src: url('../fonts/OpenSans-Light.ttf');
+}
+
+@font-face {
+    font-family: OpenSans-Regular;
+    src: url('../fonts/OpenSans-Regular.ttf');
+}
+
 .no-pad { padding: 0; }
+.no-pad-left { padding-left: 0; }
+.no-pad-top { padding-top: 0; }
+.no-pad-right { padding-right: 0; }
+.no-pad-bottom { padding-bottom: 0; }
 
 .half-pad { padding: 5px; }
 .half-pad-top { padding-top: 5px; }
@@ -54,7 +75,47 @@
 .triple-gap-right { margin-right: 30px; }
 .triple-gap-left { margin-left: 30px; }
 
-.bordered-bottom{
+.bg-white {
+    background-color: white;
+}
+
+.blue {
+    color: @primary-blue;
+}
+
+.dark-blue {
+    color: @primary-dark-blue;
+}
+
+.bordered-bottom {
     padding-bottom: 20px;
     border-bottom: 1px solid #ECECEC;
 }
+
+.dotted-bottom {
+    padding-bottom: 10px;
+    padding-top: 10px;
+    border-bottom: 1px dotted #ECECEC;
+}
+
+.btn-dark-blue {
+    background-color:@primary-blue;
+    color: white;
+}
+
+.btn-dark-blue:hover {
+    background-color: @primary-dark-blue;
+    color: white;
+}
+
+.btn-light-blue {
+    background-color:@primary-light-blue;
+    color: white;
+}
+
+.btn-light-blue:hover {
+    background-color: @primary-blue;
+    color: white;
+}
+
+
