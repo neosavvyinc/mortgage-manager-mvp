@@ -21,39 +21,40 @@ var PricingOptions = React.createClass({
 		this.transitionTo('dashboardApplications');
 	},
 
+    back: function() {
+        this.transitionTo('dashboardApplications');
+    },
+
 	render: function() {
-		var yesIcon = <div><i className="fa fa-check green"></i> </div>,
-			noIcon = <div><span><i className="fa fa-times red"></i> </span> &nbsp;&nbsp;&nbsp;After 15 days</div>,
+		var yesIcon = <div><i className="fa fa-check text-success"></i> </div>,
 			tableFeatures = {
-				'Cost': ['Free', '$100'],
-				'Upload Documents': [noIcon, yesIcon],
-				'View Documents': [noIcon, yesIcon],
-				'Invite Lenders': [noIcon, yesIcon],
-				'': [<button className="blue align-right gap-top" onClick={this.onChooseTrial}> Choose Plan</button>,
-						<button className="blue align-right gap-top" onClick={this.onChoosePremium}> Choose Plan </button>
+                'Price After 15 Days': ['$100'],
+				'Upload Documents': [yesIcon],
+				'View Documents': [yesIcon],
+				'Invite Lenders': [yesIcon],
+				'': [
+						<button className="btn btn-sm btn-primary" onClick={this.onChoosePremium}> Choose Plan </button>
 					]
 			},
 			tableHeader = ((
 				<thead>
-					<th className="align-center">Features</th>
-					<th className="align-center">15 day Trial</th>
-					<th className="align-center">Premium</th>
+					<th className="text-center label-lg">Features</th>
+					<th className="text-center label-lg">Premium</th>
 				</thead>
 			)),
 			colSpacingArr = [
-				<col style={{width: '20%'}}/>,
-				<col style={{width: '50%'}}/>,
-				<col style={{width: '30%'}}/>
+				<col style={{width: '35%'}}/>,
+				<col style={{width: '65%'}}/>
 			];
 
 		return (
-			<div className="container gap-top">
-				<div className="row">
-					<div className="static">
-						<h1>Pricing</h1>
-						<div className="large">
-							<Table name="Pricing" colSpacing={colSpacingArr} header={tableHeader} table={tableFeatures}/>
-						</div>
+            <div className="container">
+                <div className="row">
+                    <h1 className="bordered-bottom gap-bottom"><i className="fa fa-chevron-left pointer" onClick={this.back}></i>  Pricing</h1>
+                    <div className="row triple-gap-top">
+                        <div className="col-md-8 col-md-offset-2 col-xs-12">
+						    <Table name="Pricing" colSpacing={colSpacingArr} textPosition="center" header={tableHeader} table={tableFeatures}/>
+                        </div>
 					</div>
 				</div>
 			</div>

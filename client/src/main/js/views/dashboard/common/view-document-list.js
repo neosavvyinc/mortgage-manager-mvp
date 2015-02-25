@@ -65,11 +65,11 @@ var Documents = React.createClass({
     },
 
     onNewDocumentUpload: function() {
-        this.transitionTo('uploadNewDocument', {appId: this.getParams().appId});
+        this.transitionTo('uploadNewDocument', {appId: this.getParams().appId, tabName: 'documents'});
     },
 
     onDocumentUpload: function(document) {
-        this.transitionTo('uploadExistingDocument', {appId: this.getParams().appId, tab: 0, documentId: document._id});
+        this.transitionTo('uploadExistingDocument', {appId: this.getParams().appId, documentId: document._id, tabName: 'documents'});
     },
 
 	onDocumentDownload: function(document) {
@@ -79,7 +79,7 @@ var Documents = React.createClass({
     onDocumentView: function(document) {
         var appId = this.getParams().appId,
             docId = document._id;
-        this.transitionTo('viewDocument', {appId: appId, tab: 0, documentId: docId});
+        this.transitionTo('viewDocument', {appId: appId, documentId: docId, tabName: 'documents'});
     },
 
     getDocuments: function() {
@@ -117,7 +117,7 @@ var Documents = React.createClass({
                         name: "requestDocument",
                         params: [{
                             appId: this.getParams().appId,
-                            tab: 0,
+                            tabName: 'documents',
                             docType: 'standard'
                         }]
                     }
@@ -128,7 +128,7 @@ var Documents = React.createClass({
                         name: 'requestDocument',
                         params: [{
                             appId: this.getParams().appId,
-                            tab: 0,
+                            tabName: 'documents',
                             docType: 'explanation'
                         }]
                     }
@@ -142,7 +142,7 @@ var Documents = React.createClass({
                         name: 'uploadNewDocument',
                         params: [{
                             appId: this.getParams().appId,
-                            tab: 0
+                            tabName: 'documents'
                         }],
 	                    disabled: tabsDisabled
                     },
@@ -161,7 +161,8 @@ var Documents = React.createClass({
 					    //Download a zip of all files
 					    window.open(Endpoints.APPLICATIONS.ONE.DOWNLOAD.URL.replace(':id', this.getParams().appId));
 				    }.bind(this),
-				    disabled: tabsDisabled
+				    disabled: tabsDisabled,
+                    tabName: 'documents'
 			    },
 			    icon: 'fa fa-download'
 		    });
@@ -173,36 +174,37 @@ var Documents = React.createClass({
                 disabled: true,
                 style: 'disabled hidden'
             }, uploadButton = {
-                style: 'btn blue block gap-right five sixths',
+                style: 'btn btn-sm btn-success',
 	            text: 'Upload ',
-	            disabled: false
+                disabled: false
             }, downloadButton = {
 	            disabled: true,
 	            style: 'disabled hidden'
             };
             
             if(document.uploadDate !== undefined) {
-	            uploadButton.text = '';
-	            if(this.state.disableButtons) {
-		            viewButton.disabled = true;
-		            downloadButton.disabled = true;
-		            uploadButton.disabled = true;
-		            viewButton.style =  'btn red disabled gap-right tooltip';
-		            downloadButton.style =  'btn green disabled gap-right tooltip';
-		            uploadButton.style =  'btn disabled blue gap-right tooltip';
-	            } else {
-		            viewButton.disabled = false;
-		            viewButton.style =  'btn red gap-right gap-bottom tooltip';
-		            uploadButton.style = 'btn blue gap-right gap-bottom tooltip';
-		            downloadButton.disabled = false;
-		            downloadButton.style =  'btn green tooltip';
-	            }
+                uploadButton.text = '';
+                if(this.state.disableButtons) {
+                    viewButton.disabled = true;
+                    downloadButton.disabled = true;
+                    uploadButton.disabled = true;
+                    viewButton.style =  'btn btn-sm btn-primary disabled ';
+                    downloadButton.style =  'btn btn-sm btn-success disabled';
+                    uploadButton.style =  'btn btn-sm btn-info disabled';
+                } else {
+                    viewButton.disabled = false;
+                    viewButton.style = 'btn btn-sm btn-primary';
+                    uploadButton.style = 'btn btn-sm btn-success';
+                    uploadButton.text = '';
+                    downloadButton.disabled = false;
+                    downloadButton.style = 'btn btn-sm btn-info';
+                }
             } else {
-	            uploadButton.style =  'btn blue block gap-right five sixths tooltip';
-	            if(this.state.disableButtons) {
-		            uploadButton.style += ' disabled';
-		            uploadButton.disabled = true;
-	            }
+                uploadButton.style =  'btn btn-sm btn-success';
+                if(this.state.disableButtons) {
+                    uploadButton.style += ' disabled';
+                    uploadButton.disabled = true;
+                }
             }
 
             // e.g. Wednesday, January 21, 2015 3:21 PM
@@ -216,12 +218,18 @@ var Documents = React.createClass({
 				        <th>{document.description}</th>
 				        <th>{document.requestDate}</th>
 				        <th>
-					        <button className={viewButton.style} disabled={viewButton.disabled} onClick={this.onDocumentView.bind(this, document)} data-tooltip="View">
-						        <i className="fa fa-binoculars"></i>
-					        </button>
-					        <button className={downloadButton.style} disabled={downloadButton.disabled} onClick={this.onDocumentDownload.bind(this, document)} data-tooltip="Download">
-						        <i className="fa fa-download"></i>
-					        </button>
+                            <ul className="list-inline">
+                                <li className={viewButton.disabled ? "" : "btn-group"}>
+                                    <button className={viewButton.style} disabled={viewButton.disabled} onClick={this.onDocumentView.bind(this, document)} data-toggle="tooltip" data-placement="bottom" title="View">
+                                        <i className="fa fa-binoculars"></i>
+                                    </button>
+                                </li>
+                                <li className={downloadButton.disabled ? "" : "btn-group"}>
+                                    <button className={downloadButton.style} disabled={downloadButton.disabled} onClick={this.onDocumentDownload.bind(this, document)} data-toggle="tooltip" data-placement="bottom" title="Download">
+                                        <i className="fa fa-download"></i>
+                                    </button>
+                                </li>
+                            </ul>
 				        </th>
 			        </tr>
 		        ));
@@ -233,15 +241,23 @@ var Documents = React.createClass({
 				        <th>{document.description}</th>
 				        <th>{document.requestDate}</th>
 				        <th>
-					        <button className={viewButton.style} disabled={viewButton.disabled} onClick={this.onDocumentView.bind(this, document)} data-tooltip="View">
-						        <i className="fa fa-binoculars"></i>
-					        </button>
-					        <button className={uploadButton.style} disabled={uploadButton.disabled} onClick={this.onDocumentUpload.bind(this, document)} data-tooltip="Upload">{uploadButton.text}
-						        <i className="fa fa-upload"></i>
-					        </button>
-					        <button className={downloadButton.style} disabled={downloadButton.disabled} onClick={this.onDocumentDownload.bind(this, document)} data-tooltip="Download">
-						        <i className="fa fa-download"></i>
-					        </button>
+                            <ul className="row">
+                                <li className={viewButton.style == "disabled hidden" ? "hidden" : "btn-group"}>
+                                    <button className={viewButton.style + (viewButton.disabled ? " disabled half-gap-right half-gap-bottom" : " btn-group half-gap-right half-gap-bottom")} disabled={viewButton.disabled} onClick={this.onDocumentView.bind(this, document)} data-toggle="tooltip" data-placement="bottom" title="View">
+                                        <i className="fa fa-binoculars"></i>
+                                    </button>
+                                </li>
+                                <li className="btn-group">
+                                    <button className={uploadButton.style + " half-gap-right half-gap-bottom"} disabled={uploadButton.disabled} onClick={this.onDocumentUpload.bind(this, document)} title="Upload">{uploadButton.text}
+                                        <i className="fa fa-upload"></i>
+                                    </button>
+                                </li>
+                                <li className={downloadButton.style == "disabled-hidden" ? "hidden" : "btn-group"}>
+                                    <button className={downloadButton.style + (downloadButton.disabled ? " disabled half-gap-bottom" : " btn-group half-gap-bottom")} disabled={downloadButton.disabled} onClick={this.onDocumentDownload.bind(this, document)} data-toggle="tooltip" data-placement="bottom" title="Download">
+                                        <i className="fa fa-download"></i>
+                                    </button>
+                                </li>
+                            </ul>
 				        </th>
 			        </tr>
 		        ));
@@ -249,16 +265,16 @@ var Documents = React.createClass({
         }, this);
 
         return (
-            <div className="container">
-                <div className="gap-top">
-                    <h2>Documents</h2>
-                    <Navigation navigationItems={actions}/>
-                    <table className="responsive">
-	                    <col style={otherColStyle}/>
-	                    <col style={otherColStyle}/>
-	                    <col style={otherColStyle}/>
-	                    <col style={otherColStyle}/>
-	                    <col style={actionStyle}/>
+            <div>
+                <h2>Documents</h2>
+                <Navigation navigationItems={actions}/>
+                <div className="table-responsive">
+                    <table className="table table-striped">
+                        <col style={otherColStyle}/>
+                        <col style={otherColStyle}/>
+                        <col style={otherColStyle}/>
+                        <col style={otherColStyle}/>
+                        <col style={actionStyle}/>
                         <thead>
                             <tr>
                                 <th>Document Name</th>

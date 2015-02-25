@@ -54,7 +54,7 @@ var UploadDocument = React.createClass({
         if(e) {
             e.preventDefault();
         }
-		this.transitionTo('dashboardDocuments', {appId: this.getParams().appId, tab:0});
+		this.transitionTo('dashboardAppDetails', {appId: this.getParams().appId, tabName: 'documents'});
 	},
 
 	updateDocName: function() {
@@ -126,51 +126,54 @@ var UploadDocument = React.createClass({
 	render: function() {
 		return (this.state.loader) ? (<div className="loader"> <i className="fa fa-spinner fa-pulse"></i> </div>) :
 			(
-				<div>
-					<form className="uploadComponent" encType="multipart/form-data">
-						<div onClick={this.close} title="Close" className="close">X</div>
-						<legend><h1>Upload Document</h1></legend>
-						<div className="row">
-							<div className="two fourths padded">
-								<input ref="docName" type="text" placeholder="Document Name" value={this.state.docName} onChange={this.updateDocName}/>
-							</div>
-							<div className="two fourths padded">
-								<span className="select-wrap">
-									<select value={this.state.type} ref="docType" onChange={this.updateDocType}>
-										<option value="Tax Document">Tax Document</option>
-										<option value="Income Document">Income Document</option>
-										<option value="Identity Document">Identity Document</option>
-									</select>
-								</span>
-							</div>
-						</div>
-						<div className="row">
-							<div className="three fourths padded">
-								<input type="text" placeholder="Choose File" value={this.state.fileName} disabled/>
-							</div>
-							<div className="one fourth padded upload">
-								<div className="fileUpload block button blue">
-									<span>Select File</span>
-									<input ref="uploadBtn" onChange={this.handleFileName} readOnly type="file" className="upload" />
-								</div>
-							</div>
-						</div>
-						<div className="row">
-							<div className="one fourth skip-two padded submit">
-								<button className="red block gap-right gap-bottom" onClick={this.close}>Close</button>
-							</div>
-							<div className="one fourth padded submit">
-								<button className="green block gap-right gap-bottom" onClick={this.onUploadDocument}>Upload</button>
-							</div>
-						</div>
-						<div className="row">
-							<div className="two fourths skip-one">
-								<MessageBox displayMessage={this.state.success} message={this.state.uploadMessage} type='success' />
-								<MessageBox displayMessage={this.state.error} message={this.state.uploadMessage} type='error' />
-							</div>
-						</div>
-					</form>
-				</div>
+                <div className="modal" style={{display: 'block'}}>
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                            <form encType="multipart/form-data">
+                                <div className="modal-header">
+                                    <button type="button" className="close" onClick={this.close}><span aria-hidden="true">&times;</span></button>
+                                    <h3 className="modal-title">Upload Document</h3>
+                                </div>
+                                <div className="modal-body">
+                                    <div className="row double-gap-top">
+                                        <div className="col-sm-6 col-xs-12 gap-bottom">
+                                            <input className="form-control" ref="docName" type="text" placeholder="Document Name" value={this.state.docName} onChange={this.updateDocName}/>
+                                        </div>
+                                        <div className="col-sm-6 col-xs-12 gap-bottom">
+                                            <select className="form-control" value={this.state.type} ref="docType" onChange={this.updateDocType}>
+                                                <option value="Tax Document">Tax Document</option>
+                                                <option value="Income Document">Income Document</option>
+                                                <option value="Identity Document">Identity Document</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div className="row double-gap-top double-gap-bottom">
+                                        <div className="col-sm-8 col-xs-12 gap-bottom">
+                                            <input className="form-control" type="text" placeholder="Choose File" value={this.state.fileName} disabled/>
+                                        </div>
+                                        <div className="col-sm-4 col-xs-12 gap-bottom">
+                                            <div className="fileUpload btn btn-primary col-xs-12">
+                                                <span>Select File</span>
+                                                <input ref="uploadBtn" onChange={this.handleFileName} readOnly type="file" className="upload" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="row">
+                                        <div className="col-xs-12">
+                                            <MessageBox displayMessage={this.state.success} message={this.state.uploadMessage} type='success' />
+                                            <MessageBox displayMessage={this.state.error} message={this.state.uploadMessage} type='error' />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="modal-footer">
+                                    <button type="button" className="btn btn-default" onClick={this.close}>Close</button>
+                                    <button type="button" className="btn btn-primary" onClick={this.onUploadDocument}>Upload</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
 			);
 	}
 });

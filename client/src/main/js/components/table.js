@@ -11,8 +11,6 @@ var Table = React.createClass({
 		Router.Navigation
 	],
 
-
-
 	render: function() {
 		var table = [];
 
@@ -20,18 +18,18 @@ var Table = React.createClass({
 
 			table.push((
 				<tr>
-					<td className="align-center">{key}</td>
+					<td className={this.props.textPosition ? "text-center" : ""}>{key}</td>
 					{value.map(function(val) {
-						return ((<td className="align-center">{val}</td>));
-					})}
+						return ((<td className={this.props.textPosition ? "text-center" : ""}>{val}</td>));
+					}.bind(this))}
 				</tr>
 			));
-		});
+		}.bind(this));
 
 		return (
-			<div className="container gap-right">
-				<table className="responsive">
-					{this.props.colSpacing.map(function(col) {
+            <div className="table-responsive">
+                <table className="table table-striped">
+                    {this.props.colSpacing.map(function(col) {
 						return (col);
 					})}
 					{this.props.header}
