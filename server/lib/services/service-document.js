@@ -29,6 +29,23 @@ exports.createDocument = function(doc, success, failure) {
 };
 
 /**
+ * Retrieves one document given a document ID
+ * @param docId
+ * @param success
+ * @param failure
+ */
+exports.getOneDocument = function(docId, success, failure){
+	var document = new documentModel();
+	document.retrieve({_id:docId}, function(docData){
+		if(docData.length){
+			success(docData[0].toObject());
+		} else {
+			failure(new Error('Error retrieving document'));
+		}
+	}, failure);
+};
+
+/**
  * Service that handles storing a document in mongo for a particular application
  * @param doc
  * @param success

@@ -13,6 +13,12 @@ var applicationService = require('./service-application');
 var documentService = require('./service-document');
 var mandrillService = require('./service-mandrill');
 
+exports.getOneApplication = function(appId, success, failure){
+	var application = new applicationModel();
+
+	application.retrieve({_id: appId}, success, failure);
+};
+
 exports.getUserApplications = function(uid, success, failure){
     var application = new applicationModel();
     var applicationLenders = new applicationLendersModel();
@@ -157,7 +163,7 @@ exports.createApplication = function(uid, success, failure) {
     async.series([
         function(done){
             userDetails.retrieve({_id: uid}, function(bDetails){
-                applicantDetails = bDetails[0];
+                applicantDetails = bDetails[0].toObject();
                 done();
             }, function(error){
                 done(error);

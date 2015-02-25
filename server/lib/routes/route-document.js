@@ -4,10 +4,13 @@ var path = require('path'),
 	_ = require('underscore'),
 	async = require('async'),
 	sizeOf = require('image-size'),
+	fs = require('fs'),
+	mkdirp = require('mkdirp'),
 	phantom = require('../phantomjs/phantom'),
 	commonUtils = require('../utils/common-utils'),
 	settings = require('../config/app/settings'),
 	documentService = require('../services/service-document'),
+	applicationService = require('../services/service-application'),
 	s3Service = require('../services/service-s3');
 
 /**
@@ -61,29 +64,95 @@ exports.insertDocumentEntry = function(req, res) {
 
 /**
  * Download all documents in a zip format
- * @param req
- * @param res
+ * @param s3Client
  */
-exports.downloadAllDocuments = function(req, res) {
-	var appId = req.params.appId;
+exports.downloadAllDocuments = function(s3Client) {
+	return function(req, res) {
+		var appId = req.params.appId,
+			downloadPath = __dirname.split('lib')[0] + 'uploads/' + appId + '/',
+			documentIds,
+			downloadDocs = [],
+			s3Toggle = settings.getConfig().s3.s3Toggle;
 
-	documentService.createDocumentZip(appId, function(zipUrl) {
-		res.download(zipUrl, 'MortgageDocuments.zip', function(error) {
-			settings.log.info('Downloading all documents for appId: ' + appId);
-			if (error) {
-				settings.log.fatal(error);
-			} else {
-				documentService.deleteZip(zipUrl, function() {
-					settings.log.info('Deleted zip file successfully');
-				}, function(error) {
-					settings.log.fatal(error);
+		async.series([
+			function(done) {
+				if(s3Toggle) {
+					applicationService.getOneApplication({_id: appId}, function (application) {
+						documentIds = application[0].documents;
+						done();
+					}, done);
+				} else {
+					done();
+				}
+			},
+			function(done) {
+				if(s3Toggle) {
+					async.each(documentIds, function (docId, done1) {
+						documentService.getOneDocument({_id: docId}, function (docData) {
+							if (docData.url) {
+								downloadDocs.push({
+									name: docData.name,
+									id: docId
+								});
+							}
+							done1();
+						}, done1);
+					}, function (error) {
+						if (error) {
+							done(error);
+						} else {
+							done();
+						}
+					});
+				} else {
+					done();
+				}
+			},
+			function(done) {
+				if(s3Toggle) {
+					if (!fs.existsSync(downloadPath)) {
+						mkdirp(downloadPath);
+					}
+					async.each(downloadDocs, function (document, done) {
+						var documentPath = downloadPath + document.id + '.pdf';
+						s3Service.getFile(s3Client, appId, document.id, documentPath, done, done);
+					}, function (error) {
+						if (error) {
+							done(error);
+						} else {
+							done();
+						}
+					});
+				} else {
+					done();
+				}
+			},
+			function(done) {
+				documentService.createDocumentZip(appId, function (zipUrl) {
+					res.download(zipUrl, 'MortgageDocuments.zip', function (error) {
+						if (error) {
+							done(error);
+						} else {
+							documentService.deleteZip(zipUrl, function () {
+								settings.log.info('Deleted zip file successfully');
+								done();
+							}, function (error) {
+								done(error);
+							});
+						}
+					});
 				});
 			}
+		], function(error) {
+			if(error) {
+				settings.log.fatal(error);
+				res.status(500).send({message: 'Internal Server Error'});
+			} else {
+				settings.log.info('Downloading all documents for appId: ' + appId);
+				res.status(200).end();
+			}
 		});
-	}, function(error) {
-		settings.log.fatal(error);
-		res.status(500).send({message: 'Internal Server Error'});
-	});
+	};
 };
 
 /**

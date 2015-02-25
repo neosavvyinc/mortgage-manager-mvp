@@ -103,7 +103,7 @@ module.exports = function(router, passport, s3Client) {
 	router.route('/applications/:appId/download')
 		.all(_isAuthenticated)
 		.all(_checkTrialExpired)
-		.get(documentRoute.downloadAllDocuments);
+		.get(documentRoute.downloadAllDocuments(s3Client));
 
 	//Route for handling one specific document in an application
 	router.route('/applications/:appId/documents/:docId')

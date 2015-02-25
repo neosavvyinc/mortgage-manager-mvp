@@ -159,7 +159,7 @@ var Documents = React.createClass({
 			    tabLink: {
 				    callback: function() {
 					    //Download a zip of all files
-					    window.open(EndPoints.APPLICATIONS.ONE.DOWNLOAD.URL.replace(':id', this.getParams().appId));
+					    window.open(Endpoints.APPLICATIONS.ONE.DOWNLOAD.URL.replace(':id', this.getParams().appId));
 				    }.bind(this),
 				    disabled: tabsDisabled
 			    },
