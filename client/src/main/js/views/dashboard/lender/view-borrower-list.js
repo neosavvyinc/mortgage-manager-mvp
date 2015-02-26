@@ -46,27 +46,25 @@ var BorrowerContacts = React.createClass({
             ));
         }, this);
         return (
-            <div className="container">
-                <div className="gap-top">
-                    <h2>Lenders</h2>
-                    <Navigation navigationItems={actions}/>
-                    <div className="table-responsive">
-                        <table className="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Applicant's Name</th>
-                                    <th>Address</th>
-                                    <th>Email</th>
-                                    <th>Phone</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                        {borrowersTable.map(function(borrower) {
-                            return (borrower);
-                        })}
-                            </tbody>
-                        </table>
-                    </div>
+            <div className="gap-top">
+                <h2>Borrowers</h2>
+                <Navigation navigationItems={actions}/>
+                <div className="table-responsive">
+                    <table className="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Applicant's Name</th>
+                                <th>Address</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                    {borrowersTable.map(function(borrower) {
+                        return (borrower);
+                    })}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         );

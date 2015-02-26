@@ -141,7 +141,7 @@ var ApplicantQuestions = React.createClass({
                         </div>
                     </div>
                 </div>
-                <div className="row">
+                <div className="row triple-gap-bottom">
                     <div className="col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 col-xs-12">
                         <div className="row">
                             <MessageBox displayMessage={this.state.questionsError} message={this.state.errorText} type='error' />

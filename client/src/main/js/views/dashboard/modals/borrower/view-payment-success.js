@@ -24,18 +24,25 @@ var PaymentSuccess = React.createClass({
 
 	render: function() {
 		return (
-			<div>
-				<form className="uploadComponent">
-					<div onClick={this.close} title="Close" className="close">X</div>
-					<legend><h1>Your Payment was successful!</h1></legend>
-					<div className="row">
-						Thank you for your support. You can now access all the premium features.
-					</div>
-					<div className="row">
-						<button className="one third red block gap-right gap-bottom gap-top" onClick={this.close}>Close</button>
-					</div>
-				</form>
-			</div>
+            <div className="modal" style={{display: 'block'}}>
+                <div className="modal-dialog modal-md">
+                    <div className="modal-content">
+                        <form>
+                            <div className="modal-header">
+                                <button type="button" className="close" onClick={this.close}><span aria-hidden="true">&times;</span></button>
+                                <h3 className="modal-title">Your Payment was successful!</h3>
+                            </div>
+                            <div className="modal-body text-center">
+                                <i className="fa fa-check-circle-o icon-xxl dark-green"></i>
+                                <p className="gap-top">Thank you for your support. You can now access all the premium features</p>
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-dark-blue" onClick={this.close}>Close</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
 		);
 	}
 });

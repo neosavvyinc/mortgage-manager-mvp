@@ -117,7 +117,7 @@ var RequestDocument = React.createClass({
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-default" onClick={this.close}>Close</button>
-                                <button type="button" className="btn btn-primary" onClick={this.onRequestDocument}>Request</button>
+                                <button type="button" className="btn btn-dark-blue" onClick={this.onRequestDocument}>Request</button>
                             </div>
                         </form>
                     </div>

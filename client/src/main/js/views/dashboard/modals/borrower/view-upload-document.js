@@ -152,7 +152,7 @@ var UploadDocument = React.createClass({
                                             <input className="form-control" type="text" placeholder="Choose File" value={this.state.fileName} disabled/>
                                         </div>
                                         <div className="col-sm-4 col-xs-12 gap-bottom">
-                                            <div className="fileUpload btn btn-primary col-xs-12">
+                                            <div className="fileUpload btn btn-dark-blue col-xs-12">
                                                 <span>Select File</span>
                                                 <input ref="uploadBtn" onChange={this.handleFileName} readOnly type="file" className="upload" />
                                             </div>
@@ -168,7 +168,7 @@ var UploadDocument = React.createClass({
                                 </div>
                                 <div className="modal-footer">
                                     <button type="button" className="btn btn-default" onClick={this.close}>Close</button>
-                                    <button type="button" className="btn btn-primary" onClick={this.onUploadDocument}>Upload</button>
+                                    <button type="button" className="btn btn-dark-blue" onClick={this.onUploadDocument}>Upload</button>
                                 </div>
                             </form>
                         </div>

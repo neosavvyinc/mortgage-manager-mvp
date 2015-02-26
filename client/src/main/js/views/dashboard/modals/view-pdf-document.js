@@ -100,8 +100,8 @@ var ViewPdf = React.createClass({
 			<div>
                 <div className="row gap-top">
                     <div className="col-sm-4 col-sm-offset-4 col-xs-12">
-                        <div className="btn btn-default col-xs-6" onClick={this.close}><i className="fa fa-chevron-left"></i> Close</div>
-                        <div className="btn btn-primary pull-right col-xs-6" onClick={this.download}>Download <i className="fa fa-download pointer"></i></div>
+                        <div className="btn btn-default col-xs-6 pointer" onClick={this.close}><i className="fa fa-chevron-left"></i> Close</div>
+                        <div className="btn btn-dark-blue pull-right col-xs-6 pointer" onClick={this.download}>Download <i className="fa fa-download"></i></div>
                     </div>
                 </div>
 				<div className="row">
