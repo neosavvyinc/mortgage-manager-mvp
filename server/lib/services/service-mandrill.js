@@ -34,7 +34,7 @@ exports.sendInvite = function(lenderInfo, sender, appId, token, callback) {
 				}
 			],
 			from_email: mandrillConfig.sourceEmail,
-			from_name: 'DoubleApp Team',
+			from_name: 'ShuttleDoc Team',
 			subject: 'You have received an invitation',
 			merge_vars: [{
 				rcpt: lenderInfo.email,
@@ -88,7 +88,7 @@ exports.forgotPassword = function(email, userDetails, token, callback) {
 				}
 			],
 			from_email: mandrillConfig.sourceEmail,
-			from_name: 'DoubleApp Team',
+			from_name: 'ShuttleDoc Team',
 			subject: 'Password Reset',
 			merge_vars: [{
 				rcpt: email,
@@ -103,7 +103,7 @@ exports.forgotPassword = function(email, userDetails, token, callback) {
 					},
 					{
 						name: "sender",
-						content: 'DoubleApp Team'
+						content: 'ShuttleDoc Team'
 					},
 					{
 						name: "redirectURL",
@@ -136,7 +136,7 @@ exports.sendPassword = function(userInfo, password, callback){
                 }
             ],
             from_email: mandrillConfig.sourceEmail,
-            from_name: 'DoubleApp Team',
+            from_name: 'ShuttleDoc Team',
             subject: 'New Account Password',
             merge_vars: [{
                 rcpt: userInfo.email,

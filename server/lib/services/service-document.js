@@ -201,7 +201,6 @@ exports.deleteZip = function(zipUrl, success, failure) {
  * Generates a new list of documents depending on the applicants
  * @param applicationId
  * @param applicantDetails
- * @param coapplicantDetails
  */
 exports.generateDocumentList = function(applicationId, applicantDetails){
 
@@ -218,18 +217,6 @@ exports.generateDocumentList = function(applicationId, applicantDetails){
         requestDate: currentDate
 	});
 
-	// W2 - coapplicant
-	//if(coapplicantDetails){
-	//	documents.push({
-	//		appId: applicationId,
-	//		name: coapplicantDetails.firstName + ' ' + coapplicantDetails.lastName + '\'s ' + 'W2\'s',
-	//		description: 'W2 for the past two years',
-	//		type: 'Tax Document',
-	//		amount: 2,
-     //       requestDate: currentDate
-     //   });
-	//}
-
 	// Paystubs - applicant
 	documents.push({
 		appId: applicationId,
@@ -239,18 +226,6 @@ exports.generateDocumentList = function(applicationId, applicantDetails){
 		amount: 2,
         requestDate: currentDate
     });
-
-	// Paystubs - coapplicant
-	//if(coapplicantDetails){
-	//	documents.push({
-	//		appId: applicationId,
-	//		name: coapplicantDetails.firstName + ' ' + coapplicantDetails.lastName + '\'s ' + 'Paystubs',
-	//		description: 'Two recent paystubs for sources of income',
-	//		type: 'Income Document',
-	//		amount: 2,
-     //       requestDate: currentDate
-     //   });
-	//}
 
 	// Renting
 	if(applicantDetails.renting){
@@ -301,18 +276,6 @@ exports.generateDocumentList = function(applicationId, applicantDetails){
             requestDate: currentDate
         });
 	}
-
-	// Financial Assets
-	//if(applicantDetails.financialAssets){
-	//	documents.push({
-	//		appId: applicationId,
-	//		name: 'SEP-IRA / 401k',
-	//		description: 'Two recent statements from the account or institution',
-	//		type: 'Income Document',
-	//		amount: 1,
-     //       requestDate: currentDate
-     //   });
-	//}
 
 	// OfferLetter
 	documents.push({
