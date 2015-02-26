@@ -161,7 +161,7 @@ exports.sendPassword = function(userInfo, password, callback){
             }]
         }
     }, function(error) {
-        if (error){
+        if (error) {
             callback(error);
         } else {
             callback();

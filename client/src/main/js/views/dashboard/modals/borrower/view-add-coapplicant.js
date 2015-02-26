@@ -47,7 +47,6 @@ var AddCoapplicant = React.createClass({
     },
 
     onNewCoapplicant: function(){
-        debugger;
         this.transitionTo('viewProfile');
     },
 
@@ -78,8 +77,8 @@ var AddCoapplicant = React.createClass({
                             ApplicationActions.addCoapplicant();
                         }.bind(this), function(error){
                             this.setState({
-                                applicantInfoError: true,
-                                errorText: error.statusText
+                                error: true,
+                                errorText: error.responseJSON.message
                             });
                         }.bind(this));
 
@@ -87,8 +86,8 @@ var AddCoapplicant = React.createClass({
                 }.bind(this),
                 function(error){
                     this.setState({
-                        applicantInfoError: true,
-                        errorText: error.responseJSON.message
+                        error: true,
+                        errorText: error.message
                     });
                 }.bind(this)
             );

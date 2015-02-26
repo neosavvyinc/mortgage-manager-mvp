@@ -29,8 +29,8 @@ exports.updateUser = function(req, res) {
         } else {
             async.series([
                 function(done){
-                    userDetailsService.getUserDetails({phone:  userObject.phone}, function(userDetailsData){
-                        if(userDetailsData[0] && userDetailsData[0].phone === userObject.phone){
+                    userDetailsService.getUserDetails({phone:  userObject.phone}, function(userDetailsData) {
+                        if(userDetailsData[0] && userDetailsData[0].pUID !== userObject.pUID && userDetailsData[0].phone === userObject.phone){
                             done({message: 'This phone number is already in use'});
                         } else {
                             done();
@@ -110,8 +110,8 @@ exports.addCoApplicant = function(req, res) {
             }
         ],function(error){
             if(error) {
-                settings.log.fatal(error.message);
-                res.status(500).send(error.message);
+                settings.log.fatal(error);
+                res.status(500).send(error);
             } else {
                 settings.log.info('Successfully added co-applicant for user with uid ' + uid);
                 res.send({message: 'Success'});
