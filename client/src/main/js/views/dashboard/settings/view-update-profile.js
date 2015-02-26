@@ -82,7 +82,7 @@ var ApplicantInfo = React.createClass({
 
     onUpdateCoapplicant: function(){
         this.setState({
-            hasCoapplicant: ApplicationStore.hasCoapplicant()
+            hasCoapplicant: !ApplicationStore.hasCoapplicant()
         });
     },
 	
