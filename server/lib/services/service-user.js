@@ -228,13 +228,15 @@ exports.updatePassword = function(uid, userDetails, success, failure) {
 			var isValid = validationUtils.validateUser(userDetails);
 			if(isValid.errors.length){
 				done({message: 'The password didn\'t match the criteria.'});
-			} else {}
+			} else {
+				done();
+			}
 		},
 		function(done) {
 			//Get the user from mongo
 			user.retrieve({_id: uid}, function(doc) {
 				userDoc = doc[0].toObject();
-				if(userDetails.oldPassword !== null && !_isValidPassword(userDetails.oldPassword, userDoc.password)) {
+				if(userDetails.oldPassword !== undefined && !_isValidPassword(userDetails.oldPassword, userDoc.password)) {
 					done(new Error('Password entered is incorrect'));
 				} else {
 					done();
