@@ -19,6 +19,7 @@ var NewPassword = require('../views/registration/view-new-password');
 var UpdatePassword = require('../views/registration/view-update-password');
 var ChangePassword = require('../views/dashboard/settings/view-change-password');
 var ApplicantInfo = require('../views/registration/view-applicant-info');
+var CoApplicantInfo = require('../views/registration/view-coapplicant-info');
 var LenderInfo = require('../views/registration/view-lender-info');
 var ApplicantQuestions = require('../views/registration/view-questions');
 var newLenderInvite = require('../views/registration/view-new-lender-invite');
@@ -66,6 +67,7 @@ var routes = (
             <Route name="applicantQuestions" path="applicant-questions" handler={ApplicantQuestions} />
             <Route name="lenderInfo" path="lender-info" handler={LenderInfo} />
             <Route name="applicantInfo" path="applicant-info" handler={ApplicantInfo} />
+            <Route name="coApplicantInfo" path="coapplicant-info" handler={CoApplicantInfo} />
             <Route name="newLender" path="new-lender" handler={newLenderInvite} />
         </Route>
         <Route name="dashboard" handler={Dashboard}>

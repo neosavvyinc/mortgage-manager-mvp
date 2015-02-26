@@ -30,20 +30,3 @@ var Header = React.createClass({
 });
 
 module.exports = Header;
-
-/**
- <div className="navbar navbar-default">
- <div className="container">
- <div className="col-xs-6">
- <div className="nav navbar-nav">
- <a href="http://www.neosavvy.com/" className="navbar-brand"> Neosavvy, Inc.</a>
- </div>
- </div>
- <div className="col-xs-6">
- <div className="nav navbar-nav pull-right">
- <Settings/>
- </div>
- </div>
- </div>
- </div>
- **/

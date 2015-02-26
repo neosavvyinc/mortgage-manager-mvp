@@ -30,7 +30,6 @@ applicationModel = ApplicationModel.prototype;
  * @param failure
  */
 applicationModel.insertNewApp = function(applicantDetails,
-										 coapplicantDetails,
 										 success,
 										 failure) {
 	var appId = commonUtils.generateId(),
@@ -49,11 +48,6 @@ applicationModel.insertNewApp = function(applicantDetails,
 				documents: [],
 				status: 0
 			});
-			if(coapplicantDetails){
-				_.extend(item, {
-					coUID: coapplicantDetails._id
-				});
-			}
 			application.insert(item, done, done);
 		},
 		function(done) {
@@ -63,19 +57,19 @@ applicationModel.insertNewApp = function(applicantDetails,
 				applicantDetails = applicantDetails.toObject();
 			}
 			userDetails.update(applicantDetails, {_id: applicantDetails._id}, null, done, done);
-		},
-		function(done) {
-			if(coapplicantDetails) {
-				//Update the coApplicant details with the new appId
-				coapplicantDetails.appId.push(appId);
-				if (coapplicantDetails.toObject !== undefined) {
-					coapplicantDetails = coapplicantDetails.toObject();
-				}
-				userDetails.update(coapplicantDetails, {_id: coapplicantDetails._id}, null, done, done);
-			} else {
-				done();
-			}
 		}
+		//function(done) {
+		//	if(coapplicantDetails) {
+		//		//Update the coApplicant details with the new appId
+		//		coapplicantDetails.appId.push(appId);
+		//		if (coapplicantDetails.toObject !== undefined) {
+		//			coapplicantDetails = coapplicantDetails.toObject();
+		//		}
+		//		userDetails.update(coapplicantDetails, {_id: coapplicantDetails._id}, null, done, done);
+		//	} else {
+		//		done();
+		//	}
+		//}
 	], function(error) {
 		if(error !== undefined) {
 			failure(error);

@@ -203,7 +203,7 @@ exports.deleteZip = function(zipUrl, success, failure) {
  * @param applicantDetails
  * @param coapplicantDetails
  */
-exports.generateDocumentList = function(applicationId, applicantDetails, coapplicantDetails){
+exports.generateDocumentList = function(applicationId, applicantDetails){
 
 	var documents = [],
         currentDate = new Date();
@@ -219,16 +219,16 @@ exports.generateDocumentList = function(applicationId, applicantDetails, coappli
 	});
 
 	// W2 - coapplicant
-	if(coapplicantDetails){
-		documents.push({
-			appId: applicationId,
-			name: coapplicantDetails.firstName + ' ' + coapplicantDetails.lastName + '\'s ' + 'W2\'s',
-			description: 'W2 for the past two years',
-			type: 'Tax Document',
-			amount: 2,
-            requestDate: currentDate
-        });
-	}
+	//if(coapplicantDetails){
+	//	documents.push({
+	//		appId: applicationId,
+	//		name: coapplicantDetails.firstName + ' ' + coapplicantDetails.lastName + '\'s ' + 'W2\'s',
+	//		description: 'W2 for the past two years',
+	//		type: 'Tax Document',
+	//		amount: 2,
+     //       requestDate: currentDate
+     //   });
+	//}
 
 	// Paystubs - applicant
 	documents.push({
@@ -241,16 +241,16 @@ exports.generateDocumentList = function(applicationId, applicantDetails, coappli
     });
 
 	// Paystubs - coapplicant
-	if(coapplicantDetails){
-		documents.push({
-			appId: applicationId,
-			name: coapplicantDetails.firstName + ' ' + coapplicantDetails.lastName + '\'s ' + 'Paystubs',
-			description: 'Two recent paystubs for sources of income',
-			type: 'Income Document',
-			amount: 2,
-            requestDate: currentDate
-        });
-	}
+	//if(coapplicantDetails){
+	//	documents.push({
+	//		appId: applicationId,
+	//		name: coapplicantDetails.firstName + ' ' + coapplicantDetails.lastName + '\'s ' + 'Paystubs',
+	//		description: 'Two recent paystubs for sources of income',
+	//		type: 'Income Document',
+	//		amount: 2,
+     //       requestDate: currentDate
+     //   });
+	//}
 
 	// Renting
 	if(applicantDetails.renting){
@@ -303,16 +303,16 @@ exports.generateDocumentList = function(applicationId, applicantDetails, coappli
 	}
 
 	// Financial Assets
-	if(applicantDetails.financialAssets){
-		documents.push({
-			appId: applicationId,
-			name: 'SEP-IRA / 401k',
-			description: 'Two recent statements from the account or institution',
-			type: 'Income Document',
-			amount: 1,
-            requestDate: currentDate
-        });
-	}
+	//if(applicantDetails.financialAssets){
+	//	documents.push({
+	//		appId: applicationId,
+	//		name: 'SEP-IRA / 401k',
+	//		description: 'Two recent statements from the account or institution',
+	//		type: 'Income Document',
+	//		amount: 1,
+     //       requestDate: currentDate
+     //   });
+	//}
 
 	// OfferLetter
 	documents.push({
