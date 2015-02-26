@@ -11,7 +11,8 @@ Schemas.UserSchema = new Schema({
 	password: { type: String, required: true },
 	type: { type: String, required: true },
     hasUserDetails: { type: Boolean, required: true, default: false },
-	pricingPlan: { type: String, required: true, default: 'trial' }
+	pricingPlan: { type: String, required: true, default: 'trial' },
+	pendingReset: { type: Boolean, default: false }
 });
 
 Schemas.PasswordResetSchema = new Schema({
