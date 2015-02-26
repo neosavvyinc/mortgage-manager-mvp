@@ -105,9 +105,9 @@ exports.addCoApplicant = function(req, res) {
                 userDetailsService.createCoApplicant(uid, coapplicant, done, done);
             }
         ],function(error){
-            if(error){
+            if(error) {
                 settings.log.fatal(error.message);
-                res.status(500).send({message: 'Internal Server Error'});
+                res.status(500).send(error.message);
             } else {
                 settings.log.info('Successfully added co-applicant for user with uid ' + uid);
                 res.send({message: 'Success'});
