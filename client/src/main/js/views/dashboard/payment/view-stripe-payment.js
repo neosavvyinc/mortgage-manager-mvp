@@ -6,6 +6,7 @@ var React = require('react'),
 	Constants = require('../../../constants/constants'),
 	MessageBox = require('../../../components/message-box'),
 	ModelPayment = require('../../../models/model-payment'),
+	PaymentActions =  require('../../../actions/action-payment'),
 	uuid = require('node-uuid');
 
 var StripePayment = React.createClass({
@@ -48,7 +49,7 @@ var StripePayment = React.createClass({
 
 		this.setState({
 			submitButtonClass: 'col-sm-6 col-xs-12 btn btn-md btn-dark-blue disabled',
-			spinnerClass: '',
+			spinnerClass: 'larger',
 			showMessage: false,
 			disablePayment: true
 		});
@@ -57,7 +58,7 @@ var StripePayment = React.createClass({
 			ModelPayment.createToken(this.refs.paymentForm.getDOMNode(), function (status, response) {
 				if (response.error) {
 					this.setState({
-						submitButtonClass: 'one third button turquoise',
+						submitButtonClass: 'col-sm-6 col-xs-12 btn btn-md btn-dark-blue',
 						spinnerClass: 'hidden',
 						showMessage: true,
 						messageText: response.error.message,
@@ -70,6 +71,7 @@ var StripePayment = React.createClass({
 								showMessage: false,
 								spinnerClass: 'hidden'
 							});
+							PaymentActions.upgrade();
 							this.transitionTo('paymentSuccess');
 						}.bind(this),
 						function(error) {
@@ -84,7 +86,7 @@ var StripePayment = React.createClass({
 			}.bind(this));
 		} else {
 			this.setState({
-				submitButtonClass: 'one third button turquoise',
+				submitButtonClass: 'col-sm-6 col-xs-12 btn btn-md btn-dark-blue',
 				spinnerClass: 'hidden',
 				showMessage: true,
 				messageText: 'Invalid Credit card number',
@@ -116,7 +118,7 @@ var StripePayment = React.createClass({
                                 <input ref="expMonth" className="gap-bottom form-control" type="text" maxLength="2"  placeholder="MM" data-stripe="exp-month"/>
                             </div>
                             <div className="col-xs-3">
-                                <input ref="expYear" className="gap-bottom form-control" type="text" maxLength="4" placeholder="YY"  data-stripe="exp-year"/>
+                                <input ref="expYear" className="gap-bottom form-control" type="text" maxLength="4" placeholder="YYYY"  data-stripe="exp-year"/>
                             </div>
                             <div className="col-xs-6">
                                 <input className="gap-bottom form-control" type="password" maxLength="4"  placeholder="CVC" data-stripe="cvc"/>
@@ -155,7 +157,10 @@ var StripePayment = React.createClass({
                         <div className="row">
                             <div className="col-xs-12">
                                 <MessageBox displayMessage={this.state.showMessage} message={this.state.messageText} type={this.state.messageType} />
-                                <button className={this.state.submitButtonClass} disabled={this.state.disablePayment} onClick={this.onMakePayment}>Make Payment</button>
+                                <div className="row">
+		                            <button className={this.state.submitButtonClass} disabled={this.state.disablePayment} onClick={this.onMakePayment}>Make Payment</button>
+		                            <h4 className={this.state.spinnerClass}>&nbsp;<i className="fa fa-spinner fa-pulse"></i></h4>
+                                </div>
                             </div>
                         </div>
                     </div>

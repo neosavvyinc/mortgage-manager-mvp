@@ -8,12 +8,15 @@ var User = require('../models/model-user');
 var UserStore = require('../stores/store-user');
 var UserActions = require('../actions/action-user');
 
+var PaymentStore = require('../stores/store-payment');
+
 var HeaderNav = React.createClass({
 
 	mixins: [
 		Router.State,
 		Router.Navigation,
-		Reflux.listenTo(UserStore, 'onLogoutTransition')
+		Reflux.listenTo(UserStore, 'onLogoutTransition'),
+		Reflux.listenTo(PaymentStore, 'onPremium')
 	],
 
 	getInitialState: function() {
@@ -26,7 +29,7 @@ var HeaderNav = React.createClass({
 	componentDidMount: function() {
 		User.getUserDetails(UserStore.getCurrentUserId()).then(function (user) {
 			if (user.type === 'borrower' && user.pricingPlan === 'trial') {
-				this.setState({isTrial: true});
+				this.setState({isTrial: true, userType: 'borrower'});
 			}
 		}.bind(this));
 	},
@@ -34,6 +37,13 @@ var HeaderNav = React.createClass({
 	onLogout: function(){
 		User.logOut().then(function() {
 			UserActions.logout();
+		});
+	},
+
+	onPremium: function() {
+		this.setState({
+			isTrial: false,
+			upgraded: true
 		});
 	},
 
@@ -75,12 +85,20 @@ var HeaderNav = React.createClass({
 		var upgradeClass,
 			viewPaymentsClass;
 
-		if(this.state.isTrial) {
-			upgradeClass = '';
-			viewPaymentsClass = 'hidden disabled';
+		if(this.state.userType === 'borrower') {
+			if (this.state.isTrial) {
+				upgradeClass = '';
+				viewPaymentsClass = 'hidden disabled';
+			} else if(this.state.upgraded) {
+				upgradeClass = 'hidden disabled';
+				viewPaymentsClass = 'hidden disabled';
+			} else {
+				upgradeClass = 'hidden disabled';
+				viewPaymentsClass = '';
+			}
 		} else {
 			upgradeClass = 'hidden disabled';
-			viewPaymentsClass = '';
+			viewPaymentsClass = 'hidden disabled';
 		}
 
 		return (
