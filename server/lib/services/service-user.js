@@ -6,10 +6,10 @@ var userDetailsModel = require('../db/models/model-user-details').Model;
 var passwordResetModel = require('../db/models/model-password-reset').Model;
 var lenderInvitesModel = require('../db/models/model-lender-invites').Model;
 var commonUtils = require('../utils/common-utils');
+var validationUtils = require('../utils/validation-utils');
 var mandrillService = require('./service-mandrill');
 var bCrypt = require('bcrypt-nodejs');
 var moment = require('moment/');
-var validationUtils = require('../utils/validation-utils');
 
 /**
  * Function that gets the user document based on conditions specified.
@@ -265,6 +265,7 @@ exports.updatePassword = function(uid, userDetails, success, failure) {
 		function(done) {
 			//Update user with new password
 			userDoc.password = userDetails.password;
+			userDoc.pendingReset = false;
 			user.insertOrUpdate(userDoc, {_id: userDoc._id}, function() {
 				done();
 			}, done);

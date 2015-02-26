@@ -33,6 +33,8 @@ var Welcome = React.createClass({
                             if(!UserStore.getCurrentUser().hasUserDetails) {
                                 var transitionRoute = UserStore.getCurrentUser().type === 'lender' ? 'lenderInfo' : 'applicantQuestions';
                                 transition.redirect(transitionRoute);
+                            } else if(UserStore.getCurrentUser().pendingReset) {
+	                            transition.redirect('change-password');
                             } else {
                                 transition.redirect('dashboardApplications');
                             }
@@ -68,7 +70,6 @@ var Welcome = React.createClass({
             } else {
                 User.emailExists(this.refs.borrowerEmail.getDOMNode().value).then(
                     function(){
-                        debugger;
                         BorrowerActions.newBorrower(this.refs.borrowerEmail.getDOMNode().value);
                     }.bind(this),
                     function(error){

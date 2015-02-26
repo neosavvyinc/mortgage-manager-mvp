@@ -83,7 +83,8 @@ exports.createCoApplicant = function(userId, coapplicant, success, failure) {
 			user.insertOrUpdate({
                 email: coapplicant.email,
                 password: newPassword,
-                type: coapplicant.type
+                type: coapplicant.type,
+				pendingReset: true
             }, {email: coapplicant.email}, function(coapp) {
 				createdCoApp = coapp;
 				done();
