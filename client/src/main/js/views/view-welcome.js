@@ -70,6 +70,7 @@ var Welcome = React.createClass({
             } else {
                 User.emailExists(this.refs.borrowerEmail.getDOMNode().value).then(
                     function(){
+                        debugger;
                         BorrowerActions.newBorrower(this.refs.borrowerEmail.getDOMNode().value);
                     }.bind(this),
                     function(error){

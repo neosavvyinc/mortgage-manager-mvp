@@ -49,10 +49,10 @@ exports.createUser = function(userObject, callback) {
  */
 exports.emailExists = function(email, success, failure){
 	var user = new userModel();
-	user.findOneDocument({email: email}, function() {
+	user.findOneDocument({email: email}, function(doc) {
 			failure(new Error('The user already exists'));
 		},
-		function() {
+		function(err) {
 			success();
 		});
 };
