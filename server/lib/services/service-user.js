@@ -9,6 +9,7 @@ var commonUtils = require('../utils/common-utils');
 var mandrillService = require('./service-mandrill');
 var bCrypt = require('bcrypt-nodejs');
 var moment = require('moment/');
+var validationUtils = require('../utils/validation-utils');
 
 /**
  * Function that gets the user document based on conditions specified.
@@ -224,11 +225,19 @@ exports.updatePassword = function(uid, userDetails, success, failure) {
 
 	async.series([
 		function(done) {
+			var isValid = validationUtils.validateUser(userDetails);
+			if(isValid.errors.length){
+				done({message: 'The password didn\'t match the criteria.'});
+			} else {
+				done();
+			}
+		},
+		function(done) {
 			//Get the user from mongo
 			user.retrieve({_id: uid}, function(doc) {
 				userDoc = doc[0].toObject();
-				if(userDetails.oldPassword !== null && !_isValidPassword(userDetails.oldPassword, userDoc.password)) {
-					done(new Error('Password entered is incorrect.'));
+				if(userDetails.oldPassword !== undefined && !_isValidPassword(userDetails.oldPassword, userDoc.password)) {
+					done(new Error('Password entered is incorrect'));
 				} else {
 					done();
 				}
@@ -239,7 +248,7 @@ exports.updatePassword = function(uid, userDetails, success, failure) {
 			passwordReset.retrieve({_id: uid}, function(doc) {
 				if(doc.length > 0) {
 					passwordResetObject = doc[0].toObject();
-					if(userDetails.token !== null && passwordResetObject.token !== userDetails.token) {
+					if(userDetails.token !== undefined && passwordResetObject.token !== userDetails.token) {
 						done(new Error('Token mismatch'));
 					} else {
 						done();
