@@ -87,7 +87,7 @@ var AddCoapplicant = React.createClass({
                 function(error){
                     this.setState({
                         error: true,
-                        errorText: error.message
+                        errorText: error.responseJSON.message
                     });
                 }.bind(this)
             );
