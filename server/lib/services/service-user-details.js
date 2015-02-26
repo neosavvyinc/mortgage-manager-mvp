@@ -6,8 +6,12 @@ var async = require('async'),
 	userDetailsModel = require('../db/models/model-user-details').Model,
 	userModel = require('../db/models/model-user').Model,
 	lenderInvitesModel = require('../db/models/model-lender-invites').Model,
-	applicationLendersModel = require('../db/models/model-application-lenders').Model,
-    mandrillService = require('./service-mandrill');
+    applicationLendersModel = require('../db/models/model-application-lenders').Model,
+    documentsModel = require('../db/models/model-document').Model,
+    applicationModel = require('../db/models/model-application').Model,
+    applicationService = require('./service-application'),
+    mandrillService = require('./service-mandrill'),
+    documentService = require('./service-document');
 
 
 /**
@@ -67,7 +71,11 @@ exports.createCoApplicant = function(userId, coapplicant, success, failure) {
         newPassword,
         user = new userModel(),
         userDetails = new userDetailsModel(),
-        coAppEmail = coapplicant.email;
+        documents = new documentsModel(),
+        application = new applicationModel(),
+        coAppEmail = coapplicant.email,
+        docs;
+
     async.series([
 		function(done) {
 			//Create coapplicant credentials in user schema
@@ -75,7 +83,8 @@ exports.createCoApplicant = function(userId, coapplicant, success, failure) {
 			user.insertOrUpdate({
                 email: coapplicant.email,
                 password: newPassword,
-                type: coapplicant.type
+                type: coapplicant.type,
+				pendingReset: true
             }, {email: coapplicant.email}, function(coapp) {
 				createdCoApp = coapp;
 				done();
@@ -107,6 +116,16 @@ exports.createCoApplicant = function(userId, coapplicant, success, failure) {
             user.insertOrUpdate({hasUserDetails: true}, {email: coAppEmail}, function(coapp){
                 done();
             }, done);
+        },
+        function(done){
+            docs = documentService.generateDocumentList(coapplicant.appId[0], coapplicant);
+            documents.insertNewDocument(docs, done, done);
+        },
+        function(done){
+            applicationService.insertDocuments(docs, done, done);
+        },
+        function(done){
+            application.updateApplication(coapplicant.appId[0], {coUID: coapplicant._id}, done, done);
         }
 	], function(error) {
 		if(error) {

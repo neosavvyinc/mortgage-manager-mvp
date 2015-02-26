@@ -6,7 +6,8 @@ var BorrowerActions = Reflux.createActions([
     "submitQuestions",
     "changeBorrowerType",
     "submitBasicInfo",
-    "resetBorrower"
+    "resetBorrower",
+    "addCoapplicant"
 ]);
 
 module.exports = BorrowerActions;

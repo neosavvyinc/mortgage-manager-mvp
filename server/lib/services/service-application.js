@@ -156,7 +156,6 @@ exports.createApplication = function(uid, success, failure) {
     var documents = new documentModel();
 
     var applicantDetails,
-        coapplicantDetails = null,
         docs,
         applicationId;
 
@@ -169,24 +168,14 @@ exports.createApplication = function(uid, success, failure) {
                 done(error);
             });
         },
-        function(done){
-            if(applicantDetails.coUID){
-                userDetails.retrieve({_id: applicantDetails.coUID}, function (coAppDetails) {
-                    coapplicantDetails = coAppDetails[0];
-                    done();
-                }, done);
-            } else {
-                done();
-            }
-        },
         function(done) {
-            application.insertNewApp(applicantDetails, coapplicantDetails, function(appUUID){
+            application.insertNewApp(applicantDetails, function(appUUID){
                 applicationId = appUUID;
                 done();
             }, done);
         },
         function(done) {
-            docs = documentService.generateDocumentList(applicationId, applicantDetails, coapplicantDetails);
+            docs = documentService.generateDocumentList(applicationId, applicantDetails);
             documents.insertNewDocument(docs, done, done);
         },
         function(done){
@@ -208,6 +197,7 @@ exports.insertDocuments = function(documents, success, failure){
     if(documents.length < 1){
         failure(new Error('The document array was empty'));
     }
+
     application.update({documents: _.pluck(documents, '_id')}, {_id: documents[0].appId}, success, failure);
 };
 

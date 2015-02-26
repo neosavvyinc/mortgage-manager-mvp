@@ -11,7 +11,8 @@ Schemas.UserSchema = new Schema({
 	password: { type: String, required: true },
 	type: { type: String, required: true },
     hasUserDetails: { type: Boolean, required: true, default: false },
-	pricingPlan: { type: String, required: true, default: 'trial' }
+	pricingPlan: { type: String, required: true, default: 'trial' },
+	pendingReset: { type: Boolean, default: false }
 });
 
 Schemas.PasswordResetSchema = new Schema({
@@ -30,6 +31,7 @@ Schemas.UserInfoSchema = new Schema({
 	state: { type: String, required: true },
 	zip: { type: String, required: true },
 	phone: { type: String, required: true, unique: true },
+    isPrimaryApplicant: { type: Boolean, required: true, default: false },
 	coUID: { type: String, ref: 'UserSchema' },
 	created: { type: Date, required: true },
 	lastLogin: { type: Date, required: true },

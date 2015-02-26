@@ -2,7 +2,8 @@ var Reflux = require('reflux');
 
 var ApplicationActions = Reflux.createActions([
     "selectApplication",
-    "reSendInvite"
+    "reSendInvite",
+    "addCoapplicant"
 ]);
 
 module.exports = ApplicationActions;

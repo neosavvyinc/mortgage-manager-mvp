@@ -19,6 +19,7 @@ var NewPassword = require('../views/registration/view-new-password');
 var UpdatePassword = require('../views/registration/view-update-password');
 var ChangePassword = require('../views/dashboard/settings/view-change-password');
 var ApplicantInfo = require('../views/registration/view-applicant-info');
+var CoApplicantInfo = require('../views/registration/view-coapplicant-info');
 var LenderInfo = require('../views/registration/view-lender-info');
 var ApplicantQuestions = require('../views/registration/view-questions');
 var newLenderInvite = require('../views/registration/view-new-lender-invite');
@@ -31,6 +32,7 @@ var ApplicationDetails = require('../views/dashboard/common/view-application-det
 var RequestDocument = require('../views/dashboard/modals/lender/view-lender-request-document');
 var ForgotPassword = require('../views/registration/view-forgot-password');
 var ViewProfile = require('../views/dashboard/settings/view-update-profile');
+var addCoapplicant = require('../views/dashboard/modals/borrower/view-add-coapplicant');
 var PricingOptions = require('../views/dashboard/payment/view-pricing-options');
 var StripePayment = require('../views/dashboard/payment/view-stripe-payment');
 var TrialExpired = require('../views/dashboard/modals/borrower/view-trial-expired');
@@ -66,6 +68,7 @@ var routes = (
             <Route name="applicantQuestions" path="applicant-questions" handler={ApplicantQuestions} />
             <Route name="lenderInfo" path="lender-info" handler={LenderInfo} />
             <Route name="applicantInfo" path="applicant-info" handler={ApplicantInfo} />
+            <Route name="coApplicantInfo" path="coapplicant-info" handler={CoApplicantInfo} />
             <Route name="newLender" path="new-lender" handler={newLenderInvite} />
         </Route>
         <Route name="dashboard" handler={Dashboard}>
@@ -76,7 +79,11 @@ var routes = (
 		        <DefaultRoute handler={PaymentSuccess}/>
 	        </Route>
 	        <Route name="changePassword" path="change-password" handler={ChangePassword}/>
-	        <Route name="viewProfile" path="view-profile" handler={ViewProfile} />
+	        <Route name="viewProfile" path="view-profile" handler={ViewProfile}>
+                <Route name="addCoapplicant" path="add-coapplicant" handler={Modal}>
+                    <DefaultRoute handler={addCoapplicant} />
+                </Route>
+            </Route>
             <Route name="dashboardApplications" path="applications" handler={Applications} />
             <Route name="dashboardAppDetails" path="applications/:appId/:tabName" handler={ApplicationDetails}>
                 <Route name="uploadNewDocument" path="upload" handler={Modal}>
