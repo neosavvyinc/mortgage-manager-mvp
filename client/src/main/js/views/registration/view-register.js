@@ -18,7 +18,8 @@ var Dashboard = React.createClass({
 
     mixins: [
         Router.State,
-        Router.Navigation
+        Router.Navigation,
+        Reflux.listenTo(UserStore, "onAuthentication")
     ],
 
     getInitialState: function(){
@@ -29,11 +30,21 @@ var Dashboard = React.createClass({
 
     componentDidMount: function() {
         User.isAuthenticated(UserStore.getCurrentUserId()).then(
-            function() {
-                this.setState({
-                    isAuthenticated: true
-                });
+            function(res) {
+                if(res.isAuthenticated){
+                    this.setState({
+                        isAuthenticated: true
+                    });
+                }
             }.bind(this));
+    },
+
+    onAuthentication: function() {
+        if(UserStore.getCurrentUser() != {}){
+            this.setState({
+                isAuthenticated: true
+            });
+        }
     },
 
     render: function(){

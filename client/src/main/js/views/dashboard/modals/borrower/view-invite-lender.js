@@ -105,7 +105,7 @@ var UploadDocument = React.createClass({
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-default" onClick={this.close}>Close</button>
-                                <button type="button" className="btn btn-primary" onClick={this.onInviteLender}>Send</button>
+                                <button type="button" className="btn btn-dark-blue" onClick={this.onInviteLender}>Send</button>
                             </div>
                         </form>
                     </div>

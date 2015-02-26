@@ -20,7 +20,7 @@ var ChangePassword = React.createClass({
 			passwordError: false,
 			messageText: '',
 			messageType: 'error',
-			continueClass: 'btn btn-md btn-primary col-xs-12',
+			continueClass: 'btn btn-md btn-dark-blue col-xs-12',
 			loginClass: 'hidden'
 		};
 	},
@@ -50,7 +50,7 @@ var ChangePassword = React.createClass({
 					passwordError: true,
 					messageText: 'Password successfully updated. Click below to login',
 					messageType: 'success',
-					loginClass: 'btn btn-md btn-primary col-xs-12',
+					loginClass: 'btn btn-md btn-dark-blue col-xs-12',
 					continueClass: 'hidden'
 				});
 			}.bind(this), function(error) {

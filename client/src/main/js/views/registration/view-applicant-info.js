@@ -251,7 +251,7 @@ var ApplicantInfo = React.createClass({
                         </div>
                     </form>
                 </div>
-                <div className="row">
+                <div className="row triple-gap-bottom">
                     <div className="col-xs-12">
                         <div className="row">
                             <MessageBox gridPos="col-sm-6 col-xs-12" displayMessage={this.state.applicantInfoError} message={this.state.errorText} type='error' />

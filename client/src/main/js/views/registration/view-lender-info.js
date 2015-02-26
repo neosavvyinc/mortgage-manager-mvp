@@ -164,7 +164,7 @@ var LenderInfo = React.createClass({
         );
 
         return (
-            <div className="container container-color fill">
+            <div className="container">
                 <div className="row">
                     <h2 className="col-xs-12 bordered-bottom double-gap-bottom">{this.state.applicantType}'s Name</h2>
                     {lenderName}
@@ -177,7 +177,7 @@ var LenderInfo = React.createClass({
                     <h2 className="col-xs-12 bordered-bottom double-gap-bottom">{this.state.applicantType}'s Contact Information</h2>
                     {lenderContact}
                 </div>
-                <div className="row">
+                <div className="row triple-gap-bottom">
                     <div className="col-xs-12">
                         <div className="row">
                             <MessageBox gridPos="col-sm-6 col-xs-12" displayMessage={this.state.applicantInfoError} message={this.state.errorText} type='error' />

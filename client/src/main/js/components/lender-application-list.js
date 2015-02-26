@@ -51,7 +51,7 @@ var LenderApplications = React.createClass({
                         <th>{app.lastModified || "None"}</th>
                         <th>
                             <div className="row">
-	                            <button className="btn btn-primary btn-xs" onClick={this.onApplicationSelect.bind(null, app)}>View <i className="fa fa-binoculars"></i></button>
+	                            <button className="btn btn-dark-blue btn-xs" onClick={this.onApplicationSelect.bind(null, app)}>View <i className="fa fa-binoculars"></i></button>
                             </div>
                         </th>
                     </tr>
