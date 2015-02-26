@@ -236,7 +236,6 @@ exports.updatePassword = function(uid, userDetails, success, failure) {
 			//Get the user from mongo
 			user.retrieve({_id: uid}, function(doc) {
 				userDoc = doc[0].toObject();
-				console.log('userDetails.oldPassword '+userDetails.oldPassword);
 				if(userDetails.oldPassword !== undefined && !_isValidPassword(userDetails.oldPassword, userDoc.password)) {
 					done(new Error('Password entered is incorrect'));
 				} else {
