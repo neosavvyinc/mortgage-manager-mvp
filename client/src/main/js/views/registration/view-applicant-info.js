@@ -70,6 +70,7 @@ var ApplicantInfo = React.createClass({
         if(validateApplicantInfo(this.state.applicantType, applicantInfo)) {
             applicantInfo.phone = applicantInfo.phone.replace(/\D/g, '');
             delete applicantInfo.email;
+            applicantInfo.isPrimaryApplicant = true;
             applicantInfo.isSelfEmployed = this.state.currentBorrower.isSelfEmployed;
             applicantInfo.recentlyMarried = this.state.currentBorrower.recentlyMarried;
             applicantInfo.renting = this.state.currentBorrower.renting;

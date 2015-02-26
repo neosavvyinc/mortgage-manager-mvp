@@ -8,6 +8,7 @@ var async = require('async'),
 	lenderInvitesModel = require('../db/models/model-lender-invites').Model,
     applicationLendersModel = require('../db/models/model-application-lenders').Model,
     documentsModel = require('../db/models/model-document').Model,
+    applicationModel = require('../db/models/model-application').Model,
     applicationService = require('./service-application'),
     mandrillService = require('./service-mandrill'),
     documentService = require('./service-document');
@@ -71,6 +72,7 @@ exports.createCoApplicant = function(userId, coapplicant, success, failure) {
         user = new userModel(),
         userDetails = new userDetailsModel(),
         documents = new documentsModel(),
+        application = new applicationModel(),
         coAppEmail = coapplicant.email,
         docs;
 
@@ -115,11 +117,14 @@ exports.createCoApplicant = function(userId, coapplicant, success, failure) {
             }, done);
         },
         function(done){
-            docs = documentService.generateDocumentList(coapplicant.appId, coapplicant);
+            docs = documentService.generateDocumentList(coapplicant.appId[0], coapplicant);
             documents.insertNewDocument(docs, done, done);
         },
         function(done){
             applicationService.insertDocuments(docs, done, done);
+        },
+        function(done){
+            application.updateApplication(coapplicant.appId[0], {coUID: coapplicant._id}, done, done);
         }
 	], function(error) {
 		if(error) {

@@ -32,6 +32,7 @@ var ApplicationDetails = require('../views/dashboard/common/view-application-det
 var RequestDocument = require('../views/dashboard/modals/lender/view-lender-request-document');
 var ForgotPassword = require('../views/registration/view-forgot-password');
 var ViewProfile = require('../views/dashboard/settings/view-update-profile');
+var addCoapplicant = require('../views/dashboard/modals/borrower/view-add-coapplicant');
 var PricingOptions = require('../views/dashboard/payment/view-pricing-options');
 var StripePayment = require('../views/dashboard/payment/view-stripe-payment');
 var TrialExpired = require('../views/dashboard/modals/borrower/view-trial-expired');
@@ -78,7 +79,11 @@ var routes = (
 		        <DefaultRoute handler={PaymentSuccess}/>
 	        </Route>
 	        <Route name="changePassword" path="change-password" handler={ChangePassword}/>
-	        <Route name="viewProfile" path="view-profile" handler={ViewProfile} />
+	        <Route name="viewProfile" path="view-profile" handler={ViewProfile}>
+                <Route name="addCoapplicant" path="add-coapplicant" handler={Modal}>
+                    <DefaultRoute handler={addCoapplicant} />
+                </Route>
+            </Route>
             <Route name="dashboardApplications" path="applications" handler={Applications} />
             <Route name="dashboardAppDetails" path="applications/:appId/:tabName" handler={ApplicationDetails}>
                 <Route name="uploadNewDocument" path="upload" handler={Modal}>

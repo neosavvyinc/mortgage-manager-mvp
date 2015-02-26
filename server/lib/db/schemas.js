@@ -30,6 +30,7 @@ Schemas.UserInfoSchema = new Schema({
 	state: { type: String, required: true },
 	zip: { type: String, required: true },
 	phone: { type: String, required: true, unique: true },
+    isPrimaryApplicant: { type: Boolean, required: true, default: false },
 	coUID: { type: String, ref: 'UserSchema' },
 	created: { type: Date, required: true },
 	lastLogin: { type: Date, required: true },

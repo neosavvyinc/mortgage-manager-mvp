@@ -3,7 +3,8 @@ var Reflux = require('reflux');
 var User = require('../models/model-user');
 var ApplicationActions = require('../actions/action-application');
 
-var _application = {};
+var _application = {},
+    _hasCoapplicant = false;
 
 var ApplicationStore = Reflux.createStore({
 
@@ -16,6 +17,15 @@ var ApplicationStore = Reflux.createStore({
 
     onReSendInvite: function(){
         this.trigger();
+    },
+
+    onAddCoapplicant: function(){
+        _hasCoapplicant = true;
+        this.trigger();
+    },
+
+    hasCoapplicant: function(){
+        return _hasCoapplicant;
     },
 
     getCurrentApplication: function(){

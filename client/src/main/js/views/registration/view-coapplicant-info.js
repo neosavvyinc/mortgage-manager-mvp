@@ -74,24 +74,28 @@ var CoApplicantInfo = React.createClass({
         };
 
         if(validateApplicantInfo(this.state.applicantType, applicantInfo)) {
-            if(this.state.applicantType == "Applicant") {
-                applicantInfo.phone = applicantInfo.phone.replace(/\D/g, '');
-                delete applicantInfo.email;
-
-            } else {
-                applicantInfo.type = "borrower";
-                applicantInfo.appId = this.state.applicantData.appId[0];
-
-                User.addCoapplicant(this.state.currentUserId, applicantInfo).then(function(){
-                    this.transitionTo('dashboardApplications');
-                }.bind(this), function(error){
+            applicantInfo.phone = applicantInfo.phone.replace(/\D/g, '');
+            applicantInfo.type = "borrower";
+            applicantInfo.appId = this.state.applicantData.appId;
+            User.emailExists(this.refs.email.getDOMNode().value).then(
+                function(){
+                    User.addCoapplicant(this.state.currentUserId, applicantInfo).then(function(){
+                        this.transitionTo('dashboardApplications');
+                    }.bind(this), function(error){
+                        this.setState({
+                            applicantInfoError: true,
+                            errorText: error.responseJSON.message
+                        });
+                    }.bind(this));
+                }.bind(this),
+                function(error){
                     this.setState({
                         applicantInfoError: true,
                         errorText: error.responseJSON.message
                     });
-                }.bind(this));
+                }.bind(this)
+            );
 
-            }
         } else {
             this.setState({
                 applicantInfoError: true,

@@ -3,11 +3,14 @@
 var React = require('react'),
 	Router = require('react-router'),
 	Reflux = require('reflux'),
+    RouterHandle = Router.RouteHandler,
+    Link = Router.Link,
 	Constants = require('../../../constants/constants'),
 	MessageBox = require('../../../components/message-box'),
 	User = require('../../../models/model-user'),
-	BorrowerActions = require('../../../actions/action-borrower'),
 	UserStore = require('../../../stores/store-user'),
+    ApplicationActions = require('../../../actions/action-application'),
+    ApplicationStore = require('../../../stores/store-application'),
 	Location = Router.HistoryLocation;
 
 var validateApplicantInfo = function(applicantInfo){
@@ -25,7 +28,8 @@ var ApplicantInfo = React.createClass({
 
 	mixins: [
 		Router.State,
-		Router.Navigation
+		Router.Navigation,
+        Reflux.listenTo(ApplicationStore, "onUpdateCoapplicant")
 	],
 
 	statics: {
@@ -44,7 +48,8 @@ var ApplicantInfo = React.createClass({
 		return {
 			messageText: '',
 			showMessage: false,
-			messageType: 'error'
+			messageType: 'error',
+            hasCoapplicant: UserStore.getCurrentUser().hasCoapplicant || true
 		};
 	},
 
@@ -59,6 +64,9 @@ var ApplicantInfo = React.createClass({
 			this.refs.zip.getDOMNode().value = userDetails.zip;
 			this.refs.phone.getDOMNode().value = userDetails.phone;
 			this.refs.email.getDOMNode().value = userDetails.email;
+            if(userDetails.coUID == undefined && userDetails.isPrimaryApplicant){
+                ApplicationActions.addCoapplicant();
+            }
 		}.bind(this), function(error) {
 			this.setState({
 				showMessage: true,
@@ -71,6 +79,12 @@ var ApplicantInfo = React.createClass({
 	back: function() {
 		this.transitionTo('dashboardApplications');
 	},
+
+    onUpdateCoapplicant: function(){
+        this.setState({
+            hasCoapplicant: ApplicationStore.hasCoapplicant()
+        });
+    },
 	
 	onSubmitInfo: function(e){
 		e.preventDefault();
@@ -88,7 +102,6 @@ var ApplicantInfo = React.createClass({
 		};
 
 		if(validateApplicantInfo(applicantInfo)) {
-			//TODO - probably dissuade the user from using dots or have separate fields for each part of the phone number
 			applicantInfo.phone = applicantInfo.phone.replace(/\D/g, '');
 
 			User.update(UserStore.getCurrentUserId(), applicantInfo).then(function () {
@@ -116,7 +129,10 @@ var ApplicantInfo = React.createClass({
 	render: function() {
 		return (
             <div className="container">
-                <h1 className="bordered-bottom gap-bottom"><i className="fa fa-chevron-left pointer" onClick={this.back}></i> Edit Profile</h1>
+                <div className="row bordered-bottom gap-bottom">
+                    <h1 className="col-sm-9 col-xs-12"><i className="fa fa-chevron-left pointer" onClick={this.back}></i> Edit Profile</h1>
+                    <Link className={"col-sm-3 col-xs-12 pull-right btn btn-md btn-dark-blue dashboard-header-btn " + (this.state.hasCoapplicant ? "hidden" : "")} to="addCoapplicant"><i className="fa fa-plus-square-o"></i>&nbsp;&nbsp;Add Coapplicant</Link>
+                </div>
                 <div className="row">
                     <h3 className="col-xs-12">Name</h3>
                     <form className="row">
@@ -176,9 +192,8 @@ var ApplicantInfo = React.createClass({
                             <button className="btn btn-md btn-dark-blue col-sm-6 col-xs-12" onClick={this.onSubmitInfo}>Continue</button>
                         </div>
                     </div>
-
-
                 </div>
+                <RouterHandle />
             </div>
 		)
 	}
