@@ -45,7 +45,7 @@ var ChangePassword = React.createClass({
 				messageType: 'error'
 			});
 		} else {
-			User.updatePassword(UserStore.getCurrentUserId(), oldPassword, newPassword, null).then(function() {
+			User.updatePassword(UserStore.getCurrentUserId(), oldPassword, newPassword, undefined).then(function() {
 				this.setState({
 					passwordError: true,
 					messageText: 'Password successfully updated. Click below to login',
@@ -84,6 +84,15 @@ var ChangePassword = React.createClass({
                                 <div className="form-group">
                                     <input className="form-control" type="password" ref="confirmPassword" placeholder="Confirm Password"/>
                                 </div>
+	                            <div className="alert alert-info">
+		                            <p>Your password should have at least:</p>
+		                            <ul>
+			                            <li>Eight characters</li>
+			                            <li>One lower case</li>
+			                            <li>One upper case</li>
+			                            <li>One special character (!@#~$%^&)</li>
+		                            </ul>
+	                            </div>
                                 <MessageBox displayMessage={this.state.passwordError} message={this.state.messageText} type={this.state.messageType} />
                                 <button className={this.state.continueClass} onClick={this.onCheckPassword}>Continue</button>
                                 <button className={this.state.loginClass} onClick={this.onUpdatedPassword}>Login</button>

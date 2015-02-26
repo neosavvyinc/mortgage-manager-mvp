@@ -109,7 +109,7 @@ exports.addCoApplicant = function(req, res) {
                 });
             }
         ],function(error){
-            if(error){
+            if(error) {
                 settings.log.fatal(error.message);
                 res.status(500).send(error.message);
             } else {

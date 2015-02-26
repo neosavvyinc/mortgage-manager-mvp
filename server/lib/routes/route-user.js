@@ -181,7 +181,7 @@ exports.registerUser = function(passport) {
  *
  */
 exports.emailExists = function(req, res){
-	var email = req.param('email');
+	var email = req.params.email;
 
 	userService.emailExists(email, function() {
 		res.send({message: 'Success'});

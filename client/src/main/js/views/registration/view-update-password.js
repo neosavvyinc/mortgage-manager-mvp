@@ -40,7 +40,7 @@ var UpdatePassword = React.createClass({
 			});
 		} else {
 			if(this.state.token) {
-				User.updatePassword(this.getQuery().uid, null, newPassword, this.state.token).then(function() {
+				User.updatePassword(this.getQuery().uid, undefined, newPassword, this.state.token).then(function() {
 					this.setState({
 						updatedPassword: true,
 						passwordError: true,
@@ -61,12 +61,16 @@ var UpdatePassword = React.createClass({
 	render: function() {
 		return this.state.updatedPassword ? (
             <div className="container">
-                <div className="row">
-                    <div className="one fourth">
-                        <MessageBox displayMessage={this.state.passwordError} message={this.state.messageText} type={this.state.messageType} />
-                        <button className="btn btn-lg btn-dark-blue col-xs-12" onClick={this.onUpdatedPassword}>Login</button>
-                    </div>
-                </div>
+	            <div className="col-xs-12 col-sm-6 col-md-4 col-sm-offset-3 col-md-offset-4">
+		            <div className="panel panel-default">
+			            <div className="row">
+			                <div className="one fourth">
+			                    <MessageBox displayMessage={this.state.passwordError} message={this.state.messageText} type={this.state.messageType} />
+			                    <button className="btn btn-lg btn-dark-blue col-xs-12" onClick={this.onUpdatedPassword}>Login</button>
+			                </div>
+		                </div>
+		            </div>
+	            </div>
             </div>
 		) : (
             <div className="container">
@@ -85,6 +89,15 @@ var UpdatePassword = React.createClass({
                                     <label>Confirm New Password</label>
                                     <input className="form-control" type="password" ref="confirmPassword" placeholder="Confirm Password"/>
                                 </div>
+	                            <div className="alert alert-info">
+		                            <p>Your password should have at least:</p>
+		                            <ul>
+			                            <li>Eight characters</li>
+			                            <li>One lower case</li>
+			                            <li>One upper case</li>
+			                            <li>One special character (!@#~$%^&)</li>
+		                            </ul>
+	                            </div>
                                 <MessageBox displayMessage={this.state.passwordError} message={this.state.messageText} type={this.state.messageType} />
                                 <button className="btn btn-lg btn-dark-blue col-xs-12" onClick={this.onCheckPassword}>Continue</button>
                             </div>
