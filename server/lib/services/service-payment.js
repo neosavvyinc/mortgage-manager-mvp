@@ -22,7 +22,7 @@ var async = require('async'),
 exports.makePayment = function(uid, token, card, amount, idempotentToken, success, failure) {
 	var charge,
 		chargeError,
-		coAppId,
+		userToUpdate,
 		payingUser,
 		payment = new paymentModel(),
 		cardInstance = new cardModel(),
@@ -109,16 +109,23 @@ exports.makePayment = function(uid, token, card, amount, idempotentToken, succes
 		function(done) {
 			//Get the coapplicant userId
 			userDetails.retrieve({_id: uid}, function(docs) {
-				coAppId = docs[0].toObject().coUID;
+				userToUpdate = docs[0].toObject().coUID;
 				done();
 			}, done);
 		},
 		function(done) {
-			if(coAppId === undefined) {
+			//If the coapplicant is paying, primary applicant should also have premium
+			userDetails.retrieve({coUID: uid}, function(docs) {
+				userToUpdate = docs[0].toObject()._id;
+				done();
+			}, done);
+		},
+		function(done) {
+			if(userToUpdate === undefined) {
 				done();
 			} else {
 				//Change plan for coapplicant to premium
-				user.update({pricingPlan: 'premium'}, {_id: coAppId}, null, done, done);
+				user.update({pricingPlan: 'premium'}, {_id: userToUpdate}, null, done, done);
 			}
 		}
 	], function(error) {

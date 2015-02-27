@@ -33,10 +33,8 @@ var Welcome = React.createClass({
                             if(!UserStore.getCurrentUser().hasUserDetails) {
                                 var transitionRoute = UserStore.getCurrentUser().type === 'lender' ? 'lenderInfo' : 'applicantQuestions';
                                 transition.redirect(transitionRoute);
-                            } else if(UserStore.getCurrentUser().pendingReset) {
-	                            transition.redirect('change-password');
                             } else {
-                                transition.redirect('dashboardApplications');
+	                            transition.redirect('dashboardApplications');
                             }
                         }
                     }
@@ -128,8 +126,8 @@ var Welcome = React.createClass({
         if(!UserStore.getCurrentUser().hasUserDetails){
             var transitionRoute = UserStore.getCurrentUser().type == 'lender' ? 'lenderInfo' : 'applicantQuestions' ;
             this.transitionTo(transitionRoute);
-        } else if(this.getQuery().changePassword){
-            this.transitionTo('changePassword');
+        } else if(this.getQuery().changePassword || UserStore.getCurrentUser().pendingReset) {
+	        this.transitionTo('changePassword');
         } else {
             this.transitionTo('dashboardApplications');
         }
