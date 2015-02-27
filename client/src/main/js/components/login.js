@@ -1,3 +1,5 @@
+'use strict';
+
 var React = require('react');
 var Link = require('react-router').Link;
 
@@ -18,8 +20,8 @@ var Login = React.createClass({
     getInitialState: function(){
         return {
             loginError: false,
-            loginErrorText: "There was an error with your credentials. Please try again."
-        }
+            loginErrorText: 'There was an error with your credentials. Please try again.'
+        };
     },
 
     getDefaultProps: function(){
