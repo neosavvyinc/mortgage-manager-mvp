@@ -4,6 +4,7 @@ var util = require('util'),
 	_ = require('underscore'),
 	async = require('async'),
 	baseModel = require('./model-base'),
+    userModel = require('./model-user').Model,
 	applicationLendersModel = require('./model-application-lenders').Model,
 	Schemas = require('../schemas').Schemas,
 	userDetailsSchema = Schemas.UserInfoSchema,
@@ -29,7 +30,8 @@ userDetailsModel = UserDetailsModel.prototype;
  * @private
  */
 userDetailsModel.insertOrUpdate = function(item, success, failure) {
-	var applicationLenders = new applicationLendersModel();
+	var applicationLenders = new applicationLendersModel(),
+        user = new userModel();
 	var currentDate = new Date(),
 		docs;
 
@@ -51,16 +53,18 @@ userDetailsModel.insertOrUpdate = function(item, success, failure) {
 					function(cb){
 						userDetailsModel.insert(item, cb, cb);
 					},
-					function(cb){
-						if(item.appId){
-							applicationLenders.insert({
-								lenderId: item._id,
-								appId: [item.appId]
-							}, cb, cb);
-						} else {
-							cb();
-						}
-					}
+                    function(cb){
+                        user.retrieve({_id: item._id}, function(user){
+                            if(user[0].type === 'lender' && item.appId.length){
+                                applicationLenders.insert({
+                                    lenderId: item._id,
+                                    appId: item.appId[0]
+                                }, cb, cb);
+                            } else {
+                                cb();
+                            }
+                        });
+                    }
 				],function(error){
 					if(error){
 						done(error);
