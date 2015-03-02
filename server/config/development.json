@@ -29,5 +29,8 @@
       "secretAccessKey": "akme2ne24o46t1GL5djOUcv+H7+0o94tBny/cseB",
       "sslEnabled": true
     }
+  },
+  "zillow": {
+	  "zwsid": "X1-ZWz1ay675605cb_a1050"
   }
 }
