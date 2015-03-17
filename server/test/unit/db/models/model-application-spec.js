@@ -81,7 +81,7 @@ describe('modelApplication',  function() {
 				failure('insert fail');
 			});
 
-			application.insertNewApp({dummy: 'dummy'}, {dummyTwo: 'dummy2'}, function() {
+			application.insertNewApp({dummy: 'dummy'}, function() {
 				expect().toHaveNotExecuted('should not have succeeded');
 			}, function(error) {
 				expect(error).toBe('insert fail');
@@ -106,7 +106,7 @@ describe('modelApplication',  function() {
 				failure('update fail');
 			});
 
-			application.insertNewApp({appId: []}, {dummy: 'dummy2'}, function() {
+			application.insertNewApp({appId: []}, function() {
 				expect().toHaveNotExecuted('should not have succeeded');
 			}, function(error) {
 				expect(error).toBe('update fail');
@@ -120,8 +120,7 @@ describe('modelApplication',  function() {
 				lastModified: 'date',
 				pUID: 'uId',
 				documents: [],
-				status: 0,
-				coUID: 'couId'
+				status: 0
 			};
 
 			spyOn(commonUtils, 'generateId').andReturn('fakeId');
@@ -155,9 +154,9 @@ describe('modelApplication',  function() {
 				success();
 			});
 
-			application.insertNewApp({_id: 'uId', appId: []}, {_id: 'couId', appId: []}, function() {
+			application.insertNewApp({_id: 'uId', appId: []}, function() {
 				expect(baseModel.prototype.insert.callCount).toBe(1);
-				expect(baseModel.prototype.update.callCount).toBe(2);
+				expect(baseModel.prototype.update.callCount).toBe(1);
 			}, function(error) {
 				expect().toHaveNotExecuted('should not have failed');
 			});
@@ -170,8 +169,7 @@ describe('modelApplication',  function() {
 				lastModified: 'date',
 				pUID: 'uId',
 				documents: [],
-				status: 0,
-				coUID: 'couId'
+				status: 0
 			};
 
 			spyOn(commonUtils, 'generateId').andReturn('fakeId');
@@ -199,9 +197,9 @@ describe('modelApplication',  function() {
 				success();
 			});
 
-			application.insertNewApp({_id: 'uId', appId: []}, {_id: 'couId', appId: []}, function() {
+			application.insertNewApp({_id: 'uId', appId: []}, function() {
 				expect(baseModel.prototype.insert.callCount).toBe(1);
-				expect(baseModel.prototype.update.callCount).toBe(2);
+				expect(baseModel.prototype.update.callCount).toBe(1);
 			}, function(error) {
 				expect().toHaveNotExecuted('should not have failed');
 			});
