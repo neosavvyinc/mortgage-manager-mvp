@@ -395,7 +395,7 @@ exports.inviteLender = function(appId, userId, lenderInfo, success, failure){
         },
         function(done){
             lenderInvites.retrieve({email: lenderInfo.email},function(lenderInviteData){
-                if(lenderInviteData.length){
+                if(lenderInviteData.appId === appId){
                     done({message:'User has already been invited to this application'});
                 } else {
                     done();
