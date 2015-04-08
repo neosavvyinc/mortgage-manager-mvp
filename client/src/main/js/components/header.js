@@ -46,7 +46,7 @@ var Header = React.createClass({
             <div className="navbar navbar-fixed-top">
                 <div className="container">
                     <div className="navbar-header page-scroll col-xs-4">
-                        <div className="navbar-brand page-scroll pointer">ShuttleDoc</div>
+                        <div className="navbar-brand page-scroll pointer">DocSwap</div>
                     </div>
 	                <div className={this.state.premiumClass}>
 		                <div className="nav navbar-nav pull-right">
