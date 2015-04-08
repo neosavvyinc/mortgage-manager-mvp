@@ -13,8 +13,8 @@ server {
     access_log /opt/mam-nginx/logs/ssl-log.log;
 
     ssl on;
-    ssl_certificate     /opt/mam-nginx/certificates/mam.crt;
-    ssl_certificate_key /opt/mam-nginx/certificates/mam.key;
+    ssl_certificate     /opt/mam-nginx/certificates/{{ sslCert }};
+    ssl_certificate_key /opt/mam-nginx/certificates/{{ sslKey }};
 
     ssl_session_timeout 5m;
 
