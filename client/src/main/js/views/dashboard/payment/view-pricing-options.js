@@ -47,18 +47,27 @@ var PricingOptions = React.createClass({
 				<col style={{width: '65%'}}/>
 			];
 
-		return (
-            <div className="container">
-                <div className="row">
-                    <h1 className="bordered-bottom gap-bottom"><i className="fa fa-chevron-left pointer" onClick={this.back}></i>  Pricing</h1>
-                    <div className="row triple-gap-top">
-                        <div className="col-md-8 col-md-offset-2 col-xs-12">
-						    <Table name="Pricing" colSpacing={colSpacingArr} textPosition="center" header={tableHeader} table={tableFeatures}/>
-                        </div>
-					</div>
-				</div>
-			</div>
-		);
+    return (
+      <div className="container">
+        test!!
+        <div className="row">
+          <h1 className="bordered-bottom gap-bottom">
+            <i className="fa fa-chevron-left pointer" onClick={this.back}></i>
+            Pricing</h1>
+          <div className="row triple-gap-top">
+            <div className="col-md-4 col-xs-12">
+              <Table name="Pricing" colSpacing={colSpacingArr} textPosition="center" header={tableHeader} table={tableFeatures}/>
+            </div>
+            <div className="col-md-4 col-xs-12">
+              <Table name="Pricing" colSpacing={colSpacingArr} textPosition="center" header={tableHeader} table={tableFeatures}/>
+            </div>
+            <div className="col-md-4 col-xs-12">
+              <Table name="Pricing" colSpacing={colSpacingArr} textPosition="center" header={tableHeader} table={tableFeatures}/>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
 	}
 });
 

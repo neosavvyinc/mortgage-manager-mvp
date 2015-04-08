@@ -31,7 +31,7 @@ var HeaderLogout = React.createClass({
                             <span className="sr-only">Toggle navigation</span>
                             <i className="fa fa-bars fa-lg"></i>
                         </button>
-                        <Link className="navbar-brand page-scroll pointer" to='welcome'>ShuttleDoc</Link>
+                        <Link className="navbar-brand page-scroll pointer" to='welcome'>DocSwap</Link>
                     </div>
                     <div className={"collapse navbar-collapse " + (this.state.displayMenu ? "in" : "")}>
                         <ul className="nav navbar-nav">
