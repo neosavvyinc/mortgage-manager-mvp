@@ -26,10 +26,10 @@
   file: dest=/opt/mam-nginx/logs mode=755 state=directory owner={{ mamUID }} group={{ mamGID }}
 
 - name: Copy MAM SSL cert
-  copy: src=mam.crt dest=/opt/mam-nginx/certificates/mam.crt
+  copy: src={{sslCertLocation}}/{{sslCert}} dest=/opt/mam-nginx/certificates/{{sslCert}}
 
 - name: Copy MAM SSL key
-  copy: src=mam.key dest=/opt/mam-nginx/certificates/mam.key
+  copy: src={{sslCertLocation}}/{{sslKey}}  dest=/opt/mam-nginx/certificates/{{sslKey}}
 
 - name: restart nginx
   service: name=nginx state=restarted

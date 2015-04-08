@@ -1,0 +1,19 @@
+- hosts: production
+  remote_user: root
+  roles:
+    - ubuntu
+    - nodejs
+    - mongodb
+    - deploy
+    - nginx-ssl
+  vars:
+      serverListenPort: "8090" # used by healthcheck
+      nginxProxyToPort: "3000"
+      applicationHostname: "www.docswap.co"
+      nodeEnvironment: "staging" # FIXME: We need a production one
+      adminContact: "contact@neosavvy.com" # FIXME: this will need to change
+      mamUID: "root"
+      mamGID: "root"
+      sslCertLocation: "production"
+      sslCert: "docswap.crt"
+      sslKey: "docswap.key"
