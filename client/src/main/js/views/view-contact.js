@@ -50,6 +50,7 @@ var Contact = React.createClass({
                                         <p>Corporate Headquarters</p>
                                         <p>349 5th Avenue, Suite 412</p>
                                         <p>New York, NY, 10016</p>
+                                        <a href="mailto:adam@docswap.co">Contact Adam Directly</a>
                                     </div>
                                     <div className="col-xs-12 hidden-sm hidden-md hidden-lg triple-gap-top triple-gap-bottom text-center">
                                         <p>Corporate Headquarters</p>

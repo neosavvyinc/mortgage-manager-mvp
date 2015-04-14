@@ -10,8 +10,8 @@
       serverListenPort: "8090" # used by healthcheck
       nginxProxyToPort: "3000"
       applicationHostname: "www.docswap.co"
-      nodeEnvironment: "staging" # FIXME: We need a production one
-      adminContact: "contact@neosavvy.com" # FIXME: this will need to change
+      nodeEnvironment: "production"
+      adminContact: "adam@docswap.co"
       mamUID: "root"
       mamGID: "root"
       sslCertLocation: "production"
