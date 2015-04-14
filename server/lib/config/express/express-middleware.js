@@ -4,7 +4,16 @@ var path = require('path'),
 	expressSession = require('express-session'),
 	bodyParser = require('body-parser'),
 	multer = require('multer'),
-	settings = require('../app/settings');
+	settings = require('../app/settings'),
+    _ = require('underscore');
+
+var validFileExtensions = [
+    'pdf',
+    'jpg',
+    'jpeg',
+    'png',
+    'gif'
+];
 
 module.exports = function(app, router, passport) {
 	// for parsing application/json
@@ -21,7 +30,7 @@ module.exports = function(app, router, passport) {
 		},
 		onFileUploadStart: function (file) {
 			var extension = file.extension;
-			if (extension!=='pdf' && extension!=='jpg' && extension!=='jpeg' && extension!=='png') {
+            if( !extension || !_.contains(validFileExtensions, extension.toLowerCase()) ) {
 				return false;
 			}
 		}
