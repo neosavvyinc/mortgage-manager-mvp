@@ -66,7 +66,7 @@ var Team = React.createClass({
                                     <div className="row">
                                         <div className="col-md-offset-4 col-md-4 col-sm-6 col-xs-12 triple-pad-bottom">
                                             <div className="row text-center">
-                                                <img src="assets/images/gmorris.jpg" width="100%"/>
+                                                <img src="assets/images/gmorris.jpg" width="50%"/>
                                             </div>
                                             <h4 className="bordered-bottom double-pad-top text-center">Gene Morris</h4>
                                             <p>Gene has been a close advisor to DocSwap since inception. He has a 27 year career in the Mortgage industry with Bank of America and a BA from UNC Charlotte. With his industry experience and positive attitude he'll be a guiding light to DocSwap as we try to revolutionize the way Mortgage's are originated.</p>
