@@ -17,7 +17,7 @@
   file: path=/etc/supervisor owner=root group=root state=directory
 
 - name: Fresh Supervisor Node Conf
-  copy: src=supervisord.node.mam.conf dest=/etc/supervisor/supervisord.node.mam.conf
+  template: src=supervisord.node.mam.conf dest=/etc/supervisor/supervisord.node.mam.conf
 
 - name: Copy the Supervisord Startup Script
   copy: src=supervisord.node.mam dest=/etc/init.d/supervisord.node.mam mode=0755
