@@ -7,6 +7,9 @@
 - name: python header
   apt: name=python-dev state=present
 
+- name: phantom js
+  npm: name=phantomjs state=present production=yes global=yes
+
 - name: python setup tools
   apt: name=python-setuptools state=present
 

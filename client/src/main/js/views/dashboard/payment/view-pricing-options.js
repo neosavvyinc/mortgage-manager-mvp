@@ -27,15 +27,30 @@ var PricingOptions = React.createClass({
 
 	render: function() {
 		var yesIcon = <div><i className="fa fa-check text-success"></i> </div>,
-			tableFeatures = {
+            betaFeatures = {
+                'Price After 15 Days': ['$1'],
+                'Upload Documents': [yesIcon],
+                'View Documents': [yesIcon],
+                'Invite Lenders': [yesIcon],
+                '': [
+                    <button className="btn btn-sm btn-dark-blue" onClick={this.onChoosePremium}> Choose Plan </button>
+                ]
+            },
+            tableFeatures = {
                 'Price After 15 Days': ['$100'],
-				'Upload Documents': [yesIcon],
-				'View Documents': [yesIcon],
-				'Invite Lenders': [yesIcon],
-				'': [
-						<button className="btn btn-sm btn-dark-blue" onClick={this.onChoosePremium}> Choose Plan </button>
-					]
-			},
+                'Upload Documents': [yesIcon],
+                'View Documents': [yesIcon],
+                'Invite Lenders': [yesIcon],
+                '': [
+                    <button className="btn btn-sm btn-dark-blue" onClick={this.onChoosePremium}> Choose Plan </button>
+                ]
+            },
+            betaHeader = ((
+                <thead>
+                    <th className="text-center label-lg">Features</th>
+                    <th className="text-center label-lg">Beta</th>
+                </thead>
+            )),
 			tableHeader = ((
 				<thead>
 					<th className="text-center label-lg">Features</th>
@@ -49,17 +64,13 @@ var PricingOptions = React.createClass({
 
     return (
       <div className="container">
-        test!!
         <div className="row">
           <h1 className="bordered-bottom gap-bottom">
             <i className="fa fa-chevron-left pointer" onClick={this.back}></i>
             Pricing</h1>
           <div className="row triple-gap-top">
             <div className="col-md-4 col-xs-12">
-              <Table name="Pricing" colSpacing={colSpacingArr} textPosition="center" header={tableHeader} table={tableFeatures}/>
-            </div>
-            <div className="col-md-4 col-xs-12">
-              <Table name="Pricing" colSpacing={colSpacingArr} textPosition="center" header={tableHeader} table={tableFeatures}/>
+              <Table name="Pricing" colSpacing={colSpacingArr} textPosition="center" header={betaHeader} table={betaFeatures}/>
             </div>
             <div className="col-md-4 col-xs-12">
               <Table name="Pricing" colSpacing={colSpacingArr} textPosition="center" header={tableHeader} table={tableFeatures}/>

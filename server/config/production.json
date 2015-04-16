@@ -1,28 +1,30 @@
 {
   "port": 3000,
-  "hostURL": "http://localhost:9991/#",
+  "hostURL": "https://docswap.co/#",
   "dbURL": "mongodb://localhost/MAM",
   "logging": {
     "levels": {
-      "dev": "info"
+      "staging": "all"
     },
     "appenders": [
       {
-        "type": "console",
-        "category": "dev"
+        "absolute": true,
+        "type": "file",
+        "filename": "/opt/mam-nginx/logs/node-production-server.log",
+        "category": "production"
       }
     ]
   },
   "stripe": {
-    "secretKey": "sk_test_07Jn4CiM4JsrBXJQy11MgC5O",
-    "publishableKey": "pk_test_U8nPZC9Czk76tfjCs6o5CMH9"
+    "secretKey": "sk_live_lTqT2i3LikxOFw7GGKl317Lf",
+    "publishableKey": "pk_live_9QJTltPTY2XJyp65XTYBTWNE"
   },
   "mandrill": {
-    "APIKey": "pfsqI34h5B8YYWoi0OJEjw",
-    "sourceEmail": "doubleapp.ns@gmail.com"
+    "APIKey": "1KWE9cJblObJ0emP1RcTXA",
+    "sourceEmail": "adam@docswap.co"
   },
   "s3": {
-	"s3Toggle": false,
+    "s3Toggle": true,
     "maxAsyncS3": 20,
     "s3RetryCount": 3,
     "s3RetryDelay": 1000,

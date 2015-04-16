@@ -1,9 +1,17 @@
 'use strict';
 /* jshint ignore:start */
 
-var mandrillConfig = require('../config/app/mandrill'),
-	settings = require('../config/app/settings'),
-	mandrill = require('node-mandrill')(mandrillConfig.APIKey);
+var settings = require('../config/app/settings');
+var mandrill = require('node-mandrill');
+
+
+var mandrillApi;
+
+var initializeApi = function() {
+    if( !mandrillApi ){
+        mandrillApi = mandrill(settings.getConfig().mandrill.APIKey);
+    }
+};
 
 /**
  * Send invite mandrill service method
@@ -14,6 +22,7 @@ var mandrillConfig = require('../config/app/mandrill'),
  * @param callback
  */
 exports.sendInvite = function(lenderInfo, sender, appId, token, callback) {
+    initializeApi();
 	var redirectURL = settings.getConfig().hostURL +
 						'/register/new-lender?token=' + token +
 						'&email=' + lenderInfo.email +
@@ -22,7 +31,7 @@ exports.sendInvite = function(lenderInfo, sender, appId, token, callback) {
 						'&organization=' + lenderInfo.organization +
 						'&appId=' + appId;
 
-	mandrill('/messages/send-template', {
+    mandrillApi('/messages/send-template', {
 		template_name: 'lender_invite',
 		template_content: [],
 		message: {
@@ -33,7 +42,7 @@ exports.sendInvite = function(lenderInfo, sender, appId, token, callback) {
 					name: lenderInfo.firstName + " " + lenderInfo.lastName
 				}
 			],
-			from_email: mandrillConfig.sourceEmail,
+			from_email: settings.getConfig().mandrill.sourceEmail,
 			from_name: 'DocSwap Team',
 			subject: 'You have received an invitation',
 			merge_vars: [{
@@ -72,11 +81,12 @@ exports.sendInvite = function(lenderInfo, sender, appId, token, callback) {
 };
 
 exports.forgotPassword = function(email, userDetails, token, callback) {
+    initializeApi();
 	var redirectURL = settings.getConfig().hostURL +
 		'/register/update-password?token=' + token +
 		'&uid=' + userDetails._id;
 
-	mandrill('/messages/send-template', {
+    mandrillApi('/messages/send-template', {
 		template_name: 'forgot_password',
 		template_content: [],
 		message: {
@@ -87,7 +97,7 @@ exports.forgotPassword = function(email, userDetails, token, callback) {
 					name: userDetails.firstName + " " + userDetails.lastName
 				}
 			],
-			from_email: mandrillConfig.sourceEmail,
+			from_email: settings.getConfig().mandrill.sourceEmail,
 			from_name: 'DocSwap Team',
 			subject: 'Password Reset',
 			merge_vars: [{
@@ -122,9 +132,10 @@ exports.forgotPassword = function(email, userDetails, token, callback) {
 };
 
 exports.sendPassword = function(userInfo, password, callback){
+    initializeApi();
     var redirectURL = settings.getConfig().hostURL + '?changePassword=true';
 
-    mandrill('/messages/send-template', {
+    mandrillApi('/messages/send-template', {
         template_name: 'new_password',
         template_content: [],
         message: {
@@ -135,7 +146,7 @@ exports.sendPassword = function(userInfo, password, callback){
                     name: userInfo.firstName + " " + userInfo.lastName
                 }
             ],
-            from_email: mandrillConfig.sourceEmail,
+            from_email: settings.getConfig().mandrill.sourceEmail,
             from_name: 'DocSwap Team',
             subject: 'New Account Password',
             merge_vars: [{

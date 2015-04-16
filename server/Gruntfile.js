@@ -124,7 +124,8 @@ module.exports = function gruntFile(grunt) {
 
 	grunt.registerTask('start', 'Start server at localhost:' + LOCAL_SERVICE_PORT, function() {
 		process.env.NODE_ENV = process.env.NODE_ENV || 'development';
-		grunt.task.run('stop', 'shell:startDb', 'shell:start');
+        console.log('Loading node with env: ' + process.env.NODE_ENV);
+        grunt.task.run('stop', 'shell:startDb', 'shell:start');
 	});
 
 	grunt.registerTask('populate', 'Populates all json files into mongo', function() {
