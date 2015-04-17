@@ -3,6 +3,7 @@
 var path = require('path'),
 	async = require('async'),
 	childProcess = require('child_process'),
+    settings = require('../config/app/settings'),
 	utils = require('../utils/common-utils');
 
 exports.convertToPdf = function(imageSourcePath, pdfTargetPath, captureOptions, success, failure) {
@@ -11,18 +12,22 @@ exports.convertToPdf = function(imageSourcePath, pdfTargetPath, captureOptions, 
 
 	async.series([
 		function(done) {
+            settings.log.info('Generating some HTML');
 			html = _getImageHtml(imageSourcePath, captureOptions.height, captureOptions.width);
 			done();
 		},
 		function(done) {
+            settings.log.info('Writing out the html file with generated html');
 			var result = utils.writeTmpFileSync(html, 'html');
 			filePath = result.path;
 			done();
 		},
 		function(done) {
+            settings.log.info('About to capture the pdf file');
 			_capturePdf(filePath, pdfTargetPath, captureOptions, done, done);
 		},
 		function(done) {
+            settings.log.info('Deleting the file');
 			utils.deleteFileSync(filePath, done, done);
 		}
 	], function(error) {
@@ -61,12 +66,13 @@ var _capturePdf = function(htmlSourcePath, pdfTargetPath, captureOptions, succes
 
 	childProcess.exec(command, function(error, stdout, stderr) {
 		if(stdout) {
-			console.log('phantomjs.capturePdf: stdout=' + stdout);
+            settings.log.info('phantomjs.capturePdf: stdout=' + stdout);
 		}
 		if(error) {
 			if(error.code === 1) {
 				success();
 			} else {
+                settings.log.error('Error while running phantom: ' + error);
 				failure(error);
 			}
 		} else {

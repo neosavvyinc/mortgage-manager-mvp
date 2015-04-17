@@ -14,6 +14,7 @@ exports.getConfig = function() {
 	return config;
 };
 
+//FIXME: THIS SHOULD BE ENV Specific - pull this out to <env>.json
 exports.secretKey = 'MamSecretKey';
 
 exports.log = {};
