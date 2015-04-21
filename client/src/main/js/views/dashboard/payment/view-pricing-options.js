@@ -13,6 +13,10 @@ var PricingOptions = React.createClass({
 		Router.Navigation
 	],
 
+    onChooseBeta: function() {
+        this.transitionTo('stripePayment', {price: '$1'});
+    },
+
 	onChoosePremium: function() {
 		this.transitionTo('stripePayment', {price: '$100'});
 	},
@@ -33,7 +37,7 @@ var PricingOptions = React.createClass({
                 'View Documents': [yesIcon],
                 'Invite Lenders': [yesIcon],
                 '': [
-                    <button className="btn btn-sm btn-dark-blue" onClick={this.onChoosePremium}> Choose Plan </button>
+                    <button className="btn btn-sm btn-dark-blue" onClick={this.onChooseBeta}> Choose Plan </button>
                 ]
             },
             tableFeatures = {

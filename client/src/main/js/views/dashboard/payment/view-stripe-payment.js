@@ -112,7 +112,7 @@ var StripePayment = React.createClass({
                                 <input className="gap-bottom form-control" type="text" ref="firstName" placeholder="Name on card" data-stripe="name" required />
                             </div>
                             <div className="col-xs-12">
-                                <input ref="cardNumber" className="gap-bottom form-control" type="text" maxLength="20"  placeholder="Card Number" data-stripe="number"/>
+                                <input ref="cardNumber" className="gap-bottom form-control" type="password" maxLength="20"  placeholder="Card Number" data-stripe="number"/>
                             </div>
                             <div className="col-xs-3">
                                 <input ref="expMonth" className="gap-bottom form-control" type="text" maxLength="2"  placeholder="MM" data-stripe="exp-month"/>
