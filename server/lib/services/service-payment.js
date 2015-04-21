@@ -116,7 +116,9 @@ exports.makePayment = function(uid, token, card, amount, idempotentToken, succes
 		function(done) {
 			//If the coapplicant is paying, primary applicant should also have premium
 			userDetails.retrieve({coUID: uid}, function(docs) {
-				userToUpdate = docs[0].toObject()._id;
+				if(docs.length > 0) {
+					userToUpdate = docs[0].toObject()._id;
+				}
 				done();
 			}, done);
 		},

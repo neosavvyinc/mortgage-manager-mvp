@@ -46,6 +46,13 @@ var StripePayment = React.createClass({
 
 	onMakePayment: function(ev) {
 		ev.preventDefault();
+		var price;
+
+		if(this.getParams().price === 'beta') {
+			price = '1';
+		} else {
+			price = '100';
+		}
 
 		this.setState({
 			submitButtonClass: 'col-sm-6 col-xs-12 btn btn-md btn-dark-blue disabled',
@@ -65,7 +72,7 @@ var StripePayment = React.createClass({
 						disablePayment: false
 					});
 				} else {
-					ModelPayment.makePayment(response.id, response.card, this.state.idempotentToken, this.getParams().price.replace('$', '')).then(
+					ModelPayment.makePayment(response.id, response.card, this.state.idempotentToken, price).then(
 						function() {
 							this.setState({
 								showMessage: false,
@@ -98,6 +105,13 @@ var StripePayment = React.createClass({
 	render: function() {
 
         // TODO: Reuse user's personal address as billing address
+		var price;
+
+		if(this.getParams().price === 'beta') {
+			price = '$1';
+		} else {
+			price = '$100';
+		}
 
 		return (
 			<form ref="paymentForm" className="container">
@@ -150,7 +164,7 @@ var StripePayment = React.createClass({
                     </div>
                 </div>
                 <div className="row">
-                    <h3 className="col-xs-12 double-gap-bottom">Amount: {this.getParams().price}</h3>
+                    <h3 className="col-xs-12 double-gap-bottom">Amount: {price}</h3>
                 </div>
                 <div className="row">
                     <div className="col-md-6 col-xs-12">
