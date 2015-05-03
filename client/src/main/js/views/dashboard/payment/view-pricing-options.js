@@ -13,6 +13,10 @@ var PricingOptions = React.createClass({
 		Router.Navigation
 	],
 
+    onChooseBeta: function() {
+        this.transitionTo('stripePayment', {price: '$1'});
+    },
+
 	onChoosePremium: function() {
 		this.transitionTo('stripePayment', {price: 'premium'});
 	},

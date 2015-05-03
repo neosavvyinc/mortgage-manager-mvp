@@ -9,7 +9,7 @@
   vars:
       serverListenPort: "8090" # used by healthcheck
       nginxProxyToPort: "3000"
-      applicationHostname: "www.docswap.co"
+      applicationHostname: "beta.docswap.co"
       nodeEnvironment: "production"
       adminContact: "adam@docswap.co"
       mamUID: "root"

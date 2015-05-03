@@ -1,3 +1,12 @@
+
+server {
+    listen 80;
+    server_name docswap.co;
+
+    access_log /opt/mam-nginx/logs/non-ssl.log;
+    return 301 http://www.docswap.co;
+}
+
 server {
     listen 80;
     server_name {{ applicationHostname }};
