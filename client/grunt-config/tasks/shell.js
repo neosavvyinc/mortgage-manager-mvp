@@ -8,7 +8,7 @@ module.exports = {
                 cb();
             }
         },
-        command: "rm -r ./target"
+        command: "sudo rm -r ./target"
     },
     cleanDeployment: {
         options: {
@@ -173,6 +173,5 @@ module.exports = {
             }
         },
         command: "which pkill"
-    },
- 
+    }
 };
