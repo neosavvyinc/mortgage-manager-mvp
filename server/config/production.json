@@ -20,8 +20,8 @@
     "publishableKey": "pk_live_9QJTltPTY2XJyp65XTYBTWNE"
   },
   "mandrill": {
-    "APIKey": "1KWE9cJblObJ0emP1RcTXA",
-    "sourceEmail": "adam@docswap.co"
+    "APIKey": "7KYA1cKthF1YZL4zxlygow",
+    "sourceEmail": "contact@docswap.co"
   },
   "s3": {
     "s3Toggle": true,
